@@ -244,8 +244,7 @@ Specific to this company's actual situation. Not generic.
 [Closing — 1-2 sentences]
 Availability + any gap acknowledgments the user chose to include (Step 5).
 
-[Language closing — if applicable]
-Only if user confirmed inclusion in Step 5. Written in that language. Italic in PDF.
+Describe any confirmed language skills in English within the closing. Do not add a foreign-language sentence.
 ```
 
 End the draft with: "How does this read? Once you approve I'll generate the PDF."
@@ -320,7 +319,7 @@ Assemble the JSON payload:
     ],
     "problems_section": "{approved problems paragraph}",
     "closing": "{approved closing}",
-    "language_closing": "{approved language sentence or null}"
+    "language_closing": null
   },
   "output_path": "output/{company-slug}-{role-slug}-cover.pdf"
 }

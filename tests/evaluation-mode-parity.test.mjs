@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import test from 'node:test';
 import { ROOT, rmSync } from './helpers.mjs';
-import { FROZEN_EVALUATION_MODES, KNOWN_EVALUATION_MODES, discoverEvaluationModes, readModeText, structuralGaps } from './evaluation-mode-parity-helpers.mjs';
+import { discoverEvaluationModes, readModeText, structuralGaps } from './evaluation-mode-parity-helpers.mjs';
 
 const REPORT = `# 評価: {Company} — {Role}
 
@@ -46,18 +46,8 @@ function sandbox(t) {
   return { parent, root };
 }
 
-test('canonical and re-synced locales retain their real fenced templates', () => {
-  const synced = KNOWN_EVALUATION_MODES.filter(file => !FROZEN_EVALUATION_MODES.has(file));
-  for (const file of ['oferta.md', ...synced]) {
-    assert.deepEqual(structuralGaps(readModeText(ROOT, `modes/${file}`)), [], file);
-  }
-});
-
-test('frozen locales still require report-format resync', () => {
-  for (const file of FROZEN_EVALUATION_MODES) {
-    assert.ok(structuralGaps(readModeText(ROOT, `modes/${file}`)).length > 0,
-      `${file}: remove from FROZEN_EVALUATION_MODES in tests/evaluation-mode-parity-helpers.mjs`);
-  }
+test('English baseline retains its fenced report template', () => {
+  assert.deepEqual(structuralGaps(readModeText(ROOT, 'modes/oferta.md')), []);
 });
 
 test('a missing H answers section is reported', () => {

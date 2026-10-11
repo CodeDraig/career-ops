@@ -98,16 +98,7 @@ If `$mode` is not a sub-command AND doesn't look like a JD, show discovery.
 
 ## Output Language Directive
 
-Before executing any mode, read `config/profile.yml` if it exists and resolve:
-
-- `language.output` → ISO language code for human-facing output. Default: `en`.
-- `language.modes_dir` → optional market-mode directory. This controls market vocabulary and local evaluation rules only. It may be a single string (one declared market, the historical default) or a list of declared candidate markets for a candidate genuinely running parallel campaigns in more than one market at once (#3793), e.g. `modes_dir: [modes/de, modes/zh]`. When a list is given, the FIRST entry is primary and supplies the evaluation-mode file (Block A-F rules can only run from one market's file at a time); EVERY declared market's `_shared.md` is loaded into context. `modes` itself is a valid declared candidate for markets without a localized directory; when first it supplies `modes/oferta.md`, and its baseline `modes/_shared.md` is loaded once. Per posting, judge which declared market actually applies from the JD's own MARKET signals (hiring-entity jurisdiction, currency, benefits/legal vocabulary) — never from the JD's language alone. If genuinely ambiguous, an interactive session asks and stops before persistence; an unattended worker uses the primary market and records that fallback in the report header or Block G.
-
-Inject this directive after loading the mode instructions and before producing any user-visible content:
-
-> Write all human-facing output in `{language.output}` regardless of the language of these instructions or of the job description. This includes reports, tracker notes, PDFs, cover letters, outreach, interview prep, form answers, and summaries. If `language.modes_dir` supplies market-specific vocabulary (one market, or several declared at once), keep the market logic but explain terms in `{language.output}` when needed.
-
-`language.output` is authoritative for prose. `modes_dir` is market context; it must not force the prose language.
+Write all human-facing output in English regardless of the language of the job description. Legacy `language.output`, `language.primary`, and `language.modes_dir` settings are unsupported and have no effect. Always use the baseline modes under `modes/`. Preserve proper names, quoted source material, and multilingual input recognition. Do not rewrite existing user data.
 
 ---
 
@@ -185,7 +176,7 @@ After determining the mode, load the necessary files before executing:
 
 If `modes/_custom.md` exists, read it after `modes/_profile.md` and before the selected mode file. It contains user house rules and procedural preferences. It may override workflow/style defaults, but it never adds factual claims about the candidate.
 
-Resolve `language.modes_dir` before applying the path shorthand below. With no setting, use `modes`. With a scalar directory, preserve the existing behavior: use that directory's `_shared.md` and localized mode file when it provides one. With a list, load every declared directory's `_shared.md` exactly once (including the baseline `modes/_shared.md` when `modes` appears), but use only the FIRST entry's evaluation-mode file for Blocks A-F; later entries contribute context, never a competing evaluation file. User-layer `_profile.md` and `_custom.md` remain under `modes/`.
+Use baseline system modes under `modes/`. User-layer `_profile.md` and `_custom.md` stay in the data root.
 
 ### Modes that require `_shared.md` + their mode file
 
@@ -201,7 +192,7 @@ Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `ma
 
 ### Modes that load only their mode file
 
-Read `modes/{mode}.md` only. Do not preload `_shared.md`, `_profile.md` or `_custom.md`: the mode file names the one context file it reads and the ones it must not. Values it takes from `config/profile.yml` (`language.output`, `pipeline.triage_threshold`) are resolved here and injected; the mode never reads that file itself.
+Read `modes/{mode}.md` only. Do not preload `_shared.md`, `_profile.md` or `_custom.md`: the mode file names the one context file it reads and the ones it must not. Values it takes from `config/profile.yml` (`pipeline.triage_threshold`) are resolved here and injected; the mode never reads that file itself.
 
 Applies to: `triage`
 
@@ -212,7 +203,7 @@ For `scan`, `apply` (with Playwright), and `pipeline` (3+ URLs): launch as a wor
 ```python
 Agent(
   subagent_type="general-purpose",
-  prompt="[output language directive]\n\n[content of modes/_shared.md, or resolved shared context: every declared _shared.md once]\n\n[content of modes/_profile.md if exists]\n\n[content of modes/_custom.md if exists]\n\n[content of modes/{mode}.md, or resolved selected mode file; primary evaluation file for Blocks A-F]\n\n[invocation-specific data]",
+  prompt="[English output directive]\n\n[content of modes/_shared.md]\n\n[content of modes/_profile.md if exists]\n\n[content of modes/_custom.md if exists]\n\n[content of modes/{mode}.md]\n\n[invocation-specific data]",
   description="career-ops {mode}"
 )
 ```

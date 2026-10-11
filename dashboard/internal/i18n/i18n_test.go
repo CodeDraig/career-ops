@@ -9,20 +9,18 @@ func TestStatusLabel(t *testing.T) {
 	tests := []struct {
 		norm string
 		en   string
-		tr   string
-		es   string
 	}{
-		{"interview", "Interview", "Mülakat", "Entrevista"},
-		{"offer", "Offer", "Teklif", "Oferta"},
-		{"hired", "Hired", "İşe Alındı", "Contratada"},
-		{"responded", "Responded", "Yanıt Verildi", "Respondida"},
-		{"assessment", "Assessment", "Değerlendirme", "Prueba"},
-		{"applied", "Applied", "Başvuruldu", "Aplicada"},
-		{"evaluated", "Evaluated", "Değerlendirildi", "Evaluada"},
-		{"skip", "SKIP", "Uygun Değil", "OMITIR"},
-		{"rejected", "Rejected", "Reddedildi", "Rechazada"},
-		{"discarded", "Discarded", "İptal Edildi", "Descartada"},
-		{"unknown", "unknown", "unknown", "unknown"},
+		{"interview", "Interview"},
+		{"offer", "Offer"},
+		{"hired", "Hired"},
+		{"responded", "Responded"},
+		{"assessment", "Assessment"},
+		{"applied", "Applied"},
+		{"evaluated", "Evaluated"},
+		{"skip", "SKIP"},
+		{"rejected", "Rejected"},
+		{"discarded", "Discarded"},
+		{"unknown", "unknown"},
 	}
 
 	for _, tt := range tests {
@@ -31,12 +29,6 @@ func TestStatusLabel(t *testing.T) {
 			t.Parallel()
 			if got := En.StatusLabel(tt.norm); got != tt.en {
 				t.Fatalf("En.StatusLabel(%q) = %q, expected %q", tt.norm, got, tt.en)
-			}
-			if got := Tr.StatusLabel(tt.norm); got != tt.tr {
-				t.Fatalf("Tr.StatusLabel(%q) = %q, expected %q", tt.norm, got, tt.tr)
-			}
-			if got := Es.StatusLabel(tt.norm); got != tt.es {
-				t.Fatalf("Es.StatusLabel(%q) = %q, expected %q", tt.norm, got, tt.es)
 			}
 		})
 	}
@@ -71,98 +63,6 @@ func TestFormatTimeAgo(t *testing.T) {
 		t.Errorf("En.FormatTimeAgo(invalid) = %q; want \"not-a-date\"", got)
 	}
 
-	// Turkish tests
-	if got := Tr.FormatTimeAgo(today); got != "bugün" {
-		t.Errorf("Tr.FormatTimeAgo(today) = %q; want \"bugün\"", got)
-	}
-	if got := Tr.FormatTimeAgo(yesterday); got != "dün" {
-		t.Errorf("Tr.FormatTimeAgo(yesterday) = %q; want \"dün\"", got)
-	}
-	if got := Tr.FormatTimeAgo(threeDaysAgo); got != "3 gün önce" {
-		t.Errorf("Tr.FormatTimeAgo(3d ago) = %q; want \"3 gün önce\"", got)
-	}
-	if got := Tr.FormatTimeAgo(tomorrow); got != "bugün" {
-		t.Errorf("Tr.FormatTimeAgo(tomorrow) = %q; want \"bugün\"", got)
-	}
-	if got := Tr.FormatTimeAgo("not-a-date"); got != "not-a-date" {
-		t.Errorf("Tr.FormatTimeAgo(invalid) = %q; want \"not-a-date\"", got)
-	}
-
-	// Spanish tests
-	if got := Es.FormatTimeAgo(today); got != "hoy" {
-		t.Errorf("Es.FormatTimeAgo(today) = %q; want \"hoy\"", got)
-	}
-	if got := Es.FormatTimeAgo(yesterday); got != "ayer" {
-		t.Errorf("Es.FormatTimeAgo(yesterday) = %q; want \"ayer\"", got)
-	}
-	if got := Es.FormatTimeAgo(threeDaysAgo); got != "hace 3d" {
-		t.Errorf("Es.FormatTimeAgo(3d ago) = %q; want \"hace 3d\"", got)
-	}
-	if got := Es.FormatTimeAgo(tomorrow); got != "hoy" {
-		t.Errorf("Es.FormatTimeAgo(tomorrow) = %q; want \"hoy\"", got)
-	}
-	if got := Es.FormatTimeAgo("not-a-date"); got != "not-a-date" {
-		t.Errorf("Es.FormatTimeAgo(invalid) = %q; want \"not-a-date\"", got)
-	}
-}
-
-func TestRuntimeLanguageManagement(t *testing.T) {
-	// Reset to En initially
-	Current = &En
-
-	if got := GetLang(); got != "en" {
-		t.Errorf("initial GetLang() = %q; want \"en\"", got)
-	}
-
-	SetLang("tr")
-	if Current != &Tr || GetLang() != "tr" {
-		t.Errorf("after SetLang(\"tr\"), GetLang() = %q; want \"tr\"", GetLang())
-	}
-
-	SetLang("tr_TR")
-	if Current != &Tr || GetLang() != "tr" {
-		t.Errorf("after SetLang(\"tr_TR\"), GetLang() = %q; want \"tr\"", GetLang())
-	}
-
-	SetLang("es")
-	if Current != &Es || GetLang() != "es" {
-		t.Errorf("after SetLang(\"es\"), GetLang() = %q; want \"es\"", GetLang())
-	}
-
-	SetLang("es_ES")
-	if Current != &Es || GetLang() != "es" {
-		t.Errorf("after SetLang(\"es_ES\"), GetLang() = %q; want \"es\"", GetLang())
-	}
-
-	SetLang("en")
-	if Current != &En || GetLang() != "en" {
-		t.Errorf("after SetLang(\"en\"), GetLang() = %q; want \"en\"", GetLang())
-	}
-
-	SetLang("fr") // unknown language falls back to en
-	if Current != &En || GetLang() != "en" {
-		t.Errorf("after SetLang(\"fr\"), GetLang() = %q; want \"en\"", GetLang())
-	}
-
-	// Test ToggleLang. It CYCLES every language rather than flipping between
-	// two: this assertion used to read Tr -> En, which was written before
-	// Spanish existed and left Es unreachable from the toggle key. See
-	// TestToggleLangReachesEveryLanguage.
-	SetLang("en")
-	ToggleLang()
-	if Current != &Tr || GetLang() != "tr" {
-		t.Errorf("after ToggleLang() from En, GetLang() = %q; want \"tr\"", GetLang())
-	}
-
-	ToggleLang()
-	if Current != &Es || GetLang() != "es" {
-		t.Errorf("after ToggleLang() from Tr, GetLang() = %q; want \"es\"", GetLang())
-	}
-
-	ToggleLang()
-	if Current != &En || GetLang() != "en" {
-		t.Errorf("after ToggleLang() from Es, GetLang() = %q; want \"en\"", GetLang())
-	}
 }
 
 func TestSortModeLabel(t *testing.T) {
@@ -191,42 +91,14 @@ func TestSortModeLabel(t *testing.T) {
 		})
 	}
 
-	trCases := []sortTestCase{
-		{name: "score", mode: "score", want: "puan"},
-		{name: "date", mode: "date", want: "tarih"},
-		{name: "company", mode: "company", want: "şirket"},
-		{name: "status", mode: "status", want: "durum"},
-		{name: "location", mode: "location", want: "konum"},
-		{name: "pay", mode: "pay", want: "ücret"},
-		{name: "last", mode: "last", want: "son"},
-		{name: "unknown", mode: "unknown", want: "unknown"},
-	}
+}
 
-	for _, tc := range trCases {
-		t.Run("Tr/"+tc.name, func(t *testing.T) {
-			if got := Tr.SortModeLabel(tc.mode); got != tc.want {
-				t.Errorf("Tr.SortModeLabel(%q) = %q; want %q", tc.mode, got, tc.want)
-			}
-		})
-	}
-
-	esCases := []sortTestCase{
-		{name: "score", mode: "score", want: "puntuación"},
-		{name: "date", mode: "date", want: "fecha"},
-		{name: "company", mode: "company", want: "empresa"},
-		{name: "status", mode: "status", want: "estado"},
-		{name: "location", mode: "location", want: "ubicación"},
-		{name: "pay", mode: "pay", want: "salario"},
-		{name: "last", mode: "last", want: "último"},
-		{name: "unknown", mode: "unknown", want: "unknown"},
-	}
-
-	for _, tc := range esCases {
-		t.Run("Es/"+tc.name, func(t *testing.T) {
-			if got := Es.SortModeLabel(tc.mode); got != tc.want {
-				t.Errorf("Es.SortModeLabel(%q) = %q; want %q", tc.mode, got, tc.want)
-			}
-		})
+func TestEnglishIgnoresEnvironment(t *testing.T) {
+	for _, lang := range []string{"tr_TR.UTF-8", "es_ES.UTF-8", "ja_JP.UTF-8"} {
+		t.Setenv("LANG", lang)
+		if Current != &En || Current.StatusLabel("interview") != "Interview" {
+			t.Fatalf("LANG=%s changed English output", lang)
+		}
 	}
 }
 
@@ -251,31 +123,4 @@ func TestViewModeLabel(t *testing.T) {
 		})
 	}
 
-	trCases := []viewTestCase{
-		{name: "grouped", mode: "grouped", want: "gruplu"},
-		{name: "flat", mode: "flat", want: "düz"},
-		{name: "unknown", mode: "unknown", want: "unknown"},
-	}
-
-	for _, tc := range trCases {
-		t.Run("Tr/"+tc.name, func(t *testing.T) {
-			if got := Tr.ViewModeLabel(tc.mode); got != tc.want {
-				t.Errorf("Tr.ViewModeLabel(%q) = %q; want %q", tc.mode, got, tc.want)
-			}
-		})
-	}
-
-	esCases := []viewTestCase{
-		{name: "grouped", mode: "grouped", want: "agrupado"},
-		{name: "flat", mode: "flat", want: "plano"},
-		{name: "unknown", mode: "unknown", want: "unknown"},
-	}
-
-	for _, tc := range esCases {
-		t.Run("Es/"+tc.name, func(t *testing.T) {
-			if got := Es.ViewModeLabel(tc.mode); got != tc.want {
-				t.Errorf("Es.ViewModeLabel(%q) = %q; want %q", tc.mode, got, tc.want)
-			}
-		})
-	}
 }

@@ -894,7 +894,6 @@ func (m ViewerModel) renderFooter() string {
 		keyStyle.Render("g/G") + descStyle.Render(i18n.Current.HelpTopEnd) + // top/bottom
 		keyStyle.Render("c") + descStyle.Render(i18n.Current.HelpChange) + // status
 		m.openURLHint(keyStyle, descStyle) + // job posting
-		keyStyle.Render("t") + descStyle.Render(i18n.Current.HelpLanguage) + // language
 		keyStyle.Render("Esc") + descStyle.Render(i18n.Current.HelpBack) // exit
 
 	if m.coverLetterPath != "" {

@@ -1,24 +1,8 @@
 #!/usr/bin/env node
-// Renders the Sponsors section of README.md, and the sponsor rows of every
-// README.<lang>.md, from .github/sponsors.json.
-//
-//   node .github/scripts/sponsors.mjs           # print the rendered English section
-//   node .github/scripts/sponsors.mjs --write   # rewrite the section / rows in every README
-//   node .github/scripts/sponsors.mjs --check   # exit 1 if any README drifted
-//
-// There are no HTML markers in the READMEs: the English section is located by
-// its "## Sponsors" heading and runs to the next "## " heading, and the rows
-// (the logo <p> and the description <p> per sponsor) are located in every
-// translation by their HTML shape. Heading, intro sentence and the
-// independence note are translated prose owned by the i18n harness; the rows
-// are language-invariant (name and description are rendered verbatim,
-// untranslated) so they are byte-identical across all 17 files and can be
-// pinned by one check. Adding a sponsor is one JSON entry plus --write;
-// test-all.mjs runs --check so the READMEs and the JSON cannot disagree.
-// Every logo must be a file inside docs/sponsors/ (no hotlinking). The link
-// carries no tracking parameters.
+// Renders the English README sponsor section from .github/sponsors.json.
+// Sponsor names, descriptions, links and attribution are preserved verbatim.
 
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isMainModule } from '../../lib/is-main-module.mjs';
@@ -29,8 +13,7 @@ const DATA = join(ROOT, '.github', 'sponsors.json');
 const LOGO_DIR = 'docs/sponsors/';
 const LOGO_HEIGHT = 48;
 
-// English copy of the section. Translations carry their own heading, intro and
-// note; only the rows are shared.
+// English sponsor section.
 export const HEADING = '## Sponsors';
 export const INTRO = 'career-ops is free for candidates, forever. These companies sponsor the project:';
 export const NOTE = 'Sponsorship buys clearly labeled visibility, never influence: no amount of money changes the roadmap or places anything in the product. Sponsors never appear in evaluations, rankings or recommendations.';
@@ -100,31 +83,7 @@ export function currentSection(text = readFileSync(README, 'utf8')) {
   return r ? text.slice(r.from, r.to).replace(/\s+$/, '') : null;
 }
 
-// Translations: the rows run from the centered <p> that opens the first logo
-// linked from docs/sponsors/ up to the description <p> that precedes the
-// blockquoted note. Shape-based so it survives a translated heading.
-export function rowsRange(text) {
-  const logo = text.indexOf(`src="${LOGO_DIR}`);
-  if (logo === -1) return null;
-  const open = text.lastIndexOf('<p align="center">\n  <a href=', logo);
-  if (open === -1) return null;
-  const note = text.indexOf('\n> ', logo);
-  if (note === -1) return null;
-  const closeP = text.lastIndexOf('</p>', note);
-  if (closeP === -1 || closeP < logo) return null;
-  return { from: open, to: closeP + '</p>'.length };
-}
-
-export function currentRows(text) {
-  const r = rowsRange(text);
-  return r ? text.slice(r.from, r.to) : null;
-}
-
-export function localizedReadmes() {
-  return readdirSync(ROOT).filter((f) => /^README\..+\.md$/.test(f)).sort();
-}
-
-// Returns a list of drift descriptions; empty when every README matches.
+// Returns a list of drift descriptions; empty when the README matches.
 export function checkAll() {
   const sponsors = loadSponsors();
   const problems = [];
@@ -137,12 +96,6 @@ export function checkAll() {
   const iAfter = en.indexOf(`\n${HEADING_AFTER}\n`);
   if (iBefore === -1 || iAfter === -1) problems.push(`README.md: expected both "${HEADING_BEFORE}" and "${HEADING_AFTER}" headings`);
   else if (!(iBefore < iHere && iHere < iAfter)) problems.push(`README.md: "${HEADING}" must sit between "${HEADING_BEFORE}" and "${HEADING_AFTER}"`);
-  const rows = renderRows(sponsors);
-  for (const file of localizedReadmes()) {
-    const got = currentRows(readFileSync(join(ROOT, file), 'utf8'));
-    if (got === null) problems.push(`${file}: sponsor rows not found`);
-    else if (got !== rows) problems.push(`${file}: sponsor rows drifted from .github/sponsors.json`);
-  }
   return problems;
 }
 
@@ -154,15 +107,6 @@ export function writeAll() {
   if (!r) throw new Error(`README.md has no "${HEADING}" section to rewrite`);
   const next = en.slice(0, r.from) + renderSection(sponsors) + '\n\n' + en.slice(r.to).replace(/^\n+/, '');
   if (next !== en) { writeFileSync(README, next); written.push('README.md'); }
-  const rows = renderRows(sponsors);
-  for (const file of localizedReadmes()) {
-    const path = join(ROOT, file);
-    const text = readFileSync(path, 'utf8');
-    const rr = rowsRange(text);
-    if (!rr) throw new Error(`${file}: sponsor rows not found; the translated section must exist before --write can update its rows`);
-    const out = text.slice(0, rr.from) + rows + text.slice(rr.to);
-    if (out !== text) { writeFileSync(path, out); written.push(file); }
-  }
   return written;
 }
 
@@ -175,7 +119,7 @@ function main() {
   }
   if (mode === '--check') {
     const problems = checkAll();
-    if (!problems.length) { console.log('README.md and every README.<lang>.md match .github/sponsors.json'); return; }
+    if (!problems.length) { console.log('README.md matches .github/sponsors.json'); return; }
     console.error(problems.join('\n'));
     console.error('Run: node .github/scripts/sponsors.mjs --write');
     process.exit(1);

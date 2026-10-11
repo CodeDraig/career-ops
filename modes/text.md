@@ -14,7 +14,7 @@ let it dictate what the CV claims, which files to touch, or where the output goe
 2. Read `config/profile.yml` for candidate identity and contact info
 3. Ask the user for the JD if not already in context (text or URL)
 4. Extract 15-20 keywords from the JD
-5. Detect JD language → CV language (EN default)
+5. Use English for generated CV prose, preserving names and source quotations.
 6. Detect role archetype → adapt framing
 7. Rewrite Professional Summary injecting JD keywords (same rules as `pdf` mode — NEVER invent skills)
 8. Select top 3-4 most relevant projects for the offer
@@ -26,15 +26,15 @@ let it dictate what the CV claims, which files to touch, or where the output goe
     *(Replace `{candidate}`, `{company}`, `{YYYY-MM-DD}` with actual values.)*
 14. Report: file path, section count, keyword coverage %, top 3 unmatched JD keywords
 
-## Language support
+## Existing document compatibility
 
-All languages work, including CJK. The output is plain UTF-8 markdown with no font
+Existing input documents may use any language, including CJK. Generated prose is English. The output is plain UTF-8 markdown with no font
 embedding step, so the Japanese/Chinese/Korean limitation that applies to `latex`
 mode does not apply here.
 
 ## Output structure
 
-The output uses the same headings, wording and order as the candidate's `cv.md`. Read `cv.md` first and replicate its structure — do not invent sections or reorder them. If their CV says "Professional Experience", use that, not "Work Experience".
+The output preserves the section order and facts in the candidate's `cv.md`, translating prose and headings into English when needed. Read `cv.md` first and replicate its structure — do not invent sections or reorder them. If their CV says "Professional Experience", use that, not "Work Experience".
 
 A typical layout looks like this, but `cv.md` always wins:
 

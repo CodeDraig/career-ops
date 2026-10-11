@@ -8,30 +8,13 @@ import (
 	"testing"
 )
 
-// Every string the TUI renders must exist in every language.
-//
-// Go does not help here. A Catalog literal that omits a field still compiles,
-// and the omitted field is "" — so adding a UI string and wiring it into a
-// screen renders BLANK in every language whose literal was not updated. No
-// compile error, no panic, no test: the label just isn't there, and only
-// someone running the dashboard in Turkish or Spanish would notice.
-//
-// Measured before writing this: all three catalogs are complete today
-// (136/136), so this is a ratchet, not a backlog.
+// Every English UI label must be populated.
 
 var catalogVarRe = regexp.MustCompile(`(?m)^var (\w+) = Catalog\{`)
 
-// catalogs maps each language's var name to its value.
-//
-// Hand-written, because Go cannot enumerate a package's variables — but NOT
-// trusted to be complete: the test below reads catalog.go and fails if a
-// language exists in the source and is missing from here. That way a new
-// `var Fr = Catalog{…}` fails with "add it to this map" instead of being
-// silently skipped, which is the failure mode a hard-coded list has.
+// The English catalog is the only shipped catalog.
 var catalogs = map[string]*Catalog{
 	"En": &En,
-	"Tr": &Tr,
-	"Es": &Es,
 }
 
 func declaredCatalogs(t *testing.T) []string {

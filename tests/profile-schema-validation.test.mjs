@@ -6,8 +6,8 @@
 // `profile?.language?.output` and takes the fallback when the key is absent —
 // which is indistinguishable from the key being MISSPELLED:
 //
-//     langauge:          # <- parses cleanly, validates nowhere
-//       output: ja
+//     canddiate:          # <- parses cleanly, validates nowhere
+//       full_name: Fixture
 //     spend_teir: premium
 //
 // English output at the default tier, no signal anywhere. The user's only clue
@@ -34,10 +34,10 @@ const { validateProfile, knownKeysFromExample, UNDOCUMENTED_KEYS, EXAMPLE_PATH }
 const EXAMPLE = existsSync(EXAMPLE_PATH) ? readFileSync(EXAMPLE_PATH, 'utf-8') : '';
 
 test('a misspelled key is named, with the key it was probably meant to be', () => {
-  const { findings } = validateProfile('langauge:\n  output: ja\nspend_teir: premium\n', EXAMPLE);
+  const { findings } = validateProfile('canddiate:\n  full_name: Fixture\nspend_teir: premium\n', EXAMPLE);
   const unknown = findings.filter((f) => f.code === 'unknown-key');
   assert.equal(unknown.length, 2, `expected both typos: ${JSON.stringify(findings)}`);
-  assert.equal(unknown.find((f) => f.key === 'langauge')?.suggestion, 'language');
+  assert.equal(unknown.find((f) => f.key === 'canddiate')?.suggestion, 'candidate');
   assert.equal(unknown.find((f) => f.key === 'spend_teir')?.suggestion, 'spend_tier');
 });
 
@@ -171,14 +171,14 @@ test('doctor surfaces it as a warning, and does not fail the run', () => {
   const dir = mkdtempSync(join(tmpdir(), 'career-ops-profile-shape-'));
   try {
     mkdirSync(join(dir, 'config'), { recursive: true });
-    writeFileSync(join(dir, 'config', 'profile.yml'), 'langauge:\n  output: ja\n');
+    writeFileSync(join(dir, 'config', 'profile.yml'), 'canddiate:\n  full_name: Fixture\n');
     const r = spawnSync(process.execPath, [join(ROOT, 'doctor.mjs'), '--target', dir], {
       cwd: dir, encoding: 'utf-8', timeout: 60_000,
       env: { ...process.env, CAREER_OPS_ROOT: dir, CAREER_OPS_DATA_DIR: '' },
     });
     const all = `${r.stdout}${r.stderr}`;
     assert.match(all, /config\/profile\.yml: 1 issue/, `doctor did not report the typo:\n${all.slice(0, 600)}`);
-    assert.match(all, /did you mean "language"/, 'doctor did not carry the suggestion through');
+    assert.match(all, /did you mean "candidate"/, 'doctor did not carry the suggestion through');
   } finally {
     rmSync(dir, { recursive: true, force: true, maxRetries: 10 });
   }
@@ -191,7 +191,7 @@ test('a clean profile adds no doctor noise', () => {
     // page_format and style are documented as commented-out sections, so a
     // profile that sets them is as clean as one that does not.
     writeFileSync(join(dir, 'config', 'profile.yml'),
-      'language:\n  output: ja\npage_format: a4\nstyle:\n  accent_color: "#2563eb"\n');
+      'candidate:\n  full_name: Fixture\npage_format: a4\nstyle:\n  accent_color: "#2563eb"\n');
     const r = spawnSync(process.execPath, [join(ROOT, 'doctor.mjs'), '--target', dir], {
       cwd: dir, encoding: 'utf-8', timeout: 60_000,
       env: { ...process.env, CAREER_OPS_ROOT: dir, CAREER_OPS_DATA_DIR: '' },
@@ -200,4 +200,10 @@ test('a clean profile adds no doctor noise', () => {
   } finally {
     rmSync(dir, { recursive: true, force: true, maxRetries: 10 });
   }
+});
+
+
+test('legacy language settings are reported as unsupported', () => {
+  const { findings } = validateProfile('language:\n  output: ja\n  modes_dir: [modes/de, modes/zh]\n', EXAMPLE);
+  assert.ok(findings.some((f) => f.code === 'unknown-key' && f.key === 'language'));
 });

@@ -102,7 +102,7 @@ Then open your AI CLI in the folder — the same first-run onboarding applies. U
 
 ### Contributing for the first time
 
-If you want to contribute to career-ops, start with a small, focused change. Bug fixes, documentation, translations, and new zero-auth scanner providers can go straight to a pull request; new features, modes, commands, or architecture changes should start with an issue first.
+If you want to contribute to career-ops, start with a small, focused change. Bug fixes, documentation and new zero-auth scanner providers can go straight to a pull request; new features, modes, commands, or architecture changes should start with an issue first.
 
 The basic workflow is:
 

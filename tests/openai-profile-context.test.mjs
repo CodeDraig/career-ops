@@ -13,7 +13,7 @@ test('OpenAI-compatible evaluator sends authoritative archetypes from the separa
   mkdirSync(join(data, 'config'));
   mkdirSync(join(data, 'modes'));
   writeFileSync(join(data, 'cv.md'), '# Fictional fixture candidate\n');
-  writeFileSync(join(data, 'config/profile.yml'), 'language:\n  output: en\nnorth_star: FIXTURE_YAML_TARGET\n');
+  writeFileSync(join(data, 'config/profile.yml'), 'language:\n  output: ja\n  modes_dir: [modes/de, modes/zh]\nnorth_star: FIXTURE_YAML_TARGET\n');
   const archetype = 'FIXTURE_AUTHORITATIVE_ARCHETYPE_REMOTE_ONLY';
   writeFileSync(join(data, 'modes/_profile.md'), `## Your Target Roles\n${archetype}\n`);
   let messages;
@@ -37,6 +37,8 @@ test('OpenAI-compatible evaluator sends authoritative archetypes from the separa
   const content = messages.find((m) => m.role === 'system').content;
   const prompt = typeof content === 'string' ? content : content.map((part) => part.text ?? '').join('\n');
   assert.match(prompt, /FIXTURE_YAML_TARGET/);
+  assert.match(prompt, /Write all human-facing output in English/);
+  assert.match(prompt, /Legacy language.output, language.primary and language.modes_dir settings are unsupported/);
   assert.ok(prompt.includes(archetype), 'the actual outgoing request must contain _profile.md');
   assert.ok(prompt.indexOf(archetype) > prompt.indexOf('## Archetype Detection'), 'user archetypes follow shared defaults');
   assert.deepEqual(readdirSync(data).sort(), ['config', 'cv.md', 'modes'], '--no-save writes no evaluation artifacts');

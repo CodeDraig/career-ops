@@ -405,7 +405,6 @@ func (m ProgressModel) renderHelp() string {
 
 	keys := keyStyle.Render("↑↓") + descStyle.Render(i18n.Current.HelpScroll) +
 		keyStyle.Render("PgUp/Dn") + descStyle.Render(i18n.Current.HelpPage) +
-		keyStyle.Render("t") + descStyle.Render(i18n.Current.HelpLanguage) +
 		keyStyle.Render("Esc") + descStyle.Render(i18n.Current.HelpBack)
 
 	gap := m.width - lipgloss.Width(keys) - lipgloss.Width(brand) - 2

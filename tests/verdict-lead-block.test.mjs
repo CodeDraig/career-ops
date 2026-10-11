@@ -104,8 +104,8 @@ if (!existsSync(join(ROOT, 'web', 'src'))) {
   const skeleton = modeFiles.map(f => [f, readFile(f)])
     .filter(([, t]) => t.includes('## H)') && t.includes('## Risk Summary'));
   const names = skeleton.map(([f]) => f);
-  if (names.length < 8 || !names.includes('modes/oferta.md') || !names.includes('modes/tr/is-ilani.md')) {
-    fail(`verdict-lead walk found ${names.length} full-skeleton modes (${names.join(', ')}) — expected ≥8 incl. modes/oferta.md and modes/tr/is-ilani.md; the check would be blind`);
+  if (names.length !== 1 || names[0] !== 'modes/oferta.md') {
+    fail(`verdict-lead walk found ${names.length} full-skeleton modes (${names.join(', ')}) — expected only the English baseline modes/oferta.md`);
   } else {
     const gaps = [];
     for (const [f, t] of skeleton) {

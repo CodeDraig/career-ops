@@ -39,8 +39,7 @@ function assertRow(row, fields, overrides = {}) {
 for (const [mode, date, company, role] of markets) {
   const labels = { num: '#', date, company, role, score: 'Score', status: 'Status', pdf: 'PDF', report: 'Report', location: 'Location', via: 'Via', notes: 'Notes' };
   const shipped = fixture(labels, baseFields);
-  check(`${mode}: exact shipped header reads all eight fields`, () => {
-    assert.ok(readFileSync(join(ROOT, 'modes', `${mode}.md`), 'utf8').includes(shipped[0]), 'fixture must match the shipped mode');
+  check(`${mode}: historical header reads all eight fields`, () => {
     assert.ok(isHeaderRow(shipped[0]));
     assertRow(parseTrackerRow(shipped[2], resolveColumns(shipped)), baseFields);
   });

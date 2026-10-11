@@ -40,13 +40,7 @@ func TestLocalizedTrackerHeaders(t *testing.T) {
 			base := []string{"#", market.date, market.company, market.role, "Score", "Status", "PDF", "Report"}
 			baseValues := []string{"41", "2026-01-02", "Acme", "Engineer", "4.2/5", "Applied", "✅", "[41](reports/041.md)"}
 			pipe := func(cells []string) string { return "| " + strings.Join(cells, " | ") + " |" }
-			mode, err := os.ReadFile(filepath.Join("..", "..", "..", "modes", market.mode+".md"))
-			if err != nil {
-				t.Fatal(err)
-			}
-			if !strings.Contains(string(mode), pipe(base)) {
-				t.Fatal("fixture must match the exact shipped mode header")
-			}
+			// Historical tracker headers remain supported after removing mode packs.
 			layouts := []struct {
 				name           string
 				headers, cells []string

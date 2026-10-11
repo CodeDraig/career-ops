@@ -49,7 +49,7 @@ function fixture(t) {
   process.env.CAREER_OPS_CODE_ROOT = CORE;
   fs.mkdirSync(path.join(data, 'config'));
   fs.writeFileSync(path.join(data, 'cv.md'), '# Fictional Fixture\n\nFixture engineer.\n');
-  fs.writeFileSync(path.join(data, 'config/profile.yml'), 'candidate:\n  full_name: Fictional Fixture\nlanguage:\n  output: en\n  modes_dir: modes/fr\n');
+  fs.writeFileSync(path.join(data, 'config/profile.yml'), 'candidate:\n  full_name: Fictional Fixture\nlanguage:\n  output: ja\n  modes_dir: modes/fr\n');
   fs.writeFileSync(path.join(data, 'config/cv-facts.json'), '{}\n');
   fs.mkdirSync(path.join(data, 'data'));
   fs.writeFileSync(path.join(data, 'data/applications.md'), '# Fixture tracker\n\n| # | Date | Company | Role | Score | Status | PDF | Report | Notes |\n|---|---|---|---|---|---|---|---|---|\n');
@@ -70,10 +70,11 @@ async function invoke(kind, input) {
   return events;
 }
 
-test('separate data root: evaluation reads the configured market and persists through core commands', { skip: skipCore }, async (t) => {
+test('separate data root: evaluation ignores legacy market settings and persists through core commands', { skip: skipCore }, async (t) => {
   const data = fixture(t);
-  assert.equal(readLanguageConfig().modesDir, 'modes/fr');
-  assert.match(readLanguageConfig().evalModeFile, /^modes\/fr\//);
+  assert.equal(readLanguageConfig().output, 'en');
+  assert.equal(readLanguageConfig().modesDir, 'modes');
+  assert.equal(readLanguageConfig().evalModeFile, "modes/oferta.md");
   await invoke('evaluate', 'https://fixture.invalid/jobs/1');
   const apps = readApplications();
   assert.equal(apps.length, 1, fs.readFileSync(path.join(data, 'merge-result.txt'), 'utf8'));

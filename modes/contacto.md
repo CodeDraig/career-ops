@@ -117,9 +117,7 @@ short message; otherwise run the LinkedIn power move below.
      time-respecting move -- hedging here reads as if the candidate forgot
      the relationship happened.
 
-5. **Versions**:
-   - EN (default)
-   - ES (if Spanish company)
+5. **Language**: Write the message in English.
 
 6. **Alternative targets**, if the search happened to confirm any others: one line
    each (who they are, and the single reason to try them). Omit this section
@@ -199,8 +197,7 @@ that there is **no contact discovery**.
      **Default 150** when the key is absent. The message MUST fit — count and trim.
    - **Lead with a specific value proposition** (the single strongest match point),
      not an introduction. Punchy sentences, not paragraphs.
-   - **Language:** match the JD / platform language (e.g. Simplified Chinese for
-     BOSS Zhipin). Character count applies to the output language.
+   - **Language:** write in English, including for non-English platforms. The character budget still applies.
 
 5. **No-fluff policy (hard):** remove filler and replace it with a concrete value
    prop. Ban phrases like "I'm looking for a job", "I'm passionate about",

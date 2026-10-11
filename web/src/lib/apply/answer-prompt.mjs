@@ -58,6 +58,8 @@ ${sources}
 
 Ground EVERY answer in the REAL candidate — never invent facts.${memory ? `\n\nDurable notes about the user:\n${memory}` : ""}
 
+Write generated free-text answers in English, regardless of the form language or legacy profile language settings. Preserve names, quoted source material, and the exact option text for selects/radios.
+
 FIELDS (id ⇥ type ⇥ label ⇥ options):
 ${fieldsList}
 

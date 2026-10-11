@@ -66,13 +66,11 @@ and never touched by `update-system.mjs` (see
 | `heuristics/` | Shared candidate-facing writing heuristics loaded by other modes — `recruiter-side.md` governs PDF summaries, bullets, cover letters, form answers, and outreach |
 | `pdf/` | Opt-in passes inside the `pdf` flow, not routable modes — `hm-audit.md` is the hiring-manager read of a tailored CV, run between the fact gate and PDF render when `--hm-audit` is passed |
 | `regional/` | Market calibration modes — `eu-swe.md` calibrates applications for European SWE roles (advisory only) |
-| `ar/ da/ de/ es/ fr/ hi/ id/ it/ ja/ ko/ pl/ pt/ ru/ tr/ ua/ zh/` | Language modes: native translations of the core modes with market-specific vocabulary; each has its own README |
 
 ## Conventions
 
 - One file = one mode; the h1 is `# Mode: <name> — <purpose>`.
 - Underscore prefix = shared context or template, not a routable mode.
-- Language selection: explicit user request or `language.modes_dir` in
-  `config/profile.yml` wins over JD-language detection (see `AGENTS.md`).
+- All modes produce English output and use the baseline system instructions.
 - Mode files are system-layer: edits belong upstream. User personalization
   goes in `_profile.md` / `_custom.md`, never in the mode files themselves.

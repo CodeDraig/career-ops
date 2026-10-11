@@ -111,11 +111,9 @@ TRIAGE: {PASS|MARGINAL|FAIL|SKIP} | {Company} | {Role} | {Score}/5 | {reason ≤
 The `TRIAGE:` prefix, the verdict keyword, and the `{Company} | {Role} | {Score}/5`
 cells are machine-readable and stay exactly as written above whatever the output
 language — the caller parses them. Only `{reason}` is human-facing prose: write it
-in `{language.output}` per AGENTS.md § "Output Language vs Market Modes" (default
-`en` when the key is absent). As with `triage_threshold`, the caller injects the
-resolved value; triage never reads `config/profile.yml` itself.
+in English per AGENTS.md § "English-only output". The caller injects `triage_threshold`; triage never reads `config/profile.yml` itself.
 
-**Examples** (English output; only the reason field changes with `language.output`):
+**Examples** (English output):
 ```text
 TRIAGE: PASS | Acme Corp | Senior Program Manager | 4.3/5 | Remote, comp clears floor, archetype direct match, 3+ proof points map
 TRIAGE: FAIL | Globex | Staff Engineer | 2.0/5 | Hard DQ: primary hands-on coding required — outside target archetypes

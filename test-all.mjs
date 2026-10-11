@@ -60,7 +60,7 @@ import * as yaml from 'js-yaml';
 import { pass, fail, warn, run, runAcrossUtcDay, runAcrossLocalDay, lastRunFailure, formatRunFailure, fileExists, finish, results, linkNodeModules, ROOT, QUICK, NODE, DEFAULT_SCRIPT_TIMEOUT_MS, getBash, toBashPath, hermeticGitEnv } from './tests/helpers.mjs';
 import { flagValue, hasFlag } from './lib/cli-flags.mjs';
 import { collectMjsFiles, isNestedCheckout, isUnderNestedCheckout } from './lib/mjs-files.mjs';
-import { FROZEN_EVALUATION_MODES, KNOWN_EVALUATION_MODES, discoverEvaluationModes, readModeText, structuralGaps } from './tests/evaluation-mode-parity-helpers.mjs';
+import { readModeText, structuralGaps } from './tests/evaluation-mode-parity-helpers.mjs';
 import { childFailureExcerpt } from './lib/failure-excerpt.mjs';
 import { SCRATCH_PREFIX, isScratchDir, markScratchOwner, sweepScratchDirs } from './lib/scratch-dirs.mjs';
 
@@ -2178,10 +2178,8 @@ const leakPatterns = [
 
 const scanExtensions = ['md', 'yml', 'html', 'mjs', 'sh', 'go', 'json'];
 const allowedFiles = [
-  // English README + localized translations (all legitimately credit Santiago)
-  'README.md', 'README.ar.md', 'README.da.md', 'README.de.md', 'README.es.md', 'README.fr.md', 'README.hi.md',
-  'README.ja.md', 'README.ko-KR.md', 'README.pl.md', 'README.pt-BR.md', 'README.ru.md', 'README.ta.md', 'README.cn.md',
-  'README.ua.md', 'README.zh-TW.md', 'README.tr.md',
+  // README legitimately credits the author.
+  'README.md',
   // Standard project files
   'LICENSE', 'CITATION.cff', 'CONTRIBUTING.md', 'CHANGELOG.md', 'TRADEMARK.md',
   'package.json', '.github/FUNDING.yml', 'CLAUDE.md', 'AGENTS.md', 'go.mod', 'test-all.mjs',
@@ -2623,11 +2621,8 @@ const outputLanguageClaudeDoc = readTextLF('CLAUDE.md');
 const careerOpsSkill = readTextLF('.agents/skills/career-ops/SKILL.md');
 const batchPrompt = readTextLF('batch/batch-prompt.md');
 
-if (/language:\s*\n(?:\s*#.*\n)*\s*output:\s*["']?en["']?/.test(profileExample)) {
-  pass('profile.example.yml documents language.output default');
-} else {
-  fail('profile.example.yml is missing language.output default');
-}
+if (/English-only/.test(profileExample)) pass('profile example documents English-only output');
+else fail('profile example is missing English-only output guidance');
 
 // Regression guard (#1771): doc assertions must survive CRLF checkouts
 // (Windows core.autocrlf=true). Exercises the real read path: a CRLF fixture
@@ -2658,55 +2653,9 @@ try {
   fail(`CRLF regression guard crashed: ${e.message}`);
 }
 
-if (
-  /language\.output/.test(outputLanguageAgentsDoc) &&
-  /human-facing output/i.test(outputLanguageAgentsDoc) &&
-  /modes_dir/.test(outputLanguageAgentsDoc)
-) {
-  pass('AGENTS.md documents output language separately from market modes');
-} else {
-  fail('AGENTS.md does not document the language.output vs modes_dir contract');
-}
-
-const marketModeDocs = [
-  ['AGENTS.md', outputLanguageAgentsDoc],
-  ['CLAUDE.md', outputLanguageClaudeDoc],
-];
-
-const outputRequestSwitchesMarketMode = (text) => text.split('\n').some((line) =>
-  /asks? for (German|French|Arabic|Japanese|Turkish) output/i.test(line) &&
-  /(?:switch(?:es|ing)?|use|read from)[^\n]*(?:language\.modes_dir|modes\/(?:de|fr|ar|ja|tr))/i.test(line)
-);
-
-const validOutputLanguageGuidance = 'If the user asks for French output, set language.output to fr.';
-const invalidOutputLanguageGuidance = 'If the user asks for French output, switch to language.modes_dir: modes/fr.';
-if (
-  !outputRequestSwitchesMarketMode(validOutputLanguageGuidance) &&
-  outputRequestSwitchesMarketMode(invalidOutputLanguageGuidance)
-) {
-  pass('output-language mentions do not imply a market-mode switch');
-} else {
-  fail('output-language mentions are incorrectly treated as market-mode switches');
-}
-
-for (const [docName, docText] of marketModeDocs) {
-  if (outputRequestSwitchesMarketMode(docText)) {
-    fail(`${docName} treats output-language requests as market-mode selection`);
-  } else {
-    pass(`${docName} keeps output language separate from market-mode selection`);
-  }
-}
-
-if (/language\.output/.test(careerOpsSkill) && /human-facing output/i.test(careerOpsSkill)) {
-  pass('career-ops skill injects the output language rule');
-} else {
-  fail('career-ops skill does not inject the output language rule');
-}
-
-if (/Language Rule/i.test(batchPrompt) && /language\.output/.test(batchPrompt) && /write all human-facing output/i.test(batchPrompt)) {
-  pass('batch prompt honors language.output for worker prose');
-} else {
-  fail('batch prompt does not honor language.output for worker prose');
+for (const [name, text] of [['AGENTS.md', outputLanguageAgentsDoc], ['skill', careerOpsSkill], ['batch', batchPrompt]]) {
+  if (/Write all human-facing output in English/.test(text)) pass(`${name} requires English output`);
+  else fail(`${name} is missing the English output rule`);
 }
 
 const batchEvaluationInputs = batchPrompt.match(/### Step 2 \u2014 Evaluate A-G([\s\S]*?)#### Step 0 \u2014 Archetype Detection/)?.[1] ?? '';
@@ -4089,11 +4038,11 @@ if (
     rcSection.includes('always a lawyer question') &&
     rcSection.includes('not legal advice') &&
     rcSection.includes('not** online') &&
-    rcSection.includes('Render in {language.output}')
+    rcSection.includes('Render in English')
   ) {
     pass('offer-prep statutory-context subsection pins table lookup, tag-note + lawyer-question integration, covenant-type discipline, never-assert-application rule, not-legal-advice, no-research reaffirmation, i18n rendering (#2028)');
   } else {
-    fail('offer-prep statutory-context subsection missing/incomplete — needs table reference, statutory-context note + lawyer-question integration, covenant-type never-conflate discipline, never-assert-application hard rule, not-legal-advice note, local-lookup-is-not-research clarification, {language.output} rendering (#2028)');
+    fail('offer-prep statutory-context subsection missing/incomplete — needs table reference, statutory-context note + lawyer-question integration, covenant-type never-conflate discipline, never-assert-application hard rule, not-legal-advice note, local-lookup-is-not-research clarification, English rendering (#2028)');
   }
 
   // 3. Phrasing discipline holds in the report-facing text: the blockquote
@@ -4168,7 +4117,7 @@ if (
     /gone and is not coming back in any shape/.test(semSection) &&
     /Never assert a floor value, a regulation flag, a doctrine holding,\s+voidness, or violation\s+\(HARD RULE\)/.test(semSection) &&
     semSection.includes('always a lawyer question') &&
-    semSection.includes('Render in {language.output}') &&
+    semSection.includes('Render in English') &&
     /no floor-figure statements,\s+no regulation-flag statements/.test(semSection) &&
     /never computes, estimates, or\s+ranges a notice or severance amount/.test(semSection) &&
     // must NOT reference the deleted table's path, or gate any behavior on
@@ -4188,16 +4137,16 @@ if (
     !/2 weeks|3 weeks|8 weeks|26 weeks/.test(semSection) &&
     !/Waksdale|ONCA 391|wilful.misconduct standard|Bardal/i.test(semSection)
   ) {
-    pass('offer-prep sub-statutory-terms subsection documents the table deletion per #2280, routes unconditionally to lawyer questions with no table lookup or category/doctrine gating, never-assert hard rule, {language.output} rendering, no-calculations non-goal — and carries no reintroduced statutory figures or doctrine narrative (#2039, #2280)');
+    pass('offer-prep sub-statutory-terms subsection documents the table deletion per #2280, routes unconditionally to lawyer questions with no table lookup or category/doctrine gating, never-assert hard rule, English rendering, no-calculations non-goal — and carries no reintroduced statutory figures or doctrine narrative (#2039, #2280)');
   } else {
-    fail('offer-prep sub-statutory-terms subsection missing/incomplete, or still asserts a specific floor value / regulation flag / doctrine holding, or still gates on a table lookup — needs the #2280 table-deletion rationale, unconditional lawyer-question routing, the floor-value/flag/doctrine never-assert hard rule, {language.output} rendering, no-calculations non-goal, and must not restate the removed ESA figures or Waksdale narrative (#2039, #2280)');
+    fail('offer-prep sub-statutory-terms subsection missing/incomplete, or still asserts a specific floor value / regulation flag / doctrine holding, or still gates on a table lookup — needs the #2280 table-deletion rationale, unconditional lawyer-question routing, the floor-value/flag/doctrine never-assert hard rule, English rendering, no-calculations non-goal, and must not restate the removed ESA figures or Waksdale narrative (#2039, #2280)');
   }
 
   // 3. Lawyer-question workflow: both the floor question and the
   //    doctrine-directed question are present, fire unconditionally (no
   //    table-flag gating), explicitly ask the lawyer for the current
   //    figure/effect rather than the mode asserting one, and are routed
-  //    through {language.output} rendering at the presentation boundary.
+  //    through English rendering at the presentation boundary.
   const semLawyerBlock = semSection.slice(
     Math.max(0, semSection.indexOf('Questions for your lawyer')),
     semSection.indexOf('candidate-empowering angle') > 0
@@ -4209,11 +4158,11 @@ if (
     /does this clause meet it/i.test(semLawyerBlock) &&
     /could void the whole clause/i.test(semLawyerBlock) &&
     !/void_doctrine: true/.test(semLawyerBlock) &&
-    (semLawyerBlock.match(/Render in \{language\.output\}/g) || []).length >= 2
+    (semLawyerBlock.match(/Render in English/g) || []).length >= 2
   ) {
-    pass('sub-statutory-terms lawyer-question workflow generates both the statutory-floor question and the doctrine-directed question unconditionally (no table-flag gating), each asking the lawyer for the current figure/effect (never asserting one) and each rendered via [Render in {language.output}] at the presentation boundary (#2039, #2280)');
+    pass('sub-statutory-terms lawyer-question workflow generates both the statutory-floor question and the doctrine-directed question unconditionally (no table-flag gating), each asking the lawyer for the current figure/effect (never asserting one) and each rendered via [Render in English] at the presentation boundary (#2039, #2280)');
   } else {
-    fail('sub-statutory-terms lawyer-question workflow incomplete — needs a statutory-floor question asking the lawyer for the current minimum, a doctrine-directed question about whether a defect could void the whole clause, both firing unconditionally with no void_doctrine table-flag gating, and both rendered via [Render in {language.output}] (#2039, #2280)');
+    fail('sub-statutory-terms lawyer-question workflow incomplete — needs a statutory-floor question asking the lawyer for the current minimum, a doctrine-directed question about whether a defect could void the whole clause, both firing unconditionally with no void_doctrine table-flag gating, and both rendered via [Render in English] (#2039, #2280)');
   }
 
   // 4. Phrasing discipline holds in the report-facing text: no rendered
@@ -4309,81 +4258,9 @@ if (
   fail('_shared.md missing canonical company-type compensation reliability framework');
 }
 
-const zhShared = readFile('modes/zh/_shared.md');
-const zhOferta = readFile('modes/zh/oferta.md');
-if (
-  zhShared.includes('## 公司类型与薪资可信度') &&
-  zhShared.includes('成长期创业公司 / 已融资创业公司') &&
-  zhShared.includes('早期初创企业 / 未盈利创业公司') &&
-  zhShared.includes('开源社区 / 教育社区') &&
-  zhShared.includes('实际合同主体 / 用工主体') &&
-  zhShared.includes('薪资可信度默认使用保守的正式等级：`低`') &&
-  zhShared.includes('薪资分析压缩为两行：公司类型和薪资可信度') &&
-  zhShared.includes('浮动 / 条件性现金组成') &&
-  zhOferta.includes('公司类型分类（必填）') &&
-  zhOferta.includes('薪资可信度（必填）') &&
-  zhOferta.includes('没有任何公开薪资数字，也没有“综合薪资”“底薪+提成”“含绩效”“含全勤”“最高可达”等模糊补偿表述') &&
-  zhOferta.includes('JD 未提供薪资 / 补偿信息；跳过薪资组成拆分、详细市场数据表和 HR 核验问题') &&
-  zhOferta.includes('出现“综合薪资”“底薪+提成”“含绩效”“含全勤”“最高可达”“上不封顶”等模糊补偿表述时，进入完整薪资可信度路径') &&
-  zhOferta.includes('公开薪资区间') &&
-  zhOferta.includes('可能的合同固定 base') &&
-  zhOferta.includes('浮动 / 条件性现金组成') &&
-  zhOferta.includes('非现金福利') &&
-  zhOferta.includes('当 JD 明确写出薪资数字，或出现模糊补偿表述时，必须给出 3-6 个 HR 核验问题') &&
-  zhOferta.includes('不要把招聘广告薪资当作真实到手')
-) {
-  pass('Chinese modes include company-type compensation reliability checks');
-} else {
-  fail('Chinese modes missing company-type compensation reliability checks');
-}
-
-// ── Localized evaluation-mode structural parity (#3669, #3828) ──
-// Localized evaluation modes were frozen at a pre-Block-G shape: no Block G,
-// no Risk Summary, and `## G)` meaning the draft-answers block that is `## H)`
-// in the canonical. A locale WITHOUT an evaluation mode falls back to the
-// canonical and gets all of it, so a stale translation is worse than none.
-// This pins the structural contract on EVERY localized evaluation mode: the
-// report-format letters A)–H) present, `## Risk Summary` between G) and H), and
-// the header field labels + `## Risk Summary` literal in English (the web
-// viewer maps them by name and silently drops what it does not know).
-//
-// Evaluation modes are discovered by content, not by name: any
-// modes/<lang>/*.md that opens a `## A)` report block is one, so the seven
-// market mode sets that keep theirs under a market name (angebot, offre,
-// naukri, lowongan, annuncio, gonggo, vacature) are checked alongside the
-// oferta.md files and a future one cannot hide from the check by its filename
-// (#3828). The allowlist in tests/evaluation-mode-parity-helpers.mjs names the
-// files still frozen; a re-synced file MUST be removed from it (the check fails
-// loudly otherwise). Entries the walk no longer finds also fail, so the list
-// can only shrink. Denominator
-// asserted against the full list of known files, or the check would go blind
-// one file at a time.
-{
-  const evaluationModes = discoverEvaluationModes(ROOT);
-  const undiscovered = KNOWN_EVALUATION_MODES.filter(f => !evaluationModes.includes(f));
-  if (undiscovered.length > 0) {
-    fail(`localized evaluation-mode walk did not find ${undiscovered.join(', ')} (renamed, or its \`## A)\` block is gone?) — found ${evaluationModes.length}: ${evaluationModes.join(', ')}`);
-  } else {
-    const canonicalGaps = structuralGaps(readModeText(ROOT, 'modes/oferta.md'));
-    const stillFrozen = [], resynced = [], drifted = [], unknownFrozen = [...FROZEN_EVALUATION_MODES].filter(f => !evaluationModes.includes(f));
-    for (const file of evaluationModes) {
-      const gaps = structuralGaps(readModeText(ROOT, `modes/${file}`));
-      if (FROZEN_EVALUATION_MODES.has(file)) (gaps.length === 0 ? resynced : stillFrozen).push(file);
-      else if (gaps.length > 0) drifted.push(`${file} (${gaps.join(', ')})`);
-    }
-    if (canonicalGaps.length > 0) {
-      fail(`canonical modes/oferta.md lost its own report-format contract: ${canonicalGaps.join(', ')}`);
-    } else if (unknownFrozen.length > 0) {
-      fail(`FROZEN_EVALUATION_MODES names files the walk did not find (renamed or deleted?): ${unknownFrozen.join(', ')}`);
-    } else if (drifted.length > 0) {
-      fail(`localized evaluation mode drifted from the canonical report structure: ${drifted.join('; ')}`);
-    } else if (resynced.length > 0) {
-      fail(`localized evaluation mode re-synced but still listed as frozen — remove from FROZEN_EVALUATION_MODES in tests/evaluation-mode-parity-helpers.mjs and tick it in #3669 (oferta.md) or #3828 (market-named): ${resynced.join(', ')}`);
-    } else {
-      pass(`localized evaluation-mode structural parity: ${evaluationModes.length - stillFrozen.length} of ${evaluationModes.length} files carry A)–H) + Risk Summary + English header labels; still frozen (allowlisted, #3669/#3828): ${stillFrozen.join(', ') || 'none'}`);
-    }
-  }
-}
+const canonicalGaps = structuralGaps(readModeText(ROOT, 'modes/oferta.md'));
+if (canonicalGaps.length) fail(`English evaluation structure incomplete: ${canonicalGaps.join(', ')}`);
+else pass('English evaluation retains its complete report structure');
 
 const batchPromptDoc = readFile('batch/batch-prompt.md');
 if (
@@ -5126,21 +5003,6 @@ if (
     fail('apply mode references browser-extract.mjs — the extractor must not touch the apply/form path');
   }
 
-  // Phase 2b (#1449): the language-market pipeline mirrors must wire the same
-  // opt-in extractor, so non-English users get the token saving too.
-  const langPipelines = readdirSync(join(ROOT, 'modes'), { withFileTypes: true })
-    .filter((e) => e.isDirectory())
-    .map((e) => `modes/${e.name}/pipeline.md`)
-    .filter((p) => existsSync(join(ROOT, p)));
-  const langMissing = langPipelines.filter((m) => {
-    const src = readFile(m);
-    return !(src.includes('browser-extract.mjs') && src.includes('scan.extractor'));
-  });
-  if (langPipelines.length > 0 && langMissing.length === 0) {
-    pass(`all ${langPipelines.length} language pipeline mirrors wire the opt-in extractor (#1449 Phase 2b)`);
-  } else {
-    fail(`language pipeline mirrors missing extractor wiring: ${langMissing.join(', ') || '(none found)'}`);
-  }
 }
 
 if (readFile('DATA_CONTRACT.md').includes('data/blacklist.md')) {
@@ -6640,7 +6502,7 @@ if (
 const criticalRoutingContracts = [
   ['paste-a-JD auto-pipeline', /Pastes JD or URL\s*\|\s*auto-pipeline/],
   ['PDF mode', /generate CV\/PDF\s*\|\s*`pdf`/i],
-  ['language modes_dir override', /language\.modes_dir:\s*modes\/(?:\{lang\}|de)/],
+  ['English-only mode routing', /Always use the baseline modes under `modes\/`/],
   ['doctor --json onboarding', /node doctor\.mjs --json/],
 ];
 for (const [name, marker] of criticalRoutingContracts) {
@@ -18575,13 +18437,13 @@ console.log('\n67. Protected-grounds question detection (#2030)');
     pgSection.includes('names that context instead of flagging cleanly') &&
     pgSection.includes('no sentiment or intent inference') &&
     pgSection.includes('not legal advice') &&
-    pgSection.includes('Render in {language.output}') &&
+    pgSection.includes('Render in English') &&
     redflagMode.includes('| Protected-grounds questions (Step 2c) |') &&
     redflagMode.includes('5 signal types × 2')
   ) {
     pass('interview-redflag Step 2c pins jurisdiction derivation from config/profile.yml, skip-when-no-row, reuse of existing evidence tiers + scoring (+1/+2) + verdict tiers + #1856 blacklist bridge, legitimate_contexts honesty, no-intent-inference, not-legal-advice, i18n rendering, and the aggregated signal-table row (#2030)');
   } else {
-    fail('interview-redflag Step 2c missing/incomplete — needs table + profile.yml jurisdiction derivation, skip-when-no-row rule, existing-machinery reuse (no new verdict system; +1/+2 aggregation; blacklist-suggestion bridge), legitimate_contexts honesty, no sentiment/intent inference, not-legal-advice note, {language.output} rendering, signals-table row, updated 5-signal max (#2030)');
+    fail('interview-redflag Step 2c missing/incomplete — needs table + profile.yml jurisdiction derivation, skip-when-no-row rule, existing-machinery reuse (no new verdict system; +1/+2 aggregation; blacklist-suggestion bridge), legitimate_contexts honesty, no sentiment/intent inference, not-legal-advice note, English rendering, signals-table row, updated 5-signal max (#2030)');
   }
 
   // 3. Phrasing discipline holds in the report-facing text: the rendered
@@ -18691,11 +18553,11 @@ console.log('\n68. Immigration-status requirement overreach (#2033)');
     sigSection.includes('unlawful unless required by law, regulation, executive order, or government contract for this position') &&
     sigSection.includes('⚠️ **Immigration-status requirement signal:**') &&
     sigSection.includes('not legal advice') &&
-    sigSection.includes('Render in {language.output}')
+    sigSection.includes('Render in English')
   ) {
     pass('oferta Block G immigration-status signal pins jurisdiction derivation, skip-when-no-row, exceptions honesty (named hook instead of clean flag), the ITAR/EAR US-person note, statute-fact phrasing, and the not-legal-advice close (#2033)');
   } else {
-    fail('oferta Block G immigration-status signal missing/incomplete — needs table + profile.yml jurisdiction derivation, skip-when-no-row, exceptions honesty, ITAR/EAR note, statute-fact phrasing, {language.output} rendering, not-legal-advice note (#2033)');
+    fail('oferta Block G immigration-status signal missing/incomplete — needs table + profile.yml jurisdiction derivation, skip-when-no-row, exceptions honesty, ITAR/EAR note, statute-fact phrasing, English rendering, not-legal-advice note (#2033)');
   }
 
   const stepStart = applyNow.indexOf('## Step 5d — Immigration-status screening check');
@@ -18934,10 +18796,10 @@ try {
     fail('followup mode missing the never-write blacklist guarantee for latency flags');
   }
 
-  if (followupModeDoc.includes('[Render in {language.output}')) {
-    pass('followup latency reminders use the {language.output} localization pattern');
+  if (followupModeDoc.includes('[Render in English')) {
+    pass('followup latency reminders use the English localization pattern');
   } else {
-    fail('followup latency reminders missing the {language.output} localization pattern');
+    fail('followup latency reminders missing the English localization pattern');
   }
 
   if (!/STATUTORY_THRESHOLDS|resolveJurisdiction|--jurisdiction/.test(rejectionLatencySrc)) {
@@ -19210,80 +19072,19 @@ try {
 }
 
 console.log('\n73. Gemini evaluator and encoding');
-
-let geminiTmp = null;
+const geminiTmp = mkdtempSync(join(tmpdir(), 'co-gemini-english-'));
 try {
-  geminiTmp = mkdtempSync(join(ROOT, 'co-gemini-'));
-  const configDir = join(geminiTmp, 'config');
-  const modesDir = join(geminiTmp, 'modes', 'tr');
-  mkdirSync(configDir, { recursive: true });
-  mkdirSync(modesDir, { recursive: true });
-
-  // 1. Create a profile.yml setting modes_dir to modes/tr
-  writeFileSync(
-    join(configDir, 'profile.yml'),
-    '\uFEFFlanguage:\n  modes_dir: modes/tr\n', // Starts with a UTF-8 BOM
-    'utf-8'
-  );
-
-  // 2. Create localized dummy files in modes/tr/
-  // is-ilani.md contains Turkish/Czech characters: Türkiye, Čeština
-  writeFileSync(join(modesDir, '_shared.md'), 'Shared Turkish context', 'utf-8');
-  writeFileSync(join(modesDir, 'is-ilani.md'), 'Türkiye Čeština logic', 'utf-8');
-
-  // 3. Create other required files
-  writeFileSync(join(geminiTmp, 'cv.md'), 'My CV', 'utf-8');
-  mkdirSync(join(geminiTmp, 'modes'), { recursive: true });
-  writeFileSync(join(geminiTmp, 'modes', '_profile.md'), 'My Profile', 'utf-8');
-
-  // 4. Create a mock job description file with a BOM and UTF-8 characters
-  const jdPath = join(geminiTmp, 'mock-jd.txt');
-  writeFileSync(jdPath, '\uFEFFJob in Türkiye Čeština with BOM', 'utf-8');
-
-  // Run ROOT/gemini-eval.mjs directly with cwd: geminiTmp.
-  let stdout = '';
-  let stderr = '';
-  try {
-    stdout = execFileSync(NODE, [join(ROOT, 'gemini-eval.mjs'), '--file', jdPath, '--no-save'], {
-      cwd: geminiTmp,
-      env: {
-        ...process.env,
-        GEMINI_API_KEY: 'mock-api-key-12345'
-      },
-      encoding: 'utf-8',
-      stdio: ['pipe', 'pipe', 'pipe'],
-      timeout: 30000
-    });
-  } catch (err) {
-    stdout = err.stdout || '';
-    stderr = err.stderr || '';
-  }
-
-  // Assertions:
-  if (stdout.includes('Loading context files...')) {
-    pass('Gemini evaluator loads files phase started');
-  } else {
-    fail('Gemini evaluator failed to start file loading phase');
-  }
-
-  if (stdout.includes('modes/tr/_shared.md not found') || stdout.includes('modes/tr/is-ilani.md not found')) {
-    fail('Gemini evaluator failed to resolve custom modes directory or filenames');
-  } else {
-    pass('Gemini evaluator resolved custom modes directory (modes/tr/) and localized filenames (is-ilani.md)');
-  }
-
-  if (stderr.includes('API_KEY') || stderr.includes('API key')) {
-    pass('Gemini evaluator reached API phase with mock key');
-  } else {
-    fail(`Gemini evaluator failed before reaching API phase or crashed: ${stderr}`);
-  }
-} catch (e) {
-  fail(`Gemini evaluator test crashed: ${e.message}`);
-} finally {
-  if (geminiTmp && existsSync(geminiTmp)) {
-    rmSync(geminiTmp, { recursive: true, force: true });
-  }
-}
+  mkdirSync(join(geminiTmp, 'config'));
+  writeFileSync(join(geminiTmp, 'config/profile.yml'), '\uFEFFlanguage:\n  output: tr\n  modes_dir: modes/tr\n');
+  writeFileSync(join(geminiTmp, 'cv.md'), 'Fictional CV');
+  const jdPath = join(geminiTmp, 'jd.txt');
+  writeFileSync(jdPath, '\uFEFFJob in Türkiye Čeština with BOM');
+  const result = spawnSync(NODE, [join(ROOT, 'gemini-eval.mjs'), '--file', jdPath, '--no-save', '--context-only'], {
+    cwd: geminiTmp, env: { ...process.env, CAREER_OPS_ROOT: geminiTmp, GEMINI_API_KEY: 'fixture-unused' }, encoding: 'utf8', timeout: 30000,
+  });
+  if (result.status === 0 && result.stdout.includes('Evaluation mode: modes/oferta.md')) pass('Gemini reads UTF-8 input and ignores legacy market routing without a model call');
+  else fail(`Gemini English context probe failed: ${result.stderr || result.error}`);
+} finally { rmSync(geminiTmp, { recursive: true, force: true }); }
 
 console.log('\n74. gmail: isCleanUrl() drops page assets');
 try {

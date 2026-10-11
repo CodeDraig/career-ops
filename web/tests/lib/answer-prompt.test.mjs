@@ -83,3 +83,12 @@ test("a form with no fields still produces a well-formed prompt", () => {
   // prompt, it does not reword it.
   assert.match(prompt, /FIELDS \(id ⇥ type ⇥ label ⇥ options\):\n\n\nFor each field/);
 });
+
+
+test("generated prose stays English while foreign form options remain exact", () => {
+  const prompt = buildAnswerPrompt({ title: "Ingénieur", fields: [{ id: "choice", type: "select", label: "Lieu", options: ["Paris", "À distance"] }] });
+  assert.match(prompt, /Write generated free-text answers in English/);
+  assert.match(prompt, /regardless of the form language or legacy profile language settings/);
+  assert.ok(prompt.includes("[options: Paris | À distance]"));
+  assert.match(prompt, /EXACT option text/);
+});

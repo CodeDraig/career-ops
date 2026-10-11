@@ -68,11 +68,8 @@ const modes = walk(join(ROOT, 'modes'))
   .map((abs) => ({ rel: relative(ROOT, abs).split(sep).join('/'), text: readFileSync(abs, 'utf-8') }))
   .filter(({ text }) => BLOCK_F.test(text));
 
-// A floor, so a Block F heading that stops matching cannot turn this suite into
-// a green run over nothing. Nineteen evaluation modes ship on 2026-10-03; a new
-// market raises the count without touching this line.
-check(`discovery finds the evaluation modes (${modes.length})`, () => {
-  assert.ok(modes.length >= 19, `only ${modes.length} files under modes/ define Block F; 19 did when this suite was written`);
+check('discovery finds the English evaluation mode', () => {
+  assert.deepEqual(modes.map(({ rel }) => rel), ['modes/oferta.md']);
 });
 
 for (const { rel, text } of modes) {

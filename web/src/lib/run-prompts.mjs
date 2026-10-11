@@ -109,48 +109,11 @@ export function buildPrompt({ kind, input, memory, today, postedAt, lang, cvTemp
   const nodeCommand = (file) => split
     ? `node '${path.join(codeRoot, file).replaceAll("'", "'\\''")}'`
     : `node ${file}`;
-  const layoutNote = split
+  const languageDirective = "Write all human-facing output in English regardless of the language of the job description. Legacy language.output, language.primary and language.modes_dir settings have no effect.\n\n";
+  const layoutNote = languageDirective + (split
     ? `The working directory and user data root is ${JSON.stringify(dataRoot)}. Keep cv.md, config/profile.yml, modes/_profile.md, modes/_custom.md, reports/, output/, data/ and batch/tracker-additions/ relative to that directory. The career-ops engine is ${JSON.stringify(codeRoot)}: read its AGENTS.md and DATA_CONTRACT.md, and resolve other system modes, templates and scripts there. Run core scripts by their absolute paths; CAREER_OPS_ROOT already points to the user data directory.\n\n`
-    : "";
-  // AGENTS.md's "Output Language vs Market Modes" composition rule. The CLI
-  // picks this up by reading AGENTS.md interactively; a one-shot headless
-  // prompt has no such chance, so the rule has to be stated in the prompt or a
-  // configured market silently does nothing on a web-triggered run.
-  //
-  // `lang` is optional and defaults to the English/global configuration:
-  // readLanguageConfig() touches the filesystem, so callers that cannot supply
-  // it (tests, future callers) keep working instead of this module reaching for
-  // fs itself and losing its "plain module, testable as a value" property.
-  const resolvedLang = lang ?? { output: "en", modesDir: "modes", modesDirs: ["modes"], evalModeFile: "modes/oferta.md" };
-  // language.modes_dir may declare MULTIPLE simultaneous candidate markets
-  // (#3793 — e.g. an immigrant candidate applying in both Canada and China at
-  // once). `modesDirs` carries every declared market (primary first);
-  // `modesDir` alone (older callers, e.g. tests that only set that field)
-  // means exactly one declared market.
-  const allDeclaredMarkets = resolvedLang.modesDirs ?? [resolvedLang.modesDir];
-  // `modes` is a real declared candidate (for markets with no localized
-  // directory), so [modes, modes/zh] is still multi-market. It is omitted only
-  // from the extra `_shared.md` pointers: the default baseline is already the
-  // core context, while localized directories need an explicit include.
-  const declaredMarkets = allDeclaredMarkets.filter(Boolean);
-  const isMultiMarket = declaredMarkets.length > 1;
-  const sharedMarketDirs = declaredMarkets.filter((dir) => dir !== "modes");
-  const sharedMarketNote = sharedMarketDirs.length
-    ? ` Also read ${sharedMarketDirs.map((dir) => systemFile(`${dir}/_shared.md`)).join(" and ")} for ${
-        isMultiMarket ? "these markets'" : "this market's"
-      } vocabulary, benefits and legal concepts, and keep those terms (explained in the output language) where relevant.`
-    : "";
-  // Market selection affects evaluation persistence. Research is read-only and
-  // may use the shared context without receiving evaluation-only stop rules.
-  const marketSelectionNote = kind === "evaluate" && isMultiMarket
-    ? ` These are multiple DECLARED candidate markets — per posting, judge which one actually applies from the JD's own MARKET signals (hiring-entity jurisdiction, currency, benefits/legal vocabulary), reusing the same judgment Block G posting-legitimacy checks already use. Never infer the market from the JD's language alone (a French-language Quebec/federal-Canada posting needs Canada's concepts, not modes/fr's France/Belgium/Switzerland/Luxembourg ones).`
-    : "";
-  const unattendedAmbiguityStep = kind === "evaluate" && isMultiMarket
-    ? ` If those signals remain genuinely ambiguous, this is an unattended run and nobody can answer a question: do not stop or ask the candidate. Continue with the first/primary market (${resolvedLang.modesDir}) and state both the ambiguity and that primary-market fallback explicitly in the report header or Block G before persisting.\n\n`
-    : "";
-  const marketNote = sharedMarketNote + marketSelectionNote;
-  const languageDirective = `\n\nWrite all human-facing output in "${resolvedLang.output}" regardless of the language of these instructions or the job description.${marketNote}\n`;
-  const mem = (memory.trim() ? `\n\nDurable notes about the user (from their profile):\n${memory.trim()}\n` : "") + languageDirective;
+    : "");
+  const mem = (memory.trim() ? `\n\nDurable notes about the user (from their profile):\n${memory.trim()}\n` : "");
   if (kind === "research") {
     return `${layoutNote}You are investigating the user's OWN work / portfolio to surface job-search-relevant strengths, headless. Investigate the target (use WebFetch for URLs; read local files if referenced) and report: what it is, why it is impressive, and how to leverage it in their job search — which roles/claims it supports and how to frame it on a CV. Be specific, honest, and encouraging. Report only: never submit, send, or click Apply anywhere, and contact no one — you are investigating the user's own work, not acting on it.${mem}
 
@@ -256,13 +219,13 @@ End with EXACTLY one final line: VERDICT: {5 if now live, else 1}/5 — {what yo
   // core changes its mind, this follows instead of contradicting it.
   return `${layoutNote}You are running the OFFICIAL career-ops job evaluation, HEADLESS, on the user's own machine. Today is ${today}. Run the REAL career-ops evaluation — do NOT improvise your own scoring.
 
-1. Read ${systemFile(resolvedLang.evalModeFile)} and follow it EXACTLY — EVERY section its report template specifies, in its order, including the Machine Summary. Do not treat any list of sections in THIS prompt as the set to produce; that file is the only source of truth for which sections exist. Ground the fit in THIS person: read cv.md, config/profile.yml and modes/_profile.md.
+1. Read ${systemFile("modes/oferta.md")} and follow it EXACTLY — EVERY section its report template specifies, in its order, including the Machine Summary. Do not treat any list of sections in THIS prompt as the set to produce; that file is the only source of truth for which sections exist. Ground the fit in THIS person: read cv.md, config/profile.yml and modes/_profile.md.
 
    Use WebFetch to read the posting (you are headless — Playwright is unavailable), and mark the report header "Verification: unconfirmed (batch mode)".
 
    **If WebFetch does not return the posting itself — a login/consent wall, a partial page shell with no job description, a 404 or expired ad, a paywall, a bot challenge, or a page whose text is not this job — this is the mode file's "posting appears closed" case: STOP BEFORE BLOCK A and do not generate an evaluation, a report or a CV.** That rule is the mode's, not this prompt's; modes/pipeline.md states the same thing for extraction — never treat a login wall or partial shell as a verified JD. Instead, say which URL you fetched and what came back, so the user can paste the job text themselves. A scored report about a login screen looks exactly like a scored report about the job, and a run that reports it could not read the posting is a correct outcome.
 
-${mem}${unattendedAmbiguityStep}2. Persist the result CANONICALLY so the web and the CLI share ONE source of truth:
+${mem}2. Persist the result CANONICALLY so the web and the CLI share ONE source of truth:
    a. Reserve a report number: run \`${nodeCommand("reserve-report-num.mjs")}\` — its stdout is a 3-digit number (e.g. 035).
    b. Write the full report to reports/{num}-{company-slug}-${today}.md  (company-slug = company lowercased, non-alphanumerics → hyphens).
    c. Write batch/tracker-additions/{num}-{company-slug}.tsv as TWO lines (real \\t tabs): a HEADER row of the 10 column labels, then ONE data row of 10 TAB-separated columns under it. merge-tracker reads the header and resolves every field by NAME, so no value can land in the wrong column. Copy both lines exactly as shown. ALWAYS write all 10 fields on the data row — leave the last one EMPTY if there is no posting URL, never "N/A" or "-":

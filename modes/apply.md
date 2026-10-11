@@ -89,7 +89,7 @@ Application forms are where status screening most often hides — usually one dr
 
 If a question matches, warn the candidate BEFORE generating or filling an answer for that question:
 
-> ⚠️ **Immigration-status screening warning:** [Render in {language.output}: a factual statement that the form question "{question text}" screens for a specific immigration status rather than work authorization; that under {jurisdiction_name}'s {legal_basis} status requirements are unlawful unless a listed exception applies — cite the entry's `legal_basis` and `exceptions` verbatim as data tokens; if the form or posting names a plausible statutory hook (government contract, security clearance, an s.16 category), name it here. Note that the lawful version of this question ("are you authorized to work in {country}?") is different and would not have triggered this warning, that exemptions cannot be verified from the form, and that this is informational only and not legal advice. Ask the candidate how they want to handle the question.]
+> ⚠️ **Immigration-status screening warning:** [Render in English: a factual statement that the form question "{question text}" screens for a specific immigration status rather than work authorization; that under {jurisdiction_name}'s {legal_basis} status requirements are unlawful unless a listed exception applies — cite the entry's `legal_basis` and `exceptions` verbatim as data tokens; if the form or posting names a plausible statutory hook (government contract, security clearance, an s.16 category), name it here. Note that the lawful version of this question ("are you authorized to work in {country}?") is different and would not have triggered this warning, that exemptions cannot be verified from the form, and that this is informational only and not legal advice. Ask the candidate how they want to handle the question.]
 
 **Hard rules for this step:**
 
@@ -107,7 +107,7 @@ Application forms are where legally prohibited questions most often live — sal
 
 If a field matches, warn the candidate BEFORE generating or filling an answer for that field:
 
-> ⚠️ **Prohibited-content warning:** [Render in {language.output}: a factual statement that the form field "{field label}" asks for {the matched content}, which {jurisdiction_name}'s {legal_basis} has prohibited employers from seeking since {effective date} — cite the entry's `legal_basis` and `effective` fields verbatim as data tokens; note that the candidate is generally not obligated to answer, that exemptions exist which cannot be verified from the form, and that this is informational only and not legal advice. Ask the candidate how they want to handle the field.]
+> ⚠️ **Prohibited-content warning:** [Render in English: a factual statement that the form field "{field label}" asks for {the matched content}, which {jurisdiction_name}'s {legal_basis} has prohibited employers from seeking since {effective date} — cite the entry's `legal_basis` and `effective` fields verbatim as data tokens; note that the candidate is generally not obligated to answer, that exemptions exist which cannot be verified from the form, and that this is informational only and not legal advice. Ask the candidate how they want to handle the field.]
 
 **Hard rules for this step:**
 
@@ -119,7 +119,7 @@ If a field matches, warn the candidate BEFORE generating or filling an answer fo
 
 Before drafting answers, read the matched report's Block G fixed-term finding and any visible JD text. If either explicitly describes the role as fixed-term — for example `18 month contract`, `6-month contract`, `fixed-term`, `fixed-term contract position`, `temporary position/role/assignment`, or `term position` — surface one reminder before the first answer:
 
-> ℹ️ **Fixed-term role reminder:** [Render in {language.output}: quote the exact fixed-term phrase and preserve any stated duration verbatim. State that the role is explicitly time-limited, then suggest confirming renewal expectations, benefits, end-of-term/notice terms, and whether the total package reflects the finite term. If compensation comes up, say only that fixed-term roles can use different compensation structures and that current benchmarks for this market and role should be verified before choosing an anchor.]
+> ℹ️ **Fixed-term role reminder:** [Render in English: quote the exact fixed-term phrase and preserve any stated duration verbatim. State that the role is explicitly time-limited, then suggest confirming renewal expectations, benefits, end-of-term/notice terms, and whether the total package reflects the finite term. If compensation comes up, say only that fixed-term roles can use different compensation structures and that current benchmarks for this market and role should be verified before choosing an anchor.]
 
 **Hard rules:**
 

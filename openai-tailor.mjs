@@ -198,6 +198,7 @@ const templateHtml   = readFile(PATHS.template, 'templates/cv-template.html', tr
 // Build system prompt
 // ---------------------------------------------------------------------------
 const systemPrompt = `You are career-ops, an AI-powered CV tailoring engine.
+Write all human-facing output in English. Legacy language.output, language.primary and language.modes_dir settings have no effect. Preserve proper names and quoted source material.
 You read a candidate's base CV, profile, an evaluation report, and a Job Description.
 Your job is to apply strict anti-fabrication tailoring rules to fill in an HTML template.
 
