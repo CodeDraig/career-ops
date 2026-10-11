@@ -9,7 +9,10 @@ import { resolveTrackerPath, readTrackerFile } from "../../src/lib/core/tracker-
 test("web tracker and ledger follow the core resolver across supported layouts", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "tracker-files-"));
   const prior = process.env.CAREER_OPS_TRACKER;
+  const priorCode = process.env.CAREER_OPS_CODE_ROOT;
+  const codeRoot = path.resolve(import.meta.dirname, "../../..");
   try {
+    process.env.CAREER_OPS_CODE_ROOT = codeRoot;
     delete process.env.CAREER_OPS_TRACKER;
     for (const directory of [root, path.join(root, "data"), path.join(root, "custom")]) {
       fs.mkdirSync(directory, { recursive: true });
@@ -26,7 +29,7 @@ test("web tracker and ledger follow the core resolver across supported layouts",
     check(root);
     process.env.CAREER_OPS_TRACKER = path.join(root, "custom/applications.md");
     check(path.join(root, "custom"));
-    process.env.CAREER_OPS_TRACKER = path.relative(process.cwd(), path.join(root, "custom/applications.md"));
+    process.env.CAREER_OPS_TRACKER = path.relative(codeRoot, path.join(root, "custom/applications.md"));
     check(path.join(root, "custom"));
     // A FILE symlink needs a privilege a non-elevated Windows shell lacks, and
     // a junction only links directories, so this one leg has no stand-in there.
@@ -50,6 +53,8 @@ test("web tracker and ledger follow the core resolver across supported layouts",
   } finally {
     if (prior === undefined) delete process.env.CAREER_OPS_TRACKER;
     else process.env.CAREER_OPS_TRACKER = prior;
+    if (priorCode === undefined) delete process.env.CAREER_OPS_CODE_ROOT;
+    else process.env.CAREER_OPS_CODE_ROOT = priorCode;
     fs.rmSync(root, { recursive: true, force: true });
   }
 });

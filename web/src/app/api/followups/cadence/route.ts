@@ -113,15 +113,9 @@ export async function POST(req: Request) {
   const root = careerOpsRoot();
   const file = path.join(root, "config", "profile.yml");
   let base: Record<string, unknown> = {};
-  if (!fs.existsSync(file)) {
-    // First create: seed from the example so we never leave a cadence-only profile.
-    try {
-      const seeded = yaml.load(fs.readFileSync(path.join(root, "config", "profile.example.yml"), "utf8"));
-      base = isObj(seeded) ? seeded : {};
-    } catch {
-      base = {};
-    }
-  } else {
+  // Missing facts stay missing. The example contains fictional accomplishments
+  // and work authorization, which approving a cadence does not confirm.
+  if (fs.existsSync(file)) {
     // DATA-LOSS GUARD (mirrors /api/profile): a profile that EXISTS but cannot be
     // read/parsed must never be overwritten with a cadence-only file.
     let parsed: unknown;

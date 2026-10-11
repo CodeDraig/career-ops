@@ -19,5 +19,5 @@ export async function POST(req: NextRequest) {
   if (offers.length === 0) return Response.json({ added: 0 });
 
   const result = await addOffersToPipeline(offers);
-  return Response.json(result);
+  return Response.json(result, { status: result.error ? 500 : 200 });
 }

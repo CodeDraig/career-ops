@@ -32,6 +32,7 @@ STATE_LOCK_DIR="$BATCH_DIR/.batch-state.lock"
 STATE_LOCK_PID_FILE="$STATE_LOCK_DIR/pid"
 STATE_LOCK_TIMEOUT_SECONDS=30
 MAIN_PID="${BASHPID:-$$}"
+LOCK_ACQUIRED=false
 
 # Defaults
 PARALLEL=1
@@ -183,13 +184,18 @@ acquire_lock() {
     fi
   fi
   echo "$MAIN_PID" > "$LOCK_FILE"
+  LOCK_ACQUIRED=true
 }
 
 release_lock() {
-  if [[ "${BASHPID:-$$}" != "$MAIN_PID" ]]; then
+  if [[ "${BASHPID:-$$}" != "$MAIN_PID" || "$LOCK_ACQUIRED" != "true" ]]; then
     return
   fi
-  rm -f "$LOCK_FILE"
+  # Status, dry-run and rejected invocations never own this lock. Even an
+  # owner must leave a successor's lock alone if it was replaced meanwhile.
+  if [[ -f "$LOCK_FILE" && "$(cat "$LOCK_FILE")" == "$MAIN_PID" ]]; then
+    rm -f "$LOCK_FILE"
+  fi
 }
 
 trap release_lock EXIT

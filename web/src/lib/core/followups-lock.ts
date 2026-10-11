@@ -1,7 +1,6 @@
-import path from "node:path";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
-import { careerOpsRoot } from "@/lib/career-ops";
+import { rootScript } from "@/lib/career-ops";
 
 /**
  * ACL for the core's follow-ups file lock (`followup-seed.mjs`).
@@ -47,12 +46,9 @@ type CoreWithFollowupsLock = (
  *  newly-installed checkout is picked up on the next request. */
 const modCache = new Map<string, CoreWithFollowupsLock>();
 
-/** Resolve the core export, or null when this root has data but no scripts.
- *  A data-only root cannot host the seeder either, so there is nothing to
- *  exclude cross-process and the in-process queue alone is correct — see
- *  `withFollowupsLock` below. */
+/** Resolve the lock from the engine, including when user data lives elsewhere. */
 async function loadCoreLock(): Promise<CoreWithFollowupsLock | null> {
-  const file = path.join(careerOpsRoot(), "followup-seed.mjs");
+  const file = rootScript("followup-seed");
   const cached = modCache.get(file);
   if (cached) return cached;
   if (!fs.existsSync(file)) return null;
@@ -76,9 +72,9 @@ export class FollowupsBusyError extends Error {
 /**
  * Run `fn` holding the core's follow-ups lock, releasing it on EVERY path.
  *
- * When the core scripts are absent (data-only root), runs `fn` with no file
- * lock: without the core there is no seeder to race, and `withLogLock` still
- * serializes this process. When the lock is contended past the web timeout,
+ * When the selected engine lacks this script, the legacy fallback runs `fn`
+ * under the in-process queue only. A separate data directory still uses the
+ * engine's shared lock. When it is contended past the web timeout,
  * throws `FollowupsBusyError` so the route can answer 409 rather than hang.
  *
  * @param followupsPath absolute path to data/follow-ups.md (the core resolves

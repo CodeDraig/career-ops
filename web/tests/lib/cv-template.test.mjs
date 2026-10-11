@@ -170,3 +170,16 @@ test("an unresolvable checkout yields the base template rather than throwing", a
 
   assert.equal(await resolveCvTemplate(root), BASE_CV_TEMPLATE);
 });
+
+test("a separate data root selects its template from the installed engine", { skip: !coreUsable }, async (t) => {
+  const root = fakeCheckout();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const data = path.join(root, "personal");
+  fs.mkdirSync(path.join(data, "config"), { recursive: true });
+  fs.writeFileSync(path.join(root, "config/profile.yml"), "cv:\n  template: standard\n");
+  fs.writeFileSync(path.join(data, "config/profile.yml"), "cv:\n  template: mine\n");
+  const rel = await asDashboard(root, undefined, () => resolveCvTemplate(root, data));
+  assert.equal(rel, "templates/cv-template.mine.html");
+  const prompt = buildPrompt({ kind: "pdf", input: "001", memory: "", today: "2026-10-11", cvTemplate: rel, codeRoot: root, dataRoot: data });
+  assert.ok(prompt.includes(JSON.stringify(path.join(root, rel))));
+});

@@ -3,7 +3,7 @@ import type { Page, Frame, ElementHandle } from "playwright-core";
 import { resolveCli } from "@/lib/clis";
 import { careerOpsRoot } from "@/lib/career-ops";
 import { dropNewTabs } from "./diagnose";
-import { isSubmitControl, snapshotLabel } from "./submit-guard.mjs";
+import { isSubmitControl, snapshotLabel, readElementFacts as factsOf } from "./submit-guard.mjs";
 import type { DriveStep } from "./issue";
 import { CAPS } from "../worker-capabilities.mjs";
 import { scopeFrom } from "../claude-invocation.mjs";
@@ -28,68 +28,6 @@ export type { DriveStep };
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type DriveResult = { reached: boolean; turns: number; reason: string; steps: DriveStep[] };
-
-/** What the guard decides on, read from the live DOM. See submit-guard.mjs. */
-type ElementFacts = {
-  ref: string;
-  tag: string;
-  type: string;
-  role: string;
-  inForm: boolean;
-  aria: string;
-  placeholder: string;
-  text: string;
-  value: string;
-  name: string;
-  title: string;
-  alt: string;
-};
-
-/** Read one element's facts, in the page. Defined once, at the top level, and
- *  handed to Playwright as the pageFunction for both call sites: the snapshot
- *  that decides which elements the planner may address, and the re-check the
- *  action path runs on the handle it is about to act on. Two extractors would
- *  eventually disagree, and the disagreement is the bug.
- *
- *  Playwright serialises it by source and runs it in the page, so it closes over
- *  nothing here — everything it needs is the element and its ref. */
-const factsOf = (el: Element, ref: string | null): ElementFacts => {
-  const field = el as HTMLInputElement;
-  const tag = el.tagName.toLowerCase();
-  const flat = (s: string | null) => (s || "").replace(/\s+/g, " ").trim();
-  // The accessible name, not just the attribute: a control named through
-  // aria-labelledby has no aria-label at all, and reading only the attribute
-  // would leave the guard classifying an empty string.
-  let aria = flat(el.getAttribute("aria-label"));
-  if (!aria) {
-    const ids = flat(el.getAttribute("aria-labelledby")).split(" ").filter(Boolean);
-    aria = flat(ids.map((id) => document.getElementById(id)?.textContent || "").join(" ")).slice(0, 200);
-  }
-  return {
-    ref: ref || el.getAttribute("data-co-ref") || "",
-    tag,
-    type: flat(el.getAttribute("type")).toLowerCase(),
-    role: flat(el.getAttribute("role")).toLowerCase() || (tag === "a" ? "link" : tag),
-    // `.form` also covers a control placed outside its form by form="id".
-    inForm: Boolean(field.form) || el.closest("form") !== null,
-    aria,
-    placeholder: field.placeholder || "",
-    // Capped here, not in Node: a [role="button"] can wrap a whole section, and
-    // 70 of those would cross the wire in full every turn. Well above the 80
-    // chars the snapshot line keeps, but still a cap ahead of classification:
-    // a submit phrase past character 200 of an unusually large clickable is
-    // invisible to isSubmitControl. Accepted: the alternative is unbounded text
-    // per element every turn, or classifying inside the page.
-    text: flat(el.textContent).slice(0, 200),
-    value: field.value || "",
-    name: field.name || "",
-    // Classification only (see submit-guard.mjs): they name an icon-only
-    // control that carries nothing else, and never reach the snapshot line.
-    // Same 200-char cap and the same caveat as `text` above.
-    title: flat(el.getAttribute("title")).slice(0, 200),
-    alt: flat(el.getAttribute("alt")).slice(0, 200),
-  };
-};
 
 /** Controls tagged per turn. The planner reads every one of them. */
 const MAX_REFS = 70;
@@ -287,8 +225,8 @@ Reply ONE action JSON.`;
       continue;
     }
 
-    if (act.action === "reached_form") return { reached: true, turns: turn, reason: "agent-reached", steps };
-    if (act.action === "done") return { reached: true, turns: turn, reason: "agent-done", steps };
+    if (act.action === "reached_form" && goal === "reach") return { reached: true, turns: turn, reason: "agent-reached", steps };
+    if (act.action === "done" && goal === "full") return { reached: true, turns: turn, reason: "agent-done", steps };
     if (act.action === "stuck") {
       const s: DriveStep = { turn, action: "stuck", detail: act.reason || "", thumb: await shot() };
       steps.push(s);
@@ -367,5 +305,6 @@ Reply ONE action JSON.`;
     steps.push(s);
     emit(s);
   }
-  return { reached: await isFormReady().catch(() => false), turns: budget, reason: "budget-exhausted", steps };
+  // A visible form proves navigation, never that its answers were filled.
+  return { reached: goal === "reach" && await isFormReady().catch(() => false), turns: budget, reason: "budget-exhausted", steps };
 }

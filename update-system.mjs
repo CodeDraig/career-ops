@@ -4199,7 +4199,7 @@ async function apply() {
 
 // ── ROLLBACK ────────────────────────────────────────────────────
 
-function rollback() {
+async function rollback() {
   // Same precondition as apply(): a nested .git-less install would look its
   // backup branches up — and check files out — in the enclosing repo (#3334).
   assertOwnGitToplevel();
@@ -4214,6 +4214,27 @@ function rollback() {
     }
 
     console.log(`Rolling back to: ${latest}`);
+
+    // Configured named variants are user-owned even when the backup ships the
+    // same filename. Read configuration from the data root, but protect files
+    // in this code checkout (the directory rollback actually changes).
+    let dataRoot = ROOT;
+    try {
+      const { getCareerOpsRoot } = await import('./path-resolver.mjs');
+      dataRoot = getCareerOpsRoot();
+    } catch (err) {
+      if (err?.code !== 'ERR_MODULE_NOT_FOUND' || err?.url !== new URL('./path-resolver.mjs', import.meta.url).href) throw err;
+    }
+    const configuredVariants = await loadConfiguredTemplateVariants({
+      profilePath: process.env.CAREER_OPS_PROFILE || join(dataRoot, 'config', 'profile.yml'),
+    });
+    const backupFiles = gitRawIn(ROOT, 'ls-tree', '-r', '--name-only', '-z', latest).split('\0').filter(Boolean);
+    const localFiles = gitRawIn(ROOT, 'ls-files', '-z', '--cached', '--others', '--', 'templates/').split('\0').filter(Boolean);
+    const preservedPaths = [...new Set([...backupFiles, ...localFiles])]
+      .filter((file) => isUserConfiguredTemplateVariant(file, configuredVariants));
+    const preservedSet = new Set(preservedPaths);
+    const preserveSpecs = preservedPaths.map((file) => `${EXCLUDE_PATHSPEC_PREFIX}${file}`);
+    const rollbackFiles = (paths) => expandToShippedFiles(paths, latest).filter((file) => !preservedSet.has(file));
 
     // Checkout system files from backup branch.
     //
@@ -4233,8 +4254,10 @@ function rollback() {
     const restored = [];
     const removed = [];
     for (const path of SYSTEM_PATHS) {
+      const inBackup = backupFiles.filter((file) => path.endsWith('/') ? file.startsWith(path) : file === path);
+      if (inBackup.length > 0 && inBackup.every((file) => preservedSet.has(file))) continue;
       try {
-        git('checkout', latest, '--', path);
+        git('checkout', latest, '--', path, ...preserveSpecs);
         restored.push(path);
       } catch (err) {
         const pathspec = path.endsWith('/') ? path.slice(0, -1) : path;
@@ -4252,9 +4275,13 @@ function rollback() {
         // for tracked files; `rmSync` cleans up the untracked-but-
         // on-disk case (e.g. an apply() that crashed between checkout
         // and commit, leaving the path untracked locally).
-        git('rm', '-r', '-f', '--ignore-unmatch', '--', pathspec);
+        git('rm', '-r', '-f', '--ignore-unmatch', '--', pathspec, ...preserveSpecs);
         try {
-          rmSync(join(ROOT, pathspec), { recursive: true, force: true });
+          // A directory can contain an untracked configured variant. Never
+          // recursively remove it after Git correctly excluded that variant.
+          if (!preservedPaths.some((file) => file === pathspec || file.startsWith(`${pathspec}/`))) {
+            rmSync(join(ROOT, pathspec), { recursive: true, force: true });
+          }
         } catch {
           // Already gone, or not present on disk — fine.
         }
@@ -4267,12 +4294,12 @@ function rollback() {
     // the 53 directory entries, and addPaths forces every path it is given —
     // `git add -f -- docs/` here would sweep the user's ignored files into the
     // rollback commit exactly as it would have in apply().
-    if (restored.length > 0) addPaths(expandToShippedFiles(restored, latest));
+    if (restored.length > 0) addPaths(rollbackFiles(restored));
     const rollbackPaths = [...restored, ...removed];
     // Keep rollback's scoped commit aligned with the file-level staging list.
     // A directory pathspec would otherwise include tracked files still present
     // in the worktree but absent from the backup tree (#3504).
-    const expandedRollbackPaths = expandToShippedFiles(rollbackPaths, latest);
+    const expandedRollbackPaths = rollbackFiles(rollbackPaths);
     try {
       // Scope the commit to the rollback paths (#915 bug 2). A bare
       // `git commit` would sweep unrelated staged files into the rollback.
@@ -4290,6 +4317,7 @@ function rollback() {
     }
 
     console.log(`Rollback complete. Restored ${restored.length} path(s) from ${latest}, removed ${removed.length} path(s) added after the backup.`);
+    if (preservedPaths.length) console.log(`Kept configured template variant(s): ${preservedPaths.join(', ')}`);
     console.log('Your data (CV, profile, tracker, reports) was not affected.');
   } catch (err) {
     console.error('Rollback failed:', err.message);
@@ -4370,7 +4398,7 @@ if (isCli) {
       case 'check': await check(); break;
       case 'status': console.log(`career-ops v${formatLocalVersion()}`); break;
       case 'apply': await apply(); break;
-      case 'rollback': rollback(); break;
+      case 'rollback': await rollback(); break;
       case 'dismiss': await dismiss(); break;
       default:
         console.log('Usage: node update-system.mjs [check [--force] [--channel main]|status|apply --confirm [--force] [--channel main]|rollback|dismiss [--version X.Y.Z]]');

@@ -23,6 +23,11 @@ import { pdfIndexEntryForReport } from "@/lib/apply/cv-selection.mjs";
 // reader) cannot drift apart, and so the read rule is testable from web/tests.
 import { NOTES_START, NOTES_END, profilePath as profileMemoryPath, readProfileMemory } from "@/lib/profile-memory.mjs";
 
+/** Directory holding the installed engine's modes, templates and scripts. */
+export function careerOpsCodeRoot(): string {
+  return resolveCodeRoot(process.cwd(), process.env);
+}
+
 /**
  * Resolve the career-ops "home" — the directory holding the user's sibling
  * files (cv.md, data/, reports/). In production the web/ app lives inside the
@@ -42,7 +47,7 @@ export function careerOpsRoot(): string {
   // from different bases: the script came from the configured checkout and the
   // data root from the process's parent. Identical when the variable is unset,
   // which is every default install.
-  const coreRoot = resolveCodeRoot(process.cwd(), process.env);
+  const coreRoot = careerOpsCodeRoot();
   return resolveDataRoot(
     coreRoot,
     (p) => {
@@ -74,7 +79,7 @@ export function rootScript(nameNoExt: string): string {
   // resolveRootScript() already returns the absolute `<checkout>/<name>.mjs`, and
   // its path.join carries the Turbopack ignore: the core checkout is selected at
   // runtime and must not be bundled into the web server output.
-  return resolveRootScript(resolveCodeRoot(process.cwd(), process.env), nameNoExt);
+  return resolveRootScript(careerOpsCodeRoot(), nameNoExt);
 }
 
 // Feature-detect the core's `tracker.mjs delete --num` row-delete (#1200) by probing
@@ -169,7 +174,7 @@ export function readApplications(): Application[] {
   // never a hand-written return-shape list that the two could drift from. The
   // third argument is the running system checkout, so a data-only root (no
   // tracker-aliases.json of its own) still resolves headers correctly.
-  return parseApplications(md, careerOpsRoot(), path.resolve(process.cwd(), "..")) as Application[];
+  return parseApplications(md, careerOpsRoot(), careerOpsCodeRoot()) as Application[];
 }
 
 export type StatusLogRow = {
@@ -553,6 +558,7 @@ function resolveEvalModeFile(root: string, modesDir: string): string {
  */
 export function readLanguageConfig(): LanguageConfig {
   const root = careerOpsRoot();
+  const codeRoot = careerOpsCodeRoot();
   let modesDirs = ["modes"];
   let output = "en";
   try {
@@ -572,7 +578,7 @@ export function readLanguageConfig(): LanguageConfig {
           if (typeof value !== "string" || !value.trim()) return null;
           const candidate = value.trim().replace(/\/+$/, "");
           if (!MODES_DIR_RE.test(candidate)) return null;
-          return fs.existsSync(path.join(root, candidate)) ? candidate : null;
+          return fs.existsSync(path.join(codeRoot, candidate)) ? candidate : null;
         };
         // The first declared entry is primary. Do not filter it away and
         // silently promote a later market into the evaluation slot. This
@@ -593,5 +599,5 @@ export function readLanguageConfig(): LanguageConfig {
     /* no profile yet, or malformed — defaults are correct */
   }
   const modesDir = modesDirs[0];
-  return { output, modesDir, modesDirs, evalModeFile: resolveEvalModeFile(root, modesDir) };
+  return { output, modesDir, modesDirs, evalModeFile: resolveEvalModeFile(codeRoot, modesDir) };
 }

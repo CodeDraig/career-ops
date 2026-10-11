@@ -1,16 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
+import { resolveCodeRoot } from "./code-root.mjs";
 
 // Synchronous mirror of path-resolver.mjs for the synchronous web readers.
 // tracker-files.test.mjs checks parity against the core resolver, including
 // overrides, legacy layouts, and symlinks.
 export function resolveTrackerPath(root) {
   const override = process.env.CAREER_OPS_TRACKER?.trim();
-  const candidate = path.resolve(override || (
+  const candidate = override ? path.resolve(resolveCodeRoot(process.cwd()), override) : path.resolve(
     fs.existsSync(path.join(root, "data/applications.md"))
       ? path.join(root, "data/applications.md")
       : path.join(root, "applications.md")
-  ));
+  );
   try {
     return fs.realpathSync(candidate);
   } catch {

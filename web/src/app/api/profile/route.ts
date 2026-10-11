@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 // Merge-safe writer for config/profile.yml (a USER-LAYER file — DATA_CONTRACT:
 // never clobber the user's archetypes/narrative/proof-points). On first create we
-// seed from config/profile.example.yml; on an existing file we deep-merge ONLY the
+// write ONLY approved fields; on an existing file we deep-merge ONLY the
 // proposed keys, write atomically (temp + rename), and only ever via the confirm-
 // gated setProfile action. The web orchestrates the real file — no parallel store.
 
@@ -72,18 +72,10 @@ export async function POST(req: Request) {
   const root = careerOpsRoot();
   const file = path.join(root, "config", "profile.yml");
   let base: Record<string, unknown> = {};
-  let seeded = false;
   // DATA-LOSS GUARD (maintainer, bug-class #649/#704/#920/#958): distinguish
-  // "no profile yet" (safe to seed from the example) from "profile EXISTS but is
+  // "no profile yet" (start with approved facts only) from "profile EXISTS but is
   // malformed" (NEVER overwrite — that would silently destroy the user's data).
-  if (!fs.existsSync(file)) {
-    try {
-      base = (yaml.load(fs.readFileSync(path.join(root, "config", "profile.example.yml"), "utf8")) as Record<string, unknown>) || {};
-      seeded = Object.keys(base).length > 0;
-    } catch {
-      base = {};
-    }
-  } else {
+  if (fs.existsSync(file)) {
     let parsed: unknown;
     try {
       parsed = yaml.load(fs.readFileSync(file, "utf8"));
@@ -106,5 +98,5 @@ export async function POST(req: Request) {
   } catch (e) {
     return Response.json({ error: e instanceof Error ? e.message : "write failed" }, { status: 500 });
   }
-  return Response.json({ ok: true, seeded });
+  return Response.json({ ok: true, seeded: false });
 }

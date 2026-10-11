@@ -1,8 +1,8 @@
 /**
  * submit-guard.mjs — the one definition of "this control submits the form",
- * shared by the two places in the agentic drive loop that have to agree on it
- * (`web/src/lib/apply/drive.ts`): the snapshot that decides which elements the
- * planner may address, and the action path that executes what it picked.
+ * shared by initial Apply navigation and the agentic drive loop: the snapshot
+ * that decides which elements the planner may address, and the action path
+ * that executes what it picked.
  *
  * NEVER-SUBMIT is by construction for the planner's ACTION VOCABULARY
  * (`web/AGENTS.md`: "There is no exception, no flag"): there is no "submit"
@@ -28,7 +28,40 @@
  */
 
 /**
- * The facts both call sites decide on, read from the live DOM by `drive.ts`:
+ * Read the same facts for initial navigation, planner snapshots and re-checks.
+ * Playwright serializes this function into the page; it must close over nothing.
+ * @param {Element} el
+ * @param {string | null} [ref]
+ */
+export function readElementFacts(el, ref = null) {
+  const field = /** @type {HTMLInputElement} */ (el);
+  const tag = el.tagName.toLowerCase();
+  const flat = (s) => (s || "").replace(/\s+/g, " ").trim();
+  let aria = flat(el.getAttribute("aria-label"));
+  if (!aria) {
+    const ids = flat(el.getAttribute("aria-labelledby")).split(" ").filter(Boolean);
+    aria = flat(ids.map((id) => document.getElementById(id)?.textContent || "").join(" ")).slice(0, 200);
+  }
+  return {
+    ref: ref || el.getAttribute("data-co-ref") || "",
+    tag,
+    type: flat(el.getAttribute("type")).toLowerCase(),
+    role: flat(el.getAttribute("role")).toLowerCase() || (tag === "a" ? "link" : tag),
+    // .form also covers a submit button outside the form, with form="id".
+    inForm: Boolean(field.form) || el.closest("form") !== null,
+    aria,
+    placeholder: field.placeholder || "",
+    // Bound DOM text crossing the wire, as in the original drive snapshot.
+    text: flat(el.textContent).slice(0, 200),
+    value: field.value || "",
+    name: field.name || "",
+    title: flat(el.getAttribute("title")).slice(0, 200),
+    alt: flat(el.getAttribute("alt")).slice(0, 200),
+  };
+}
+
+/**
+ * The facts navigation and drive call sites read from the live DOM:
  *
  * - `tag`          lowercase tag name
  * - `type`         the authored `type` attribute, lowercased ("" when absent).

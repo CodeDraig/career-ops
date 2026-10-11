@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { careerOpsRoot, rootScript } from "@/lib/career-ops";
+import { careerOpsRoot, careerOpsCodeRoot, rootScript } from "@/lib/career-ops";
 import type { DiscoveredOffer } from "./scan";
 
 /**
@@ -34,14 +34,13 @@ export function addOffersToPipeline(offers: DiscoveredOffer[]): Promise<AddResul
     }));
   if (clean.length === 0) return Promise.resolve({ added: 0 });
 
-  // Data-only / pre-scan-ats checkout has no scan.mjs writers → fail with an
-  // actionable message instead of a silent added:0.
+  // Fail explicitly if the selected engine lacks the canonical writer.
   if (!fs.existsSync(rootScript("scan"))) {
-    return Promise.resolve({ added: 0, error: "This checkout is data-only — the pipeline writer (scan.mjs) isn't available." });
+    return Promise.resolve({ added: 0, error: "The selected career-ops engine has no pipeline writer (scan.mjs)." });
   }
 
   const scanUrl = pathToFileURL(rootScript("scan")).href;
-  const localTodayUrl = pathToFileURL(path.join(careerOpsRoot(), "lib", "local-today.mjs")).href;
+  const localTodayUrl = pathToFileURL(path.join(careerOpsCodeRoot(), "lib", "local-today.mjs")).href;
   const code = `
 import { appendToPipeline, appendToScanHistory } from ${JSON.stringify(scanUrl)};
 import { localToday } from ${JSON.stringify(localTodayUrl)};
@@ -67,17 +66,22 @@ process.stdin.on("end", async () => {
   return new Promise((resolve) => {
     const child = spawn(process.execPath, ["--input-type=module", "-e", code], {
       cwd: careerOpsRoot(),
-      env: process.env,
+      env: { ...process.env, CAREER_OPS_ROOT: careerOpsRoot() },
     });
     let out = "";
     let err = "";
     child.stdout.on("data", (d: Buffer) => (out += d.toString()));
     child.stderr.on("data", (d: Buffer) => (err += d.toString()));
     child.on("error", (e) => resolve({ added: 0, error: e instanceof Error ? e.message : "spawn failed" }));
-    child.on("close", () => {
+    child.on("close", (code) => {
+      if (code !== 0) {
+        resolve({ added: 0, error: err.trim().slice(0, 200) || `pipeline writer exited with code ${code}` });
+        return;
+      }
       try {
-        const parsed = JSON.parse(out.trim() || "{}") as AddResult;
-        resolve({ added: parsed.added ?? 0, error: parsed.error });
+        const parsed = JSON.parse(out.trim()) as AddResult;
+        if (!Number.isInteger(parsed.added) || parsed.added < 0) throw new Error("invalid writer result");
+        resolve({ added: parsed.added, error: parsed.error });
       } catch {
         resolve({ added: 0, error: err.trim().slice(0, 200) || "writer returned no result" });
       }

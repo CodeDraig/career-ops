@@ -1,6 +1,7 @@
 import type { Page, Frame } from "playwright-core";
 import type { ApplyField } from "./extract";
 import type { ApplyIssue } from "./issue";
+import { isSubmitControl, readElementFacts } from "./submit-guard.mjs";
 
 export type { ApplyIssue };
 
@@ -94,10 +95,16 @@ export async function tryApplyTrigger(page: Page): Promise<boolean> {
     //    openai.com → jobs.ashbyhq.com/…/application). Navigate there in-tab.
     const atsLink = page.locator('a[href*="ashbyhq"], a[href*="greenhouse"], a[href*="lever.co"], a[href*="smartrecruiters"], a[href*="workable"], a[href*="recruitee"], a[href*="bamboohr"], a[href*="jobvite"], a[href*="teamtailor"], a[href*="myworkdayjobs"], a[href*="/apply"], a[href*="/application"]').first();
     if (await atsLink.count().catch(() => 0)) {
-      const href = await atsLink.getAttribute("href").catch(() => null);
-      if (href && /^https?:\/\//i.test(href) && !/submit/i.test(href)) {
-        await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30_000 }).catch(() => {});
-        return true;
+      const handle = await atsLink.elementHandle();
+      try {
+        const facts = handle ? await handle.evaluate(readElementFacts, null).catch(() => null) : null;
+        const href = handle ? await handle.getAttribute("href").catch(() => null) : null;
+        if (facts && !isSubmitControl(facts) && href && /^https?:\/\//i.test(href) && !/submit/i.test(href)) {
+          await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30_000 });
+          return true;
+        }
+      } finally {
+        await handle?.dispose().catch(() => {});
       }
     }
     // 2) Otherwise click a visible Apply CTA (never a submit). dropNewTabs() has
@@ -107,10 +114,17 @@ export async function tryApplyTrigger(page: Page): Promise<boolean> {
       .or(page.getByRole("link", { name: /apply/i }))
       .first();
     if ((await t.count().catch(() => 0)) && (await t.isVisible().catch(() => false))) {
-      const label = (await t.innerText().catch(() => "")).toLowerCase();
-      if (/submit|applied|withdraw/.test(label)) return false;
-      await t.click({ timeout: 3000 }).catch(() => {});
-      return true;
+      // Bind the check and click to one node: a locator re-resolution could
+      // otherwise click a replacement submit control after checking navigation.
+      const handle = await t.elementHandle();
+      try {
+        const facts = handle ? await handle.evaluate(readElementFacts, null).catch(() => null) : null;
+        if (!facts || isSubmitControl(facts) || /applied|withdraw/i.test(facts.text)) return false;
+        await handle!.click({ timeout: 3000 });
+        return true;
+      } finally {
+        await handle?.dispose().catch(() => {});
+      }
     }
   } catch {
     /* ignore */

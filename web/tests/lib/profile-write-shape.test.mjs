@@ -33,7 +33,9 @@ const routes = [
   { name: "profile", post: updateProfile, patch: { name: "Updated Fixture Candidate" } },
   { name: "followups/cadence", post: updateCadence, patch: { applied_first_days: 9 } },
 ];
-const template = "candidate:\n  full_name: Template Candidate\n  location: Template City\ncompensation:\n  currency: USD\n";
+// Use the shipped example: its fictional accomplishments and authorization
+// claims must never become user facts just because a partial patch is approved.
+const template = readFileSync(new URL("../../../config/profile.example.yml", import.meta.url), "utf8");
 
 async function withFixture(source, fn) {
   const root = mkdtempSync(path.join(tmpdir(), "career-ops-profile-shape-"));
@@ -100,15 +102,15 @@ for (const route of routes) {
     });
   });
 
-  test(`${route.name} still creates a missing profile from the template`, async () => {
+  test(`${route.name} creates a missing profile from approved fields only`, async () => {
     await withFixture(undefined, async ({ config, file }) => {
       assert.equal(existsSync(file), false);
       const response = await route.post(request(route));
       assert.equal(response.status, 200);
       assert.equal((await response.json()).ok, true);
-      const expected = yaml.load(template);
-      if (route.name === "profile") expected.candidate.full_name = route.patch.name;
-      else expected.followup_cadence = route.patch;
+      const expected = route.name === "profile"
+        ? { candidate: { full_name: route.patch.name } }
+        : { followup_cadence: route.patch };
       assert.deepEqual(yaml.load(readFileSync(file, "utf8")), expected);
       assert.deepEqual(readdirSync(config).sort(), ["profile.example.yml", "profile.yml"]);
     });
