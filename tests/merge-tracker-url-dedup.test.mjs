@@ -331,7 +331,7 @@ ok('legacy 9-col tracker (no URL column) still merges; URL is dropped, no crash'
   } finally { cleanup(env); }
 });
 
-ok('--backfill-urls resolves a ROOT-relative reports/ link (the P0 regression)', () => {
+ok('--backfill-urls does not resolve root-relative report links', () => {
   const env = makeEnv();
   try {
     writeFileSync(join(env.reportsDir, '13-figma-2026-06-25.md'),
@@ -341,7 +341,7 @@ ok('--backfill-urls resolves a ROOT-relative reports/ link (the P0 regression)',
       '| 13 | 2026-06-25 | Figma | Strategy & Ops | 3.5/5 | Evaluated | ❌ | [13](reports/13-figma-2026-06-25.md) | n |  |',
     ]);
     runMerge(env, ['--backfill-urls']);
-    assert.ok(trackerRows(env)[0].includes('greenhouse.io/figma/jobs/13'), 'root-relative link resolved + url backfilled');
+    assert.equal(urlCell(trackerRows(env)[0]), '', 'root-relative link must not supply a posting URL');
   } finally { cleanup(env); }
 });
 

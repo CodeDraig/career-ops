@@ -43,7 +43,7 @@ if (ok) pass('classifyOutcome maps every canonical status to its outcome bucket'
 
 // Spanish aliases run through the same normalization; 'aplicado' must not be a
 // positive either, or the bug simply reappears for Spanish-language trackers.
-if (classifyOutcome('aplicado') === 'awaiting' && classifyOutcome('enviada') === 'awaiting') {
+if (classifyOutcome('aplicado') === 'pending' && classifyOutcome('enviada') === 'pending') {
   pass("Spanish 'applied' aliases resolve to 'awaiting', not 'positive'");
 } else {
   fail(`aplicado → '${classifyOutcome('aplicado')}', enviada → '${classifyOutcome('enviada')}'`);

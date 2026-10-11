@@ -128,33 +128,9 @@ export function loadLifecycle(statesPath) {
 
 const { order: LIFECYCLE_ORDER, terminal: TERMINAL_STATUSES, labels: CANONICAL_LABELS } = loadLifecycle(STATES_FILE);
 
-// Mirrors the ALIASES map in analyze-patterns.mjs / verify-pipeline.mjs —
-// applications.md status cell normalization (bold markers, trailing dates,
-// Spanish aliases from the shipped default modes).
-const STATUS_ALIASES = {
-  'evaluada': 'evaluated', 'condicional': 'evaluated', 'hold': 'evaluated',
-  'evaluar': 'evaluated', 'verificar': 'evaluated',
-  'aplicado': 'applied', 'enviada': 'applied', 'aplicada': 'applied',
-  'applied': 'applied', 'sent': 'applied',
-  'respondido': 'responded',
-  'screening': 'assessment', 'online assessment': 'assessment', 'online_assessment': 'assessment', 'online screening': 'assessment',
-  'entrevista': 'interview',
-  'oferta': 'offer',
-  'rechazado': 'rejected', 'rechazada': 'rejected',
-  'descartado': 'discarded', 'descartada': 'discarded',
-  'cerrada': 'discarded', 'cancelada': 'discarded',
-  'no aplicar': 'skip', 'no_aplicar': 'skip', 'monitor': 'skip', 'geo blocker': 'skip',
-};
-
-/**
- * Normalize an applications.md status cell to one of the canonical ids.
- * @param {string} raw
- * @returns {string}
- */
+/** Normalize canonical tracker labels without legacy aliases or decorations. */
 export function normalizeStatus(raw) {
-  const clean = String(raw ?? '').replace(/\*\*/g, '').trim().toLowerCase()
-    .replace(/\s+\d{4}-\d{2}-\d{2}.*$/, '').trim();
-  return STATUS_ALIASES[clean] || clean;
+  return String(raw ?? '').trim().toLowerCase();
 }
 
 // active-interviews.md's Status column tracks a per-round state (Scheduled,
@@ -574,9 +550,9 @@ function runSelfTest() {
   };
 
   // --- normalizeStatus / normalizeInterviewStatus ---
-  check(normalizeStatus('**Applied**') === 'applied', 'normalizeStatus strips bold markers');
-  check(normalizeStatus('Rejected 2026-06-01') === 'rejected', 'normalizeStatus strips trailing date');
-  check(normalizeStatus('entrevista') === 'interview', 'normalizeStatus maps Spanish alias');
+  check(normalizeStatus('**Applied**') === '**applied**', 'normalizeStatus does not interpret bold markers');
+  check(normalizeStatus('Rejected 2026-06-01') === 'rejected 2026-06-01', 'normalizeStatus does not strip dates');
+  check(normalizeStatus('entrevista') === 'entrevista', 'normalizeStatus does not map Spanish aliases');
   check(normalizeInterviewStatus('Scheduled') === 'interview', 'unrecognized round status defaults to interview');
   check(normalizeInterviewStatus('Rejected') === 'rejected', 'terminal round status maps through');
   check(normalizeInterviewStatus('Withdrawn') === 'discarded', 'withdrawn maps to discarded');

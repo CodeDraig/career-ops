@@ -84,7 +84,7 @@ test("separate data root: tracker reader and real status CLI share a relative ov
   fs.writeFileSync(tracker, "# Tracker\n\n| # | Date | Company | Role | Score | Status | PDF | Report | Notes |\n|---|---|---|---|---|---|---|---|---|\n| 1 | 2026-10-10 | Fictional Fixture | Engineer | 3/5 | Evaluated | ❌ | — | Fixture |\n");
   process.env.CAREER_OPS_TRACKER = path.relative(CORE, tracker);
   assert.equal(readApplications()[0].status, "Evaluated");
-  const response = await status(request({ n: "1", status: "aplicado" }));
+  const response = await status(request({ n: "1", status: "Applied" }));
   assert.equal(response.status, 200, await response.clone().text());
   assert.equal(readApplications()[0].status, "Applied");
   assert.match(fs.readFileSync(path.join(data, "data/status-log.tsv"), "utf8"), /Evaluated\tApplied\tweb/);

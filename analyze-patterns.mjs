@@ -19,15 +19,13 @@ import { fileURLToPath } from 'url';
 import { isMainModule } from './lib/is-main-module.mjs';
 import { load as yamlLoad } from 'js-yaml';
 import { resolveColumns, parseTrackerRow, normalizeVia } from './tracker-parse.mjs';
-import { getCareerOpsRoot } from './path-resolver.mjs';
+import { getCareerOpsRoot, resolveTrackerPath } from './path-resolver.mjs';
 import { atsVendorOf } from './ats-vendor.mjs';
 import { flagValue, hasFlag, validateFlags } from './lib/cli-flags.mjs';
 import { localToday } from './lib/local-today.mjs';
 
 const CAREER_OPS = getCareerOpsRoot();
-const APPS_FILE = existsSync(join(CAREER_OPS, 'data/applications.md'))
-  ? join(CAREER_OPS, 'data/applications.md')
-  : join(CAREER_OPS, 'applications.md');
+const APPS_FILE = resolveTrackerPath(CAREER_OPS);
 const REPORTS_DIR = join(CAREER_OPS, 'reports');
 
 const MACHINE_SUMMARY_FIELDS = new Set([
@@ -95,27 +93,8 @@ const summaryMode = args.includes('--summary');
 let MIN_THRESHOLD = 5;
 let MIN_VENDOR_N = 8;
 
-// --- Status normalization (mirrors verify-pipeline.mjs) ---
-const ALIASES = {
-  'evaluada': 'evaluated', 'condicional': 'evaluated', 'hold': 'evaluated',
-  'evaluar': 'evaluated', 'verificar': 'evaluated',
-  'aplicado': 'applied', 'enviada': 'applied', 'aplicada': 'applied',
-  'applied': 'applied', 'sent': 'applied',
-  'respondido': 'responded',
-  'screening': 'assessment', 'online assessment': 'assessment', 'online_assessment': 'assessment', 'online screening': 'assessment',
-  'entrevista': 'interview',
-  'oferta': 'offer',
-  'rechazado': 'rejected', 'rechazada': 'rejected',
-  'contratado': 'hired', 'contratada': 'hired', 'accepted': 'hired', 'accept': 'hired',
-  'descartado': 'discarded', 'descartada': 'discarded',
-  'cerrada': 'discarded', 'cancelada': 'discarded',
-  'no aplicar': 'skip', 'no_aplicar': 'skip', 'monitor': 'skip', 'geo blocker': 'skip',
-};
-
 function normalizeStatus(raw) {
-  const clean = raw.replace(/\*\*/g, '').trim().toLowerCase()
-    .replace(/\s+\d{4}-\d{2}-\d{2}.*$/, '').trim();
-  return ALIASES[clean] || clean;
+  return String(raw ?? '').trim().toLowerCase();
 }
 
 export function classifyOutcome(status) {
@@ -661,7 +640,7 @@ requirement_importance:
   if (classifyOutcome('Hired') !== 'positive') failures.push(`hired: classifyOutcome('Hired') → ${classifyOutcome('Hired')}, expected 'positive'`);
   // Every hired alias must resolve to 'hired' — testing only one lets the others regress silently.
   for (const alias of ['contratado', 'contratada', 'accepted', 'accept']) {
-    if (normalizeStatus(alias) !== 'hired') failures.push(`hired: normalizeStatus('${alias}') → ${normalizeStatus(alias)}, expected 'hired'`);
+    if (normalizeStatus(alias) !== alias) failures.push(`hired: normalizeStatus('${alias}') → ${normalizeStatus(alias)}, expected unchanged alias`);
   }
   // Every submitted status must land in exactly one outcome bucket, and every
   // bucket must be a declared one — a status added to one list and not the other
@@ -1345,22 +1324,11 @@ export function analyze(entries = parseTracker()) {
   // Enrich entries with report data and classification
   const enriched = entries.map(e => {
     const reportMatch = e.report.match(/\]\(([^)]+)\)/);
-    // Tracker links are relative to the tracker file's own directory (see
-    // merge-tracker.mjs link normalization); fall back to repo root for
-    // legacy root-relative links. Each candidate is guarded to reports/
-    // before the read is attempted; parseReport returns null for a missing
-    // file, so no pre-flight existsSync is needed (#2385).
+    // Read tracker-relative links only, within the reports directory.
     let reportData = null;
     if (reportMatch) {
-      const candidates = new Set([
-        join(dirname(APPS_FILE), reportMatch[1]),
-        join(CAREER_OPS, reportMatch[1]),
-      ]);
-      for (const candidate of candidates) {
-        if (!withinReports(candidate)) continue;
-        reportData = parseReport(candidate);
-        if (reportData) break;
-      }
+      const reportPath = join(dirname(APPS_FILE), reportMatch[1]);
+      if (withinReports(reportPath)) reportData = parseReport(reportPath);
     }
     const outcome = classifyOutcome(e.status);
     const trackerScore = parseFloat(e.score);

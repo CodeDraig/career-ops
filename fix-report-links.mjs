@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { findDeadReportLink } from './tracker-links.mjs';
 /**
  * fix-report-links.mjs — Repair tracker rows whose Report link points at a missing file
  *
@@ -9,7 +10,7 @@
  * cell, the row order, the cell padding and the file's line endings (LF/CRLF)
  * are left byte-for-byte as they were; nothing is re-sorted or re-formatted.
  *
- * "Broken" is decided by findDeadReportLink() in tracker-utils.mjs, the same
+ * "Broken" is decided by findDeadReportLink() in tracker-links.mjs, the same
  * function verify-pipeline and merge-tracker use, so the tools always agree on
  * which rows are broken. It does not guess WHY a report is missing (#4748).
  *
@@ -23,7 +24,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { dirname } from 'path';
 import { getCareerOpsRoot, resolveTrackerPath } from './path-resolver.mjs';
-import { openTrackerTransaction, findDeadReportLink } from './tracker-utils.mjs';
+import { openTrackerTransaction } from './tracker-utils.mjs';
 import { resolveColumns, parseTrackerRow } from './tracker-parse.mjs';
 import { validateFlags } from './lib/cli-flags.mjs';
 import { isMainModule } from './lib/is-main-module.mjs';
@@ -39,11 +40,10 @@ const SINGLE_LINK_RE = /^\[[^\]]*\]\([^)]+\)$/;
  *
  * @param {string[]} lines - Tracker content split on '\n' (a CR stays on its line).
  * @param {string} trackerDir - Directory containing the tracker file.
- * @param {string} dataRoot - Data root.
  * @param {{stat?: Function}} [options] - Test seam for filesystem inspection.
  * @returns {{lines: string[], changed: object[], skipped: object[], inspectionErrors: object[], hasReportColumn: boolean}}
  */
-export function fixReportLinks(lines, trackerDir, dataRoot, options = {}) {
+export function fixReportLinks(lines, trackerDir, options = {}) {
   const COLS = resolveColumns(lines);
   if (COLS.report == null) return { lines, changed: [], skipped: [], inspectionErrors: [], hasReportColumn: false };
 
@@ -68,7 +68,7 @@ export function fixReportLinks(lines, trackerDir, dataRoot, options = {}) {
     }
 
     let inspectionFailure = null;
-    const link = findDeadReportLink(row.report, trackerDir, dataRoot, {
+    const link = findDeadReportLink(row.report, trackerDir, {
       stat: options.stat,
       onInspectionError: (failure) => { inspectionFailure = failure; },
     });
@@ -142,7 +142,7 @@ if (!DRY_RUN) {
 }
 try {
 const content = trackerTransaction ? trackerTransaction.read() : readFileSync(APPS_FILE, 'utf-8');
-const result = fixReportLinks(content.split('\n'), dirname(APPS_FILE), CAREER_OPS);
+const result = fixReportLinks(content.split('\n'), dirname(APPS_FILE));
 
 if (!result.hasReportColumn) {
   console.log('The tracker has no Report column. Nothing to fix.');

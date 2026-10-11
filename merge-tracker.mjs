@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { findDeadReportLink } from './tracker-links.mjs';
 /**
  * merge-tracker.mjs — Merge batch tracker additions into applications.md
  *
@@ -31,7 +32,7 @@ import { normalizeReportLink as normalizeLink } from './tracker-links.mjs';
 import { getCareerOpsRoot } from './path-resolver.mjs';
 import { roleFuzzyMatch } from './role-matcher.mjs';
 import { parsePdfIndex, livePdfIndex } from './find.mjs';
-import { LEGACY_COLMAP, TSV_REQUIRED_FIELDS, detectColumns, isHeaderRow, resolveScoreStatus, looksLikeTsvHeaderRow, resolveTsvColumns, looksLikeScoreCell, normalizeVia, normalizeTextKey, SEPARATOR_ROW_RE, extractReqNumber, extractCellUrl, parseMarkdownLinks } from './tracker-parse.mjs';
+import { TSV_REQUIRED_FIELDS, resolveColumns, detectColumns, isHeaderRow, resolveScoreStatus, looksLikeTsvHeaderRow, resolveTsvColumns, looksLikeScoreCell, normalizeVia, normalizeTextKey, SEPARATOR_ROW_RE, extractReqNumber, extractCellUrl, parseMarkdownLinks } from './tracker-parse.mjs';
 // The ATS vendor table shared with analyze-patterns.mjs and the scanners, so
 // the URL cell's label and the per-vendor analysis name a board identically.
 import { atsVendorOf } from './ats-vendor.mjs';
@@ -39,7 +40,7 @@ import { atsVendorOf } from './ats-vendor.mjs';
 // for the same reason normalizeCompany lives in tracker-utils: a second private
 // list is how company identity drifts between scripts (#2445, #3665).
 import { LEGAL_SUFFIXES, GENERIC_DESCRIPTORS } from './invite-match.mjs';
-import { resolveTrackerPath, resolveWorkspaceRoot, resolvePdfIndexPath, trackerLockDirFor, acquireTrackerLock, writeFileAtomic, normalizeCompany, cell, loadCanonicalStates, findDeadReportLink, rebuildRow } from './tracker-utils.mjs';
+import { resolveTrackerPath, resolveWorkspaceRoot, resolvePdfIndexPath, trackerLockDirFor, acquireTrackerLock, writeFileAtomic, normalizeCompany, cell, loadCanonicalStates, rebuildRow } from './tracker-utils.mjs';
 // Canonical posting-URL key. Kept in its own module so scan.mjs / scan-history
 // can adopt the same key later without the definitions drifting.
 import { normalizeUrl, isAggregatorUrl, aggregatorPostingId } from './url-key.mjs';
@@ -380,57 +381,15 @@ export async function mergeTracker(options = {}) {
   // Ensure required directories exist (fresh setup)
   mkdirSync(join(DATA_ROOT, 'data'), { recursive: true });
   mkdirSync(ADDITIONS_DIR, { recursive: true });
-  // Canonical states — loaded from templates/states.yml, the single source of truth.
-  // Adding a state or alias there is all that is needed; no code change required here.
+  // Canonical states belong to the installed system, never the user data root.
   const _CODE_ROOT = dirname(fileURLToPath(import.meta.url));
-  const _STATES_FILE = existsSync(join(_CODE_ROOT, 'templates/states.yml'))
-    ? join(_CODE_ROOT, 'templates/states.yml')
-    : join(_CODE_ROOT, 'states.yml');
-  // A missing or unreadable states file is a broken install, not a reason to abort
-  // the merge on a raw ENOENT. Say so once, then merge each status as written:
-  // validateStatus() only rewrites to "Evaluated" when it has states to check.
-  let _canonicalStates = [];
-  try {
-    _canonicalStates = loadCanonicalStates(_STATES_FILE);
-  } catch (err) {
-    console.warn(`⚠️  Cannot read canonical states (${err.message}): statuses are merged as written. Restore templates/states.yml, then run node normalize-statuses.mjs`);
-  }
-  const _aliasMap = Object.fromEntries(
-    _canonicalStates.flatMap(s => s.aliases.map(a => [a.toLowerCase(), s.label]))
-  );
-
-  /**
-   * Convert raw addition status text into one canonical tracker state.
-   *
-   * Batch workers and older tracker additions may emit Spanish labels, bold
-   * Markdown, legacy date suffixes, or repost markers. The merge script normalizes
-   * all of those variants here so applications.md keeps the states defined by
-   * templates/states.yml.
-   *
-   * @param {string} status - Raw status string from a TSV or pipe-delimited row.
-   * @returns {string} Canonical tracker status.
-   */
+  const _canonicalStates = loadCanonicalStates(join(_CODE_ROOT, 'templates/states.yml'));
+  /** Validate additions against the current canonical states only. */
   function validateStatus(status) {
-    const clean = status.replace(/\*\*/g, '').replace(/\s+\d{4}-\d{2}-\d{2}.*$/, '').trim();
-    const lower = clean.toLowerCase();
-
-    // Label match (case-insensitive)
-    for (const s of _canonicalStates) {
-      if (s.label.toLowerCase() === lower) return s.label;
-    }
-
-    // Alias match
-    if (_aliasMap[lower]) return _aliasMap[lower];
-
-    // DUPLICADO/Repost → Discarded
-    if (/^(duplicado|dup|repost)/i.test(lower)) return 'Discarded';
-
-    // No states loaded (see above): keep the row's own status rather than record
-    // an "Evaluated" it never claimed.
-    if (!_canonicalStates.length && clean) return clean;
-
-    console.warn(`⚠️  Non-canonical status "${status}" → defaulting to "Evaluated"`);
-    return 'Evaluated';
+    const clean = status.trim().toLowerCase();
+    const state = _canonicalStates.find(s => s.label.toLowerCase() === clean);
+    if (!state) throw new Error(`Non-canonical tracker status: "${status}"`);
+    return state.label;
   }
 
   // normalizeVia (Unicode-aware Via/agency key, #1596/#1603) lives in
@@ -492,7 +451,7 @@ export async function mergeTracker(options = {}) {
     // Containment, not cosmetics: resolve and assert the path stays under
     // REPORTS_ROOT. Stripping leading `../` alone still let an embedded
     // `reports/../../..` walk out of the tree, and the tracker is user-editable.
-    const reportPath = resolve(REPORTS_ROOT, linkMatch[1].trim().replace(/^(\.\.\/)+/, ''));
+    const reportPath = resolve(TRACKER_DIR, linkMatch[1].trim());
     if (!reportPath.startsWith(REPORTS_ROOT + sep)) return null;
     // existsSync alone accepts a directory, which would let the new Pass 0.5
     // dedup tier treat two additions whose report link happens to resolve to
@@ -760,13 +719,13 @@ export async function mergeTracker(options = {}) {
   // 9-column layout, or a customized one with an extra/reordered column (e.g. a
   // Location column after Role). We map columns by header NAME rather than fixed
   // position so both work — fixed-position indexing would otherwise read, say,
-  // Location where it expects Score. Falls back to the legacy layout when no
+  // Location where it expects Score. Requires a recognized English header; no positional layout is guessed when no
   // recognizable header row is found.
-  // LEGACY_COLMAP, HEADER_ALIASES and detectColumns are the shared header-name
+  // HEADER_ALIASES and detectColumns are the shared header-name
   // mapping, now sourced from tracker-parse.mjs so every tracker reader stays in
   // lockstep (see imports above). COLMAP stays mutable here — it is reassigned to
   // the detected layout once the table is read (below).
-  let COLMAP = LEGACY_COLMAP;
+  let COLMAP;
 
   // Total cell count of the tracker's ACTUAL header row, set once the table is
   // read. Writes are driven by this width rather than by a hardcoded column list
@@ -1384,7 +1343,7 @@ export async function mergeTracker(options = {}) {
     // Run with: node merge-tracker.mjs --migrate-via [--dry-run]
     if (MIGRATE_VIA) {
       const lines = appContent.split('\n');
-      const colmap = detectColumns(lines) || LEGACY_COLMAP;
+      const colmap = resolveColumns(lines);
       if (colmap.via != null) {
         console.log('✅ Via column already present — nothing to migrate.');
         return 0;
@@ -1424,7 +1383,7 @@ export async function mergeTracker(options = {}) {
     // Run with: node merge-tracker.mjs --migrate-urls [--dry-run]
     if (MIGRATE_URLS) {
       const lines = appContent.split('\n');
-      const colmap = detectColumns(lines) || LEGACY_COLMAP;
+      const colmap = resolveColumns(lines);
       if (colmap.url == null) {
         console.error('❌ --migrate-urls: this tracker has no URL column. Add a `URL` header column first (additive), then re-run.');
         return 1;
@@ -1551,8 +1510,8 @@ export async function mergeTracker(options = {}) {
     }
     // Detect the tracker's column layout via header names so parsing and writing
     // both work whether the table uses the original 9-column layout or a customized
-    // one (e.g. with a Location column after Role). Falls back to the legacy layout.
-    COLMAP = detectColumns(appLines) || LEGACY_COLMAP;
+    // one (e.g. with a Location column after Role). Requires a recognized English header.
+    COLMAP = resolveColumns(appLines);
     // Capture the header's real width so buildRow emits rows of exactly that shape
     // (see HEADER_WIDTH). Detected from the same line detectColumns matched, so the
     // two can never disagree.
@@ -1618,8 +1577,7 @@ export async function mergeTracker(options = {}) {
         // `line` there leaves the same unreadable row this fix exists to prevent.
         if ((app.url || '').trim()) { already++; return buildRow({ ...app }); }
         // Shared derivation with the merge loop — one place that knows how to turn a
-        // report link into the posting URL. Tracker links may be root-relative
-        // (`reports/...`) or data-relative (`../reports/...`); both resolve.
+        // report link into the posting URL, relative to the tracker file.
         const resolved = resolveReportUrl(app.report);
         // A row we cannot fill is still rebuilt, with an empty URL cell.
         //
@@ -1813,19 +1771,12 @@ export async function mergeTracker(options = {}) {
       // later in verify-pipeline. Warn, but still merge: the application record is
       // the user's data and must not be lost or rewritten because a report is
       // missing. Cells with no link (—, N/A, empty) are the documented "no report"
-      // convention and are not flagged. Checked against the same two bases
-      // verify-pipeline's Check 3 uses (the tracker's own directory, then the data
-      // root for legacy root-relative links), so a link warned about here is
-      // exactly one verify-pipeline would flag later. resolveReportPath() is NOT
-      // used: it strips leading `../` and so can accept a link verify-pipeline
-      // rejects (e.g. `../../stray.md`).
-      // The rule itself lives in tracker-utils.mjs (findDeadReportLink), shared with
-      // verify-pipeline's Check 3 and fix-report-links.mjs: a directory (e.g. a link
-      // to `reports/`) is not a report, so a regular file is required.
-      const deadLink = findDeadReportLink(addition.report, TRACKER_DIR, DATA_ROOT);
+      // convention and are not flagged. Use the same tracker-relative file check
+      // as verify-pipeline and fix-report-links, defined in tracker-links.mjs.
+      const deadLink = findDeadReportLink(addition.report, TRACKER_DIR);
       if (deadLink !== null) {
         const linked = deadLink.trim();
-        console.warn(`⚠️  ${file}: ${addition.company} — ${addition.role}: report link "${linked}" does not resolve to a file (checked from ${TRACKER_DIR} and ${DATA_ROOT}) — the row is not rewritten; verify-pipeline will flag it until the report exists`);
+        console.warn(`⚠️  ${file}: ${addition.company} — ${addition.role}: report link "${linked}" does not resolve to a file (checked from ${TRACKER_DIR}) — the row is not rewritten; verify-pipeline will flag it until the report exists`);
         missingReports++;
       }
 

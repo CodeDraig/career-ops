@@ -39,8 +39,8 @@
  *   skipped as ANSWERED rather than overridden — unlike --force, which
  *   silences it while the ambiguity is still real.
  *
- * State validation is strict against templates/states.yml (labels, ids, and
- * aliases resolve to the canonical label; anything else is rejected before the
+ * State validation is strict against templates/states.yml (labels and ids
+ * resolve to the canonical label; anything else is rejected before the
  * tracker is touched). --note appends to the Notes cell with "; " and is
  * idempotent — re-running the same command is always safe. With --replace-note
  * OLD, --note NEW instead replaces whole notes at "; " boundaries (including
@@ -104,7 +104,7 @@ import { join, dirname, resolve, sep, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
 import { createHash } from 'node:crypto';
-import { extractTrackerReportNumbers, resolveColumns, parseTrackerRow, normalizeTextKey, splitTrackerCells, trackerRowSeparator } from './tracker-parse.mjs';
+import { extractTrackerReportNumbers, resolveColumns, parseTrackerRow, normalizeTextKey } from './tracker-parse.mjs';
 import { roleFuzzyMatch } from './role-matcher.mjs';
 import { localToday } from './lib/local-today.mjs';
 import {
@@ -144,7 +144,7 @@ const USAGE = `Usage: node set-status.mjs <report#|company> <state> [--note "...
        node set-status.mjs --report-link N <state> [...] (strict Report-cell identity)
 
   <report#|company>  Row selector: tracker # (exact) or company name (normalized match)
-  <state>            Canonical state from templates/states.yml (aliases accepted)
+  <state>            Canonical state from templates/states.yml (labels and ids accepted)
   --row N            Select by tracker # explicitly (unambiguous; skips the mismatch guard)
   --report N         Select the row whose Report cell links report #N
   --report-link N    Select an exact numeric Report link; reject malformed cells
@@ -201,7 +201,7 @@ function renderStatesSection() {
   });
   return [
     '',
-    'Canonical states (aliases also accepted — see templates/states.yml):',
+    'Canonical states (labels and ids — see templates/states.yml):',
     ...lines,
     '',
     '  A terminal state ends the application. Discarded is YOUR decision or a',
@@ -517,7 +517,7 @@ if (flags.expectTracker !== null
   failWith(EXIT_AMBIGUOUS, 'tracker-changed', 'Tracker changed since review; review the current tracker before retrying');
 }
 const lines = content.split('\n');
-const parseOptions = { allowTabs: true, allowIndentation: true };
+const parseOptions = { allowIndentation: true };
 const colmap = resolveColumns(lines, parseOptions);
 
 const rows = [];
@@ -525,7 +525,7 @@ for (let i = 0; i < lines.length; i++) {
   const row = parseTrackerRow(lines[i], colmap, parseOptions);
   if (row) rows.push({ ...row, lineIdx: i });
   else if (flags.reportLink !== null && colmap.report != null) {
-    const report = splitTrackerCells(lines[i])[colmap.report] ?? '';
+    const report = lines[i].split('|')[colmap.report] ?? '';
     if ([...String(report).matchAll(/\[(\d+)\]\(([^)]+)\)/g)].some(link => link[1] === flags.reportLink)) {
       failWith(EXIT_AMBIGUOUS, 'malformed-row', `Tracker row linking report #${flags.reportLink} has missing cells`);
     }
@@ -643,12 +643,7 @@ if (flags.reportLink !== null && !resolveCanonicalState(oldStatus, states)) {
   failWith(EXIT_USAGE, 'invalid-current-state', `Tracker #${target.num} has an unrecognized current status: "${oldStatus}"`);
 }
 const rawLine = lines[target.lineIdx];
-const separator = trackerRowSeparator(rawLine);
-// A tab is a cell delimiter in a legacy TSV row. Neutralize tabs only there;
-// in a pipe table they remain ordinary note text.
-const note = flags.note != null
-  ? cell(separator === '\t' ? flags.note.replace(/\t/g, ' ') : flags.note)
-  : null;
+const note = flags.note != null ? cell(flags.note) : null;
 
 // ── advisory session-activity claim (#4532) ──────────────────────
 //
@@ -702,7 +697,7 @@ const replacedNote = flags.replaceNote !== null ? cell(flags.replaceNote) : null
 try {
   // Rebuild only the matched line: change the Status cell, append the note, keep
   // every other cell exactly as parsed.
-  const parts = splitTrackerCells(rawLine);
+  const parts = rawLine.split('|');
   while (parts.length <= Math.max(colmap.status, colmap.notes ?? 0)) parts.push('');
 
   const replaceCellValue = (index, value) => {
@@ -763,13 +758,7 @@ try {
   }
 
   if ((statusChanged || noteChanged) && !flags.dryRun) {
-    if (separator === '\t') {
-      const closing = rawLine.trimEnd().endsWith('|');
-      lines[target.lineIdx] = parts[0] + '|' + parts.slice(1, closing ? -1 : undefined).join('\t')
-        + (closing ? '|' + parts.at(-1) : '');
-    } else {
-      lines[target.lineIdx] = parts.join('|');
-    }
+    lines[target.lineIdx] = parts.join('|');
     try {
       writeFileAtomic(APPS_FILE, lines.join('\n'));
     } catch (err) {

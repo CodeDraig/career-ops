@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 
-test('merge-tracker merges with the status as written when templates/states.yml is missing', (t) => {
+test('merge-tracker refuses writes when templates/states.yml is missing', (t) => {
   const tmp = mkdtempSync(join(tmpdir(), 'career-ops-no-states-'));
   try {
     const codeRoot = join(tmp, 'code');
@@ -35,7 +35,7 @@ test('merge-tracker merges with the status as written when templates/states.yml 
     // a privilege a normal shell lacks.
     const depsReason = linkNodeModules(codeRoot, ROOT);
     if (depsReason) return t.skip(depsReason);
-    // No templates/ at all: neither states.yml candidate exists.
+    // No templates/states.yml: the installed canonical contract is unavailable.
 
     const tracker = join(dataRoot, 'data', 'applications.md');
     mkdirSync(dirname(tracker), { recursive: true });
@@ -58,11 +58,12 @@ test('merge-tracker merges with the status as written when templates/states.yml 
     });
     const out = `${r.stdout ?? ''}${r.stderr ?? ''}`;
 
-    assert.equal(r.status, 0, `merge-tracker died without states.yml:\n${out}`);
-    assert.match(out, /Cannot read canonical states/, 'the broken install must be reported');
+    assert.notEqual(r.status, 0, `merge-tracker died without states.yml:\n${out}`);
+    assert.match(out, /ENOENT.*templates[\\/]states\.yml/, 'the broken install must be reported');
     const row = readFileSync(tracker, 'utf-8').split('\n').find(l => l.includes('Globex'));
-    assert.ok(row, `the addition was not merged:\n${out}`);
-    assert.match(row, /\|\s*Applied\s*\|/, `status was rewritten instead of kept: ${row}`);
+    assert.equal(row, undefined, 'invalid install must not merge additions');
+    assert.match(readFileSync(join(dataRoot, 'batch', 'tracker-additions', '002-globex.tsv'), 'utf8'), /Globex/);
+
   } finally {
     rmSync(tmp, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   }

@@ -26,7 +26,8 @@ test("web tracker and ledger follow the core resolver across supported layouts",
     };
     check(path.join(root, "data"));
     fs.unlinkSync(path.join(root, "data/applications.md"));
-    check(root);
+    assert.equal(resolveTrackerPath(root), coreResolve(root));
+    assert.equal(readTrackerFile(root), null, "root-level tracker is unsupported");
     process.env.CAREER_OPS_TRACKER = path.join(root, "custom/applications.md");
     check(path.join(root, "custom"));
     process.env.CAREER_OPS_TRACKER = path.relative(codeRoot, path.join(root, "custom/applications.md"));

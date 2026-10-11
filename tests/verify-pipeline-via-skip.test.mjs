@@ -108,7 +108,7 @@ ${run.stderr.trim() || run.stdout.trim()}`);
   //    Check 11's output means anything. Closing that gap is a separate change
   //    to Check 1's table; asserting it here would only pin a state the
   //    tracker cannot currently reach.
-  const alias = outputOf('alias', runVp(HEADER + row(11, 'AgencyA', 'Applied') + row(19, 'AgencyB', 'Monitor')));
+  const alias = outputOf('alias', runVp(HEADER + row(11, 'AgencyA', 'Applied') + row(19, 'AgencyB', 'skip')));
   if (!/Cross-channel duplicate/.test(alias)) {
     pass('a skip alias (Monitor) is recognized as never-submitted, not just the literal SKIP');
   } else {

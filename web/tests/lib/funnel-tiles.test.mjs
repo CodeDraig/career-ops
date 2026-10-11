@@ -97,21 +97,21 @@ test('backfill IDs do not share history and snapshots include hired', async () =
   assert.deepEqual(await cumulativeTilesWithHistory([{n:'N/A',status:'HIRED'}, {n:'N/A',status:'INTERVIEW'}], '', coreRoot), {interviews:2,offers:1});
 });
 
-test('markdown-formatted canonical tracker status retains snapshot achievements', async () => {
+test('canonical tracker status retains snapshot achievements', async () => {
   const tracker = `| # | Date | Company | Role | Score | Status | PDF | Report | Notes |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 2026-09-22 | Example | Engineer | 5 | **Offer** | - | - | |`;
+| 1 | 2026-09-22 | Example | Engineer | 5 | Offer | - | - | |`;
   const applications = parseApplications(tracker, coreRoot)
     .map((app) => ({ ...app, status: canonStatus(app.status) }));
   assert.equal(applications[0].status, 'OFFER');
   assert.deepEqual(await cumulativeTilesWithHistory(applications, '', coreRoot), { interviews: 1, offers: 1 });
 });
 
-test('date-suffixed tracker statuses retain snapshot achievements without a ledger', async () => {
+test('canonical tracker statuses retain snapshot achievements without a ledger', async () => {
   const tracker = `| # | Date | Company | Role | Score | Status | PDF | Report | Notes |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 2026-09-01 | Acme | Engineer | 4 | Interview 2026-09-15 | - | - | |
-| 2 | 2026-09-01 | Beta | Engineer | 4 | **Offer 2026-09-22** | - | - | |`;
+| 1 | 2026-09-01 | Acme | Engineer | 4 | Interview | - | - | |
+| 2 | 2026-09-01 | Beta | Engineer | 4 | Offer | - | - | |`;
   const applications = parseApplications(tracker, coreRoot)
     .map((app) => ({ ...app, status: canonStatus(app.status) }));
   assert.deepEqual(await cumulativeTilesWithHistory(applications, '', coreRoot), { interviews: 2, offers: 1 });
@@ -120,11 +120,11 @@ test('date-suffixed tracker statuses retain snapshot achievements without a ledg
 test('canonicalized SKIP rows do not recover interview or offer achievements', async () => {
   const tracker = `| # | Date | Company | Role | Score | Status | PDF | Report | Notes |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 2026-09-01 | Acme | Engineer | 4 | **SKIP** | - | - | |
-| 2 | 2026-09-01 | Beta | Engineer | 4 | No Aplicar | - | - | |
+| 1 | 2026-09-01 | Acme | Engineer | 4 | SKIP | - | - | |
+| 2 | 2026-09-01 | Beta | Engineer | 4 | SKIP | - | - | |
 | 3 | 2026-09-01 | Gama | Engineer | 4 | Rejected | - | - | |
-| 4 | 2026-09-01 | Delta | Engineer | 4 | SKIP 2026-09-15 | - | - | |
-| 5 | 2026-09-01 | Epsilon | Engineer | 4 | No Aplicar 2026-09-22 | - | - | |`;
+| 4 | 2026-09-01 | Delta | Engineer | 4 | SKIP | - | - | |
+| 5 | 2026-09-01 | Epsilon | Engineer | 4 | SKIP | - | - | |`;
   const applications = parseApplications(tracker, coreRoot)
     .map((app) => ({ ...app, status: canonStatus(app.status) }));
   const ledger = [

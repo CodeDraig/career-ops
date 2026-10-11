@@ -180,7 +180,11 @@ By default, all User Layer files reside inside the project repository root. You 
 
 When resolved, all User Layer files/directories (e.g. `cv.md`, `config/profile.yml`, `modes/_profile.md`, `modes/_custom.md`, `data/`, `reports/`, `output/`, `portals.yml`) will be resolved relative to that path. System Layer files continue to be resolved relative to the codebase/repository root, keeping code and personal data completely separate.
 
+### Tracker format
+
+Trackers require English column headers in a pipe-delimited Markdown table. Columns may be reordered; optional columns remain supported. Headerless tables, tab-delimited tracker rows, translated headers, and status aliases are unsupported. Statuses use the labels in `templates/states.yml`, case-insensitively, without Markdown decoration or appended dates. Report links resolve relative to the tracker file only. Existing user files are never migrated automatically. Foreign-language company names, job titles, and posting text remain valid input.
+
 ### Tracker Path & Writes:
 - **`CAREER_OPS_TRACKER`** can be set to override the applications tracker file path directly (relative paths are resolved relative to the repository root).
-- **Read Resolution:** If no tracker override is set, reading resolves to `{DATA_ROOT}/data/applications.md` if it exists; otherwise falls back to `{DATA_ROOT}/applications.md`.
+- **Read Resolution:** If no tracker override is set, reading resolves to `{DATA_ROOT}/data/applications.md`. Root-level trackers are unsupported.
 - **Write Resolution:** All writes (including merge operations and first-run creation) target the canonical location `{DATA_ROOT}/data/applications.md`.

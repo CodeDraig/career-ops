@@ -44,7 +44,7 @@ import { getCareerOpsRoot, resolveTrackerPath } from './path-resolver.mjs';
 import { localToday } from './lib/local-today.mjs';
 import * as yaml from 'js-yaml';
 import {
-  resolveColumns, detectColumns, isHeaderRow, isSeparatorRow, LEGACY_COLMAP,
+  resolveColumns, detectColumns, isHeaderRow, isSeparatorRow,
 } from './tracker-parse.mjs';
 import {
   canonicalizeTrackerPath, openTrackerTransaction, writeFileAtomic,
@@ -213,25 +213,21 @@ function loadStates(ctx) {
     throw new TrackerExit(1);
   }
   const doc = yaml.load(readFileSync(STATES_PATH, 'utf-8'));
-  const byKey = new Map(); // lowercased label/alias → canonical label
+  const byKey = new Map(); // lowercased label/id → canonical label
   const labels = [];
   for (const s of doc?.states || []) {
     if (!s?.label) continue;
     labels.push(s.label);
     byKey.set(s.label.toLowerCase(), s.label);
     if (s.id) byKey.set(String(s.id).toLowerCase(), s.label);
-    for (const alias of s.aliases || []) byKey.set(String(alias).toLowerCase(), s.label);
   }
   return { byKey, labels };
 }
 
-// Strip markdown bold, trailing dates, and surrounding noise, then resolve
-// against canonical labels/aliases. Returns the canonical label or null.
+// Resolve canonical labels and ids case-insensitively, or return null.
 function normalizeStatus(raw, states) {
   if (!raw) return null;
   const cleaned = String(raw)
-    .replace(/\*\*/g, '')
-    .replace(/\(?\d{4}-\d{2}-\d{2}\)?/g, '')
     .trim()
     .toLowerCase();
   return states.byKey.get(cleaned) || null;
@@ -265,16 +261,7 @@ function repairPlaceholder(cell) {
  * emitted nine fixed ones, so a Location/Via/URL column survived every query and
  * vanished on export — silently, over the user's own tracker with `--out`.
  *
- * TWO detection passes, and the second one matters. `isHeaderRow` only fires
- * when the alias table resolves the FULL schema, so a header career-ops cannot
- * name — a Spanish `| # | Fecha | Empresa | Puesto | Puntuación | Estado | … |`,
- * where `puntuación` and `estado` are absent from tracker-aliases.json — records
- * no layout at all and exports as the English default (PR #3794 review). Falling
- * back to the markdown SHAPE (the line above the first separator row) records
- * the header verbatim whether or not its labels can be resolved; field placement
- * still comes from `detectColumns`/LEGACY_COLMAP, exactly as the read side does,
- * so an unresolvable header round-trips as text without ever being trusted as a
- * column map.
+ * Only a recognized English header defines the layout.
  *
  * @param {string[]} lines - All lines of the tracker markdown, pre-trimmed.
  * @returns {{header: string, separator: string|null, labels: string[],
@@ -293,9 +280,6 @@ function detectLayout(lines) {
     };
   };
   for (let i = 0; i < lines.length; i++) if (isHeaderRow(lines[i])) return at(i);
-  for (let i = 1; i < lines.length; i++) {
-    if (isSeparatorRow(lines[i]) && lines[i - 1].startsWith('|')) return at(i - 1);
-  }
   return null;
 }
 
@@ -333,8 +317,7 @@ function parseMarkdownRows(text, diag) {
   const raw = text.split('\n').map(l => l.replace(/\r$/, ''));
   const lines = raw.map(l => l.trim());
   // Map columns by header name (tracker-parse.mjs, #954) so a customized layout
-  // (e.g. an inserted Location column) can't shift Score into Status. Falls back
-  // to the legacy fixed 9-column layout when no header row is found.
+  // (e.g. an inserted Location column) cannot shift Score into Status.
   const colmap = resolveColumns(lines);
   const layout = detectLayout(lines);
   // Expected `split('|')` width: leading empty cell + one per column + the
@@ -790,7 +773,7 @@ function readLayout(meta) {
 function renderTable(rows, layout) {
   const header = layout.header || HEADER;
   const labels = layout.header ? headerLabels(layout.header) : headerLabels(HEADER);
-  const colmap = (layout.header ? detectColumns([layout.header]) : null) || LEGACY_COLMAP;
+  const colmap = resolveColumns(layout.header ? [layout.header] : []);
 
   // Column index → the indexed field that owns it. Everything else is filled
   // from the row's extras, so a Location/Via/URL/custom column comes back in

@@ -351,7 +351,7 @@ writerCase({
   name: 'normalize-statuses',
   script: 'normalize-statuses.mjs',
   content: trackerTable([
-    '| 1 | 2026-01-01 | Acme | Engineer | 4.0/5 | Aplicado | ❌ | [1](reports/001-acme.md) | seed |',
+    '| 1 | 2026-01-01 | Acme | Engineer | 4.0/5 | applied | ❌ | [1](reports/001-acme.md) | seed |',
   ]),
   verify: content => content.includes('| Applied |'),
   verifyOutput: (stdout, _stderr, tracker) => stdout.includes(`Written to ${realpathSync(tracker)}`)

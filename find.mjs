@@ -25,10 +25,10 @@
  */
 
 import { readFileSync, existsSync, statSync } from 'fs';
-import { dirname, resolve } from 'path';
+import { dirname, resolve, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { resolveColumns, parseTrackerRow } from './tracker-parse.mjs';
-import { resolvePdfIndexPath, resolveWorkspaceRootFor, pathIsInside, pathIsInsideCanonical } from './tracker-utils.mjs';
+import { resolvePdfIndexPath, resolveWorkspaceRoot, resolveWorkspaceRootFor, pathIsInside, pathIsInsideCanonical } from './tracker-utils.mjs';
 import { roleFuzzyMatch } from './role-matcher.mjs';
 import { getCareerOpsRoot, resolveTrackerPath } from './path-resolver.mjs';
 import { isMainModule } from './lib/is-main-module.mjs';
@@ -40,10 +40,9 @@ const DATA_ROOT = getCareerOpsRoot();
 // tracker-# form (same normalization as the manifest writer in generate-pdf.mjs).
 const normNum = (s) => String(s ?? '').trim().replace(/^0+(?=\d)/, '');
 
-// Same status hygiene as tracker.mjs: strip markdown bold and stray dates so a
-// messy cell still prints as its canonical label.
+// Preserve unrecognized statuses in lookup output without guessing a label.
 const cleanStatus = (s) =>
-  String(s ?? '').replace(/\*\*/g, '').replace(/\(?\d{4}-\d{2}-\d{2}\)?/g, '').trim();
+  String(s ?? '').trim();
 
 /**
  * Parse the tracker markdown into lookup rows.
@@ -56,7 +55,7 @@ const cleanStatus = (s) =>
  * @param {string} text - Full contents of applications.md.
  * @returns {Array<{trackerNum:number,date:string,company:string,role:string,score:string,status:string,reportNum:string|null,reportPath:string|null}>}
  */
-export function parseTrackerRows(text) {
+export function parseTrackerRows(text, trackerPath = resolveTrackerPath(DATA_ROOT)) {
   const lines = String(text ?? '').split('\n');
   const colmap = resolveColumns(lines);
   const rows = [];
@@ -72,7 +71,7 @@ export function parseTrackerRows(text) {
       score: row.score,
       status: cleanStatus(row.status),
       reportNum: link ? normNum(link[1]) : null,
-      reportPath: link ? link[2].replace(/^(\.\.\/)+/, '') : null,
+      reportPath: link ? relative(resolveWorkspaceRoot(trackerPath), resolve(dirname(trackerPath), link[2])) : null,
     });
   }
   return rows;
@@ -224,7 +223,7 @@ function main() {
     process.exitCode = 1;
     return;
   }
-  const rows = parseTrackerRows(readFileSync(trackerPath, 'utf-8'));
+  const rows = parseTrackerRows(readFileSync(trackerPath, 'utf-8'), trackerPath);
 
   // Derived from the tracker resolved just above, not from ROOT: a redirected
   // CAREER_OPS_TRACKER must not be searched against this install's manifest (#2471).

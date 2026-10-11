@@ -327,7 +327,7 @@ for (const notes of ['Req #25919; applied', 'req 25919; applied']) {
       isDistinctRequisition(new Set(['JR25919']), ids({ text })), false);
     const requisitions = new Map();
     collectSeenCompanyRoles({
-      applicationsText: `| Company | Role | Notes |\n|---|---|---|\n| Acme | Engineer | ${text} |\n`,
+      applicationsText: `| # | Company | Role | Score | Status | Notes |\n|---|---|---|---|---|---|\n| 1 | Acme | Engineer | 4 | Applied | ${text} |\n`,
     }, {}, undefined, { requisitionsByBase: requisitions });
     eq(`numeric-only note: "${text}" as a seed keeps every same-titled posting a duplicate`,
       isDistinctRequisition(requisitions.get(companyRoleDedupKey('Acme', 'Engineer')), ['JR25919']), false);

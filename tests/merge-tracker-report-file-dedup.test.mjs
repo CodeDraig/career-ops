@@ -56,7 +56,7 @@ ok('THE BUG: two concurrent additions for the SAME report, spelled differently, 
   try {
     writeFileSync(join(env.reportsDir, '2110-revera.md'), '# Eval\n**Score:** 3.5/5\n**URL:** N/A\n');
     writeTracker(env, [
-      '| 2110 | 2026-09-20 | Revera | Recreation Therapist | 3.5/5 | Evaluated | ❌ | [2110](reports/2110-revera.md) | n |',
+      '| 2110 | 2026-09-20 | Revera | Recreation Therapist | 3.5/5 | Evaluated | ❌ | [2110](../reports/2110-revera.md) | n |',
     ]);
     // Concurrent session's addition: same report, but a division-qualified
     // company spelling different enough that fuzzy company matching (and

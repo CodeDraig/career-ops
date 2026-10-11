@@ -18,7 +18,10 @@ import (
 
 func TestRefreshPreservesMetricsWhenFunnelHistoryCannotBeRead(t *testing.T) {
 	root := t.TempDir()
-	tracker := filepath.Join(root, "applications.md")
+	if err := os.MkdirAll(filepath.Join(root, "data"), 0700); err != nil {
+		t.Fatal(err)
+	}
+	tracker := filepath.Join(root, "data", "applications.md")
 	t.Setenv("CAREER_OPS_TRACKER", tracker)
 	content := "| # | Date | Company | Role | Score | Status | PDF | Report | Notes |\n" +
 		"|---|---|---|---|---|---|---|---|---|\n" +
@@ -26,7 +29,7 @@ func TestRefreshPreservesMetricsWhenFunnelHistoryCannotBeRead(t *testing.T) {
 	if err := os.WriteFile(tracker, []byte(content), 0600); err != nil {
 		t.Fatal(err)
 	}
-	ledger := filepath.Join(root, "status-log.tsv")
+	ledger := filepath.Join(root, "data", "status-log.tsv")
 	if err := os.Mkdir(ledger, 0700); err != nil {
 		t.Fatal(err)
 	}
@@ -91,11 +94,14 @@ func TestStartupRejectsUnreadableFunnelHistory(t *testing.T) {
 		return
 	}
 	root := t.TempDir()
-	tracker := filepath.Join(root, "applications.md")
-	if err := os.WriteFile(tracker, []byte("# Empty test tracker\n"), 0600); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, "data"), 0700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Mkdir(filepath.Join(root, "status-log.tsv"), 0700); err != nil {
+	tracker := filepath.Join(root, "data", "applications.md")
+	if err := os.WriteFile(tracker, []byte("| # | Date | Company | Role | Score | Status | PDF | Report | Notes |\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "data", "status-log.tsv"), 0700); err != nil {
 		t.Fatal(err)
 	}
 	testBinary, err := os.Executable()

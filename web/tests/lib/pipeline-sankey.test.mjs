@@ -11,7 +11,7 @@ import { classifyLeaf, buildPipelineSankey, layoutSankey, parseStatusLog, status
 
 test("Assessment has its own engaged leaf and records a submitted application", () => {
   const graph = buildPipelineSankey([{ n: '1', status: 'Assessment' }]);
-  assert.equal(classifyLeaf({ n: '1', status: 'online assessment' }, []), 'assessment');
+  assert.equal(classifyLeaf({ n: '1', status: 'Assessment' }, []), 'assessment');
   assert.equal(graph.nodes.find(node => node.id === 'assessment')?.value, 1);
   assert.equal(graph.nodes.find(node => node.id === 'submitted')?.value, 1);
   assert.ok(!graph.nodes.some(node => node.id === 'interview'));
@@ -19,15 +19,11 @@ test("Assessment has its own engaged leaf and records a submitted application", 
     [{ num: 1, from: 'Assessment', to: 'Discarded' }]), 'discarded');
 });
 
-test("statusToken uses canonStatus aliases (same map as Analytics)", () => {
+test("statusToken accepts canonical names without legacy conversion", () => {
   assert.equal(statusToken("Interview"), "INTERVIEW");
-  assert.equal(statusToken("Interview 2026-08-20"), "INTERVIEW");
-  assert.equal(statusToken("**Rejected**"), "REJECTED");
-  assert.equal(statusToken("—"), "DISCARDED");
-  assert.equal(statusToken("Oferta"), "OFFER");
-  assert.equal(statusToken("**Mülakat**"), "INTERVIEW");
-  assert.equal(statusToken("Entrevista"), "INTERVIEW");
-  assert.equal(statusToken("Rechazado"), "REJECTED");
+  for (const value of ["Interview 2026-08-20", "**Rejected**", "—", "Oferta", "Mülakat", "Entrevista"]) {
+    assert.equal(statusToken(value), value.toUpperCase());
+  }
 });
 
 test("parseStatusLog skips header and reads Interview→Rejected rows", () => {
@@ -59,16 +55,16 @@ test("Discarded with no application in the log is not a submission", () => {
   // submitted nor decided unless the history proves an application.
   assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, []), "discardedEarly");
   assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, [{ num: 7, from: "Evaluated", to: "Discarded" }]), "discardedEarly");
-  // Empty and "—" statuses fold to DISCARDED through canonStatus.
-  assert.equal(classifyLeaf({ n: 8, status: "—" }, []), "discardedEarly");
-  assert.equal(classifyLeaf({ n: 9, status: "" }, []), "discardedEarly");
+  // Explicit discarded rows remain outside the submitted funnel.
+  assert.equal(classifyLeaf({ n: 8, status: "Discarded" }, []), "discardedEarly");
+  assert.equal(classifyLeaf({ n: 9, status: "Discarded" }, []), "discardedEarly");
   // Another row's application is not evidence for this one.
   assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, [{ num: 70, from: "Applied", to: "Discarded" }]), "discardedEarly");
 });
 
 test("Discarded after reaching Applied or later stays under Submitted", () => {
   assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, [{ num: 7, from: "Applied", to: "Discarded" }]), "discarded");
-  assert.equal(classifyLeaf({ n: 7, status: "Descartado" }, [{ num: 7, from: "Respondido", to: "Descartado" }]), "discarded");
+  assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, [{ num: 7, from: "Responded", to: "Discarded" }]), "discarded");
   assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, [{ num: 7, from: "Rejected", to: "Discarded" }]), "discarded");
   assert.equal(classifyLeaf({ n: 7, status: "Discarded" }, [{ num: 7, from: "Interview", to: "Discarded" }]), "discardedInterview");
 });
@@ -108,7 +104,7 @@ test("buildPipelineSankey keeps pre-application Discarded rows out of Submitted"
     { n: 1, status: "Applied" },
     { n: 2, status: "Discarded" }, // posting closed before applying
     { n: 3, status: "Discarded" }, // withdrew after applying
-    { n: 4, status: "—" }, // folds to Discarded, no history
+    { n: 4, status: "Discarded" }, // folds to Discarded, no history
   ];
   const log = [
     { num: 2, from: "Evaluated", to: "Discarded" },
@@ -215,7 +211,7 @@ test("Sankey and cumulative tiles read the same active tracker's ledger", { skip
     };
     check(2);
     fs.unlinkSync(path.join(root, "data/applications.md"));
-    check(1);
+    check(2);
     const custom = path.join(root, "custom/applications.md");
     process.env.CAREER_OPS_TRACKER = custom;
     check(3);

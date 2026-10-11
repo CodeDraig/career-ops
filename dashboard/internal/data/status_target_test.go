@@ -31,7 +31,7 @@ func assertStatusTargetBytes(t *testing.T, path, want string) {
 	}
 }
 func TestStatusTargetUsesReaderPath(t *testing.T) {
-	for _, layout := range []string{"canonical", "legacy", "both", "absolute", "relative", "missing-override"} {
+	for _, layout := range []string{"canonical", "both", "absolute", "relative", "missing-override"} {
 		t.Run(layout, func(t *testing.T) {
 			t.Setenv("CAREER_OPS_TRACKER", "")
 			t.Setenv("CAREER_OPS_TRACKER_LOCK", "")
@@ -56,8 +56,6 @@ func TestStatusTargetUsesReaderPath(t *testing.T) {
 			before := statusTargetHeader + statusTargetRow
 			decoys := []string{}
 			switch layout {
-			case "legacy":
-				selected = legacy
 			case "both":
 				decoys = append(decoys, legacy)
 			case "absolute", "relative", "missing-override":
@@ -143,17 +141,14 @@ func TestStatusTargetUsesOnlyReportColumn(t *testing.T) {
 	}
 }
 func TestStatusTargetStaleStatusNeverMatchesAnotherCell(t *testing.T) {
-	for _, format := range []string{"pipe", "tabs", "tabs-status-last"} {
+	for _, format := range []string{"pipe", "status-last"} {
 		t.Run(format, func(t *testing.T) {
 			t.Setenv("CAREER_OPS_TRACKER", "")
 			header := "| # | Date | Company | Via | Role | Score | Status | PDF | Report | Notes |\n"
 			row := "| 42 | 2026-09-01 | Applied | Agency | Engineer | 4.2/5 | Responded | ❌ | [7](reports/007.md) | Applied |\n"
-			if format == "tabs-status-last" {
+			if format == "status-last" {
 				header = "| # | Date | Company | Via | Role | Score | PDF | Report | Notes | Status |\n"
 				row = "| 42 | 2026-09-01 | Applied | Agency | Engineer | 4.2/5 | ❌ | [7](reports/007.md) | Applied | Responded |\n"
-			}
-			if strings.HasPrefix(format, "tabs") {
-				row = strings.ReplaceAll(row, " | ", "\t")
 			}
 			root, path := writeTracker(t, header+row)
 			err := UpdateApplicationStatusAndNotes(root, model.CareerApplication{ReportNumber: "7", Status: "Applied"}, "Interview", "follow-up")
@@ -169,12 +164,10 @@ func TestStatusTargetStaleStatusNeverMatchesAnotherCell(t *testing.T) {
 				t.Fatal(err)
 			}
 			want := strings.Replace(row, "Responded", "Interview", 1)
-			if format == "pipe" {
-				want = strings.Replace(want, "| Applied |\n", "| Applied; follow-up |\n", 1)
-			} else if format == "tabs-status-last" {
-				want = strings.Replace(want, "\tApplied\tInterview", "\tApplied; follow-up\tInterview", 1)
+			if format == "status-last" {
+				want = strings.Replace(want, "| Applied | Interview |", "| Applied; follow-up | Interview |", 1)
 			} else {
-				want = strings.Replace(want, "\tApplied |\n", "\tApplied; follow-up |\n", 1)
+				want = strings.Replace(want, "| Applied |\n", "| Applied; follow-up |\n", 1)
 			}
 			if string(out) != header+want {
 				t.Fatalf("unexpected replacement: %s; want %s", out, header+want)
@@ -287,14 +280,14 @@ func TestStatusTargetAcceptsCanonicalNames(t *testing.T) {
 	}
 }
 
-func TestStatusTargetStillReadsLegacyDiskStatus(t *testing.T) {
+func TestStatusTargetRejectsLegacyDiskStatus(t *testing.T) {
 	t.Setenv("CAREER_OPS_TRACKER", "")
 	before := statusTargetHeader + strings.Replace(statusTargetRow, "| Applied |", "| **Applied** |", 1)
 	root, path := writeTracker(t, before)
-	if err := UpdateApplicationStatus(root, model.CareerApplication{ReportNumber: "7", Status: "Applied"}, "Interview"); err != nil {
-		t.Fatal(err)
+	if err := UpdateApplicationStatus(root, model.CareerApplication{ReportNumber: "7", Status: "Applied"}, "Interview"); err == nil {
+		t.Fatal("legacy status accepted")
 	}
-	assertStatusTargetBytes(t, path, strings.Replace(before, "| **Applied** |", "| Interview |", 1))
+	assertStatusTargetBytes(t, path, before)
 }
 
 func mapCanonicalStatus(status string) string {
@@ -302,4 +295,15 @@ func mapCanonicalStatus(status string) string {
 		return "SKIP"
 	}
 	return status
+}
+
+func TestStatusTargetRejectsTabDelimitedTracker(t *testing.T) {
+	t.Setenv("CAREER_OPS_TRACKER", "")
+	before := statusTargetHeader + strings.ReplaceAll(statusTargetRow, " | ", "\t")
+	root, path := writeTracker(t, before)
+	err := UpdateApplicationStatus(root, model.CareerApplication{Number: 42, ReportNumber: "7", Status: "Applied"}, "Interview")
+	if err == nil {
+		t.Fatal("tab-delimited tracker must not be updated")
+	}
+	assertStatusTargetBytes(t, path, before)
 }

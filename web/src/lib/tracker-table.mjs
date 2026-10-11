@@ -135,9 +135,8 @@ export function detectColumnMap(lines, aliases) {
 /**
  * Parse the tracker markdown (source of truth) into application rows.
  * Columns are mapped by header name via the shared alias table. A data-only
- * `rootDir` falls back to `systemRootDir`; the legacy fixed order
- * (# | Date | Company | Role | Score | Status | PDF | Report | Notes)
- * remains the last resort for old trackers without recognizable headers.
+ * `rootDir` falls back to `systemRootDir` for system files. Unsupported
+ * tracker headers raise an error; empty files return no rows.
  * Rows without a numeric # cell (header, separator, stray pipes) are skipped,
  * mirroring parseTrackerRow in tracker-parse.mjs.
  * @param {string} md - content of data/applications.md.
@@ -168,39 +167,30 @@ function emptyRow(pick) {
 export function parseApplications(md, rootDir, systemRootDir) {
   const lines = md.split("\n");
   const map = detectColumnMap(lines, loadHeaderAliases(rootDir, systemRootDir));
-  const mappedWidth = map ? Math.max(...Object.values(map)) + 1 : 0;
+  if (!map && !lines.some(line => line.trimStart().startsWith("|"))) return [];
+  if (!map) throw new Error("Tracker requires an English header with #, Company, Role, Score, and Status columns.");
+  const mappedWidth = Math.max(...Object.values(map)) + 1;
   const rows = [];
   for (const raw of lines) {
     const line = raw.trim();
     if (!line.startsWith("|")) continue;
     const cells = trackerCells(line);
     if (cells.length < 8) continue;
-    if (map) {
-      // Width guard, mirroring parseTrackerRow: a row missing an INTERIOR cell
-      // shifts every later column one left, so requiring merely that the
-      // highest mapped index EXISTS is not enough — the row must carry a cell
-      // for every mapped column. Without this the reader rendered a
-      // pre-`--migrate-via` row with Score in Role and Status in Score (#2369).
-      if (cells.length < mappedWidth) continue;
-      const at = (/** @type {string} */ k) => (map[k] == null ? "" : cells[map[k]] ?? "");
-      if (!/^\d+$/.test(at("n"))) continue; // header / separator / malformed
-      // Derived from WEB_FIELD, never listed by hand: a column the alias table
-      // resolves has to REACH the caller, not merely be recognized. Spelling
-      // the fields out here is what let `location` sit in the map for months
-      // while the emitter dropped it, and Apply Link / Follow-up be resolved
-      // by the shared alias table and thrown away the same way. A field the
-      // map has no index for reads "", exactly as before.
-      rows.push(emptyRow((k) => at(k)));
-    } else {
-      // Legacy fixed order; tolerate the 8-cell variant where Notes is absent.
-      if (!/^\d+$/.test(cells[0])) continue; // header / separator / malformed
-      const [n, date, company, role, score, status, pdf, report, ...rest] = cells;
-      // Same derivation, then the positional fields on top: everything the
-      // fixed layout does not carry (via, location, applyLink, followUp)
-      // stays "" without anyone having to remember to write it down.
-      const positional = { n, date, company, role, score, status, pdf, report, notes: rest.join(" | ") };
-      rows.push(emptyRow((k) => positional[k] ?? ""));
-    }
+    // Width guard, mirroring parseTrackerRow: a row missing an INTERIOR cell
+    // shifts every later column one left, so requiring merely that the
+    // highest mapped index EXISTS is not enough — the row must carry a cell
+    // for every mapped column. Without this the reader rendered a
+    // pre-`--migrate-via` row with Score in Role and Status in Score (#2369).
+    if (cells.length < mappedWidth) continue;
+    const at = (/** @type {string} */ k) => (map[k] == null ? "" : cells[map[k]] ?? "");
+    if (!/^\d+$/.test(at("n"))) continue; // header / separator / malformed
+    // Derived from WEB_FIELD, never listed by hand: a column the alias table
+    // resolves has to REACH the caller, not merely be recognized. Spelling
+    // the fields out here is what let `location` sit in the map for months
+    // while the emitter dropped it, and Apply Link / Follow-up be resolved
+    // by the shared alias table and thrown away the same way. A field the
+    // map has no index for reads "", exactly as before.
+    rows.push(emptyRow((k) => at(k)));
   }
   return rows;
 }

@@ -377,8 +377,8 @@ describe('normalize-statuses: 10-column tracker', () => {
 
 | # | Date | Company | Role | Location | Score | Status | PDF | Report | Notes |
 |---|------|---------|------|----------|-------|--------|-----|--------|-------|
-| 1 | 2026-01-01 | Acme | Engineer | Remote | — | Aplicado 2026-01-02 | ✅ | — | backfilled, no eval |
-| 2 | 2026-01-03 | Globex | Manager | Berlin | 4.5/5 | DUPLICADO de #1 | ❌ | — | keep me |
+| 1 | 2026-01-01 | Acme | Engineer | Remote | — | applied | ✅ | — | backfilled, no eval |
+| 2 | 2026-01-03 | Globex | Manager | Berlin | 4.5/5 | discarded | ❌ | — | keep me |
 `;
   let sb, res, rowOf;
   before(async () => {
@@ -396,11 +396,11 @@ describe('normalize-statuses: 10-column tracker', () => {
     assert.equal(acme[7], 'Applied', rowOf('Acme'));
     assert.equal(acme[6], '—', rowOf('Acme'));
   });
-  test('normalize-statuses: DUPLICADO provenance lands in the Notes column on 10-col tracker', () => {
+  test('normalize-statuses: casing repair preserves Notes on 10-col tracker', () => {
     const globex = cellsOf(rowOf('Globex'));
     assert.equal(globex[7], 'Discarded', rowOf('Globex'));
     assert.equal(globex[6], '4.5/5', rowOf('Globex'));
-    assert.ok(globex[10].includes('DUPLICADO de #1') && globex[10].includes('keep me'), rowOf('Globex'));
+    assert.equal(globex[10], 'keep me', rowOf('Globex'));
   });
 });
 
@@ -556,15 +556,8 @@ describe('web reader: shared alias table', WEB, () => {
   // recognized at all — the shape of a tracker whose header row was edited or
   // lost. The fixture above cannot reach it, so the branch that hard-codes the
   // column order needs its own rows with no header above them.
-  test('web reader: headerless tracker takes the fixed-order path, new fields empty', () => {
-    const NO_HEADER = `| 1 | 2026-01-01 | Acme | Engineer | 4.0/5 | Applied | ✅ | — | seed row |
-`;
-    const positional = web.parseApplications(NO_HEADER, ROOT)[0];
-    assert.ok(positional);
-    assert.deepEqual(
-      [positional.company, positional.role, positional.applyLink, positional.followUp, positional.notes],
-      ['Acme', 'Engineer', '', '', 'seed row'],
-    );
+  test('web reader: headerless tracker is rejected', () => {
+    assert.throws(() => web.parseApplications('| 1 | 2026-01-01 | Acme | Engineer | 4.0/5 | Applied | ✅ | — | seed |', ROOT), /English header/);
   });
 });
 
@@ -905,10 +898,10 @@ describe('web reader: row-shape contract', WEB, () => {
 // privileged. Headerless files keep the legacy positional path untouched.
 const HEADED_SCORE_FIRST_DASHES =
   'num\tdate\tcompany\trole\tscore\tstatus\tpdf\treport\tnotes\n' +
-  '2\t2026-02-02\tGlobex\tManager\t—\t—\t❌\t—\tdiscarded, never scored\n';
+  '2\t2026-02-02\tGlobex\tManager\t—\tDiscarded\t❌\t—\tdiscarded, never scored\n';
 const HEADED_STATUS_FIRST_DASHES =
   'num\tdate\tcompany\trole\tstatus\tscore\tpdf\treport\tnotes\n' +
-  '2\t2026-02-02\tGlobex\tManager\t—\t—\t❌\t—\tdiscarded, never scored\n';
+  '2\t2026-02-02\tGlobex\tManager\tDiscarded\t—\t❌\t—\tdiscarded, never scored\n';
 const HEADERLESS_DASHES =
   '2\t2026-02-02\tGlobex\tManager\t—\t—\t❌\t—\tdiscarded, never scored\n';
 
@@ -1273,7 +1266,7 @@ describe('tracker.mjs export --out over the tracker', SQLITE, () => {
 
 | # | Date | Company | Via | Role | Score | Status | PDF | Report | Notes | URL |
 |---|------|---------|-----|------|-------|--------|-----|--------|-------|-----|
-| 1 | 2026-01-01 | ? | Hays | Engineer | 4.2/5 | aplicado | ❌ | — | agency row | https://acme.example/jobs/1 |
+| 1 | 2026-01-01 | ? | Hays | Engineer | 4.2/5 | applied | ❌ | — | agency row | https://acme.example/jobs/1 |
 `;
   let sb, res, after_, cells;
   before(async () => {
@@ -1572,17 +1565,17 @@ test('tracker.mjs export: an indented table keeps every cell in its own column',
 // isHeaderRow only fires when the alias table resolves the FULL schema, so a
 // Spanish header (puntuación/estado are unmapped) recorded no layout at all and
 // exported as the English default, exit 0 (PR #3794 review).
-test('tracker.mjs export: an unresolvable localized header round-trips verbatim', SQLITE, async (t) => {
+test('tracker.mjs export: a localized header is rejected without rewriting the tracker', SQLITE, async (t) => {
   const SPANISH = `# Seguimiento
 
 | # | Fecha | Empresa | Puesto | Puntuación | Estado | PDF | Informe | Notas |
 |---|-------|---------|--------|------------|--------|-----|---------|-------|
 | 1 | 2026-01-01 | Acme | Ingeniero | 4.2/5 | Applied | ❌ | — | nota |
 `;
-  const { sb, exported } = await syncThenExport(SPANISH);
+  const sb = makeSandbox(SPANISH);
   t.after(() => removeSandbox(sb));
-  assert.equal(exported.code, 0, exported.stderr);
-  assert.equal(exported.stdout, SPANISH);
+  await assert.rejects(() => runTrackerIn(sb, 'sync'), /English header/);
+  assert.equal(readFileSync(sb.tracker, 'utf8'), SPANISH);
 });
 
 // ── Test 26: CRLF line endings survive ─────────────────────────────────────

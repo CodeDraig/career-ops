@@ -41,16 +41,11 @@ function unchanged(f, before) {
   assert.equal(existsSync(join(f.data, 'follow-ups.md')), false);
 }
 
-for (const format of ['pipe', 'tabs', 'tabs-status-last', 'pipe-no-closing-delimiter', 'indented-pipe', 'indented-tabs']) {
+for (const format of ['pipe', 'pipe-no-closing-delimiter', 'indented-pipe']) {
   test(`${format}: strict report transition preserves cells and records the complete lifecycle`, t => {
     let header = HEADER;
     let row = ROW.replace('Example Co', 'Applied Materials');
-    if (format === 'tabs-status-last') {
-      header = '| Company | # | Date | Via | Role | Score | PDF | Report | Notes | Status |\n';
-      row = '| Applied Materials | 42 | 2026-02-01 | Agency | Engineer | 4.2/5 | ❌ | [7](reports/007.md) | original | Evaluated |\n';
-    }
-    if (format.includes('tabs')) row = row.replaceAll(' | ', '\t');
-    if (format.startsWith('indented')) {
+    if (format === 'indented-pipe') {
       header = '  ' + header;
       row = '  ' + row;
     }
@@ -121,12 +116,12 @@ for (const [name, row] of [
   });
 }
 
-test('strict selector reads legacy bold status and fills a compact empty Notes cell', t => {
-  const before = HEADER + ROW.replace('Evaluated', '**Evaluated**').replace('| original |', '||');
+test('strict selector fills a compact empty Notes cell', t => {
+  const before = HEADER + ROW.replace('| original |', '||');
   const f = fixture(t, before);
   const result = run(f, ['--report-link', '7', 'Interview', '--note', 'scheduled']);
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(readFileSync(f.tracker, 'utf8'), before.replace('**Evaluated**', 'Interview').replace('||', '| scheduled |'));
+  assert.equal(readFileSync(f.tracker, 'utf8'), before.replace('Evaluated', 'Interview').replace('||', '| scheduled |'));
 });
 
 test('tab whitespace inside a pipe cell does not become a column separator', t => {
@@ -137,7 +132,7 @@ test('tab whitespace inside a pipe cell does not become a column separator', t =
   assert.equal(readFileSync(f.tracker, 'utf8'), before.replace('Evaluated', 'Interview'));
 });
 
-for (const format of ['tabs', 'pipe']) {
+for (const format of ['pipe']) {
   test(`${format}: note tabs cannot shift the final Status cell`, t => {
     const header = '| # | Date | Company | Role | Score | PDF | Report | Notes | Status |\n';
     let row = '| 42 | 2026-02-01 | Example Co | Engineer | 4.2/5 | ❌ | [7](reports/007.md) | original | Evaluated |\n';
@@ -164,17 +159,10 @@ for (const format of ['tabs', 'pipe']) {
   });
 }
 
-test('tab headers use the same column map as tab data rows', () => {
-  const header = HEADER.trimEnd().replaceAll(' | ', '\t');
-  const row = ROW.trimEnd().replaceAll(' | ', '\t');
-  assert.equal(detectColumns([header]), null, 'default parser must not admit layouts pipe-only writers cannot rewrite');
-  assert.equal(parseTrackerRow(row), null);
-  const options = { allowTabs: true, allowIndentation: true };
-  const parsed = parseTrackerRow(row, resolveColumns([header, row], options), options);
-  assert.equal(parsed.num, 42);
-  assert.equal(parsed.status, 'Evaluated');
-  assert.equal(parsed.report, '[7](reports/007.md)');
-  assert.equal(parsed.notes, 'original');
+test('tab-delimited tracker headers are rejected', () => {
+ const header = HEADER.trimEnd().replaceAll(' | ', '\t');
+ assert.equal(detectColumns([header]), null);
+ assert.throws(() => resolveColumns([header]), /English header/);
 });
 
 test('pipe-only writers cannot begin rewriting tab rows through the shared parser', t => {

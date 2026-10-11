@@ -14,6 +14,7 @@
  */
 
 import { join, relative, sep } from 'path';
+import { statSync } from 'fs';
 
 /**
  * Rewrite every report link in a string so its path is relative to trackerDir.
@@ -31,4 +32,38 @@ export function normalizeReportLink(reportField, trackerDir, repoRoot) {
     const rel = relative(trackerDir, reportAbs).split(sep).join('/');
     return `](${rel})`;
   });
+}
+
+/**
+ * The ONE rule for "this Report cell links to a report that is not on disk",
+ * shared by verify-pipeline.mjs (Check 3), merge-tracker.mjs (merge-time
+ * warning, #4748) and fix-report-links.mjs (#4750) so the three can never
+ * disagree about which rows are broken.
+ *
+ * The link is the first markdown `](target)` in the cell. It resolves when it
+ * names a REGULAR FILE from the tracker's own directory (markdown links are
+ * relative to the file holding them, see #760). A directory is not a report. A cell with no link
+ * (`—`, `N/A`, empty) is the documented "no report" convention and is never
+ * broken.
+ *
+ * @param {string} reportCell - Raw Report cell value.
+ * @param {string} trackerDir - Directory containing the tracker file.
+ * @param {{onInspectionError?: Function, stat?: Function}} [options]
+ * @returns {string|null} The unresolved link target, or null when there is no link,
+ *   it resolves, or its targets could not be inspected conclusively.
+ */
+export function findDeadReportLink(reportCell, trackerDir, options = {}) {
+  const match = String(reportCell ?? '').match(/\]\(([^)]+)\)/);
+  if (!match) return null;
+  const link = match[1];
+  const inspect = options.stat ?? statSync;
+  const path = join(trackerDir, link);
+  try {
+    return inspect(path).isFile() ? null : link;
+  } catch (error) {
+    if (error?.code === 'ENOENT' || error?.code === 'ENOTDIR') return link;
+    // Inconclusive inspection must never authorize removal of a report link.
+    options.onInspectionError?.({ link, errors: [{ path, error }] });
+    return null;
+  }
 }

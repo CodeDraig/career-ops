@@ -25,103 +25,20 @@ func TestTrackerHeaderAliasesMatchSharedJSON(t *testing.T) {
 	}
 }
 
-func TestLocalizedTrackerHeaders(t *testing.T) {
+func TestUnsupportedTrackerHeaders(t *testing.T) {
 	t.Setenv("CAREER_OPS_TRACKER", "")
-	t.Setenv("CAREER_OPS_TRACKER_LOCK", "")
-	markets := []struct{ mode, date, company, role string }{
-		{"de/angebot", "Datum", "Firma", "Rolle"},
-		{"pl/oferta", "Data", "Firma", "Rola"},
-		{"pt/oferta", "Data", "Empresa", "Vaga"},
-		{"da/oferta", "Dato", "Virksomhed", "Rolle"},
-		{"id/lowongan", "Tanggal", "Perusahaan", "Role"},
-	}
-	for _, market := range markets {
-		t.Run(market.mode, func(t *testing.T) {
-			base := []string{"#", market.date, market.company, market.role, "Score", "Status", "PDF", "Report"}
-			baseValues := []string{"41", "2026-01-02", "Acme", "Engineer", "4.2/5", "Applied", "✅", "[41](reports/041.md)"}
-			pipe := func(cells []string) string { return "| " + strings.Join(cells, " | ") + " |" }
-			// Historical tracker headers remain supported after removing mode packs.
-			layouts := []struct {
-				name           string
-				headers, cells []string
-			}{
-				{"shipped", base, baseValues},
-				{"inserted", []string{"#", market.date, market.company, "Location", "Via", market.role, "Score", "Status", "PDF", "Report", "Notes"},
-					[]string{"41", "2026-01-02", "Acme", "Berlin", "Example Agency", "Engineer", "4.2/5", "Applied", "✅", "[41](reports/041.md)", "keep this note"}},
-				{"reordered", []string{market.company, "Status", "#", market.date, "Location", "Via", market.role, "Score", "PDF", "Report", "Notes"},
-					[]string{"Acme", "Applied", "41", "2026-01-02", "Berlin", "Example Agency", "Engineer", "4.2/5", "✅", "[41](reports/041.md)", "keep this note"}},
-			}
-			for _, layout := range layouts {
-				t.Run(layout.name, func(t *testing.T) {
-					header := pipe(layout.headers)
-					cols := detectTrackerColumns([]string{header})
-					if cols == nil {
-						t.Fatal("localized header must not fall back to fixed positions")
-					}
-					tracker := header + "\n| " + strings.Repeat("--- | ", len(layout.headers)) + "\n" + pipe(layout.cells) + "\n"
-					dir, trackerPath := writeTracker(t, tracker)
-					apps := ParseApplications(dir)
-					if len(apps) != 1 {
-						t.Fatalf("expected exactly one application, got %d (header must not become a row)", len(apps))
-					}
-					a := apps[0]
-					if a.Number != 41 || a.Date != "2026-01-02" || a.Company != "Acme" || a.Role != "Engineer" || a.ScoreRaw != "4.2/5" || a.Status != "Applied" || !a.HasPDF || a.ReportNumber != "41" {
-						t.Fatalf("misaligned parsed application: %+v", a)
-					}
-					if layout.name == "shipped" {
-						return
-					}
-					if a.Notes != "keep this note" || layout.cells[cols["location"]] != "Berlin" || layout.cells[cols["via"]] != "Example Agency" {
-						t.Fatal("optional columns must map without shifting other values")
-					}
-					if err := UpdateApplicationStatusAndNotes(dir, a, "Interview", "scheduled"); err != nil {
-						t.Fatal(err)
-					}
-					updated, err := os.ReadFile(trackerPath)
-					if err != nil {
-						t.Fatal(err)
-					}
-					want := append([]string(nil), layout.cells...)
-					want[cols["status"]] = "Interview"
-					want[cols["notes"]] = "keep this note; scheduled"
-					gotLines := strings.Split(string(updated), "\n")
-					if gotLines[0] != header || !reflect.DeepEqual(splitTrackerRow(gotLines[2]), want) {
-						t.Fatalf("writer changed cells outside Status/Notes:\n%s", updated)
-					}
-					changed := ParseApplications(dir)
-					if len(changed) != 1 || changed[0].Status != "Interview" || changed[0].Notes != "keep this note; scheduled" {
-						t.Fatalf("writer output did not roundtrip: %+v", changed)
-					}
-				})
-			}
-		})
-	}
-}
-
-func TestTrackerAliasHeaderControls(t *testing.T) {
-	t.Setenv("CAREER_OPS_TRACKER", "")
-	for _, labels := range []string{"Num | Date | Company | Role", "Num | Fecha | Empresa | Puesto", "# | Datum | Firma | Rolle"} {
-		header := "| " + labels + " | Score | Status | Materials | Report | Notes |"
-		row := "| 41 | 2026-01-02 | Firma | Rolle | 4.2/5 | Applied | ✅ | [41](reports/041.md) | Status |"
-		dir, _ := writeTracker(t, header+"\n"+row+"\n")
-		apps := ParseApplications(dir)
-		if len(apps) != 1 || apps[0].Company != "Firma" || apps[0].Role != "Rolle" || apps[0].Notes != "Status" || !apps[0].HasPDF {
-			t.Errorf("header %q yielded %+v", header, apps)
+	for _, header := range []string{
+		"| # | Fecha | Empresa | Puesto | Score | Status | PDF | Report |",
+		"| # | Datum | Firma | Rolle | Score | Status | PDF | Report |",
+		"",
+	} {
+		dir, _ := writeTracker(t, header+"\n| 1 | 2026-01-01 | Acme | Engineer | 4/5 | Applied | — | — |\n")
+		if cols := detectTrackerColumns([]string{header}); cols != nil {
+			t.Fatalf("unsupported header accepted: %v", cols)
 		}
-		if detectTrackerColumns([]string{row}) != nil {
-			t.Error("individual aliases in data must not satisfy the full schema")
+		if apps := ParseApplications(dir); len(apps) != 0 {
+			t.Fatalf("unsupported tracker parsed: %v", apps)
 		}
-		legacy, _ := writeTracker(t, row+"\n")
-		if got := ParseApplications(legacy); len(got) != 1 || got[0].Company != "Firma" || got[0].Status != "Applied" {
-			t.Errorf("headerless compatibility lost: %+v", got)
-		}
-	}
-	if detectTrackerColumns([]string{"| # | Datum | Firma | Rolle | Score | unknown | PDF | Report |"}) != nil {
-		t.Error("incomplete schema must not qualify as a header")
-	}
-	ort := detectTrackerColumns([]string{"| # | Datum | Firma | Ort | Rolle | Score | Status | PDF | Report |"})
-	if ort == nil || ort["location"] != 3 || ort["role"] != 4 {
-		t.Errorf("German Ort reproduction: unexpected column map %v", ort)
 	}
 }
 

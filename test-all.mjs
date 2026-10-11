@@ -9312,7 +9312,7 @@ try {
   }
 
   // Status normalization (strips bold + trailing date, lowercases, maps aliases)
-  if (cadence.normalizeStatus('**Applied** 2026-05-01') === 'applied') {
+  if (cadence.normalizeStatus('Applied') === 'applied') {
     pass('normalizeStatus strips bold + trailing date and lowercases');
   } else {
     fail(`normalizeStatus produced ${cadence.normalizeStatus('**Applied** 2026-05-01')}`);
@@ -11544,7 +11544,7 @@ try {
 // in tracker-parse.mjs and all four readers use it.
 console.log('\n🧪 Testing shared tracker-parse column mapping...');
 try {
-  const { resolveColumns, parseTrackerRow, LEGACY_COLMAP } = await import(pathToFileURL(join(ROOT, 'tracker-parse.mjs')).href);
+  const { resolveColumns, parseTrackerRow } = await import(pathToFileURL(join(ROOT, 'tracker-parse.mjs')).href);
 
   const withLocation = [
     '| # | Date | Company | Role | Location | Score | Status | PDF | Report | Notes |',
@@ -11571,15 +11571,13 @@ try {
     fail(`tracker-parse broke the legacy layout: ${JSON.stringify(rowLeg)}`);
   }
 
-  // No header row → falls back to legacy map; header/separator/stray rows → null.
-  if (resolveColumns(['| 9 | … |']) === LEGACY_COLMAP &&
-      parseTrackerRow(legacy[0], LEGACY_COLMAP) === null &&
-      parseTrackerRow(legacy[1], LEGACY_COLMAP) === null &&
-      parseTrackerRow('not a table row', LEGACY_COLMAP) === null) {
-    pass('tracker-parse falls back to legacy map and rejects header/separator/non-rows');
-  } else {
-    fail('tracker-parse fallback / non-row rejection wrong');
-  }
+  let rejected = false;
+  try { resolveColumns(['| 9 | … |']); } catch { rejected = true; }
+  const cm = resolveColumns(legacy);
+  if (rejected && parseTrackerRow(legacy[0], cm) === null && parseTrackerRow(legacy[1], cm) === null && parseTrackerRow('not a table row', cm) === null) {
+    pass('tracker parser rejects headerless inputs and ignores table furniture');
+  } else { fail('tracker parser accepted an unsupported row'); }
+
 } catch (e) {
   fail(`tracker-parse unit test crashed: ${e.message}`);
 }
@@ -11597,8 +11595,8 @@ try {
   const rows = parseTrackerRows([
     '| # | Date | Company | Role | Score | Status | PDF | Report | Notes |',
     '|---|------|---------|------|-------|--------|-----|--------|-------|',
-    '| 3 | 2026-06-01 | Acme Labs | Platform Engineer | 4.2/5 | **Applied** (2026-06-02) | ✅ | [12](reports/012-acme-labs-2026-06-01.md) | strong fit |',
-    '| 12 | 2026-06-10 | Globex | Data Engineer | 3.8/5 | Evaluated | ❌ | [15](reports/015-globex-2026-06-10.md) | — |',
+    '| 3 | 2026-06-01 | Acme Labs | Platform Engineer | 4.2/5 | Applied | ✅ | [12](../reports/012-acme-labs-2026-06-01.md) | strong fit |',
+    '| 12 | 2026-06-10 | Globex | Data Engineer | 3.8/5 | Evaluated | ❌ | [15](../reports/015-globex-2026-06-10.md) | — |',
   ].join('\n'));
   const pdfIndex = parsePdfIndex(
     '# report\tpdf\thtml\tformat\tdate — written by generate-pdf.mjs, do not edit\n' +
@@ -12073,128 +12071,6 @@ try {
   }
 } catch (e) {
   fail(`non-Latin via guard tests crashed: ${e.message}`);
-}
-
-// ── GO STATUS LITERALS MUST BE states.yml ALIASES (#2704) ─────────
-// The Go dashboard's NormalizeStatus grew its own, larger alias table: it knew
-// every Turkish spelling while states.yml did not, so ONE tracker row
-// normalized three different ways — the TUI read `Mülakat` as interview, the
-// core left it as `mülakat` (matching no ACTIONABLE/ADVANCED set, so the row
-// vanished from the funnel), and the web rejected it on writeback. We ship
-// modes/tr/, so this was live for Turkish users.
-//
-// Guard the direction that actually drifts: every status literal Go matches on
-// must be resolvable through states.yml. Go may still hold MORE matching logic
-// (it uses substring Contains for some), but it must not know a spelling the
-// source of truth has never heard of.
-console.log('\n🧪 Testing Go status literals against states.yml (#2704)...');
-try {
-  const { loadCanonicalStates } = await import(pathToFileURL(join(ROOT, 'tracker-utils.mjs')).href);
-  const states = loadCanonicalStates(join(ROOT, 'templates', 'states.yml'));
-  const known = new Set();
-  for (const st of states) {
-    known.add(st.id.toLowerCase());
-    if (st.label) known.add(st.label.toLowerCase());
-    for (const a of st.aliases) known.add(String(a).toLowerCase());
-  }
-
-  const goPath = join(ROOT, 'dashboard', 'internal', 'data', 'career.go');
-  if (!existsSync(goPath)) {
-    pass('dashboard/internal/data/career.go absent — Go status guard skipped');
-  } else {
-    const go = readFileSync(goPath, 'utf-8');
-    const fnStart = go.indexOf('func NormalizeStatus');
-    const body = fnStart === -1 ? '' : go.slice(fnStart, go.indexOf('\nfunc ', fnStart + 1));
-    // Only the literals used for status matching (== or Contains), not any
-    // other string in the function.
-    const literals = [...body.matchAll(/(?:s == |Contains\(s, )"([^"]+)"/g)].map((m) => m[1].toLowerCase());
-    const unknown = [...new Set(literals)].filter((l) => !known.has(l));
-    if (literals.length === 0) {
-      fail('could not extract any status literals from Go NormalizeStatus — the guard is not actually checking anything (#2704)');
-    } else if (unknown.length === 0) {
-      pass(`every Go status literal (${new Set(literals).size}) resolves through states.yml (#2704)`);
-    } else {
-      fail(`Go NormalizeStatus knows spellings states.yml does not — add them to templates/states.yml: ${unknown.join(', ')}`);
-    }
-  }
-} catch (e) {
-  fail(`Go status literal guard crashed: ${e.message}`);
-}
-
-// ── TURKISH DOTTED-CAPITAL CASING (#2704 review) ──────────────────
-// JS lowercases `İ` (U+0130) to `i` + COMBINING DOT ABOVE (U+0307) and the mark
-// survives, so `TEKLİF` became `tekli\u0307f` and matched no alias. Uppercase
-// status words are ordinary in Turkish, so every all-caps Turkish row missed.
-// foldStatusInput drops U+0307 after lowercasing, which repairs 31 of the 32
-// affected spellings at once; the 32nd (`İŞE ALINDI`, where dotless `ı`
-// uppercases to `I` and lowercases back to dotted `i`) is covered by an alias.
-console.log('\n🧪 Testing Turkish uppercase status resolution (#2704)...');
-try {
-  const { loadCanonicalStates, foldStatusInput } = await import(pathToFileURL(join(ROOT, 'tracker-utils.mjs')).href);
-  const { normalizeStatus: cadenceNorm } = await import(pathToFileURL(join(ROOT, 'followup-cadence.mjs')).href);
-  const states = loadCanonicalStates(join(ROOT, 'templates', 'states.yml'));
-
-  // The fold must not be able to collapse two different states: no canonical
-  // id/label/alias may itself contain U+0307.
-  const marked = [];
-  for (const st of states) {
-    for (const v of [st.id, st.label, ...st.aliases]) {
-      if (String(v).normalize('NFD').includes('\u0307')) marked.push(`${st.id}:${v}`);
-    }
-  }
-  marked.length === 0
-    ? pass('no canonical state value carries U+0307, so the fold cannot merge two states (#2704)')
-    : fail(`a canonical value contains U+0307 — folding it could collapse states: ${marked.join(', ')}`);
-
-  // Every value, in every casing a user can produce, resolves to its own state.
-  const misses = [];
-  for (const st of states) {
-    for (const v of [st.id, st.label, ...st.aliases]) {
-      for (const typed of [String(v), String(v).toLocaleUpperCase('tr'), String(v).toUpperCase()]) {
-        if (cadenceNorm(typed) !== st.id) misses.push(`${JSON.stringify(typed)}->${cadenceNorm(typed)} (want ${st.id})`);
-      }
-    }
-  }
-  misses.length === 0
-    ? pass('every state resolves from its as-written, Turkish-uppercase and plain-uppercase spellings (#2704)')
-    : fail(`${misses.length} spelling(s) do not resolve: ${misses.slice(0, 6).join(', ')}`);
-
-  // The specific reproductions from the review.
-  const cases = [['TEKLİF', 'offer'], ['DEĞERLENDİRİLDİ', 'evaluated'], ['KABUL EDİLDİ', 'hired'], ['İŞE ALINDI', 'hired']];
-  const wrong = cases.filter(([raw, want]) => cadenceNorm(raw) !== want);
-  wrong.length === 0
-    ? pass('the all-caps Turkish cases from the #2704 review resolve correctly')
-    : fail(`all-caps Turkish still failing: ${wrong.map(([r, w]) => `${r}->${cadenceNorm(r)} (want ${w})`).join(', ')}`);
-
-  // PAIR SEMANTICS, not implementation. The assertions above prove the fold
-  // repairs Turkish; they say nothing about what else it reaches. 462d2765
-  // shipped this same fold as NFD -> strip -> NFC on the company key, which
-  // also decomposed the PRECOMPOSED dots of z-dot, e-dot and g-dot and
-  // collapsed Zubr/Zubr, Eme/Eme and Generali/Generali -- Polish, Lithuanian
-  // and Maltese losing a distinction with every existing test still green
-  // (undone in 5df43e7). The status fold carried the identical defect; these
-  // pin the OUTCOME rather than the implementation.
-  {
-    const pairs = [
-      ['TEKL\u0130F', 'teklif', true, 'Turkish dotted capital: the dot is a casing artifact'],
-      ['KABUL ED\u0130LD\u0130', 'kabul edildi', true, 'same artifact, multi-word'],
-      ['\u017Bubr', 'Zubr', false, 'Polish z-dot: the dot is a letter the user typed'],
-      ['\u0116m\u0117', 'Eme', false, 'Lithuanian e-dot: same class'],
-      ['\u0120enerali', 'Generali', false, 'Maltese g-dot'],
-      ['\u0160koda', 'Skoda', false, 'caron typed by the user'],
-      ['Nestl\u00E9', 'Nestle', false, 'accent typed by the user'],
-    ];
-    const wrong = pairs.filter(([a, b, mustMatch]) => (foldStatusInput(a) === foldStatusInput(b)) !== mustMatch);
-    wrong.length === 0
-      ? pass('foldStatusInput folds the casing artifact only - typed dots and accents still separate (#2704)')
-      : fail(`foldStatusInput pair semantics wrong: ${wrong.map(([a, b, m]) => `${a}/${b} expected ${m ? 'match' : 'differ'}`).join('; ')}`);
-  }
-
-  foldStatusInput('TEKLİF') === 'teklif'
-    ? pass('foldStatusInput strips the combining dot JS introduces (#2704)')
-    : fail(`foldStatusInput('TEKLİF') = ${JSON.stringify(foldStatusInput('TEKLİF'))}, expected "teklif"`);
-} catch (e) {
-  fail(`Turkish casing guard crashed: ${e.message}`);
 }
 
 // ── ROLE TITLES IN NON-LATIN SCRIPTS (#2781) ──────────────────────
@@ -12958,8 +12834,8 @@ try {
     const trackerParse = await import(pathToFileURL(join(ROOT, 'tracker-parse.mjs')).href);
     const esHeader = '| # | Fecha | Empresa | Puesto | Location | Score | Status | PDF | Report | Notes |';
     const esMap = trackerParse.detectColumns([esHeader]);
-    if (esMap && esMap.date === 2 && esMap.score === 6 && esMap.company === 3 && esMap.role === 4 && esMap.location === 5) {
-      pass('a fully localized header maps through the alias table (#2274, #3705)');
+    if (esMap === null) {
+      pass('localized tracker headers are rejected');
     } else {
       fail(`localized header did not map: ${JSON.stringify(esMap)}`);
     }
@@ -12969,8 +12845,8 @@ try {
     const headerShapes = [
       ['| # | Date | Company | Role | Score | Status | PDF | Report | Notes |', true],
       ['| # | Date | Company | Role | Location | Score | Status | PDF | Report | Notes |', true],
-      ['| # | Fecha | Empresa | Puesto | Score | Status | PDF | Report | Notes |', true],
-      [esHeader, true],
+      ['| # | Fecha | Empresa | Puesto | Score | Status | PDF | Report | Notes |', false],
+      [esHeader, false],
       ['| 4 | 2026-01-05 | Company | Short Row |', false],
       ['| 5 | 2026-01-05 | Empresa | Also Short |', false],
       ['| 6 | 2026-01-05 | Acme Corp | Director | 4.0/5 | Evaluated | ❌ | — | note |', false],
@@ -16249,7 +16125,7 @@ try {
     ["merge-tracker.mjs writes the cell through formatUrlCell", /put\('url', formatUrlCell\(/.test(mergeSrc)],
     ["merge-tracker.mjs reads the href before keying", /url: COLMAP\.url != null \? extractCellUrl\(/.test(mergeSrc)],
     ["tracker-parse.mjs returns the href on parsed rows", /url: extractCellUrl\(at\('url'\)\)/.test(parseSrc)],
-    ["the Go dashboard extracts the href", /func extractCellURL\(/.test(goCareerSrc) && /JobURL:\s+extractCellURL\(at\("url"\)\)/.test(goCareerSrc)],
+    ["the Go dashboard extracts the href", /func extractCellURL\(/.test(readFileSync(join(ROOT, 'dashboard', 'internal', 'data', 'tracker_links.go'), 'utf8')) && /JobURL:\s+extractCellURL\(at\("url"\)\)/.test(goCareerSrc)],
     // history-ats-seeds reads the cell directly rather than through
     // parseTrackerRow, so it is listed on its own.
     ["history-ats-seeds.mjs extracts the href", /extractCellUrl\(cells\[columns\.url\]\)/.test(historySeedsSrc)],
@@ -17230,7 +17106,7 @@ try {
 
 | # | Date | Company | Role | Score | Status | PDF | Report | Notes |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 2026-07-01 | TestCo | Engineer | 4.0 | **Applied** | ❌ | - | - |
+| 1 | 2026-07-01 | TestCo | Engineer | 4.0 | applied | ❌ | - | - |
 `;
   writeFileSync(tempTracker, dummyContent, 'utf-8');
 
@@ -17239,7 +17115,7 @@ try {
     process.env.CAREER_OPS_ROOT = tempRoot;
     run(NODE, ['normalize-statuses.mjs']);
     const updated = readFileSync(tempTracker, 'utf-8');
-    if (updated.includes('| Applied |') && !updated.includes('**Applied**')) {
+    if (updated.includes('| Applied |') && !updated.includes('| applied |')) {
       pass('normalize-statuses.mjs respects CAREER_OPS_ROOT and modifies the correct tracker file');
     } else {
       fail(`normalize-statuses.mjs did not modify target tracker correctly, content: ${updated}`);

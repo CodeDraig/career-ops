@@ -42,8 +42,8 @@ try {
   const customTracker = join(tmp, 'custom-tracker.md');
   writeFileSync(customTracker, TRACKER_HEADER);
 
-  const flatTrackerFile = join(flatTrackerDir, 'applications.md');
-  writeFileSync(flatTrackerFile, TRACKER_HEADER);
+  const flatTrackerFile = join(flatTrackerDir, 'data', 'applications.md');
+  writeFileSync(join(flatTrackerDir, 'applications.md'), TRACKER_HEADER);
 
   // 1. scan.mjs respects CAREER_OPS_TRACKER
   try {
@@ -60,14 +60,14 @@ try {
     fail(`scan.mjs CAREER_OPS_TRACKER test failed: ${err.message}`);
   }
 
-  // 2. scan.mjs honors flat root layout under CAREER_OPS_DATA_DIR
+  // 2. scan.mjs rejects flat root layout under CAREER_OPS_DATA_DIR
   try {
     const res = evalModule(
       "import { APPLICATIONS_PATH } from './scan.mjs'; console.log(JSON.stringify({ path: APPLICATIONS_PATH }));",
       { CAREER_OPS_TRACKER: null, CAREER_OPS_DATA_DIR: flatTrackerDir }
     );
     if (res.path === canonicalizeTrackerPath(flatTrackerFile)) {
-      pass('scan.mjs: APPLICATIONS_PATH resolves flat applications.md under CAREER_OPS_DATA_DIR');
+      pass('scan.mjs: APPLICATIONS_PATH uses canonical data/applications.md under CAREER_OPS_DATA_DIR');
     } else {
       fail(`scan.mjs: expected flat tracker ${flatTrackerFile}, got ${res.path}`);
     }
@@ -90,7 +90,7 @@ try {
     fail(`reply-watch.mjs CAREER_OPS_TRACKER test failed: ${err.message}`);
   }
 
-  // 4. reply-watch.mjs resolves flat applications.md under CAREER_OPS_DATA_DIR and anchors candidates/followups to DATA_ROOT
+  // 4. reply-watch.mjs uses canonical data/applications.md under CAREER_OPS_DATA_DIR and anchors candidates/followups to DATA_ROOT
   try {
     const res = evalModule(
       "import { APPS_FILE, DEFAULT_CANDIDATES_PATH, FOLLOWUPS_FILE } from './reply-watch.mjs'; console.log(JSON.stringify({ apps: APPS_FILE, candidates: DEFAULT_CANDIDATES_PATH, followups: FOLLOWUPS_FILE }));",
@@ -100,7 +100,7 @@ try {
     const expectedCandidates = join(flatTrackerDir, 'data', 'reply-candidates.json');
     const expectedFollowups = join(flatTrackerDir, 'data', 'follow-ups.md');
     if (res.apps === expectedApps && res.candidates === expectedCandidates && res.followups === expectedFollowups) {
-      pass('reply-watch.mjs: resolves flat tracker and anchors candidates/followups to CAREER_OPS_DATA_DIR');
+      pass('reply-watch.mjs: uses canonical tracker and anchors candidates/followups to CAREER_OPS_DATA_DIR');
     } else {
       fail(`reply-watch.mjs: mismatch under CAREER_OPS_DATA_DIR: ${JSON.stringify(res)}`);
     }

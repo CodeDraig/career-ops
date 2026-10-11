@@ -598,7 +598,7 @@ func TestPreviewKeepsDiscardReasonWhenTlDrIsCached(t *testing.T) {
 	app := model.CareerApplication{
 		Company:    "Acme",
 		Role:       "Backend Engineer",
-		Status:     "Descartado 2026-03-12",
+		Status:     "Discarded",
 		Notes:      "took too long to respond",
 		ReportPath: "reports/001-acme.md",
 	}
@@ -615,7 +615,7 @@ func TestPreviewKeepsDiscardReasonWhenTlDrIsCached(t *testing.T) {
 	if !strings.Contains(preview, "took too long to respond") {
 		t.Fatalf("expected preview to keep the discard reason alongside the TL;DR, got %q", preview)
 	}
-	if !strings.Contains(preview, "Descartado 2026-03-12") {
+	if !strings.Contains(preview, "Discarded") {
 		t.Fatalf("expected preview to show the closing status, got %q", preview)
 	}
 }
@@ -660,12 +660,12 @@ func TestPreviewOutcomeForStatusWithoutNotes(t *testing.T) {
 	pm := previewModelWith(t, model.CareerApplication{
 		Company: "Delta",
 		Role:    "SRE",
-		Status:  "**Rejected** 2026-05-02",
+		Status:  "Rejected",
 	})
 
 	preview := pm.renderPreview()
 
-	if !strings.Contains(preview, "Rejected 2026-05-02") {
+	if !strings.Contains(preview, "Rejected") {
 		t.Fatalf("expected outcome to show the bare closing status, got %q", preview)
 	}
 	if strings.Contains(preview, "Loading preview...") {

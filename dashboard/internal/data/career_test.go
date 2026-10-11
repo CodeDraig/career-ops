@@ -242,18 +242,18 @@ func TestParseApplicationsResolvesTrackerRelativeReportLinks(t *testing.T) {
 	if apps[0].ReportPath != wantFirst {
 		t.Fatalf("expected tracker-relative link to resolve to %q, got %q", wantFirst, apps[0].ReportPath)
 	}
-	wantSecond := filepath.Join("reports", "002-legacy-2026-06-03.md")
+	wantSecond := filepath.Join("data", "reports", "002-legacy-2026-06-03.md")
 	if apps[1].ReportPath != wantSecond {
 		t.Fatalf("expected legacy root-relative link to resolve to %q, got %q", wantSecond, apps[1].ReportPath)
 	}
 
-	// Every consumer joins ReportPath against careerOpsPath — both rows
-	// must point at files that exist.
-	for i, app := range apps {
-		if _, err := os.Stat(filepath.Join(tempDir, app.ReportPath)); err != nil {
-			t.Fatalf("row %d: resolved report path %q does not exist: %v", i, app.ReportPath, err)
-		}
+	if _, err := os.Stat(filepath.Join(tempDir, apps[0].ReportPath)); err != nil {
+		t.Fatal(err)
 	}
+	if _, err := os.Stat(filepath.Join(tempDir, apps[1].ReportPath)); !os.IsNotExist(err) {
+		t.Fatal("root-relative report unexpectedly resolved")
+	}
+
 }
 
 // writeTracker writes applications.md under data/ and returns the temp root and
@@ -417,7 +417,7 @@ func TestUpdateApplicationStatusInsertedColumn(t *testing.T) {
 // fixed layout when no recognizable header row is present.
 func TestResolveTrackerColumns(t *testing.T) {
 	header := strings.Split(insertedColumnTracker, "\n")
-	cols := resolveTrackerColumns(header)
+	cols := detectTrackerColumns(header)
 	if cols["status"] != 6 {
 		t.Errorf("status index = %d, want 6 (inserted Location column)", cols["status"])
 	}
@@ -426,9 +426,9 @@ func TestResolveTrackerColumns(t *testing.T) {
 	}
 
 	headerless := []string{"| 1 | 2026-06-01 | Acme | VP Marketing | 4.5/5 | Applied | ✅ | [1](reports/001.md) | note |"}
-	fallback := resolveTrackerColumns(headerless)
-	if fallback["status"] != 5 {
-		t.Errorf("fallback status index = %d, want 5 (legacy layout)", fallback["status"])
+	fallback := detectTrackerColumns(headerless)
+	if fallback != nil {
+		t.Errorf("headerless tracker must be rejected: %v", fallback)
 	}
 }
 
@@ -467,7 +467,7 @@ func TestResolveTrackerColumnsDuplicateHeaderLastWins(t *testing.T) {
 	dup := strings.Split(`| # | Notes | Company | Role | Score | Status | PDF | Report | Notes |
 |---|-------|---------|------|-------|--------|-----|--------|-------|
 | 1 | stray | Acme | Engineer | 4.0/5 | Applied | ✅ | — | real note |`, "\n")
-	cols := resolveTrackerColumns(dup)
+	cols := detectTrackerColumns(dup)
 	// Verify that the last "Notes" column wins
 	if cols["notes"] != 8 {
 		t.Fatalf("notes index = %d, expected 8 (tracker-parse.mjs parity)", cols["notes"])
@@ -480,7 +480,7 @@ func TestResolveTrackerColumnsVia(t *testing.T) {
 	viaTracker := strings.Split(`| # | Date | Company | Via | Role | Score | Status | PDF | Report | Notes |
 |---|------|---------|-----|------|-------|--------|-----|--------|-------|
 | 1 | 2026-01-05 | ? | Hays | Data Engineer | 4.2/5 | Applied | ✅ | — | fintech, Leeds |`, "\n")
-	cols := resolveTrackerColumns(viaTracker)
+	cols := detectTrackerColumns(viaTracker)
 	if cols["via"] != 3 {
 		t.Errorf("via index = %d, want 3", cols["via"])
 	}
@@ -492,82 +492,14 @@ func TestResolveTrackerColumnsVia(t *testing.T) {
 	}
 }
 
-// TestNormalizeStatus verifies that localized string variants map to the canonical English form.
 func TestNormalizeStatus(t *testing.T) {
-	tests := []struct {
-		input string
-		want  string
-	}{
-		// Turkish status strings
-		{"değerlendirildi", "evaluated"},
-		{"Değerlendirildi", "evaluated"},
-		{"DEĞERLENDİRİLDİ", "evaluated"},
-		{"başvuruldu", "applied"},
-		{"Başvuruldu", "applied"},
-		{"BAŞVURULDU", "applied"},
-		{"yanıt verildi", "responded"},
-		{"yanıt_verildi", "responded"},
-		{"YANIT VERİLDİ", "responded"},
-		{"mülakat", "interview"},
-		{"Mülakat", "interview"},
-		{"MÜLAKAT", "interview"},
-		{"teklif", "offer"},
-		{"Teklif", "offer"},
-		{"TEKLİF", "offer"},
-		{"reddedildi", "rejected"},
-		{"Reddedildi", "rejected"},
-		{"REDDEDİLDİ", "rejected"},
-		{"iptal edildi", "discarded"},
-		{"iptal_edildi", "discarded"},
-		{"İPTAL EDİLDİ", "discarded"},
-		{"uygun değil", "skip"},
-		{"uygun_değil", "skip"},
-		{"UYGUN DEĞİL", "skip"},
-
-		// No-diacritic variants
-		{"degerlendirildi", "evaluated"},
-		{"DEGERLENDIRILDI", "evaluated"},
-		{"basvuruldu", "applied"},
-		{"BASVURULDU", "applied"},
-		{"yanit verildi", "responded"},
-		{"mulakat", "interview"},
-		{"uygun degil", "skip"},
-
-		// English status strings
-		{"Evaluated", "evaluated"},
-		{"Applied", "applied"},
-		{"Responded", "responded"},
-		{"Assessment", "assessment"},
-		{"online screening", "assessment"},
-		{"screening", "assessment"},
-		{"online assessment", "assessment"},
-		{"online_assessment", "assessment"},
-		{"phone screening", "phone screening"},
-		{"Interview - phone screening", "interview"},
-		{"Assessment prep", "assessment prep"},
-		{"Interview", "interview"},
-		{"Offer", "offer"},
-		{"Rejected", "rejected"},
-		{"Discarded", "discarded"},
-		{"SKIP", "skip"},
-	}
-
-	for _, tt := range tests {
-		tt := tt
-		t.Run(tt.input, func(t *testing.T) {
-			t.Parallel()
-			if got := NormalizeStatus(tt.input); got != tt.want {
-				t.Errorf("NormalizeStatus(%q) = %q; want %q", tt.input, got, tt.want)
-			}
-		})
+	for _, raw := range []string{"Applied", "INTERVIEW", "Skip", "aplicado", "teklif", "**Applied**", "Applied 2026-01-01"} {
+		if got := NormalizeStatus(raw); got != strings.ToLower(raw) {
+			t.Fatalf("status unexpectedly translated: %q -> %q", raw, got)
+		}
 	}
 }
 
-// Regression: when an external writer (set-status.mjs, merge-tracker.mjs,
-// another session) changes a row's status while the dashboard is open, the
-// in-memory "old" status no longer matches the file. The update must still
-// land in the Status column — identified via the header — rather than
-// silently no-opping.
 func TestUpdateApplicationStatusWithStaleInMemoryStatus(t *testing.T) {
 	tempDir := t.TempDir()
 	dataDir := filepath.Join(tempDir, "data")

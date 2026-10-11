@@ -33,14 +33,11 @@ const STATES_FILE = join(ROOT, 'templates/states.yml');
   else fail(`states with empty label: ${noLabel.map(s => s.id).join(', ')}`);
 }
 
-// Aliases include at least the Spanish equivalents the hardcoded list had.
+// State aliases are no longer part of the supported contract.
 {
   const states = loadCanonicalStates(STATES_FILE);
-  const allAliases = states.flatMap(s => s.aliases.map(a => a.toLowerCase()));
-  const checked = ['evaluada', 'aplicado', 'entrevista', 'contratado', 'rechazado'];
-  const missing = checked.filter(a => !allAliases.includes(a));
-  if (missing.length === 0) pass('Spanish alias coverage maintained');
-  else fail(`missing Spanish aliases: ${missing.join(', ')}`);
+  if (states.every(s => !('aliases' in s))) pass('state loader exposes no aliases');
+  else fail('state loader retained an alias surface');
 }
 
 // A custom states.yml with an extra state is parsed correctly.
@@ -64,15 +61,9 @@ states:
       fail(`unexpected parse result: ${JSON.stringify(states)}`);
     }
 
-    // The alias map built from the custom file includes the new aliases.
-    const aliasMap = Object.fromEntries(
-      states.flatMap(s => s.aliases.map(a => [a.toLowerCase(), s.label]))
-    );
-    if (aliasMap['waiting'] === 'Pending' && aliasMap['hold'] === 'Pending') {
-      pass('alias map from custom states resolves correctly');
-    } else {
-      fail(`alias map unexpected: ${JSON.stringify(aliasMap)}`);
-    }
+    if (states[1].aliases === undefined) pass('old alias configuration is ignored');
+    else fail('old alias configuration remains active');
+
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

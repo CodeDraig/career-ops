@@ -457,17 +457,10 @@ function analyze(minReports) {
     const linkMatch = (row.report || '').match(/\]\(([^)]+)\)/);
     if (!linkMatch) continue;
     reportsLinked += 1;
-    // Tracker links are normalized relative to the tracker file's directory
-    // (see merge-tracker.mjs); resolve against it, with a root-relative fallback.
-    // The read is attempted directly instead of probing with existsSync first,
-    // which costs a full stat per report and races with the read (#2385).
-    const candidates = new Set([join(dirname(APPS_FILE), linkMatch[1]), join(CAREER_OPS, linkMatch[1])]);
-    let content = null;
-    for (const p of candidates) {
-      if (!withinReports(p)) continue;
-      content = readTextIfExists(p);
-      if (content !== null) break;
-    }
+    // Report links resolve against the tracker directory and stay within reports/.
+    const reportPath = join(dirname(APPS_FILE), linkMatch[1]);
+    if (!withinReports(reportPath)) continue;
+    const content = readTextIfExists(reportPath);
     if (content === null) continue;
     reportsRead += 1;
     const { score, gapText, hasMachineSummary } = parseReportGaps(content);

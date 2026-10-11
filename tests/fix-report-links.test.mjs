@@ -112,7 +112,7 @@ test('a link to a directory is treated as broken', withRoot((root) => {
 
 test('an uninspectable report target is preserved and reported separately', withRoot((root) => {
   const lines = [...HEADER, row(1, 'Acme Widgets', DEAD)];
-  const result = fixReportLinks(lines, join(root, 'data'), root, {
+  const result = fixReportLinks(lines, join(root, 'data'), {
     stat(path) {
       const error = new Error(`permission denied: ${path}`);
       error.code = 'EACCES';
@@ -123,7 +123,7 @@ test('an uninspectable report target is preserved and reported separately', with
   assert.equal(result.changed.length, 0);
   assert.equal(result.inspectionErrors.length, 1);
   assert.equal(result.inspectionErrors[0].link, '../reports/001-acme-widgets-2026-07-15.md');
-  assert.equal(result.inspectionErrors[0].errors.length, 2);
+  assert.equal(result.inspectionErrors[0].errors.length, 1);
   assert.ok(result.inspectionErrors[0].errors.every(({ error }) => error.code === 'EACCES'));
 }));
 
@@ -195,7 +195,7 @@ test('verify-pipeline warns about a report it cannot inspect instead of passing 
   }
 });
 
-test('legacy root-relative link resolves from the data root', withRoot((root) => {
+test('root-relative links are broken even when a data-root target exists', withRoot((root) => {
   report(root, '001-acme-widgets-2026-07-15.md');
   writeTracker(root, [
     ...HEADER,
@@ -205,9 +205,9 @@ test('legacy root-relative link resolves from the data root', withRoot((root) =>
   const r = run(root);
   assert.equal(r.status, 0, r.out);
   assert.match(r.out, /#2 Bolt Gadgets/);
-  assert.doesNotMatch(r.out, /#1 Acme Widgets/);
+  assert.match(r.out, /#1 Acme Widgets/);
   const after = tracker(root);
-  assert.match(after, /\[1\]\(reports\/001-acme-widgets-2026-07-15\.md\)/);
+  assert.doesNotMatch(after, /\[1\]\(reports\/001-acme-widgets-2026-07-15\.md\)/);
   assert.doesNotMatch(after, /002-bolt-gadgets/);
 }));
 
@@ -273,16 +273,17 @@ test('extra Via/URL columns: the Report column is found by header name', withRoo
     '| 1 | 2026-07-15 | Acme Widgets | Coordinator | 3.2/5 | Applied | ❌ | Hays | — | n | https://example.com/1 |');
 }));
 
-test('aliased header names still locate the Report column', withRoot((root) => {
+test('localized header names are rejected without changing the tracker', withRoot((root) => {
   writeFileSync(trackerPath(root), [
     '| # | Fecha | Empresa | Puesto | Score | Estado | PDF | Informe | Notas |',
     '|---|-------|---------|--------|-------|--------|-----|---------|-------|',
     row(1, 'Acme Widgets', DEAD),
     '',
   ].join('\n'));
+  const before = tracker(root);
   const r = run(root);
-  assert.equal(r.status, 0, r.out);
-  assert.match(tracker(root), /\| — \| note 1 \|/);
+  assert.notEqual(r.status, 0, r.out);
+  assert.equal(tracker(root), before);
 }));
 
 test('tracker with no Report column: nothing to do, exit 0, file untouched', withRoot((root) => {

@@ -121,8 +121,8 @@ try {
     '2-globex.tsv': '2\t2026-01-02\tGlobex\tData Eng\taccepted\t4.0/5\t✅\t[2](reports/2-globex-2026-01-02.md)\toffer accepted\n',
   });
   const acceptedRow = accepted.split('\n').find(l => /\bGlobex\b/.test(l)) || '';
-  if (/\|\s*Hired\s*\|/.test(acceptedRow)) {
-    pass('merge-tracker resolves the "accepted" alias to Hired');
+  if (!acceptedRow) {
+    pass('merge-tracker rejects the obsolete accepted alias');
   } else {
     fail(`merge-tracker did not resolve accepted -> Hired: ${acceptedRow.trim()}`);
   }
@@ -606,7 +606,7 @@ try {
     fail(`TSV archived despite never reaching the tracker: archived=[${broken.archived.join(', ')}] pending=[${broken.pending.join(', ')}]`);
   }
 
-  if (!/\+1 added/.test(broken.output) && /separator row/.test(broken.output)) {
+  if (!/\+1 added/.test(broken.output) && /separator row|English header/.test(broken.output)) {
     pass('the failure names the missing separator row rather than reporting rows added');
   } else {
     fail(`merge misreported the outcome: ${broken.output.split('\n').filter(l => /added|Summary/.test(l)).join(' // ') || '(no summary line)'}`);

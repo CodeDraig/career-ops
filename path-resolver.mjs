@@ -51,7 +51,7 @@ export function canonicalizeTrackerPath(path) {
 
 /**
  * Returns the canonical path to the tracker applications.md file for reading.
- * Priority: process.env.CAREER_OPS_TRACKER > root/data/applications.md > root/applications.md.
+ * Priority: process.env.CAREER_OPS_TRACKER > root/data/applications.md.
  *
  * @param {string} rootDir The career-ops data root directory
  * @returns {string} Canonical absolute path to the tracker file
@@ -74,9 +74,7 @@ export function rawTrackerPath(rootDir) {
   const env = process.env.CAREER_OPS_TRACKER?.trim();
   return env
     ? resolve(__dirname, env)
-    : existsSync(join(rootDir, 'data/applications.md'))
-      ? join(rootDir, 'data/applications.md')
-      : join(rootDir, 'applications.md');
+    : join(rootDir, 'data/applications.md');
 }
 
 /**

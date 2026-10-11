@@ -20,7 +20,7 @@ import { join } from 'path';
 console.log('\ntest suite — an inherited CAREER_OPS_TRACKER does not reach it');
 
 const HEADER = '# Applications Tracker\n\n| # | Date | Company | Role | Score | Status | PDF | Report | Notes |\n|---|------|---------|------|-------|--------|-----|--------|-------|\n';
-const ROW = '| 1 | 2026-01-01 | Acme Widgets | Coordinator | 4.0/5 | **Applied** | ❌ | — | note |\n';
+const ROW = '| 1 | 2026-01-01 | Acme Widgets | Coordinator | 4.0/5 | applied | ❌ | — | note |\n';
 
 const dir = mkdtempSync(join(tmpdir(), 'co-inherited-tracker-'));
 try {

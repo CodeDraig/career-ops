@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { findDeadReportLink } from './tracker-links.mjs';
 /**
  * verify-pipeline.mjs — Health check for career-ops pipeline integrity
  *
@@ -32,7 +33,7 @@ import {
   looksLikeScoreCell, isSeparatorRow, isHeaderRow, resolveColumns,
   normalizeTextKey, normalizeVia,
 } from './tracker-parse.mjs';
-import { CONTROL_CHARS, findDeadReportLink } from './tracker-utils.mjs';
+import { CONTROL_CHARS } from './tracker-utils.mjs';
 import { normalizeUrl } from './url-key.mjs';
 import { checkTrackerSync } from './tracker-sync-check.mjs';
 import { normalizeStatus } from './followup-cadence.mjs';
@@ -66,9 +67,7 @@ mkdirSync(REPORTS_DIR, { recursive: true });
 // Canonical states — loaded from templates/states.yml, the single source of truth.
 const _canonicalStates = loadCanonicalStates(STATES_FILE);
 const CANONICAL_STATUSES = new Set(_canonicalStates.map(s => s.id));
-const ALIASES = Object.fromEntries(
-  _canonicalStates.flatMap(s => s.aliases.map(a => [a.toLowerCase(), s.id]))
-);
+
 
 let errors = 0;
 let warnings = 0;
@@ -86,17 +85,7 @@ if (!existsSync(APPS_FILE)) {
 const content = readFileSync(APPS_FILE, 'utf-8');
 const lines = content.split('\n');
 
-// Map columns by header name so the checks work whether the tracker uses the
-// original 9-column layout or a customized one with an extra column (e.g. a
-// Location column after Role). Fixed-position indexing would otherwise read
-// Location where Score is expected and flag false errors. Falls back to the
-// legacy fixed layout when no recognizable header row is found.
-//
-// Sourced from tracker-parse.mjs rather than re-declared here: this file used
-// to carry its own copy of LEGACY_COLMAP, HEADER_ALIASES and detectColumns, so
-// a fix to the shared module left verify-pipeline reading a different layout
-// than merge-tracker wrote — the drift tracker-parse.mjs exists to prevent, and
-// the same half-application #1291 was filed for.
+// Require English headers; reordered and optional columns keep their names.
 const COLMAP = resolveColumns(lines);
 const MAX_IDX = Math.max(...Object.values(COLMAP));
 
@@ -127,11 +116,9 @@ console.log(`\n📊 Checking ${entries.length} entries in applications.md\n`);
 // --- Check 1: Canonical statuses ---
 let badStatuses = 0;
 for (const e of entries) {
-  const clean = e.status.replace(/\*\*/g, '').trim().toLowerCase();
-  // Strip trailing dates
-  const statusOnly = clean.replace(/\s+\d{4}-\d{2}-\d{2}.*$/, '').trim();
+  const statusOnly = e.status.trim().toLowerCase();
 
-  if (!CANONICAL_STATUSES.has(statusOnly) && !ALIASES[statusOnly]) {
+  if (!CANONICAL_STATUSES.has(statusOnly)) {
     error(`#${e.num}: Non-canonical status "${e.status}"`);
     badStatuses++;
   }
@@ -170,19 +157,16 @@ for (const [key, group] of companyRoleMap) {
 if (dupes === 0) ok('No exact duplicates found');
 
 // --- Check 3: Report links ---
-// Markdown links resolve relative to the file that contains them, so report
-// links must resolve against the tracker's own directory (see #760). For the
-// transition we also accept legacy root-relative links: try the tracker dir
-// first, then fall back to the repo root before flagging a link broken.
+// Report links resolve only relative to the tracker file.
 const TRACKER_DIR = dirname(APPS_FILE);
 let brokenReports = 0;
 let uninspectableReports = 0;
 for (const e of entries) {
-  // Shared rule (tracker-utils.mjs): first link, regular file, tracker dir then
-  // data root; a directory is not a report (#4748). Also used by merge-tracker
+  // Shared rule (tracker-links.mjs): first link, regular file, tracker directory.
+  // Also used by merge-tracker
   // and fix-report-links so all three agree on which rows are broken.
   let inspectionFailure = null;
-  const link = findDeadReportLink(e.report, TRACKER_DIR, CAREER_OPS, {
+  const link = findDeadReportLink(e.report, TRACKER_DIR, {
     onInspectionError: (failure) => { inspectionFailure = failure; },
   });
   if (inspectionFailure) {

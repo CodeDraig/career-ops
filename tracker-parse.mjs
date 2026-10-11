@@ -14,24 +14,7 @@
 
 import { readFileSync } from 'fs';
 
-/** The original fixed 9-column layout (num … notes at indices 1 … 9). */
-export const LEGACY_COLMAP = {
-  num: 1, date: 2, company: 3, role: 4, score: 5, status: 6, pdf: 7, report: 8, notes: 9,
-};
-
-/**
- * Header text (lowercased) → canonical field name. Includes ES aliases.
- * Loaded from tracker-aliases.json — the ONE shared alias table, which the web
- * read path (web/src/lib/tracker-table.mjs) also loads at runtime, so the two
- * can never drift (PR #1598 review). Add new aliases in the JSON, not here.
- *
- * A missing or corrupt JSON is a broken install (the file ships alongside this
- * module in SYSTEM_PATHS/BOOTSTRAP_PATHS): fail fast with an actionable
- * message rather than degrading silently — a quiet fallback here would
- * reintroduce exactly the reader drift the shared table exists to prevent.
- * (The web loader degrades to the legacy fixed order instead because it reads
- * the file from a user-configured root at request time.)
- */
+/** English header labels mapped to internal field names, shared with the web reader. */
 export const HEADER_ALIASES = (() => {
   const src = new URL('./tracker-aliases.json', import.meta.url);
   try {
@@ -101,17 +84,6 @@ const REQUIRED_HEADER_FIELDS = ['num', 'company', 'role', 'score', 'status'];
  * @returns {Object<string,number>|null} Field → column index, or null.
  */
 function headerSchemaMap(cells) {
-  // The alias table is the whole contract — no literal `company`/`role`
-  // pre-filter. There used to be one, which meant a FULLY localized header
-  // (`| # | Fecha | Empresa | Puesto | … |`) never reached the aliases that
-  // exist for exactly that case, and the tracker silently fell back to
-  // LEGACY_COLMAP. On a plain 9-column table the fallback lines up and nothing
-  // looks wrong; insert the Location column from #946's own use case and the
-  // Score cell is read from Location instead (#2274).
-  //
-  // Requiring the full schema is what makes the pre-filter unnecessary: a data
-  // row would have to carry five different header labels in five different
-  // cells to qualify, which no real row does.
   const map = {};
   cells.forEach((c, i) => { if (HEADER_ALIASES[c] != null) map[HEADER_ALIASES[c]] = i; });
   return REQUIRED_HEADER_FIELDS.every(k => map[k] != null) ? map : null;
@@ -240,38 +212,19 @@ export function resolveTsvColumns(cells) {
   return { map, missing, duplicates, unknown };
 }
 
-// The dashboard also reads legacy rows with a leading pipe and tab-separated
-// cells. Opt in only where readers/writers handle that format: other writers
-// still rebuild pipe rows and must not silently start accepting tab rows. A tab
-// inside a normal pipe table is ordinary whitespace, not a column delimiter.
-export function trackerRowSeparator(line) {
-  return line.includes('\t') && line.split('|').length <= 3 ? '\t' : '|';
-}
-
-/** Return raw cells in the same index space as line.split('|'). */
-export function splitTrackerCells(line) {
-  if (trackerRowSeparator(line) === '|') return line.split('|');
-  const opening = line.indexOf('|');
-  if (opening < 0) return line.split('|');
-  const closing = line.trimEnd().endsWith('|') ? line.lastIndexOf('|') : -1;
-  const body = line.slice(opening + 1, closing > opening ? closing : undefined);
-  return [line.slice(0, opening), ...body.split('\t'), ...(closing > opening ? [line.slice(closing + 1)] : [])];
-}
-
 /**
  * Scan the table for a header row and build a field-name → column-index map.
- * Indexing matches `line.split('|')`. Returns null — caller should fall back to
- * LEGACY_COLMAP — unless the essential columns are all present, so a stray pipe
- * line can't yield a bogus mapping.
+ * Indexing matches `line.split('|')`. Returns null unless the essential
+ * English column headers are present.
  *
  * @param {string[]} lines - All lines of applications.md.
- * @param {{allowTabs?: boolean, allowIndentation?: boolean}} [options] - Explicit legacy-layout support.
+ * @param {{allowIndentation?: boolean}} [options] - Whether to allow leading indentation.
  * @returns {Object<string,number>|null}
  */
-export function detectColumns(lines, { allowTabs = false, allowIndentation = false } = {}) {
+export function detectColumns(lines, { allowIndentation = false } = {}) {
   for (const line of lines) {
     if (!(allowIndentation ? line.trimStart() : line).startsWith('|')) continue;
-    const cells = allowTabs ? splitTrackerCells(line) : line.split('|');
+    const cells = line.split('|');
     const map = headerSchemaMap(cells.map(s => s.trim().toLowerCase()));
     if (map) return map;
   }
@@ -279,13 +232,16 @@ export function detectColumns(lines, { allowTabs = false, allowIndentation = fal
 }
 
 /**
- * Convenience: detect the header layout, falling back to the legacy fixed one.
+ * Resolve English headers; empty files have no columns, unsupported tables fail.
  * @param {string[]} lines
- * @param {{allowTabs?: boolean, allowIndentation?: boolean}} [options]
+ * @param {{allowIndentation?: boolean}} [options]
  * @returns {Object<string,number>}
  */
 export function resolveColumns(lines, options) {
-  return detectColumns(lines, options) || LEGACY_COLMAP;
+  const columns = detectColumns(lines, options);
+  if (!columns && !lines.some(line => line.trimStart().startsWith('|'))) return {};
+  if (!columns) throw new Error('Tracker requires an English header with #, Company, Role, Score, and Status columns.');
+  return columns;
 }
 
 /**
@@ -295,13 +251,14 @@ export function resolveColumns(lines, options) {
  * null. The raw line is preserved so callers can locate/replace the exact line.
  *
  * @param {string} line - One line from applications.md.
- * @param {Object<string,number>} [colmap] - From resolveColumns(); defaults to legacy.
- * @param {{allowTabs?: boolean, allowIndentation?: boolean}} [options] - Opt in only when writes preserve this layout.
+ * @param {Object<string,number>} colmap - Required detected column map from resolveColumns().
+ * @param {{allowIndentation?: boolean}} [options] - Opt in only when writes preserve this layout.
  * @returns {object|null} `{num,date,company,role,score,status,pdf,report,notes,url,location?,via?,raw}`.
  */
-export function parseTrackerRow(line, colmap = LEGACY_COLMAP, { allowTabs = false, allowIndentation = false } = {}) {
+export function parseTrackerRow(line, colmap, { allowIndentation = false } = {}) {
+  if (!colmap) throw new Error('parseTrackerRow requires a detected column map.');
   if (typeof line !== 'string' || !(allowIndentation ? line.trimStart() : line).startsWith('|')) return null;
-  const parts = (allowTabs ? splitTrackerCells(line) : line.split('|')).map(s => s.trim());
+  const parts = line.split('|').map(s => s.trim());
   // Dynamic width guard: a complete row splits into leading '' + one cell per
   // column (+ trailing '' when the row ends with a pipe). Anything shorter is
   // missing a cell, and a missing INTERIOR cell shifts every later column one

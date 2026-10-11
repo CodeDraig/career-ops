@@ -388,8 +388,8 @@ const TRACKER_REPORT_MISMATCH = `# Applications Tracker
 {
   const sb = makeSandbox(TRACKER_9);
   const r = runSetStatus(['2', 'aplicado'], sb);
-  if (r.code === 0 && /\| Globex \| Platform Engineer \| 4.0\/5 \| Applied \|/.test(readTracker(sb))) {
-    pass('alias: "aplicado" resolves to canonical "Applied"');
+  if (r.code === 1 && readTracker(sb) === TRACKER_9) {
+    pass('obsolete alias is rejected without changing the tracker');
   } else {
     fail(`alias: code=${r.code}\n${r.stdout}${r.stderr}`);
   }

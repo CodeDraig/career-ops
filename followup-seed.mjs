@@ -227,7 +227,7 @@ function envInt(name, fallback) {
 function readTrackerRows(trackerPath) {
   const content = readFileSync(trackerPath, 'utf-8');
   const lines = content.split('\n');
-  const parseOptions = { allowTabs: true, allowIndentation: true };
+  const parseOptions = { allowIndentation: true };
   const colmap = resolveColumns(lines, parseOptions);
   const rows = [];
   for (const line of lines) {

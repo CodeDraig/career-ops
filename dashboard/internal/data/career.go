@@ -5,11 +5,9 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
-	"unicode"
 
 	"github.com/santifer/career-ops/dashboard/internal/model"
 )
@@ -26,27 +24,14 @@ var (
 	reArchetypeColon = regexp.MustCompile(`(?i)\*\*(?:Arquetipo|Archetype):\*\*\s*(.+)`)
 	reArchetypeYAML  = regexp.MustCompile(`(?m)^archetype:\s*"?([^"\n]+)"?\s*$`)
 	reReportURL      = regexp.MustCompile(`(?m)^\*\*URL:\*\*\s*(https?://\S+)`)
-	// Backslash escapes a markdown link destination may carry; mirrors the
-	// unescape in tracker-parse.mjs markdownLinkDestination().
-	reMarkdownDestEscape = regexp.MustCompile(`\\([\\()<> ])`)
-	reBatchID            = regexp.MustCompile(`(?m)^\*\*Batch ID:\*\*\s*(\d+)`)
-	reDiscardReasons     = regexp.MustCompile(`(?s)discard_reasons:\s*\n((?:\s*-\s*.+?\n)+)`)
-	reDiscardItem        = regexp.MustCompile(`\s*-\s*([^\n]+)`)
+	reBatchID        = regexp.MustCompile(`(?m)^\*\*Batch ID:\*\*\s*(\d+)`)
+	reDiscardReasons = regexp.MustCompile(`(?s)discard_reasons:\s*\n((?:\s*-\s*.+?\n)+)`)
+	reDiscardItem    = regexp.MustCompile(`\s*-\s*([^\n]+)`)
 )
 
-// resolveReportPath converts a report link from the tracker into a path
-// relative to careerOpsPath. Links are normally relative to the tracker
-// file's own directory (see merge-tracker.mjs link normalization, #760);
-// legacy trackers may still carry root-relative links, so fall back to the
-// raw link when the tracker-relative resolution does not exist on disk.
+// resolveReportPath resolves relative to the tracker file and returns a data-root-relative path.
 func resolveReportPath(careerOpsPath, trackerPath, link string) string {
 	resolved := filepath.Join(filepath.Dir(trackerPath), link)
-	if _, err := os.Stat(resolved); err != nil {
-		legacy := filepath.Join(careerOpsPath, link)
-		if _, err2 := os.Stat(legacy); err2 == nil {
-			resolved = legacy
-		}
-	}
 	if rel, err := filepath.Rel(careerOpsPath, resolved); err == nil {
 		return rel
 	}
@@ -79,11 +64,7 @@ func resolveTrackerPath(careerOpsPath string) string {
 		}
 		return filepath.Clean(filepath.Join(getRepoRoot(), envTracker))
 	}
-	dataPath := filepath.Clean(filepath.Join(careerOpsPath, "data", "applications.md"))
-	if _, err := os.Stat(dataPath); err == nil {
-		return dataPath
-	}
-	return filepath.Clean(filepath.Join(careerOpsPath, "applications.md"))
+	return filepath.Clean(filepath.Join(careerOpsPath, "data", "applications.md"))
 }
 
 // ParseApplications reads applications.md and returns parsed applications.
@@ -100,9 +81,12 @@ func ParseApplications(careerOpsPath string) []model.CareerApplication {
 
 	// Map columns by header name rather than fixed position, so a customized or
 	// reordered tracker (e.g. an inserted Location column) does not desync the
-	// reader. Falls back to the legacy fixed layout when no header is present.
+	// reader. An unsupported header yields no applications.
 	// This matches the Node tracker tooling, which became header-aware in #954.
-	cols := resolveTrackerColumns(lines)
+	cols := detectTrackerColumns(lines)
+	if cols == nil {
+		return nil
+	}
 
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
@@ -507,82 +491,9 @@ func enrichAppURLsByCompany(careerOpsPath string, apps []model.CareerApplication
 	}
 }
 
-// ComputeMetrics calculates aggregate metrics from applications.
-func ComputeMetrics(apps []model.CareerApplication) model.PipelineMetrics {
-	m := model.PipelineMetrics{
-		Total:    len(apps),
-		ByStatus: make(map[string]int),
-	}
-
-	var totalScore float64
-	var scored int
-
-	for _, app := range apps {
-		status := NormalizeStatus(app.Status)
-		m.ByStatus[status]++
-
-		if app.Score > 0 {
-			totalScore += app.Score
-			scored++
-			if app.Score > m.TopScore {
-				m.TopScore = app.Score
-			}
-		}
-		if app.HasPDF {
-			m.WithPDF++
-		}
-		if status != "skip" && status != "rejected" && status != "discarded" {
-			m.Actionable++
-		}
-	}
-
-	if scored > 0 {
-		m.AvgScore = totalScore / float64(scored)
-	}
-
-	return m
-}
-
-// NormalizeStatus normalizes raw status text to a canonical form.
-// Aliases match templates/states.yml, which Node and web load directly. Keep
-// them in sync; TestNormalizeStatusCoversStatesYAML fails on a states.yml
-// spelling this function resolves differently, and test-all.mjs guards the
-// other direction (no literal here that states.yml has never heard of).
+// NormalizeStatus folds canonical English stage names without legacy aliases.
 func NormalizeStatus(raw string) string {
-	// Strip markdown bold and trailing dates
-	s := strings.ReplaceAll(raw, "**", "")
-	s = strings.TrimSpace(strings.ToLower(s))
-	// Strip trailing date (e.g., "aplicado 2026-03-12")
-	if idx := strings.Index(s, " 202"); idx > 0 {
-		s = strings.TrimSpace(s[:idx])
-	}
-
-	switch {
-	// Most restrictive first — accepts English, Spanish, and Turkish
-	case s == "hired" || s == "contratado" || s == "contratada" || s == "accepted" || s == "accept" || s == "kabul edildi" || s == "kabul_edildi" || s == "işe alındı" || s == "ise alindi" || s == "işe alindi":
-		return "hired"
-	case strings.Contains(s, "no aplicar") || strings.Contains(s, "no_aplicar") || s == "skip" || s == "monitor" || strings.Contains(s, "geo blocker") || strings.Contains(s, "geo_blocker") || strings.Contains(s, "uygun değil") || strings.Contains(s, "uygun_değil") || strings.Contains(s, "uygun degil") || strings.Contains(s, "uygun_degil"):
-		return "skip"
-	case strings.Contains(s, "interview") || strings.Contains(s, "entrevista") || strings.Contains(s, "mülakat") || strings.Contains(s, "mulakat"):
-		return "interview"
-	case s == "assessment" || s == "screening" || s == "online assessment" || s == "online_assessment" || s == "online screening":
-		return "assessment"
-	case s == "offer" || strings.Contains(s, "oferta") || strings.Contains(s, "teklif"):
-		return "offer"
-	case strings.Contains(s, "responded") || strings.Contains(s, "respondido") || strings.Contains(s, "yanıt verildi") || strings.Contains(s, "yanıt_verildi") || strings.Contains(s, "yanit verildi") || strings.Contains(s, "yanit_verildi"):
-		return "responded"
-	case strings.Contains(s, "applied") || strings.Contains(s, "aplicado") || s == "enviada" || s == "aplicada" || s == "sent" || strings.Contains(s, "başvuruldu") || strings.Contains(s, "basvuruldu"):
-		return "applied"
-	case strings.Contains(s, "rejected") || strings.Contains(s, "rechazado") || s == "rechazada" || strings.Contains(s, "reddedildi"):
-		return "rejected"
-	case strings.Contains(s, "discarded") || strings.Contains(s, "descartado") || s == "descartada" || s == "cerrada" || s == "cancelada" ||
-		strings.HasPrefix(s, "duplicado") || strings.HasPrefix(s, "dup") || strings.Contains(s, "iptal edildi") || strings.Contains(s, "iptal_edildi") || strings.Contains(s, "ıptal edildi") || strings.Contains(s, "ıptal_edildi"):
-		return "discarded"
-	case strings.Contains(s, "evaluated") || strings.Contains(s, "evaluada") || s == "condicional" || s == "hold" || s == "evaluar" || s == "verificar" || strings.Contains(s, "değerlendirildi") || strings.Contains(s, "degerlendirildi"):
-		return "evaluated"
-	default:
-		return s
-	}
+	return strings.ToLower(strings.TrimSpace(raw))
 }
 
 // LoadReportSummary extracts key fields from a report file.
@@ -625,234 +536,6 @@ func LoadReportSummary(careerOpsPath, reportPath string) (archetype, tldr, remot
 	return
 }
 
-// splitTrackerRow splits a tracker table line into trimmed cell values, using
-// the same delimiter logic as ParseApplications: a mixed "| " + tab-separated
-// body, or a pure pipe-delimited row. Field 0 is the first real column (num), so
-// the returned indices match the legacy layout (Status is field 5).
-func splitTrackerRow(line string) []string {
-	line = strings.TrimSpace(line)
-	var fields []string
-	if strings.Contains(line, "\t") {
-		// Mixed format: starts with "| " then tab-separated.
-		line = strings.TrimPrefix(line, "|")
-		line = strings.TrimSpace(line)
-		for _, p := range strings.Split(line, "\t") {
-			fields = append(fields, strings.TrimSpace(strings.Trim(p, "|")))
-		}
-	} else {
-		// Pure pipe format.
-		line = strings.Trim(line, "|")
-		for _, p := range strings.Split(line, "|") {
-			fields = append(fields, strings.TrimSpace(p))
-		}
-	}
-	return fields
-}
-
-// extractCellURL returns the posting URL a tracker URL cell points at, in
-// either written form: the href of the first http(s) markdown link, or the cell
-// verbatim when it holds none (a bare URL on an older tracker, or a "—"/"N/A"
-// placeholder the callers already treat as absent).
-//
-// This is a PORT of extractCellUrl / parseMarkdownLinks / markdownLinkDestination
-// in tracker-parse.mjs, not an approximation of it. It used to be two regexes,
-// and they disagreed with Node at the edges: a hand-edited cell holding two
-// adjacent links read as one malformed URL spanning both. The JobURL tier and
-// merge-tracker's dedup key must agree on a row's URL, so the boundary rules —
-// first link wins, balanced parentheses kept, `[`/`]` allowed in the
-// destination, the same escapes undone — are the same code, not a lookalike.
-//
-// This reader is tier 0 of the JobURL enrichment chain since #3452, and a
-// markdown-wrapped cell it could not read would not error — it would look like
-// a row with no URL and silently fall through to the report/scan-history tiers,
-// which resolve a DIFFERENT posting often enough to matter.
-func extractCellURL(cellValue string) string {
-	value := strings.TrimSpace(cellValue)
-	if value == "" {
-		return ""
-	}
-	for _, link := range parseMarkdownLinks(value) {
-		target := strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(link.target), "<"), ">")
-		lower := strings.ToLower(target)
-		if strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://") {
-			return target
-		}
-	}
-	return value
-}
-
-type markdownLink struct {
-	label  string
-	target string
-}
-
-// parseMarkdownLinks returns every markdown link in value, in order. Mirrors
-// parseMarkdownLinks in tracker-parse.mjs: the label ends at the first
-// unescaped `]`, it must be followed directly by `(`, and the destination runs
-// to the `)` that balances it, so `(remote)` inside a href survives whole.
-// Works on runes; every delimiter involved is ASCII.
-func parseMarkdownLinks(value string) []markdownLink {
-	r := []rune(value)
-	var links []markdownLink
-	cursor := 0
-	for cursor < len(r) {
-		labelStart := -1
-		for i := cursor; i < len(r); i++ {
-			if r[i] == '[' {
-				labelStart = i
-				break
-			}
-		}
-		if labelStart == -1 {
-			break
-		}
-		labelEnd := -1
-		for i := labelStart + 1; i < len(r); i++ {
-			if r[i] == '\\' {
-				i++
-			} else if r[i] == ']' {
-				labelEnd = i
-				break
-			}
-		}
-		if labelEnd == -1 || labelEnd+1 >= len(r) || r[labelEnd+1] != '(' {
-			cursor = labelStart + 1
-			continue
-		}
-		depth, linkEnd := 1, -1
-		for i := labelEnd + 2; i < len(r); i++ {
-			if r[i] == '\\' {
-				i++
-			} else if r[i] == '(' {
-				depth++
-			} else if r[i] == ')' {
-				depth--
-				if depth == 0 {
-					linkEnd = i
-					break
-				}
-			}
-		}
-		if linkEnd == -1 {
-			cursor = labelStart + 1
-			continue
-		}
-		if target, ok := markdownLinkDestination(string(r[labelEnd+2 : linkEnd])); ok {
-			links = append(links, markdownLink{label: string(r[labelStart+1 : labelEnd]), target: target})
-		}
-		cursor = linkEnd + 1
-	}
-	return links
-}
-
-// markdownLinkDestination extracts the destination from the text between `](`
-// and its balancing `)`: an angle-bracketed `<...>` form, or the run up to the
-// first whitespace outside parentheses. Mirrors markdownLinkDestination in
-// tracker-parse.mjs, including undoing the same escapes.
-func markdownLinkDestination(raw string) (string, bool) {
-	r := []rune(strings.TrimLeftFunc(raw, unicode.IsSpace))
-	if len(r) > 0 && r[0] == '<' {
-		for i := 1; i < len(r); i++ {
-			if r[i] == '\\' {
-				i++
-			} else if r[i] == '>' {
-				return reMarkdownDestEscape.ReplaceAllString(string(r[1:i]), "$1"), true
-			}
-		}
-		return "", false
-	}
-	depth, end := 0, len(r)
-	for i := 0; i < len(r); i++ {
-		switch {
-		case r[i] == '\\':
-			i++
-		case r[i] == '(':
-			depth++
-		case r[i] == ')' && depth > 0:
-			depth--
-		case unicode.IsSpace(r[i]) && depth == 0:
-			end = i
-		}
-		if end != len(r) {
-			break
-		}
-	}
-	destination := strings.TrimSpace(string(r[:end]))
-	if destination == "" {
-		return "", false
-	}
-	return reMarkdownDestEscape.ReplaceAllString(destination, "$1"), true
-}
-
-// trackerHeaderAliases maps a lowercased header cell to a canonical field name.
-// Mirrors tracker-aliases.json, which Node and web load directly. Keep the full
-// table in sync; TestTrackerHeaderAliasesMatchSharedJSON guards exact parity.
-var trackerHeaderAliases = map[string]string{
-	"#": "num", "num": "num",
-	"date": "date", "fecha": "date", "datum": "date", "data": "date",
-	"dato": "date", "tanggal": "date",
-	"company": "company", "empresa": "company",
-	"firma": "company", "virksomhed": "company", "perusahaan": "company",
-	"via": "via", "role": "role", "puesto": "role",
-	"rolle": "role", "rola": "role", "vaga": "role",
-	"location": "location", "ort": "location", "score": "score", "status": "status",
-	"pdf": "pdf", "materials": "pdf", "report": "report",
-	"apply link": "applylink", "apply": "applylink",
-	"follow-up": "followup", "follow up": "followup", "followup": "followup",
-	"notes": "notes", "url": "url",
-}
-
-// legacyTrackerColumns is the original fixed layout in splitTrackerRow field
-// space (num=0 … notes=8), used when no recognizable header row is present.
-var legacyTrackerColumns = map[string]int{
-	"num": 0, "date": 1, "company": 2, "role": 3, "score": 4,
-	"status": 5, "pdf": 6, "report": 7, "notes": 8,
-}
-
-// detectTrackerColumns scans for the table header row and maps canonical field
-// names to column indices in splitTrackerRow field space. It returns nil unless
-// the essential columns are all present, so a stray pipe line cannot yield a
-// bogus mapping and the caller falls back to legacyTrackerColumns. Mirrors
-// detectColumns in tracker-parse.mjs (#954).
-func detectTrackerColumns(lines []string) map[string]int {
-	for _, line := range lines {
-		if !strings.HasPrefix(strings.TrimSpace(line), "|") {
-			continue
-		}
-		cells := splitTrackerRow(line)
-		m := make(map[string]int)
-		for i, c := range cells {
-			if name, ok := trackerHeaderAliases[strings.ToLower(c)]; ok {
-				// Unconditional assign: with a duplicated header name the LAST
-				// occurrence wins, matching detectColumns in tracker-parse.mjs
-				// (which this function mirrors) — first-wins here made the two
-				// runtimes map the same header row differently.
-				m[name] = i
-			}
-		}
-		complete := true
-		for _, k := range []string{"num", "company", "role", "score", "status"} {
-			if _, ok := m[k]; !ok {
-				complete = false
-				break
-			}
-		}
-		if complete {
-			return m
-		}
-	}
-	return nil
-}
-
-// resolveTrackerColumns returns the header-detected column map, falling back to
-// the legacy fixed layout when no header row is found.
-func resolveTrackerColumns(lines []string) map[string]int {
-	if m := detectTrackerColumns(lines); m != nil {
-		return m
-	}
-	return legacyTrackerColumns
-}
-
 func UpdateApplicationStatus(careerOpsPath string, app model.CareerApplication, newStatus string) error {
 	return UpdateApplicationStatusAndNotes(careerOpsPath, app, newStatus, "")
 }
@@ -888,212 +571,6 @@ func cleanTableCell(s string) string {
 	s = strings.TrimSpace(s)
 	s = strings.TrimRight(s, "|")
 	return strings.TrimSpace(s)
-}
-
-// StatusPriority returns the sort priority for a status (lower = higher priority).
-func StatusPriority(status string) int {
-	switch NormalizeStatus(status) {
-	case "interview":
-		return 0
-	case "offer":
-		return 1
-	case "assessment":
-		return 2
-	case "responded":
-		return 3
-	case "applied":
-		return 4
-	case "evaluated":
-		return 5
-	case "skip":
-		return 6
-	case "rejected":
-		return 7
-	case "discarded":
-		return 8
-	default:
-		return 9
-	}
-}
-
-// ComputeProgressMetrics computes progress-oriented analytics from applications.
-func ComputeProgressMetrics(apps []model.CareerApplication, history ...map[int]int) model.ProgressMetrics {
-	pm := model.ProgressMetrics{}
-
-	// Count by normalized status
-	statusCounts := make(map[string]int)
-	var totalScore float64
-	var scored int
-
-	for _, app := range apps {
-		norm := NormalizeStatus(app.Status)
-		statusCounts[norm]++
-
-		if app.Score > 0 {
-			totalScore += app.Score
-			scored++
-			if app.Score > pm.TopScore {
-				pm.TopScore = app.Score
-			}
-		}
-
-		if norm != "skip" && norm != "rejected" && norm != "discarded" {
-			pm.ActiveApps++
-		}
-	}
-
-	if scored > 0 {
-		pm.AvgScore = totalScore / float64(scored)
-	}
-
-	// Funnel: each stage counts all apps that reached at least that stage.
-	// An app in "interview" has passed through evaluated -> applied -> responded -> assessment -> interview.
-	// "hired" is terminal success and proves every earlier stage (a landed job
-	// proves the offer, the interviews, the response, and the submission), so it
-	// counts into all four existing funnel tiers — matching computeFunnel() in stats.mjs, the
-	// canonical funnel definition, whose docstring already describes this exact
-	// math as mirroring this function.
-	total := len(apps)
-	applied := statusCounts["applied"] + statusCounts["responded"] + statusCounts["assessment"] + statusCounts["interview"] + statusCounts["offer"] + statusCounts["hired"] + statusCounts["rejected"]
-	responded := statusCounts["responded"] + statusCounts["assessment"] + statusCounts["interview"] + statusCounts["offer"] + statusCounts["hired"] + statusCounts["rejected"]
-	assessment := statusCounts["assessment"] + statusCounts["interview"] + statusCounts["offer"] + statusCounts["hired"]
-	interview := statusCounts["interview"] + statusCounts["offer"] + statusCounts["hired"]
-	offer := statusCounts["offer"] + statusCounts["hired"]
-	if len(history) > 0 {
-		applied, responded, assessment, interview, offer = 0, 0, 0, 0, 0
-		ranks := make(map[int]int)
-		var unnumberedRanks []int
-		for _, app := range apps {
-			if NormalizeStatus(app.Status) == "skip" {
-				continue
-			}
-			rank := funnelRank(app.Status)
-			if app.TrackerNumberMissing {
-				unnumberedRanks = append(unnumberedRanks, rank)
-				continue
-			}
-			if history[0][app.Number] > rank {
-				rank = history[0][app.Number]
-			}
-			if rank > ranks[app.Number] {
-				ranks[app.Number] = rank
-			}
-		}
-		for _, rank := range ranks {
-			unnumberedRanks = append(unnumberedRanks, rank)
-		}
-		for _, rank := range unnumberedRanks {
-			if rank >= 1 {
-				applied++
-			}
-			if rank >= 2 {
-				responded++
-			}
-			if rank >= 3 {
-				assessment++
-			}
-			if rank >= 4 {
-				interview++
-			}
-			if rank >= 5 {
-				offer++
-			}
-		}
-	}
-
-	// The Progress headline and funnel must report the same historical offers.
-	pm.TotalOffers = offer
-
-	// Top stage counts every tracked row, including rows backfilled without a
-	// score (#1799) — hence "Tracked", not "Evaluated", which already means both
-	// a status value and the Stats screen's scored count.
-	pm.FunnelStages = []model.FunnelStage{
-		{Label: "Tracked", Count: total, Pct: 100.0},
-		{Label: "Applied", Count: applied, Pct: safePct(applied, total)},
-		{Label: "Responded", Count: responded, Pct: safePct(responded, applied)},
-		{Label: "Assessment", Count: assessment, Pct: safePct(assessment, applied)},
-		{Label: "Interview", Count: interview, Pct: safePct(interview, applied)},
-		{Label: "Offer", Count: offer, Pct: safePct(offer, applied)},
-	}
-
-	// Rates (relative to applied). The denominator travels with them so the
-	// renderer can tell an absent rate from a measured 0% — see
-	// model.ProgressMetrics.RatesDenominator.
-	pm.RatesDenominator = applied
-	if applied > 0 {
-		pm.ResponseRate = float64(responded) / float64(applied) * 100
-		pm.InterviewRate = float64(interview) / float64(applied) * 100
-		pm.OfferRate = float64(offer) / float64(applied) * 100
-	}
-
-	// Score distribution
-	buckets := [5]int{} // 0: 4.5-5.0, 1: 4.0-4.4, 2: 3.5-3.9, 3: 3.0-3.4, 4: <3.0
-	for _, app := range apps {
-		if app.Score <= 0 {
-			continue
-		}
-		switch {
-		case app.Score >= 4.5:
-			buckets[0]++
-		case app.Score >= 4.0:
-			buckets[1]++
-		case app.Score >= 3.5:
-			buckets[2]++
-		case app.Score >= 3.0:
-			buckets[3]++
-		default:
-			buckets[4]++
-		}
-	}
-	pm.ScoreBuckets = []model.ScoreBucket{
-		{Label: "4.5-5.0", Count: buckets[0]},
-		{Label: "4.0-4.4", Count: buckets[1]},
-		{Label: "3.5-3.9", Count: buckets[2]},
-		{Label: "3.0-3.4", Count: buckets[3]},
-		{Label: "  <3.0", Count: buckets[4]},
-	}
-
-	// Weekly activity: group by ISO week from Date field, show last 8 weeks.
-	weekCounts := make(map[string]int)
-	for _, app := range apps {
-		if app.Date == "" {
-			continue
-		}
-		t, err := time.Parse("2006-01-02", app.Date)
-		if err != nil {
-			continue
-		}
-		year, week := t.ISOWeek()
-		key := fmt.Sprintf("%d-W%02d", year, week)
-		weekCounts[key]++
-	}
-
-	// Sort weeks and take last 8
-	var weeks []string
-	for w := range weekCounts {
-		weeks = append(weeks, w)
-	}
-	sort.Strings(weeks)
-	if len(weeks) > 8 {
-		weeks = weeks[len(weeks)-8:]
-	}
-
-	for _, w := range weeks {
-		pm.WeeklyActivity = append(pm.WeeklyActivity, model.WeekActivity{
-			Week:  w,
-			Count: weekCounts[w],
-		})
-	}
-
-	return pm
-}
-
-// safePct returns the percentage of part/whole, or 0 if whole is 0.
-func safePct(part, whole int) float64 {
-	if whole == 0 {
-		return 0
-	}
-	return float64(part) / float64(whole) * 100
 }
 
 // LoadReportDiscardReasons parses predicted discard reasons from a report file.

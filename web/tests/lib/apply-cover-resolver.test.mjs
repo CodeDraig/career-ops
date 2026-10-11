@@ -82,9 +82,8 @@ const { matchesTailoredCover } = await import('../../src/lib/apply/cv-match.mjs'
  * same CAREER_OPS_ROOT override careerOpsRoot() reads (see
  * web/src/lib/career-ops.ts) — no monkeypatching fs needed.
  *
- * `rows` (optional) are written as data/applications.md in the legacy fixed
- * column order parseApplications falls back to, so the applicationNumber path
- * has a real tracker to join against.
+ * `rows` (optional) use the current English tracker headers. The installed
+ * system root is pinned so the fixture also works from the root test runner.
  */
 async function withFixture(files, fn, rows) {
   const root = mkdtempSync(join(tmpdir(), 'cover-resolver-'));
@@ -115,11 +114,15 @@ async function withFixture(files, fn, rows) {
       ].join('\n')
     );
   }
+  const prevCodeRoot = process.env.CAREER_OPS_CODE_ROOT;
+  process.env.CAREER_OPS_CODE_ROOT = join(WEB_SRC, "..", "..");
   const prev = process.env.CAREER_OPS_ROOT;
   process.env.CAREER_OPS_ROOT = root;
   try {
     return await fn(outputDir);
   } finally {
+    if (prevCodeRoot === undefined) delete process.env.CAREER_OPS_CODE_ROOT;
+    else process.env.CAREER_OPS_CODE_ROOT = prevCodeRoot;
     if (prev === undefined) delete process.env.CAREER_OPS_ROOT;
     else process.env.CAREER_OPS_ROOT = prev;
   }

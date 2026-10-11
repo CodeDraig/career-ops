@@ -27,20 +27,19 @@ let _states;
 function loadStates() {
   if (_states) return _states;
   const doc = yaml.load(readFileSync(STATES_PATH, 'utf-8'));
-  const labels = [], aliasMap = {};
+  const labels = [], labelMap = {};
   for (const s of doc.states) {
     labels.push(s.label);
-    aliasMap[s.label.toLowerCase()] = s.label;
-    for (const a of (s.aliases || [])) aliasMap[String(a).toLowerCase()] = s.label;
+    labelMap[s.label.toLowerCase()] = s.label;
   }
-  _states = { labels, aliasMap };
+  _states = { labels, labelMap };
   return _states;
 }
-/** Canonical label for a status (case-insensitive, alias-aware), or null. */
+/** Canonical label for a status (case-insensitive), or null. */
 export function canonicalStatus(raw) {
   if (!raw) return null;
-  const key = String(raw).replace(/\*\*/g, '').trim().toLowerCase();
-  return loadStates().aliasMap[key] || null;
+  const key = String(raw).trim().toLowerCase();
+  return loadStates().labelMap[key] || null;
 }
 export function statusLabels() { return loadStates().labels.slice(); }
 

@@ -203,21 +203,14 @@ const cleanup = [];
   }
 }
 
-// ── hired-share: a root-level tracker has no data/ to write into ────────────
+// A root-level tracker is unsupported and must not create sharing state.
 {
   const dir = mkdtempSync(join(tmpdir(), 'hired-share-rootlevel-'));
   cleanup.push(dir);
-  // The documented fallback layout: applications.md at the root, no data/.
   writeFileSync(join(dir, 'applications.md'), TRACKER);
-
   const r = runScript('hired-share.mjs', ['--root', dir, '--report', '7', '--mark', 'never'], dir);
-  if (r.code === 0) pass('--mark never works with a root-level tracker and no data/');
-  else fail(`--mark never failed where data/ does not exist yet: ${r.stderr.slice(0, 200)}`);
-
-  const statePath = join(dir, 'data', '.hired-share-state.json');
-  if (existsSync(statePath) && JSON.parse(readFileSync(statePath, 'utf8')).byReport['7'].status === 'never') {
-    pass('the answer is persisted after creating data/');
-  } else fail('the "never" answer was reported as recorded but is not on disk');
+  if (r.code !== 0 && !existsSync(join(dir, 'data', '.hired-share-state.json'))) pass('unsupported root-level tracker cannot create sharing state');
+  else fail('unsupported root-level tracker was accepted');
 }
 
 // ── intake: a corrupt ledger is refused, not treated as empty ───────────────

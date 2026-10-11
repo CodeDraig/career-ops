@@ -97,9 +97,9 @@ test('tracker paths follow the workspace selected by the tracker', () => {
 
 test('status input resolves through the canonical states file', () => {
   const states = loadCanonicalStates(fileURLToPath(new URL('../templates/states.yml', import.meta.url)));
-  assert.equal(foldStatusInput(' **TEKLİF** '), 'teklif');
-  assert.equal(resolveCanonicalState('**aplicado**', states), 'Applied');
-  assert.equal(resolveCanonicalState('TEKLİF', states), 'Offer');
+  assert.equal(foldStatusInput(' Applied '), 'applied');
+  assert.equal(resolveCanonicalState('**aplicado**', states), null);
+  assert.equal(resolveCanonicalState('TEKLİF', states), null);
   assert.equal(resolveCanonicalState('not-a-state', states), null);
 });
 

@@ -26,8 +26,8 @@ try {
   const skipTracker = [
     '| # | Date | Company | Role | Score | Status | PDF | Report | Notes |',
     '|---|------|---------|------|-------|--------|-----|--------|-------|',
-    '| 1 | 2026-09-01 | Acme | Eng | 4/5 | **SKIP** | - | - | |',
-    '| 2 | 2026-09-01 | Beta | Eng | 4/5 | No Aplicar | - | - | |',
+    '| 1 | 2026-09-01 | Acme | Eng | 4/5 | SKIP | - | - | |',
+    '| 2 | 2026-09-01 | Beta | Eng | 4/5 | SKIP | - | - | |',
     '| 3 | 2026-09-01 | Gama | Eng | 4/5 | Rejected | - | - | |',
   ].join('\n');
   const skipLedger = stats.parseStatusLogStages([

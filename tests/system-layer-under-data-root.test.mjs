@@ -43,10 +43,10 @@ try {
   for (const envVar of ['CAREER_OPS_ROOT', 'CAREER_OPS_DATA_DIR']) {
     const out = runWithDataRoot(
       `import('./normalize-statuses.mjs').then(m => console.log(` +
-      `['Accepted','Contratado','Evaluada','Rechazado'].map(v => v + '=' + (m.normalizeStatus(v).status ?? 'unknown')).join(' ')))`,
+      `['Hired','hired','Evaluated','Rejected'].map(v => v + '=' + (m.normalizeStatus(v).status ?? 'unknown')).join(' ')))`,
       envVar,
     );
-    const expected = 'Accepted=Hired Contratado=Hired Evaluada=Evaluated Rechazado=Rejected';
+    const expected = 'Hired=Hired hired=Hired Evaluated=Evaluated Rejected=Rejected';
     out === expected
       ? pass(`normalize-statuses canonicalizes under ${envVar} (${expected})`)
       : fail(`normalize-statuses under ${envVar} produced "${out}", expected "${expected}"`);
@@ -56,9 +56,9 @@ try {
   //    localized status resolving to '' there drops the row out of the funnel.
   const cadence = runWithDataRoot(
     `import('./followup-cadence.mjs').then(m => console.log(` +
-    `['Contratado','Aplicado','Entrevista'].map(v => v + '=' + (m.normalizeStatus(v) || 'unknown')).join(' ')))`,
+    `['Hired','Applied','Interview'].map(v => v + '=' + (m.normalizeStatus(v) || 'unknown')).join(' ')))`,
   );
-  const cadenceExpected = 'Contratado=hired Aplicado=applied Entrevista=interview';
+  const cadenceExpected = 'Hired=hired Applied=applied Interview=interview';
   cadence === cadenceExpected
     ? pass(`followup-cadence resolves states.yml aliases under a data root (${cadenceExpected})`)
     : fail(`followup-cadence under a data root produced "${cadence}", expected "${cadenceExpected}"`);

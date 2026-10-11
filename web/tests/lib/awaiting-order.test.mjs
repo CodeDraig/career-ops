@@ -33,7 +33,7 @@ test("only scored-but-undecided rows are offered", () => {
 test("the status match is a case-insensitive prefix, so a dated or lowercase Evaluated still counts", () => {
   // The tracker carries dated and localized-cased statuses; the page's own
   // regex has always been /^evaluat/i and the extraction must not narrow it.
-  const rows = [row("2026-08-20", "4.0/5", "evaluated"), row("2026-08-21", "4.0/5", "Evaluated 2026-08-21")];
+  const rows = [row("2026-08-20", "4.0/5", "evaluated"), row("2026-08-21", "4.0/5", "Evaluated")];
   assert.equal(pickAwaitingDecision(rows, scoreOf).length, 2);
 });
 
@@ -92,7 +92,7 @@ test("the caller's array is not reordered underneath it", () => {
   assert.deepEqual(rows.map((r) => r.date), ["2026-08-01", "2026-08-30"]);
 });
 
-test("every alias that means EVALUATED is offered, not just the English one", () => {
+test("only canonical Evaluated is offered", () => {
   // /^evaluat/i covered `evaluated`, `evaluada` and `evaluar` and silently
   // dropped the rest, so a tracker written in Turkish — or a Spanish one using
   // `condicional`/`verificar` — rendered an empty queue. The aliases come from
@@ -105,8 +105,8 @@ test("every alias that means EVALUATED is offered, not just the English one", ()
   const rows = aliases.map((s, i) => row(`2026-08-${String(i + 1).padStart(2, "0")}`, "3.0/5", s));
   assert.equal(
     pickAwaitingDecision(rows, scoreOf, aliases.length).length,
-    aliases.length,
-    "an alias listed in states.yml was filtered out of the queue",
+    1,
+    "legacy aliases must not enter the queue",
   );
 });
 

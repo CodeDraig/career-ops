@@ -189,16 +189,13 @@ test('an explicit --root still overrides the configured data root for hired-shar
   assert.deepEqual(status.hires.map((h) => h.role), ['other role']);
 });
 
-test('hired-share --mark creates data/ on a legacy-layout data root', (t) => {
-  // applications.md at the top level and no data/: the tracker still resolves,
-  // so recording the answer must not fail on the missing state directory.
+test('hired-share ignores a root-level tracker without changing it', (t) => {
   const f = fixture(t);
   const legacy = join(f.dir, 'legacy');
   mkdirSync(legacy);
-  writeFileSync(join(legacy, 'applications.md'), tracker('legacy role'));
-
-  run(f, 'hired-share.mjs', ['--report', '1', '--mark', 'never'], { CAREER_OPS_ROOT: legacy });
-  const statePath = join(legacy, 'data', '.hired-share-state.json');
-  assert.ok(existsSync(statePath), 'state file must be written under the legacy root');
-  assert.equal(JSON.parse(readFileSync(statePath, 'utf-8')).byReport['1'].status, 'never');
+  const original = tracker('legacy role');
+  writeFileSync(join(legacy, 'applications.md'), original);
+  const status = JSON.parse(run(f, 'hired-share.mjs', ['--status'], { CAREER_OPS_ROOT: legacy }).stdout);
+  assert.deepEqual(status.hires, []);
+  assert.equal(readFileSync(join(legacy, 'applications.md'), 'utf8'), original);
 });

@@ -104,51 +104,40 @@ const CADENCE = resolveCadenceConfig();
 
 // --- Status normalization ---
 //
-// DERIVED from templates/states.yml, not a hand-copy of it. The map that used
-// to live here was already missing every Turkish spelling the Go dashboard
-// recognises, so the same tracker row normalized three different ways: the TUI
-// read `Mülakat` as `interview`, this file left it as `mülakat` (matching no
-// ACTIONABLE/ADVANCED set, so the row silently vanished from the funnel), and
-// the web rejected it outright on writeback. tracker-utils already exposes the
-// loader for exactly this — its docstring says "a new state or alias lands in
-// one file and every consumer follows" — it just had no consumer here (#2704).
+// Canonical labels and ids come from the installed templates/states.yml.
 //
 // Cached per process: these are short-lived CLI runs, so a single read is
 // correct. A long-running consumer must NOT copy this pattern — see #2590,
 // where caching states.yml for a server's lifetime pinned a stale roster.
-let aliasMapCache = null;
+let stateMapCache = null;
 
-/** alias/id/label (lowercased) → canonical lowercase id, from states.yml. */
-function statusAliasMap() {
-  if (aliasMapCache) return aliasMapCache;
+/** Canonical id/label (lowercased) → state id, from states.yml. */
+function statusIdMap() {
+  if (stateMapCache) return stateMapCache;
   const map = new Map();
   try {
     for (const st of loadCanonicalStates(join(CODEBASE_ROOT, 'templates', 'states.yml'))) {
       const id = st.id.toLowerCase();
       map.set(foldStatusInput(id), id);
       if (st.label) map.set(foldStatusInput(st.label), id);
-      for (const a of st.aliases) map.set(foldStatusInput(a), id);
     }
   } catch (err) {
     // A missing/malformed states.yml is a broken install. Degrade to
     // identity-normalization rather than resurrecting a hardcoded table: a
     // fallback copy is the same copy in disguise and drifts the same way.
     // Report it, though — degrading silently is what hid #3500, and here it
-    // costs every localized status its place in the funnel.
+    // prevents configured labels from resolving to their state ids.
     console.error(`[followup-cadence] cannot read canonical states from templates/states.yml: ${err.message}`);
-    return (aliasMapCache = new Map());
+    return (stateMapCache = new Map());
   }
-  return (aliasMapCache = map);
+  return (stateMapCache = map);
 }
 
 const ACTIONABLE_STATUSES = ['applied', 'responded', 'assessment', 'interview'];
 
 export function normalizeStatus(raw) {
-  // foldStatusInput, not a bare toLowerCase: JS lowercases the Turkish dotted
-  // capital `İ` to `i` + U+0307 and the mark survives, so every all-caps
-  // Turkish row missed every alias (#2704 review).
-  const clean = foldStatusInput(String(raw).replace(/\s+\d{4}-\d{2}-\d{2}.*$/, ''));
-  return statusAliasMap().get(clean) || clean;
+  const clean = foldStatusInput(raw);
+  return statusIdMap().get(clean) || clean;
 }
 
 // --- Date helpers ---
@@ -440,7 +429,7 @@ export function addDays(date, days) {
 // below is what the CLI path uses.
 function parseTrackerContent(content) {
   const lines = String(content ?? '').split('\n');
-  const parseOptions = { allowTabs: true, allowIndentation: true };
+  const parseOptions = { allowIndentation: true };
   const colmap = resolveColumns(lines, parseOptions);
   const entries = [];
   for (const line of lines) {

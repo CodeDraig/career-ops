@@ -102,8 +102,8 @@ func TestFunnelHistoryDuplicateRanksAndSkip(t *testing.T) {
 			{Number: 8, Status: "SKIP"},
 			{Number: 9, Status: "skip"},
 			{Number: 10, Status: "Discarded"},
-			{Number: 11, Status: "**SKIP**"},
-			{Number: 12, Status: "No Aplicar"},
+			{Number: 11, Status: "SKIP"},
+			{Number: 12, Status: "SKIP"},
 		}
 		if reverse {
 			for i, j := 0, len(apps)-1; i < j; i, j = i+1, j-1 {

@@ -61,27 +61,7 @@ const STATUS_RANK = {
   // Hired outranks everything: the accepted-job record must never lose a
   // dedup contest to a repost row (aliases from templates/states.yml).
   'hired': 8,
-  'accepted': 8,
-  'accept': 8,
-  // Assessment aliases from templates/states.yml.
-  'screening': 5,
-  'online assessment': 5,
-  'online_assessment': 5,
-  'online screening': 5,
-  // Spanish aliases — kept for backwards compat with existing tracker data
-  'no_aplicar': 0,
-  'no aplicar': 0,
-  'descartado': 0,
-  'descartada': 0,
-  'rechazado': 1,  // Terminal — below active states
-  'rechazada': 1,
-  'evaluada': 2,
-  'aplicado': 3,
-  'respondido': 4,
-  'entrevista': 6,
-  'oferta': 7,
-  'contratado': 8,
-  'contratada': 8,
+
 };
 
 /**
@@ -95,11 +75,7 @@ const STATUS_RANK = {
  * @returns {string} Lowercase status key with Markdown/date noise removed.
  */
 function normalizeStatus(status) {
-  return String(status ?? '')
-    .replace(/\*\*/g, '')
-    .replace(/\s+\d{4}-\d{2}-\d{2}.*$/, '')
-    .trim()
-    .toLowerCase();
+  return String(status ?? '').trim().toLowerCase();
 }
 
 /**

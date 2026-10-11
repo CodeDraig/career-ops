@@ -56,50 +56,6 @@ export function rebuildRow(parts) {
 }
 
 /**
- * The ONE rule for "this Report cell links to a report that is not on disk",
- * shared by verify-pipeline.mjs (Check 3), merge-tracker.mjs (merge-time
- * warning, #4748) and fix-report-links.mjs (#4750) so the three can never
- * disagree about which rows are broken.
- *
- * The link is the first markdown `](target)` in the cell. It resolves when it
- * names a REGULAR FILE from the tracker's own directory (markdown links are
- * relative to the file holding them, see #760) or, for legacy root-relative
- * links, from the data root. A directory is not a report. A cell with no link
- * (`—`, `N/A`, empty) is the documented "no report" convention and is never
- * broken.
- *
- * @param {string} reportCell - Raw Report cell value.
- * @param {string} trackerDir - Directory containing the tracker file.
- * @param {string} dataRoot - Data root (getCareerOpsRoot()).
- * @param {{onInspectionError?: Function, stat?: Function}} [options]
- * @returns {string|null} The unresolved link target, or null when there is no link,
- *   it resolves, or its targets could not be inspected conclusively.
- */
-export function findDeadReportLink(reportCell, trackerDir, dataRoot, options = {}) {
-  const match = String(reportCell ?? '').match(/\]\(([^)]+)\)/);
-  if (!match) return null;
-  const link = match[1];
-  const inspect = options.stat ?? statSync;
-  const errors = [];
-  const candidates = [...new Set([join(trackerDir, link), join(dataRoot, link)])];
-  for (const path of candidates) {
-    try {
-      if (inspect(path).isFile()) return null;
-    } catch (err) {
-      // ENOENT/ENOTDIR prove that this candidate is absent. Permission errors,
-      // transient I/O failures and every other error do not prove that, so an
-      // explicit repair must preserve the tracker cell instead of deleting it.
-      if (err?.code !== 'ENOENT' && err?.code !== 'ENOTDIR') errors.push({ path, error: err });
-    }
-  }
-  if (errors.length > 0) {
-    options.onInspectionError?.({ link, errors });
-    return null;
-  }
-  return link;
-}
-
-/**
  * Normalize company names for same-company lookups across tracker scripts.
  *
  * Company names can contain spaces, punctuation, or branding variants in the
@@ -177,8 +133,7 @@ export function cell(v) {
 /**
  * Resolve the tracker file path for the current workspace.
  *
- * Supports both layouts: `data/applications.md` (boilerplate) and
- * `applications.md` (original root layout). The `CAREER_OPS_TRACKER` env var
+ * Uses `data/applications.md`. The `CAREER_OPS_TRACKER` env var
  * overrides the path (used by tests and non-standard layouts). The result is
  * canonicalized so every script that locks or hashes the tracker path agrees
  * on one spelling.
@@ -794,16 +749,14 @@ export function writeFileAtomic(path, content, { mode } = {}) {
 /**
  * Load the canonical tracker states from `templates/states.yml`.
  *
- * states.yml is the single source of truth for the canonical states and
- * their aliases. Parsing it here (instead of hardcoding the list) means a new
- * state or alias lands in one file and every consumer follows.
+ * states.yml defines the canonical labels; legacy alias fields are ignored.
  *
  * `description` and `terminal` are passed through for callers that EXPLAIN the
  * states rather than list them (set-status.mjs --help). Both default rather
  * than throw: an entry omitting them is still a usable state.
  *
  * @param {string} statesPath - Path to templates/states.yml.
- * @returns {{id:string,label:string,aliases:string[],description:string,terminal:boolean}[]} Parsed state entries.
+ * @returns {{id:string,label:string,description:string,terminal:boolean}[]} Parsed state entries.
  */
 export function loadCanonicalStates(statesPath) {
   const doc = yaml.load(readFileSync(statesPath, 'utf-8'));
@@ -813,57 +766,14 @@ export function loadCanonicalStates(statesPath) {
   return doc.states.map(s => ({
     id: String(s.id ?? ''),
     label: String(s.label ?? ''),
-    aliases: Array.isArray(s.aliases) ? s.aliases.map(String) : [],
     description: String(s.description ?? ''),
     terminal: s.terminal === true,
   }));
 }
 
-/**
- * Resolve user input to a canonical state label, strictly.
- *
- * Case-insensitive match against each state's label, id, and aliases, after
- * stripping markdown bold. Unlike merge-tracker's lenient batch normalization
- * (which defaults unknowns to "Evaluated" so a whole merge isn't lost), this
- * is the strict variant for interactive/CLI use: unknown input returns null so
- * the caller can reject it before anything touches the tracker.
- *
- * @param {string} input - Raw state text from the user or a script.
- * @param {{id:string,label:string,aliases:string[]}[]} states - From loadCanonicalStates().
- * @returns {string|null} Canonical label (e.g. "Applied"), or null when unknown.
- */
-/**
- * Case-fold a status the way a HUMAN typed it, not the way JS lowercases it.
- *
- * JavaScript lowercases the Turkish dotted capital `İ` (U+0130) to `i` plus a
- * COMBINING DOT ABOVE (U+0307), and the mark survives — so `TEKLİF` becomes
- * `tekli\u0307f`, which equals no alias anyone would ever write. Turkish
- * uppercase status words are ordinary, so every all-caps Turkish row missed.
- *
- * Dropping U+0307 after an NFKC lowercase repairs it for every alias at once, rather
- * than listing the ~32 mark-bearing spellings the aliases would otherwise need
- * — a list that would also have to carry `ski\u0307p` and `hi\u0307red`, and that
- * would silently need extending on every future alias containing an `i`.
- *
- * No canonical state, label or alias legitimately contains U+0307, so this
- * cannot collapse two different states together (asserted in test-all).
- *
- * @param {*} input - Raw status text.
- * @returns {string} Lowercased, mark-folded, bold/whitespace-stripped status.
- */
+/** Case-insensitive canonical status input. */
 export function foldStatusInput(input) {
-  return String(input ?? '')
-    .replace(/\*\*/g, '')
-    .trim()
-    .normalize('NFKC')
-    .toLowerCase()
-    // NO `NFD`, for the same structural reason normalizeTextKey documents:
-    // NFKC leaves ż, ė and ġ as SINGLE precomposed code points so this strip
-    // cannot reach their dots, while `i` + U+0307 (what lowercasing `İ`
-    // produces) has no precomposed form and stays exposed. Decomposing first
-    // looks equivalent and is not — it collapses Żubr/Zubr, Ėmė/Eme and
-    // Ġenerali/Generali, which is what 5df43e7 had to undo on the company key.
-    .replace(/\u0307/gu, '');
+  return String(input ?? '').trim().toLowerCase();
 }
 
 export function resolveCanonicalState(input, states) {
@@ -872,7 +782,6 @@ export function resolveCanonicalState(input, states) {
   for (const s of states) {
     if (s.label.toLowerCase() === clean) return s.label;
     if (s.id.toLowerCase() === clean) return s.label;
-    if (s.aliases.some(a => a.toLowerCase() === clean)) return s.label;
   }
   return null;
 }

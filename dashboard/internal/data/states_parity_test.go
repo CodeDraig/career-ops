@@ -54,7 +54,7 @@ func loadCanonicalStates(t *testing.T) []canonicalState {
 		t.Fatal("no states parsed from templates/states.yml")
 	}
 	for _, st := range states {
-		if st.id == "" || st.label == "" || len(st.aliases) == 0 {
+		if st.id == "" || st.label == "" {
 			t.Fatalf("state %+v parsed without an id, label or aliases; the guard would check nothing for it", st)
 		}
 	}

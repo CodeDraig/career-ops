@@ -4,11 +4,11 @@ import { todaySnapshot } from "../../src/lib/home/today-snapshot.mjs";
 
 const scoreOf = (score) => Number.parseFloat(score);
 
-test("Today keeps all undecided aliases and saved URLs, without shipping tracker history", () => {
+test("Today keeps undecided canonical rows and saved URLs, without shipping tracker history", () => {
   const applications = [
     { n: "1", status: "Applied", notes: "historical notes" },
     ...Array.from({ length: 8 }, (_, i) => ({
-      n: String(i + 2), status: i % 2 ? "Evaluated 2026-09-10" : "verificar",
+      n: String(i + 2), status: "Evaluated",
       date: "2026-09-10", score: "4.5/5",
     })),
     { n: "10", status: "Discarded" },

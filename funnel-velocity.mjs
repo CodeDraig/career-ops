@@ -774,10 +774,10 @@ function selfTest() {
     '| 5 | 2026-06-01 | BoldCo | Role | 4.0/5 | **Applied** | ❌ | - | Applied 2026-07-01 |',
   ].join('\n');
   const noncanon = analyze({ trackerContent: noncanonTracker, logContent: '', benchmarks: bm, states, todayStr: TODAY });
-  check(noncanon.waiting.inFlight === 5, `waiting: non-canonical Applied variants all count in-flight, got ${noncanon.waiting.inFlight}`);
+  check(noncanon.waiting.inFlight === 2, `waiting: only canonical Applied values count in-flight, got ${noncanon.waiting.inFlight}`);
   // The waiting count must agree with the funnel's everApplied for the same rows —
   // both canonicalize status the same way, so neither may silently drop a variant.
-  check(noncanon.calibration.everApplied === 5, `waiting: in-flight agrees with everApplied on non-canonical rows, got ${noncanon.calibration.everApplied}`);
+  check(noncanon.calibration.everApplied === 2, `waiting: in-flight agrees with everApplied on non-canonical rows, got ${noncanon.calibration.everApplied}`);
 
   // -- data quality --
   const dq = analyze({ trackerContent: waitTracker, logContent: LOG_FIXTURE, benchmarks: bm, states, todayStr: TODAY }).dataQuality;

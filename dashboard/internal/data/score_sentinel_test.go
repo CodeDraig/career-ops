@@ -12,7 +12,10 @@ import (
 // absent one.
 func TestScoreSentinelLeavesHasScoreFalse(t *testing.T) {
 	dir := t.TempDir()
-	tracker := filepath.Join(dir, "applications.md")
+	if err := os.MkdirAll(filepath.Join(dir, "data"), 0700); err != nil {
+		t.Fatal(err)
+	}
+	tracker := filepath.Join(dir, "data", "applications.md")
 
 	const content = `# Applications Tracker
 

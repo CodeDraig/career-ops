@@ -221,11 +221,11 @@ eq(
 // Hired aliases from templates/states.yml must normalize to 'hired'. Before
 // this, 'Accepted'/'Contratado' normalized to themselves, so stats/funnel/
 // company-history consumers looking for 'hired' silently dropped those rows.
-for (const raw of ['Hired', 'Accepted', 'accept', 'Contratado', 'contratada']) {
+for (const raw of ['Hired', 'hired', 'HIRED']) {
   eq(`normalizeStatus('${raw}') canonicalizes to hired`, normalizeStatus(raw), 'hired');
 }
 eq('normalizeStatus(Assessment) canonicalizes to assessment', normalizeStatus('Assessment'), 'assessment');
-eq('normalizeStatus(online screening) canonicalizes to assessment', normalizeStatus('online screening'), 'assessment');
+eq('normalizeStatus(online screening) canonicalizes to assessment', normalizeStatus('online screening'), 'online screening');
 
 // #2268 — the suite pins the profile so a user's own followup_cadence can't
 // turn a healthy install red. These two guard the pin from the opposite

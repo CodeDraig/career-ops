@@ -136,7 +136,7 @@ const FIXTURE_AVATAR = join(ROOT, 'tests', 'fixtures', 'avatar-8x8.png');
 
 // ── share flow: tracker detection, weeks math, prefilled URL ────────────────
 {
-  const tracker = ['| # | Fecha | Empresa | Puesto | Score | Estado | PDF | Report | Notas |',
+  const tracker = ['| # | Date | Company | Role | Score | Status | PDF | Report | Notes |',
     '|---|---|---|---|---|---|---|---|---|',
     '| 1 | 2026-08-20 | Acme | Data Engineer | 4.5 | Hired | ✅ | [12](reports/12.md) | — |',
     '| 2 | 2026-08-21 | Beta | PM | 3.9 | Applied | ❌ | [13](reports/13.md) | — |'].join('\n');

@@ -136,11 +136,7 @@ const STATUS_PRIORITY = {
 };
 
 function normalizeStatusKey(status) {
-  return String(status ?? '')
-    .replace(/\*\*/g, '')
-    .replace(/\s+\d{4}-\d{2}-\d{2}.*$/, '')
-    .trim()
-    .toLowerCase();
+  return String(status ?? '').trim().toLowerCase();
 }
 
 // True legal-entity suffixes, stripped repeatedly (chained) since a name can
