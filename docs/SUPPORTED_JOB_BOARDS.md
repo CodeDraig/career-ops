@@ -114,6 +114,46 @@ are shared helpers and are not loaded as providers.
 | Working Nomads | API | Reads the board-wide `https://www.workingnomads.com/api/exposed_jobs/` JSON feed, then applies scanner filters. |
 | Yourator | API | **operator: 友睿資訊股份有限公司 (Yourator)** — declared per [Source Indexing Policy](../CONTRIBUTING.md#source-indexing-policy) rule 4; the submitting contributor is not affiliated with the board (provenance: the operating entity is named on the site's own [privacy page](https://www.yourator.co/privacy)). Taiwanese job board for startup and digital roles (1,760 listings across 151 employers when sampled on 2026-08-18). Reads the board-wide zero-auth `https://www.yourator.co/api/v4/jobs?page=N` JSON feed (20/page; no key, cookie or `Referer` required). Select with `provider: yourator`. The API exposes no free-text search parameter — `q`/`keyword`/`search`/`term`/`query`/`title` are accepted and silently ignored — and no filter parameter is needed for full coverage, so the provider walks every page until `payload.hasMore` turns false and lets `title_filter` gate the results (rule 5); `max_pages` (default 120) is a safety bound above the observed 88 pages, not a coverage setting. Per rule 2 the emitted URL is each row's `thirdPartyUrl` — the employer's own ATS (teamdoor.io, Greenhouse, Lever, BambooHR, Breezy, self-hosted) — with the board's `utm_*` ad parameters stripped, falling back to the Yourator posting page on the 63.9% of rows that carry none. No absolute timestamp is published (only a relative `lastActiveAt` string), so `postedAt` is always omitted. |
 
+## Integration notes: LinkedIn and Indeed
+
+Recorded 2026-10-11. These are future integration candidates, not implemented
+Career-Ops providers.
+
+- **LinkedIn:** the user already has a separate LinkedIn MCP. Investigate wiring
+  its existing search and job-detail capabilities into Career-Ops before building
+  another connector. Its tool contract and authentication lifecycle still need
+  inspection; no integration was implemented during this investigation.
+- **Indeed:** a live probe in the user's signed-in integrated browser confirmed
+  that read-only requests can be repeated within that browser session:
+  - `/jobs?...` returned HTTP 200 HTML containing structured records under
+    `mosaic.providerData['mosaic-provider-jobcards'].metaData.mosaicProviderJobCardsModel.results`.
+    Following the next-page control used `start=10` plus a pagination parameter;
+    that page contained 15 records.
+  - The observed `/viewjob` request returned HTTP 200 JSON containing job identity,
+    description data, and `loggedIn: true` when replayed in the session.
+  - `https://apis.indeed.com/graphql` accepted a replay of the observed read-only
+    `getViewJobRelevantJobs` query and returned 15 related jobs. The website supplies
+    an `indeed-api-key` header and client metadata alongside session credentials.
+  - Saved-job state and profile queries also returned successfully during normal
+    page loading. No account mutations were tested.
+
+A possible Indeed integration is a browser-backed MCP exposing `search_jobs`
+and `get_job`, retaining authentication in the browser and normalizing returned
+records. Keyword search was verified through structured data embedded in HTML;
+a general keyword-search GraphQL query was **not** established. Standalone HTTP
+access outside the browser, whether login is necessary for each endpoint, session
+renewal, sustained pagination, and response-format stability remain unverified.
+No cookies, API-key values, or account identifiers belong in this note.
+
+For a future probe, the user's selected baseline is **support engineer** with
+location **Remote** (`q=support+engineer&l=Remote`). The earlier live API probe used
+a different search, so this baseline still needs its own end-to-end verification.
+This records the requested test case, not a change to profile or portal settings.
+
+[Indeed's official MCP](https://docs.indeed.com/mcp) is another candidate, but its
+documentation at the time of investigation limited access to the Claude Connector.
+That documented integration and the observed website endpoints are separate paths.
+
 ## Evaluated, not supported
 
 These boards were evaluated alongside `providers/careerviet.mjs` and found NOT
