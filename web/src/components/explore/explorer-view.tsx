@@ -16,6 +16,7 @@ import { AiSearchBox } from "./ai-search-box";
 import { ResultsList, type EnrichedOffer } from "./results-list";
 import { useExplore } from "./explore-provider";
 import { ScheduleJobAction } from "./schedule-job-action";
+import { aiSearchSettingsLabel, savedAiSearchSettings } from "@/lib/ai-search-settings.mjs";
 
 // Same shape as core normalizeTextKey(s, " ") — never [^a-z0-9] (#2666).
 const norm = (s: string) => normalizeTextKey(s, " ");
@@ -49,14 +50,26 @@ export function ExplorerView({
   const [refineOpen, setRefineOpen] = useState(false);
   const [cli, setCli] = useState<{ id: string | null; name?: string }>({ id: null });
   const [firstRun, setFirstRun] = useState(false);
+  const [modelSummary, setModelSummary] = useState("");
 
   useEffect(() => {
-    try {
-      const id = JSON.parse(localStorage.getItem("career-ops:config") || "{}").cliId || null;
-      setCli({ id, name: id ? CLI_NAMES[id] || id : undefined });
-    } catch {
-      setCli({ id: null });
-    }
+    const readConfig = () => {
+      try {
+        const config = JSON.parse(localStorage.getItem("career-ops:config") || "{}");
+        const id = config.cliId || null;
+        setCli({ id, name: id ? CLI_NAMES[id] || id : undefined });
+        setModelSummary(id ? aiSearchSettingsLabel(id, savedAiSearchSettings(config, id)) : "");
+      } catch {
+        setModelSummary("Invalid saved model settings. Review Config before searching.");
+      }
+    };
+    readConfig();
+    window.addEventListener("storage", readConfig);
+    window.addEventListener("career-ops:config-changed", readConfig);
+    return () => {
+      window.removeEventListener("storage", readConfig);
+      window.removeEventListener("career-ops:config-changed", readConfig);
+    };
   }, []);
 
   // Initialize once from the URL (shareable search) or the server seed — without
@@ -158,6 +171,7 @@ export function ExplorerView({
               onSubmit={() => void discoverAI()}
               cliConfigured={!!cli.id}
               cliName={cli.name}
+              modelSummary={modelSummary}
               onRunScan={() => setMode("scan")}
             />
             {phase === "results" && <ResultsList offers={enriched} />}

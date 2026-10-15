@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { CostBadge } from "@/components/cost/cost-badge";
 
@@ -29,6 +30,7 @@ export function AiSearchBox({
   onSubmit,
   cliConfigured,
   cliName,
+  modelSummary,
   onRunScan,
 }: {
   intent: string;
@@ -36,6 +38,7 @@ export function AiSearchBox({
   onSubmit: () => void;
   cliConfigured: boolean;
   cliName?: string;
+  modelSummary?: string;
   onRunScan: () => void;
 }) {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -50,6 +53,7 @@ export function AiSearchBox({
   return (
     <div>
       <style>{STYLE}</style>
+      {cliConfigured && modelSummary && <p className="mb-3 text-xs text-muted">{modelSummary} · <Link href="/config" className="text-brand underline">Change in Config</Link></p>}
       <div className="co-aibox p-4">
         <div className="mb-2 flex items-center gap-2 text-[12px] font-medium text-brand">
           <Sparkles className="size-3.5" /> Describe the role — an AI hunts the open web for it

@@ -61,6 +61,25 @@ The server binds IPv4 loopback, so reach it as `localhost` or `127.0.0.1`;
 - **Additive:** the web is isolated from the core's packaging, CI and release
   automation. The CLI works exactly the same without it.
 
+## AI search model settings
+
+In **Config**, select your installed AI tool, then use **AI search model** to
+enter a model ID or alias and choose its reasoning effort. Click **Save config**.
+Choices are stored per CLI in this browser and apply to new AI searches only;
+they do not change running searches, other Career-Ops workers, or the CLI's own
+configuration files. Explore shows the saved choices before starting a search.
+
+Codex model suggestions come from the installed CLI's bundled catalog. You can
+also enter a model ID directly. The catalog lists supported reasoning levels;
+account access and model compatibility are still checked by the CLI/provider.
+OpenCode uses `provider/model` and a provider-specific reasoning variant. CLIs
+without implemented override support display that limitation explicitly.
+
+Empty fields mean **CLI default (not pinned)**. In particular, Codex AI search
+ignores the user's Codex configuration for isolation, so set both fields here
+to pin its model and reasoning effort. Explicit settings are passed as launch
+arguments, including through that isolated Codex path.
+
 ## Scheduled scans on Windows
 
 Automatic recurring scans through Task Scheduler are Windows-only. On macOS and Linux,

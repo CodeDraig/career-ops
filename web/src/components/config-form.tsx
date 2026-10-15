@@ -14,6 +14,8 @@ import { cn } from "@/lib/cn";
 import { CadenceSettings } from "@/components/followups/cadence-settings";
 import { persistCliId, readSavedCliId } from "@/lib/saved-cli";
 import { keepIfInstalled, pickDefaultInstalled } from "@/lib/cli-pick.mjs";
+import { AiSearchModelSettings, type AiSearchSettings } from "@/components/ai-search-model-settings";
+import { parseAiSearchSettings } from "@/lib/ai-search-settings.mjs";
 
 type Cli = {
   id: string;
@@ -43,6 +45,8 @@ export function ConfigForm() {
   const [apiKey, setApiKey] = useState("");
   const [logos, setLogos] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [aiSearch, setAiSearch] = useState<Record<string, AiSearchSettings>>({});
+  const [saveError, setSaveError] = useState("");
 
   // Load saved prefs
   useEffect(() => {
@@ -56,6 +60,14 @@ export function ConfigForm() {
         if (v.cliId) setCliId(v.cliId);
         if (v.provider) setProvider(v.provider);
         if (typeof v.logos === "boolean") setLogos(v.logos);
+        if (v.aiSearch && typeof v.aiSearch === "object" && !Array.isArray(v.aiSearch)) {
+          const restored: Record<string, AiSearchSettings> = {};
+          for (const [id, settings] of Object.entries(v.aiSearch)) {
+            try { restored[id] = parseAiSearchSettings(id, settings); }
+            catch { setSaveError("Some saved model settings are invalid. Review them before searching."); }
+          }
+          setAiSearch(restored);
+        }
       }
     } catch {
       /* ignore */
@@ -93,7 +105,15 @@ export function ConfigForm() {
     // The API key is deliberately NOT persisted: nothing reads it yet (the
     // key/manual panel is unwired) and a secret must never sit in clear-text
     // localStorage. Keys belong in the user's own CLI/provider config.
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ mode, cliId, provider, logos }));
+    try {
+      const settings = parseAiSearchSettings(cliId, aiSearch[cliId] ?? {});
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ mode, cliId, provider, logos, aiSearch: { ...aiSearch, [cliId]: settings } }));
+      setSaveError("");
+      window.dispatchEvent(new Event("career-ops:config-changed"));
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Could not save settings.");
+      return;
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -283,6 +303,15 @@ export function ConfigForm() {
         )}
       </div>
 
+      {mode === "cli" && cliId && (
+        <AiSearchModelSettings cliId={cliId}
+          value={aiSearch[cliId] ?? { model: "", reasoningEffort: "" }}
+          onChange={(settings) => {
+            setAiSearch((prev) => ({ ...prev, [cliId]: settings }));
+            setSaved(false);
+          }} />
+      )}
+
       {/* Appearance / privacy */}
       <label className="mt-8 mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-muted">
         Appearance
@@ -316,6 +345,7 @@ export function ConfigForm() {
 
       <CadenceSettings />
 
+      {saveError && <p role="alert" className="mt-4 text-sm text-red-500">{saveError}</p>}
       <div className="mt-8 flex items-center gap-3">
         <button
           type="button"

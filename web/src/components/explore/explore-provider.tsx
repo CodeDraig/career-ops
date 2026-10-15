@@ -18,6 +18,7 @@ import {
 import { makeAiStreamParser, type AiTraceChunk } from "@/lib/explore-ai";
 import { MAX_OFFER_LIMIT } from "@/lib/whats-new.mjs";
 import { isScannerMissing } from "@/lib/explore-error.mjs";
+import { savedAiSearchSettings } from "@/lib/ai-search-settings.mjs";
 
 export type Phase =
   | "idle"
@@ -421,10 +422,15 @@ export function ExploreProvider({ children }: { children: React.ReactNode }) {
     const intent = aiIntentRef.current.trim();
     if (!intent) return;
     let cliId: string | null = null;
+    let settings = { model: "", reasoningEffort: "" };
     try {
-      cliId = JSON.parse(localStorage.getItem("career-ops:config") || "{}").cliId || null;
-    } catch {
-      cliId = null;
+      const config = JSON.parse(localStorage.getItem("career-ops:config") || "{}");
+      cliId = config.cliId || null;
+      if (cliId) settings = savedAiSearchSettings(config, cliId);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Could not read AI search settings. Review Config.");
+      setPhase("failed");
+      return;
     }
     if (!cliId) {
       setPhase("blocked");
@@ -477,7 +483,7 @@ export function ExploreProvider({ children }: { children: React.ReactNode }) {
       const r = await fetch("/api/explore/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: intent, cliId }),
+        body: JSON.stringify({ query: intent, cliId, settings }),
       });
       if (r.status === 404) {
         runningRef.current = false;

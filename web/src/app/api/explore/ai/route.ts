@@ -9,6 +9,7 @@ import { CAPS } from "@/lib/worker-capabilities.mjs";
 import { scopeFrom } from "@/lib/claude-invocation.mjs";
 import { fencingReport } from "@/lib/cli-fencing.mjs";
 import { codexFencingSupported } from "@/lib/cli-fencing-probe.mjs";
+import { aiSearchModelArgs, aiSearchSettingsLabel, parseAiSearchSettings } from "@/lib/ai-search-settings.mjs";
 
 // Deny list DERIVED, never hand-written: every one of the six advisor argvs
 // that spelled its own omitted MultiEdit, which --permission-mode acceptEdits
@@ -44,13 +45,16 @@ Follow modes/discover.md exactly. You are running headless for the web:
 `;
 
 export async function POST(req: Request) {
-  let body: { query?: string; cliId?: string };
+  let body: { query?: string; cliId?: string; settings?: unknown };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: "bad json" }, { status: 400 });
   }
-  const query = (body.query || "").trim();
+  if (!body || typeof body.query !== "string" || typeof body.cliId !== "string") {
+    return Response.json({ error: "query and cliId required" }, { status: 400 });
+  }
+  const query = body.query.trim();
   const requestedCliId = body.cliId;
   if (!query || !requestedCliId) return Response.json({ error: "query and cliId required" }, { status: 400 });
 
@@ -61,6 +65,17 @@ export async function POST(req: Request) {
   // are all keyed on it.
   const cliId = spec.id;
   const substitution = cliSubstitutionNotice(resolved);
+  let settings;
+  let modelArgs: string[];
+  try {
+    settings = parseAiSearchSettings(requestedCliId, body.settings);
+    if (cliId !== requestedCliId && (settings.model || settings.reasoningEffort)) {
+      throw new Error("The selected CLI is unavailable. Choose a CLI and its model settings in Config before searching.");
+    }
+    modelArgs = aiSearchModelArgs(cliId, settings);
+  } catch (error) {
+    return Response.json({ error: error instanceof Error ? error.message : "Invalid model settings." }, { status: 400 });
+  }
 
   // Read the CANONICAL mode at request time — single source of truth, never a
   // homegrown prompt. Missing (older core) → graceful 400 so the Scan tab stays usable.
@@ -152,6 +167,7 @@ export async function POST(req: Request) {
           prompt,
         ]
       : spec.args(prompt);
+  args.push(...modelArgs);
 
   // POSIX detached children become process-group leaders. Keeping stdio
   // piped means Node still tracks the Codex process normally.
@@ -288,6 +304,7 @@ export async function POST(req: Request) {
       const emit = (s: string) => {
         if (safeEnqueue(s)) emitted = true;
       };
+      safeEnqueue(`AI search settings — ${spec.name}. ${aiSearchSettingsLabel(cliId, settings)}\n`);
       // Same honesty as /api/run: a runtime with no verified fencing mechanism
       // runs with its default access, and that must be visible rather than
       // inferred from which CLI happens to be selected (#2507). This stream is
