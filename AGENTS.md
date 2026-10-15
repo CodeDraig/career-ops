@@ -339,6 +339,7 @@ Write all human-facing output in English regardless of the language of the job d
 | Asks about application status | `tracker` |
 | Fills out application form | `apply` |
 | Searches for new offers | `scan` |
+| Explicitly asks to search LinkedIn jobs in the current interactive session | `linkedin` |
 | Wants to turn a list of company names into scannable ATS boards / add them to `portals.yml` | `discover` |
 | Processes pending URLs | `pipeline` |
 | Wants a fast first-pass filter before full evaluation | `triage` |
@@ -389,6 +390,8 @@ When checking the browser fallback manually:
 ### LinkedIn JD loading guard (#4121)
 
 For LinkedIn job URLs, this guard takes precedence over generic extraction/fallback rules in **every mode and language**, including headless workers. It bounds the existing browser path; it does not authorize scraping or bypassing access restrictions.
+
+**Interactive LinkedIn MCP:** When the user explicitly requests LinkedIn data and the current interactive host exposes its enabled LinkedIn MCP, load `modes/linkedin.md` and use its read-only job tools. For a specific posting, prefer `get_job_details` over the generic browser path below. That call consumes the same one-attempt extraction budget; reuse its JD and warnings across mode handoffs, and never fall back to another LinkedIn browser/extractor after it fails. A missing/disabled MCP does not authorize enabling it, changing host configuration, or starting login. An explicit LinkedIn mode request stops with setup guidance if tools are unavailable; ordinary job-URL evaluation retains the existing browser path when no MCP attempt was made. Headless and web runs retain their existing behavior and do not launch or inherit this integration.
 
 1. When a browser tool is available (Playwright or claude-in-chrome), use **one browser attempt per posting per run**. Reuse any page content already obtained by `pipeline`, `auto-pipeline`, or `oferta`; passing to another mode does not reset the budget. On an already loaded page, inspect the JD body itself. **Explicit closure evidence still takes precedence:** use the normal closed-posting handling immediately, without waiting or asking for pasted text. If a real JD is readable, reuse it and proceed to the normal liveness/employer checks. Otherwise, if it is still loading, optionally scroll it into view, wait **at most 5 seconds once**, and read/snapshot the **same page** once more; apply the same closed/readable checks to that result. Do not navigate again, reload, open a new tab, or switch browser tools to retry. A failed CLI extractor attempt also consumes the budget; do not silently start another browser attempt.
 2. If the body remains a grey skeleton/loading placeholder or is missing behind login/chrome/error content, **stop extraction for that LinkedIn URL**. Title, company, location, applicant count, an Apply button, and an authenticated session do not substitute for the JD. Loading failure is **unconfirmed**, never evidence that the job is closed or the employer is hidden.

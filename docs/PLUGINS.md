@@ -8,6 +8,13 @@ core runs exactly as it always has.
 > This is **not** the Claude Code plugin (`.claude-plugin/`). These plugins
 > extend career-ops itself.
 
+## LinkedIn in interactive agent sessions
+
+The `linkedin` mode uses the LinkedIn MCP already enabled in your agent host.
+It searches jobs, reads selected descriptions, and resolves application links.
+It is not registered through `plugins.mjs`, and adds no web screen or headless
+scanner. See [LinkedIn MCP](LINKEDIN_MCP.md) for usage and limits.
+
 ## Planned integrations
 
 Recorded 2026-10-11; updated 2026-10-15. Not implemented:
@@ -18,10 +25,9 @@ Recorded 2026-10-11; updated 2026-10-15. Not implemented:
   sending path for reviewed application emails and follow-ups. Authentication,
   mailbox selection, message deduplication, attachments, and sent-message/status
   receipts still need design; drafting alone must not count as sending.
-- **LinkedIn MCP and Indeed search:** see the
+- **Indeed search:** see the
   [job-board integration notes](SUPPORTED_JOB_BOARDS.md#integration-notes-linkedin-and-indeed)
-  for the existing separate LinkedIn MCP and the verified Indeed browser-session
-  probe.
+  for the verified Indeed browser-session probe.
 - **Browser Use:** integrate the local
   [ai-browser-use project](https://github.com/CodeDraig/ai-browser-use) as a browser
   backend for authenticated job discovery and description extraction, initially

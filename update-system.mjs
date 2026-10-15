@@ -176,6 +176,7 @@ const SYSTEM_PATHS = [
   'modes/apply.md',
   'modes/auto-pipeline.md',
   'modes/contacto.md',
+  'modes/linkedin.md',
   'modes/deep.md',
   'modes/ofertas.md',
   'modes/pipeline.md',

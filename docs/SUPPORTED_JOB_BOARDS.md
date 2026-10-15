@@ -116,13 +116,13 @@ are shared helpers and are not loaded as providers.
 
 ## Integration notes: LinkedIn and Indeed
 
-Recorded 2026-10-11. These are future integration candidates, not implemented
-Career-Ops providers.
+Recorded 2026-10-11; LinkedIn updated 2026-10-15. These integrations are separate
+from the zero-auth scanner providers above.
 
-- **LinkedIn:** the user already has a separate LinkedIn MCP. Investigate wiring
-  its existing search and job-detail capabilities into Career-Ops before building
-  another connector. Its tool contract and authentication lifecycle still need
-  inspection; no integration was implemented during this investigation.
+- **LinkedIn:** integrated through the interactive `linkedin` agent mode using
+  the existing host MCP. Search, job details, and application-link reads were
+  verified against the connected server. No web, standalone launcher, or
+  background scanner integration is included. See [usage and limits](LINKEDIN_MCP.md).
 - **Indeed:** a live probe in the user's signed-in integrated browser confirmed
   that read-only requests can be repeated within that browser session:
   - `/jobs?...` returned HTTP 200 HTML containing structured records under

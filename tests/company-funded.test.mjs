@@ -327,6 +327,8 @@ try {
 
   const originalFetch = globalThis.fetch;
   const seenFetchOptions = [];
+  // This fixture tests redirect handling, not the rolling funding-date window.
+  const recentFundingDate = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toUTCString();
   globalThis.fetch = async (url, options) => {
     seenFetchOptions.push({ url, options });
     if (seenFetchOptions.length === 1) {
@@ -341,7 +343,7 @@ try {
         <item>
           <title>Acme raises $25M Series A</title>
           <link>https://techcrunch.com/acme</link>
-          <pubDate>Wed, 15 Jul 2026 12:00:00 +0000</pubDate>
+          <pubDate>${recentFundingDate}</pubDate>
           <description>Acme raises funding.</description>
         </item>
       </channel></rss>`, {
