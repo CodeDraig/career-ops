@@ -163,11 +163,21 @@ test("inline Pipeline status browser flow (disposable data only)", { skip: !url 
     await edit(12).click();
     await select(12).selectOption("Offer");
     await edit(13).click();
+    const rejectedResponse = page.waitForResponse((response) =>
+      response.url().endsWith("/api/status") &&
+      response.request().postDataJSON()?.n === "13",
+    );
     await select(13).selectOption("Rejected");
-    await until(() => row(13).innerText().then((text) => text.includes("Rejected")));
+    assert.equal((await rejectedResponse).status(), 200);
+    // An open select's text includes every option, including "Rejected",
+    // before the save finishes. Wait for the confirmed, closed editor.
+    await edit(13).waitFor();
+    assert.equal(await row(13).getByText("Rejected", { exact: true }).isVisible(), true);
+    assert.match(fs.readFileSync(tracker, "utf8"), /Fixture Gamma.*Rejected/);
     assert.equal(await select(12).isDisabled(), true);
     release();
     await until(() => fs.readFileSync(tracker, "utf8").includes("3.8/5 | Offer"));
+    await edit(12).waitFor();
     await page.unrouteAll({ behavior: "wait" });
     await page.reload();
     assert.match(await row(12).innerText(), /Offer/);
