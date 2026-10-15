@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { resolveCodeRoot } from "../../src/lib/core/code-root.mjs";
 import "../helpers/web-ts-alias-loader.mjs";
 import { classifyLeaf, buildPipelineSankey, layoutSankey, parseStatusLog, statusToken } from "../../src/lib/pipeline-sankey.mjs";
 
@@ -215,7 +216,8 @@ test("Sankey and cumulative tiles read the same active tracker's ledger", { skip
     const custom = path.join(root, "custom/applications.md");
     process.env.CAREER_OPS_TRACKER = custom;
     check(3);
-    process.env.CAREER_OPS_TRACKER = path.relative(process.cwd(), custom);
+    // Tracker overrides are relative to the engine root, not the web cwd.
+    process.env.CAREER_OPS_TRACKER = path.relative(resolveCodeRoot(process.cwd()), custom);
     check(3);
     // A FILE symlink needs a privilege a non-elevated Windows shell lacks, and
     // a junction only links directories, so this one leg has no stand-in there.
