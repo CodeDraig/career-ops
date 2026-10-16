@@ -4,6 +4,8 @@
 
 Career-Ops is English-only. Legacy profile language settings have no effect.
 
+[Indeed search](docs/INDEED.md) is available in interactive `indeed` mode and web Explore through the local Browser Harness Chrome extension.
+
 
 <!-- The non-breaking spaces (&nbsp;) and word joiners (&#8288;) below decide where each line wraps on a phone. Keep them when editing. -->
 

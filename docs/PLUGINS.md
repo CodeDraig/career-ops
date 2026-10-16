@@ -25,18 +25,11 @@ Recorded 2026-10-11; updated 2026-10-15. Not implemented:
   sending path for reviewed application emails and follow-ups. Authentication,
   mailbox selection, message deduplication, attachments, and sent-message/status
   receipts still need design; drafting alone must not count as sending.
-- **Indeed search:** see the
-  [job-board integration notes](SUPPORTED_JOB_BOARDS.md#integration-notes-linkedin-and-indeed)
-  for the verified Indeed browser-session probe.
-- **Browser Use:** integrate the local
-  [ai-browser-use project](https://github.com/CodeDraig/ai-browser-use) as a browser
-  backend for authenticated job discovery and description extraction, initially
-  probing Indeed. Evaluate its CLI/MCP interface with the existing Career-Ops
-  agent and a persistent browser session or caller-managed CDP connection;
-  its separate model-driven `Agent` loop is a later option for difficult pages.
-  Preserve the direct ATS scanners and Career-Ops application-form safeguards.
-  The local source was inspected, but session reuse and an end-to-end Career-Ops
-  integration still need runtime verification.
+
+Indeed is now integrated through the local **browser-harness Chrome extension**
+for interactive sessions and web Explore. See [setup and limits](INDEED.md).
+This uses `CodeDraig/browser-harness`, correcting the earlier roadmap's pointer
+to `ai-browser-use`. Direct ATS scanners and application safeguards are unchanged.
 
 ## Using plugins
 

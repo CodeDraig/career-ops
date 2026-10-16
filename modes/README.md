@@ -19,6 +19,7 @@ table in `AGENTS.md` (mirrored in `CLAUDE.md`).
 | `auto-pipeline.md` | auto | Full automatic pipeline (evaluate + PDF + tracker) on a pasted JD/URL |
 | `pipeline.md` | `pipeline` | Process the URL inbox (`data/pipeline.md`) |
 | `scan.md` | `scan` | Portal scanner (job discovery) |
+| `indeed.md` | `indeed` | Indeed search through the Browser Harness Chrome extension; also in web Explore |
 | `linkedin.md` | `linkedin` | Interactive job search through the host LinkedIn MCP |
 | `batch.md` | `batch` | Mass processing with headless workers |
 | `apply.md` | `apply` | Live application assistant (form filling; never submits) |

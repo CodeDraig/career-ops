@@ -8,7 +8,7 @@ description: >-
 arguments: mode
 user_invocable: true
 user-invocable: true
-argument-hint: "[scan | linkedin | discover | deep | pdf | ats | text | latex | latex-tex | cover | email | add | expand | eu-swe | oferta | ofertas | apply | triage | batch | tracker | agent-inbox | pipeline | contacto | training | project | interview-prep | interview | master-profile | intake | interview/plan | interview/practice | interview/debrief | interview-redflag | patterns | calibrate | offer-prep | titles | upskill | followup | reply-watch | outcome | update]"
+argument-hint: "[scan | indeed | linkedin | discover | deep | pdf | ats | text | latex | latex-tex | cover | email | add | expand | eu-swe | oferta | ofertas | apply | triage | batch | tracker | agent-inbox | pipeline | contacto | training | project | interview-prep | interview | master-profile | intake | interview/plan | interview/practice | interview/debrief | interview-redflag | patterns | calibrate | offer-prep | titles | upskill | followup | reply-watch | outcome | update]"
 license: MIT
 ---
 
@@ -76,6 +76,7 @@ Determine the mode from `$mode`:
 | `apply` | `apply` |
 | `scan` | `scan` |
 | `discover` | `discover` |
+| `indeed` | `indeed` |
 | `linkedin` | `linkedin` |
 | `triage` | `triage` |
 | `batch` | `batch` |
@@ -90,6 +91,8 @@ Determine the mode from `$mode`:
 | `interview-redflag` | `interview-redflag` |
 | `update` | `update` |
 | `cover` | `cover` |
+
+**Indeed search:** Explicit Indeed searches and description-only requests route to `indeed`, using the browser-harness Chrome extension. The web equivalent is Explore → Indeed jobs. Selected job evaluation still uses `auto-pipeline`; reuse any JD already read through `indeed`.
 
 **LinkedIn search:** An explicit request to search LinkedIn jobs routes to `linkedin`, including natural-language requests. This mode is interactive-only; do not dispatch it to a headless worker or web run. A specific LinkedIn job URL still routes to `auto-pipeline` unless the user requests details only. LinkedIn job-details-only and application-link requests route to `linkedin`.
 
@@ -155,6 +158,7 @@ Available commands:
   /career-ops agent-inbox → Queue/drain requests for the next session (data/agent-inbox.md)
   /career-ops apply     → Live application assistant (reads form + generates answers)
   /career-ops scan      → Scan portals and discover new offers
+  /career-ops indeed    → Search Indeed using the connected Chrome extension
   /career-ops linkedin  → Search LinkedIn jobs using this interactive agent session
   /career-ops discover  → Resolve a company list to scannable ATS boards + append to portals.yml (zero-token)
   /career-ops triage    → Fast first-pass go/no-go score from modes/_brief.md (writes no files)
@@ -192,7 +196,7 @@ Applies to: `auto-pipeline`, `oferta`, `ofertas`, `pdf`, `text`, `contacto`, `ap
 
 Read `modes/_profile.md` (if exists) + `modes/_custom.md` (if exists) + `modes/{mode}.md`
 
-Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `master-profile`, `regional/eu-swe`, `interview/plan`, `interview/practice`, `interview/debrief`, `latex`, `latex-tex`, `training`, `project`, `patterns`, `titles`, `upskill`, `followup`, `reply-watch`, `outcome`, `cover`, `email`, `add`, `offer-prep`, `discover`, `linkedin`, `intake`, `ats`, `calibrate`
+Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `master-profile`, `regional/eu-swe`, `interview/plan`, `interview/practice`, `interview/debrief`, `latex`, `latex-tex`, `training`, `project`, `patterns`, `titles`, `upskill`, `followup`, `reply-watch`, `outcome`, `cover`, `email`, `add`, `offer-prep`, `discover`, `indeed`, `linkedin`, `intake`, `ats`, `calibrate`
 
 ### Modes that load only their mode file
 

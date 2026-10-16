@@ -10,6 +10,8 @@ If the input is a **URL** (not pasted JD text), follow this strategy to extract 
 
 **LinkedIn URLs:** first apply AGENTS.md → **LinkedIn JD loading guard (#4121)**. Reuse any earlier extraction from `pipeline` or `linkedin`, including the original URL, raw JD, warnings and employer-verification state; the one-attempt budget spans mode handoffs and overrides the generic CLI/browser/WebFetch fallback chain below. A stuck skeleton is JD unavailable, not a closed job. Without a real JD, stop here and request pasted text or a permitted employer/ATS source; do not continue to Step 1–Step 5.
 
+**Indeed handoff:** Reuse a JD already read by `indeed` mode, including its original URL, job key, closure evidence and warnings. Do not refetch that description. If the extension read failed, stop for pasted text or an employer URL rather than cycling through extractors. Employer confirmation is still required for aggregator listings.
+
 **Priority order:**
 
 1. **Playwright (preferred):** Most job portals (Lever, Ashby, Greenhouse, Workday) are SPAs. Use `browser_navigate` + `browser_snapshot` to render and read the JD.

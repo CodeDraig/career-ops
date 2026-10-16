@@ -139,6 +139,7 @@ export function ExplorerView({
           <div className="flex items-center gap-2.5">
             <Compass className="size-6 text-brand" />
             <h1 className={`${instrumentSerif.className} text-3xl text-foreground`}>Explore</h1>
+            <Link href="/explore/indeed" className="text-sm text-brand-text underline">Indeed jobs</Link>
             <span className="rounded-full border border-brand/30 bg-brand-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-text">New</span>
           </div>
           <div className="w-full sm:ml-auto sm:w-auto">

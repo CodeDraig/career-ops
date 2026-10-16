@@ -339,6 +339,7 @@ Write all human-facing output in English regardless of the language of the job d
 | Asks about application status | `tracker` |
 | Fills out application form | `apply` |
 | Searches for new offers | `scan` |
+| Explicitly asks to search Indeed jobs or read an Indeed description | `indeed` |
 | Explicitly asks to search LinkedIn jobs in the current interactive session | `linkedin` |
 | Wants to turn a list of company names into scannable ATS boards / add them to `portals.yml` | `discover` |
 | Processes pending URLs | `pipeline` |

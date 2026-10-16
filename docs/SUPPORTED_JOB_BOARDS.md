@@ -116,14 +116,20 @@ are shared helpers and are not loaded as providers.
 
 ## Integration notes: LinkedIn and Indeed
 
-Recorded 2026-10-11; LinkedIn updated 2026-10-15. These integrations are separate
+Recorded 2026-10-11; integrations updated 2026-10-15. These integrations are separate
 from the zero-auth scanner providers above.
 
 - **LinkedIn:** integrated through the interactive `linkedin` agent mode using
   the existing host MCP. Search, job details, and application-link reads were
   verified against the connected server. No web, standalone launcher, or
   background scanner integration is included. See [usage and limits](LINKEDIN_MCP.md).
-- **Indeed:** a live probe in the user's signed-in integrated browser confirmed
+- **Indeed:** integrated through the local browser-harness Chrome extension in
+  interactive `indeed` mode and web Explore. Search and description reads use
+  rendered pages; no private API keys or cookies are exported. See
+  [setup and limits](INDEED.md). The support engineer / Remote baseline and a
+  selected job description were read successfully through the extension.
+
+Historical API investigation (2026-10-11): a live probe in the user's signed-in integrated browser confirmed
   that read-only requests can be repeated within that browser session:
   - `/jobs?...` returned HTTP 200 HTML containing structured records under
     `mosaic.providerData['mosaic-provider-jobcards'].metaData.mosaicProviderJobCardsModel.results`.
@@ -137,7 +143,7 @@ from the zero-auth scanner providers above.
   - Saved-job state and profile queries also returned successfully during normal
     page loading. No account mutations were tested.
 
-A possible Indeed integration is a browser-backed MCP exposing `search_jobs`
+The earlier proposal was a browser-backed MCP exposing `search_jobs`
 and `get_job`, retaining authentication in the browser and normalizing returned
 records. Keyword search was verified through structured data embedded in HTML;
 a general keyword-search GraphQL query was **not** established. Standalone HTTP
@@ -145,9 +151,9 @@ access outside the browser, whether login is necessary for each endpoint, sessio
 renewal, sustained pagination, and response-format stability remain unverified.
 No cookies, API-key values, or account identifiers belong in this note.
 
-For a future probe, the user's selected baseline is **support engineer** with
-location **Remote** (`q=support+engineer&l=Remote`). The earlier live API probe used
-a different search, so this baseline still needs its own end-to-end verification.
+The user's selected baseline is **support engineer** with
+location **Remote** (`q=support+engineer&l=Remote`). The earlier API probe used a different search; the current extension integration
+has now verified this baseline.
 This records the requested test case, not a change to profile or portal settings.
 
 [Indeed's official MCP](https://docs.indeed.com/mcp) is another candidate, but its
