@@ -2,6 +2,8 @@
 
 <p align="center">The open-source AI job search agent.</p>
 
+[IMAP/SMTP mail](docs/MAIL.md) is available in interactive `mail` mode and the web Mail screen, with explicit review before sending.
+
 Career-Ops is English-only. Legacy profile language settings have no effect.
 
 [Indeed search](docs/INDEED.md) is available in interactive `indeed` mode and web Explore through the local Browser Harness Chrome extension.

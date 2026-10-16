@@ -40,6 +40,26 @@ console.log('\nweb → core argv contract');
 //                  bottom stays complete.
 const CALL_SITES = [
   {
+    source: 'web/src/lib/core/mail.ts',
+    script: 'mail.mjs',
+    args: ['--request'],
+    input: JSON.stringify({ action: 'accounts' }),
+    expectJson: true,
+    probe: 'run',
+  },
+  {
+    source: 'web/src/app/api/explore/indeed/route.ts',
+    script: 'indeed-search.mjs',
+    args: ['--id', '0123456789abcdef'],
+    probe: 'json-any-exit',
+  },
+  {
+    source: 'web/src/app/api/explore/indeed/route.ts',
+    script: 'indeed-search.mjs',
+    args: ['--keywords=fixture', '--location=Remote'],
+    probe: 'json-any-exit',
+  },
+  {
     source: 'web/src/app/api/followups/route.ts',
     script: 'followup-cadence.mjs',
     args: ['--json'],
@@ -182,7 +202,7 @@ export function verifyWebStaticSources({ root = ROOT, reportPass = pass, reportF
     const src = readFileSync(join(root, site.source), 'utf-8');
     const literals = [...new Set([...src.matchAll(/"(--[a-z][a-z0-9-]*)"/g)].map((m) => m[1]))];
     for (const flag of literals) {
-      if (!site.args.includes(flag))
+      if (!CALL_SITES.filter(other => other.source === site.source).some(other => other.args.includes(flag)))
         flagDrift.push(`${site.source} passes ${flag}, which no probe above covers`);
     }
   }
@@ -254,6 +274,9 @@ export function runWebCoreArgvContract() {
     const env = {
       ...process.env,
       CAREER_OPS_ROOT: sandbox,
+      CAREER_OPS_MAIL_CONFIG: join(sandbox, 'no-mail.json'),
+      CAREER_OPS_BROWSER_HARNESS_BIN: join(sandbox, 'no-browser-harness'),
+      TMPDIR: sandbox, TEMP: sandbox, TMP: sandbox,
       CAREER_OPS_DATA_DIR: '',
       // set-status.mjs resolves its root from the codebase, not from
       // CAREER_OPS_ROOT, so without this the probe would read and write the
@@ -280,6 +303,7 @@ export function runWebCoreArgvContract() {
         encoding: 'utf-8',
         timeout: 60_000,
         env,
+        input: site.input,
       });
 
       if (result.error || result.signal) {

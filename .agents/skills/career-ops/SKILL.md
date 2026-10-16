@@ -8,7 +8,7 @@ description: >-
 arguments: mode
 user_invocable: true
 user-invocable: true
-argument-hint: "[scan | indeed | linkedin | discover | deep | pdf | ats | text | latex | latex-tex | cover | email | add | expand | eu-swe | oferta | ofertas | apply | triage | batch | tracker | agent-inbox | pipeline | contacto | training | project | interview-prep | interview | master-profile | intake | interview/plan | interview/practice | interview/debrief | interview-redflag | patterns | calibrate | offer-prep | titles | upskill | followup | reply-watch | outcome | update]"
+argument-hint: "[scan | indeed | linkedin | discover | deep | pdf | ats | text | latex | latex-tex | cover | email | mail | add | expand | eu-swe | oferta | ofertas | apply | triage | batch | tracker | agent-inbox | pipeline | contacto | training | project | interview-prep | interview | master-profile | intake | interview/plan | interview/practice | interview/debrief | interview-redflag | patterns | calibrate | offer-prep | titles | upskill | followup | reply-watch | outcome | update]"
 license: MIT
 ---
 
@@ -65,6 +65,7 @@ Determine the mode from `$mode`:
 | `latex` | `latex` |
 | `latex-tex` | `latex-tex` |
 | `email` | `email` |
+| `mail` | `mail` |
 | `add` | `add` |
 | `expand` | `expand` |
 | `training` | `training` |
@@ -149,6 +150,7 @@ Available commands:
   /career-ops latex     → Export CV as LaTeX/Overleaf .tex
   /career-ops latex-tex → Tailor your own resume.tex in place (opt-in; cv.md stays default)
   /career-ops cover     → Cover letter: standalone JD paste or /career-ops cover {slug}
+  /career-ops mail      → IMAP inbox and explicitly reviewed SMTP sending
   /career-ops email     → Formal application email draft (draft-only; never sends, submits, or clicks)
   /career-ops add       → Add a project/paper/role to your CV (fetch + preview + confirm)
   /career-ops expand    → Auto-discover and add missing competencies from profile links
@@ -196,7 +198,7 @@ Applies to: `auto-pipeline`, `oferta`, `ofertas`, `pdf`, `text`, `contacto`, `ap
 
 Read `modes/_profile.md` (if exists) + `modes/_custom.md` (if exists) + `modes/{mode}.md`
 
-Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `master-profile`, `regional/eu-swe`, `interview/plan`, `interview/practice`, `interview/debrief`, `latex`, `latex-tex`, `training`, `project`, `patterns`, `titles`, `upskill`, `followup`, `reply-watch`, `outcome`, `cover`, `email`, `add`, `offer-prep`, `discover`, `indeed`, `linkedin`, `intake`, `ats`, `calibrate`
+Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `master-profile`, `regional/eu-swe`, `interview/plan`, `interview/practice`, `interview/debrief`, `latex`, `latex-tex`, `training`, `project`, `patterns`, `titles`, `upskill`, `followup`, `reply-watch`, `outcome`, `cover`, `email`, `mail`, `add`, `offer-prep`, `discover`, `indeed`, `linkedin`, `intake`, `ats`, `calibrate`
 
 ### Modes that load only their mode file
 

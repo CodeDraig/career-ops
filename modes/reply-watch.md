@@ -91,3 +91,6 @@ check and an atomic receipt in Notes to prevent repeated delivery from
 reapplying the same email. If the row changed during review, review again;
 do not retry with `--force` or remove its receipt. The drop directory follows
 the configured Data Root, and proposals for another tracker are rejected.
+
+IMAP input: use `mail` mode or the web Mail screen to fetch and import selected messages.
+Imports are deduplicated; classification and tracker approval remain this mode’s responsibility.

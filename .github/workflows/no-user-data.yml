@@ -42,6 +42,7 @@ jobs:
             const USER_PATHS = [
               /^cv\.md$/,
               /^config\/profile\.yml$/,
+              /^config\/mail\.json$/,
               /^config\/plugins\.yml$/,
               /^modes\/_profile\.md$/,
               /^modes\/_custom\.md$/,

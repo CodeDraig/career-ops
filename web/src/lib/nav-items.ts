@@ -16,6 +16,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/scheduled-scans", label: "Scheduled scans", icon: CalendarClock },
   { href: "/pipeline", label: "Pipeline", icon: ListChecks },
   { href: "/followups", label: "Follow-ups", icon: Send },
+  { href: "/mail", label: "Mail", icon: Send },
   { href: "/portals", label: "Portals", icon: Radar },
   { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/cv", label: "CV", icon: FileText },

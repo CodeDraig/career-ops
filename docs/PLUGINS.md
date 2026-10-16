@@ -15,16 +15,12 @@ It searches jobs, reads selected descriptions, and resolves application links.
 It is not registered through `plugins.mjs`, and adds no web screen or headless
 scanner. See [LinkedIn MCP](LINKEDIN_MCP.md) for usage and limits.
 
-## Planned integrations
+## Additional first-party integrations
 
-Recorded 2026-10-11; updated 2026-10-15. Not implemented:
-
-- **IMAP/SMTP:** add provider-independent email access, including self-hosted
-  mailboxes. IMAP would ingest job leads and employer replies into the existing
-  pipeline/reply-review workflows. SMTP would provide an explicitly authorized
-  sending path for reviewed application emails and follow-ups. Authentication,
-  mailbox selection, message deduplication, attachments, and sent-message/status
-  receipts still need design; drafting alone must not count as sending.
+[IMAP/SMTP mail](MAIL.md) supports interactive sessions and the web Mail screen.
+It imports selected replies, adds selected job links through canonical pipeline
+writers, and sends only a prepared, explicitly reviewed email. Credentials use
+environment variables; local receipts prevent automatic send replay.
 
 Indeed is now integrated through the local **browser-harness Chrome extension**
 for interactive sessions and web Explore. See [setup and limits](INDEED.md).

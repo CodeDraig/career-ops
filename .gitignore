@@ -266,3 +266,8 @@ data/jds/
 data/output/
 data/documents/
 data/interview-prep/
+
+# Provider-independent mail account configuration
+/config/mail.json
+/lib/mail/__pycache__/
+/tests/__pycache__/

@@ -1,0 +1,10 @@
+{
+  "accounts": [
+    {
+      "id": "personal",
+      "from": "you@example.com",
+      "imap": { "host": "imap.example.com", "port": 993, "security": "tls", "user": "you@example.com", "secretEnv": "CAREER_MAIL_PASSWORD", "auth": "password" },
+      "smtp": { "host": "smtp.example.com", "port": 587, "security": "starttls", "user": "you@example.com", "secretEnv": "CAREER_MAIL_PASSWORD", "auth": "password" }
+    }
+  ]
+}

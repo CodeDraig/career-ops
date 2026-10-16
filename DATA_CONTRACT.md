@@ -188,3 +188,10 @@ Trackers require English column headers in a pipe-delimited Markdown table. Colu
 - **`CAREER_OPS_TRACKER`** can be set to override the applications tracker file path directly (relative paths are resolved relative to the repository root).
 - **Read Resolution:** If no tracker override is set, reading resolves to `{DATA_ROOT}/data/applications.md`. Root-level trackers are unsupported.
 - **Write Resolution:** All writes (including merge operations and first-run creation) target the canonical location `{DATA_ROOT}/data/applications.md`.
+
+### Provider-independent mail
+
+`config/mail.json` is user-owned mail configuration (credential environment-variable names only).
+`data/mail/` contains private inbox snapshots, frozen outgoing messages/attachments and send-attempt receipts.
+Never auto-update, reset, prune or commit these files. IMAP imports append to the existing
+`data/reply-candidates.json` using its shared lock; they never change tracker status.
