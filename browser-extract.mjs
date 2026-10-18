@@ -716,7 +716,7 @@ function emitJd(result, maxChars) {
  * job postings, deduped by resolved URL, capped at `max`. Pure — exported for
  * tests. Anchors are dropped when the label is empty/too short or a nav
  * stopword, or the href isn't a resolvable http(s) URL.
- * @param {Array<{ href?: string, label?: string }>} anchors
+ * @param {Array<{ href?: string, label?: string, cardTitle?: string, buttonTitle?: string }>} anchors
  * @param {string} finalUrl - the page URL, used as the base to resolve relatives
  * @param {number} [max]
  */
@@ -724,8 +724,19 @@ export function normalizeListing(anchors, finalUrl, max = DEFAULT_LISTING_MAX) {
   const jobs = [];
   const seen = new Set();
   for (const a of Array.isArray(anchors) ? anchors : []) {
-    const label = String(a?.label ?? '').replace(/\s+/g, ' ').trim();
+    let label = String(a?.label ?? '').replace(/\s+/g, ' ').trim();
+    const readMore = label.match(/^read more about\s+["“](.+)["”]$/i);
+    if (readMore) label = readMore[1];
+    const buttonTitle = String(a?.buttonTitle ?? '').match(/^Job\s+#(\d+)\s*-\s*(.+)$/i);
+    try {
+      if (buttonTitle && new URL(a.href, finalUrl).pathname.split('/').includes(buttonTitle[1])) label = buttonTitle[2];
+    } catch { /* invalid href is discarded below */ }
+    if (/^(?:more info|read more|view details|learn more|apply(?: now)?)$/i.test(label) && a.cardTitle) {
+      label = String(a.cardTitle).replace(/\s+/g, ' ').trim();
+    }
     if (label.length < 3 || NAV_LABEL_STOPWORDS.has(label.toLowerCase())) continue;
+    if (/^(?:skip to|sort by|search jobs|job alerts|login|log in|employee login|application status|view all jobs|search .* by|join our talent)/i.test(label)) continue;
+    if (/^(?:more info|read more|view details|learn more|apply(?: now)?|posting number|department)$/i.test(label)) continue;
 
     let url;
     try {
@@ -734,6 +745,14 @@ export function normalizeListing(anchors, finalUrl, max = DEFAULT_LISTING_MAX) {
       continue;
     }
     if (!/^https?:$/.test(new URL(url).protocol)) continue;
+    // Same-page fragments, sorting and category controls are not postings.
+    const parsed = new URL(url);
+    const base = new URL(finalUrl);
+    const hasJobIdentity = [...parsed.searchParams.keys()].some(k => /^(?:id|job|job[_-]?id|jobopeningid|gh_jid|reqid|requisitionid|postingid|vacancyid)$/i.test(k)) ||
+      /^#\/(?:jobs?|postings|positions)\/.+/i.test(parsed.hash);
+    if (parsed.origin === base.origin && parsed.pathname === base.pathname &&
+        !hasJobIdentity) continue;
+    if (/\/(?:login|employee_sso|interest_cards|bookmarks)(?:\/|$)/i.test(parsed.pathname)) continue;
     if (seen.has(url)) continue;
     seen.add(url);
     jobs.push({ title: label, url });
@@ -816,7 +835,7 @@ export function parseArgs(argv) {
 
 // Read the raw DOM inside the page: title, main visible text, and visible
 // anchors. Runs in the browser context; returns plain data only.
-async function readDom(page) {
+export async function readDom(page) {
   return page.evaluate(() => {
     const title = (document.querySelector('h1')?.innerText || document.title || '').trim();
 
@@ -837,7 +856,26 @@ async function readDom(page) {
         if (style.display === 'none' || style.visibility === 'hidden') return false;
         return el.getClientRects().length > 0;
       })
-      .map((el) => ({ href: el.getAttribute('href') || '', label: (el.innerText || '').trim() }));
+      .map((el) => {
+        const label = (el.innerText || '').replace(/\s+/g, ' ').trim();
+        let cardTitle = '';
+        // Button-only links need their own card's title, never a neighbouring job.
+        if (/^(?:more info|read more|view details|learn more|apply(?: now)?)$/i.test(label)) {
+          let card = el.parentElement;
+          for (let depth = 0; card && depth < 4; depth++, card = card.parentElement) {
+            const headings = [...card.querySelectorAll('h2,h3,h4')];
+            if (headings.length === 1) {
+              const links = [...card.querySelectorAll('a[href]')];
+              const otherPosting = links.some(a => a.href !== el.href && /\/(?:jobs?|postings)\/[^/?#]+/.test(a.pathname || ''));
+              if (!otherPosting) cardTitle = (headings[0].innerText || '').trim();
+              break;
+            }
+            if (headings.length > 1) break;
+          }
+        }
+        return { href: el.getAttribute('href') || '', label, cardTitle,
+          buttonTitle: el.querySelector('[title]')?.getAttribute('title') || '' };
+      });
 
     // schema.org JobPosting, if present. Returned as the raw description markup
     // so the shared jdHtmlToText() does the conversion, keeping one entity /

@@ -10,9 +10,10 @@ import { sleep } from './_http.mjs';
 //
 //   GET {origin}/careers/SearchJobs?jobOffset=N
 //
-// returns a server-rendered page of <article class="article--result"> blocks.
-// Avature hard-caps the page at 6 results (a jobRecordsPerPage override is
-// ignored), and paginates via jobOffset in steps of 6 — so this is request-
+// returns server-rendered article cards, or legacy listSingleColumnItem rows.
+// Classic article tenants serve 6 results (a jobRecordsPerPage override is
+// ignored); legacy tenants can expose a different stride in their next link.
+// Pagination uses jobOffset (6 by default) — so this is request-
 // heavy for large boards; max_pages (default 50 → ~300 postings) bounds it and
 // can be raised per entry.
 //
@@ -36,7 +37,7 @@ import { sleep } from './_http.mjs';
 // `JobDetail/` links but zero parsed articles throws (a markup change), never
 // silently reads as an empty board — see `assertParsedSomething`.
 
-const PAGE_SIZE = 6; // Avature serves exactly 6 results per page
+const PAGE_SIZE = 6; // Default for classic article tenants
 const DEFAULT_MAX_PAGES = 50; // ~300 postings; override via entry.max_pages
 const HARD_MAX_PAGES = 200;
 // Pause between successive page requests. Avature's 6-results-per-page cap makes
@@ -133,7 +134,7 @@ export function assertParsedSomething(html, url) {
 // Tenants vary the result class: Synopsys uses `article--result`, Siemens
 // appends a position index (`article--result 1`). Accept any suffix.
 // careers.avature.net renders `article--jobs` cards instead (seen 2026-09-28).
-const ARTICLE_PATTERN = /<article class="article article--(?:result|jobs)\b[^"]*"[\s\S]*?<\/article>/;
+const ARTICLE_PATTERN = /<article class="article article--(?:result|jobs)\b[^"]*"[\s\S]*?<\/article>|<li\b[^>]*class=["'][^"']*\blistSingleColumnItem\b[^"']*["'][^>]*>[\s\S]*?<\/li>/;
 
 /**
  * Number of result cards on a page, before `parseArticles` drops any (no
@@ -212,13 +213,16 @@ export default {
     const pinned = typeof entry.offset_param === 'string' && entry.offset_param.trim();
     let offsetParam = pinned ? entry.offset_param.trim() : PRIMARY_OFFSET_PARAM;
     let canHeal = !pinned; // once the key is pinned, never auto-switch
+    // Legacy list tenants (Phoenix) serve ten rows, unlike six-row article tenants.
+    // Learn the initial stride from the site's next link, not the filtered row count.
+    let pageSize = PAGE_SIZE;
 
     const jobs = [];
     const seen = new Set();
 
     const getPage = async (param, page) => {
       const usp = new URLSearchParams(cfg.extraParams);
-      usp.set(param, String(page * PAGE_SIZE));
+      usp.set(param, String(page * pageSize));
       const url = `${cfg.searchUrl}?${usp.toString()}`;
       const htmlText = await ctx.fetchText(url, {
         redirect: 'error',
@@ -247,6 +251,16 @@ export default {
     for (let page = 0; page < maxPages; page++) {
       if (page > 0) await sleep(INTER_PAGE_DELAY_MS, ctx);
       let result = await getPage(offsetParam, page);
+      if (page === 0) {
+        const next = result.html.match(/<a\b[^>]*href=["']([^"']+)["'][^>]*class=["'][^"']*\bpaginationNextLink\b[^"']*["']/i);
+        if (next) {
+          try {
+            const u = new URL(decodeEntities(next[1]), cfg.origin);
+            const stride = Number(u.searchParams.get(offsetParam));
+            if (u.origin === cfg.origin && Number.isInteger(stride) && stride > 0 && stride <= 100) pageSize = stride;
+          } catch { /* retain classic stride */ }
+        }
+      }
       let fresh = absorb(result.articles);
 
       // Self-heal: the first paginated page didn't advance — either it repeated
@@ -274,7 +288,7 @@ export default {
       if (page === 0 && result.articles.length === 0) assertParsedSomething(result.html, result.url);
 
       if (fresh === 0) break; // empty page / looped / offset ignored / last page
-      if (result.cards < PAGE_SIZE) break; // last page (raw card count, not the parsed one)
+      if (result.cards < pageSize) break; // last page (raw card count, not the parsed one)
     }
     return jobs;
   },
