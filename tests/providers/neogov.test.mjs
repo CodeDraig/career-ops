@@ -18,10 +18,10 @@ try {
 
   // ── detect() ──────────────────────────────────────────────────────
   const detectCases = [
-    ['https://www.schooljobs.com/careers/exampleco', 'https://www.schooljobs.com/careers/home/index?agency=exampleco&sort=PostingDate&isDescendingSort=true&page=1'],
-    ['https://www.schooljobs.com/careers/exampleco/facultypositions', 'https://www.schooljobs.com/careers/home/index?agency=exampleco&departmentFolder=facultypositions&sort=PostingDate&isDescendingSort=true&page=1'],
-    ['https://schooljobs.com/careers/ExampleCo/', 'https://www.schooljobs.com/careers/home/index?agency=exampleco&sort=PostingDate&isDescendingSort=true&page=1'],
-    ['https://www.governmentjobs.com/careers/exampleco', 'https://www.governmentjobs.com/careers/home/index?agency=exampleco&sort=PostingDate&isDescendingSort=true&page=1'],
+    ['https://www.schooljobs.com/careers/exampleco', 'https://www.schooljobs.com/careers/home/index?agency=exampleco&sort=PositionTitle&isDescendingSort=false&page=1'],
+    ['https://www.schooljobs.com/careers/exampleco/facultypositions', 'https://www.schooljobs.com/careers/home/index?agency=exampleco&departmentFolder=facultypositions&sort=PositionTitle&isDescendingSort=false&page=1'],
+    ['https://schooljobs.com/careers/ExampleCo/', 'https://www.schooljobs.com/careers/home/index?agency=exampleco&sort=PositionTitle&isDescendingSort=false&page=1'],
+    ['https://www.governmentjobs.com/careers/exampleco', 'https://www.governmentjobs.com/careers/home/index?agency=exampleco&sort=PositionTitle&isDescendingSort=false&page=1'],
   ];
   for (const [url, expected] of detectCases) {
     const hit = neogov.detect({ name: 'Acme', careers_url: url });

@@ -9,6 +9,7 @@ try {
   browser = await chromium.launch();
   const page = await browser.newPage();
   const fixtures = {
+    bmcc: '<div class="entry-content"><div class="content-box"><ul><li><a href="https://bmccprodstroac.blob.core.windows.net/uploads/2026/faculty.pdf">Faculty</a></li></ul></div></div>',
     clinch: '<div id="jobs_search_results_1"><article><a id="link_job_title_1" href="/jobs/1">Faculty</a></article></div>',
     pageup: '<table id="search-results-content"><tr><td><a class="job-link" href="/jobs/1">Faculty</a></td><td class="location">Remote</td></tr></table>',
     interviewexchange: '<div class="job-card"><h2><a href="/jobs/1">Faculty</a></h2></div>',

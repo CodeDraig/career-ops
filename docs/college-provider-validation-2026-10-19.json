@@ -1,0 +1,3482 @@
+{
+  "validatedOn": "2026-10-19",
+  "sourceGroup": "Original provider_returned_jobs schools from the 2026-10-18 audit",
+  "sourceSchools": 172,
+  "working": 171,
+  "empty": 1,
+  "successful": 172,
+  "fullInventory": {
+    "schools": 346,
+    "successful": 231,
+    "working": 229,
+    "empty": 2,
+    "unresolved": 115,
+    "percentage": 66.76
+  },
+  "evidenceDirectory": "college-provider-validation-2026-10-19",
+  "sourceDatabaseSha256": "913b31191a624b65fe72c8fb858ffaffc9719aa1125f66062315bd89afe4276e",
+  "schools": [
+    {
+      "id": "100663",
+      "name": "University of Alabama at Birmingham",
+      "provider": "peopleadmin",
+      "count": 418,
+      "complete": true,
+      "pagination": "14 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://uab.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "100663-ownership/0.html",
+        "matched": "University of Alabama at Birmingham",
+        "excerpt": "University of Alabama at Birmingham Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log In /Create Account Help FAQs"
+      },
+      "paginationEvidence": "100663-initial/result.json",
+      "paginationSha256": "4d4d3ec141ff1032e6c01f14cf14c74f32ea5deaacb02050823c8a1ff850150a",
+      "officialReference": "https://www.uab.edu/faculty/jobs"
+    },
+    {
+      "id": "101505",
+      "name": "Jefferson State Community College",
+      "provider": "neogov",
+      "count": 3,
+      "complete": true,
+      "pagination": "2 requests; 3/3 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Jefferson State institutional folder; excludes other Alabama colleges",
+      "careersUrl": "https://www.schooljobs.com/careers/accs/jefferson",
+      "ownershipEvidence": {
+        "file": "101505-ownership/0.html",
+        "matched": "Jefferson State Community College",
+        "excerpt": "Jefferson State Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "101505-scoped/result.json",
+      "paginationSha256": "b938d289a8ba4c71e52b56dfb85dbd9a83affa88bebc87e48fac94c55a3589dc",
+      "officialReference": "https://www.jeffersonstate.edu/about-jscc/human-resources/application-search-procedures-hr/"
+    },
+    {
+      "id": "102076",
+      "name": "Snead State Community College",
+      "provider": "neogov",
+      "count": 0,
+      "complete": true,
+      "pagination": "1 requests; 0/0 unique advertised postings",
+      "status": "empty",
+      "scopeType": "institution-filtered",
+      "scope": "Snead State institutional folder; explicit zero-job response",
+      "careersUrl": "https://www.schooljobs.com/careers/accs/sneadstate",
+      "ownershipEvidence": {
+        "file": "snead-board.html",
+        "matched": "Snead State Community College",
+        "excerpt": "Snead State Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "102076-scoped/result.json",
+      "paginationSha256": "6b9e3af2670fb7f6ed9179a5d1335e931915c9ddd21458b1b20295321ae865dd",
+      "officialReference": "https://snead.edu/about/operations/human_resources/"
+    },
+    {
+      "id": "102094",
+      "name": "University of South Alabama",
+      "provider": "peopleadmin",
+      "count": 41,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://southalabama.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "102094-ownership/0.html",
+        "matched": "University of South Alabama",
+        "excerpt": "University of South Alabama | Search All Jobs Skip to Main Content Toggle navigation Home Search All Jobs Job Alerts Log In /Create Account"
+      },
+      "paginationEvidence": "102094-initial/result.json",
+      "paginationSha256": "5bf2f947aedd790c0bf8594b6e524efb0bd038564c9fa8c310bc0aa36f6c0708",
+      "officialReference": "https://usa50.southalabama.edu/departments/eforms/academicaffairs/ptfacpolicy.pdf"
+    },
+    {
+      "id": "102368",
+      "name": "Troy University",
+      "provider": "peopleadmin",
+      "count": 213,
+      "complete": true,
+      "pagination": "8 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.troyuniversityjobs.com/postings/search",
+      "ownershipEvidence": {
+        "file": "102368-ownership/0.html",
+        "matched": "Troy University",
+        "excerpt": "Troy University Employment Site | Search Jobs Skip to Main Content Home Search Jobs Log In /Create Account Help Frequently Asked Questions Search Postings"
+      },
+      "paginationEvidence": "102368-initial/result.json",
+      "paginationSha256": "b37e0773470c24bfb2340c50b4fbf85341a3a50918d06c1bf38720c28864dfda",
+      "officialReference": "https://www.troyuniversityjobs.com/postings/search"
+    },
+    {
+      "id": "104717",
+      "name": "Grand Canyon University",
+      "provider": "workday",
+      "count": 259,
+      "complete": true,
+      "pagination": "13 listing pages, 259/259 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://gcu.wd1.myworkdayjobs.com/GCU",
+      "ownershipEvidence": {
+        "file": "104717-detail.json",
+        "matched": "Grand Canyon University",
+        "excerpt": "Grand Canyon University The College of Humanities and Social Sciences at GCU is home to dedicated faculty and leaders who are deeply committed to"
+      },
+      "paginationEvidence": "104717-initial/result.json",
+      "paginationSha256": "17950968463fdbb46eebd09766fb00e0f460a1fcf80ffeb32a03e2ebfdbae5f1",
+      "officialReference": "https://jobs.gcu.edu/english-for-professional-written-and-verbal-communication-adjunct-faculty-traditional-campus-college-of-humanities-and-social-sciences/job/29011718"
+    },
+    {
+      "id": "105525",
+      "name": "Pima Community College",
+      "provider": "neogov",
+      "count": 23,
+      "complete": true,
+      "pagination": "4 requests; 23/23 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/pimacc",
+      "ownershipEvidence": {
+        "file": "105525-ownership/0.html",
+        "matched": "Pima Community College",
+        "excerpt": "Pima Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript in"
+      },
+      "paginationEvidence": "105525-scoped/result.json",
+      "paginationSha256": "fbef70ba57d320b98982ec5bc746a57dc7a5edbf6e303cccec0ad0efd1bb321f",
+      "officialReference": "https://www.schooljobs.com/careers/pimacc"
+    },
+    {
+      "id": "105668",
+      "name": "Rio Salado College",
+      "provider": "peoplesoft",
+      "count": 300,
+      "complete": true,
+      "pagination": "6 search responses; 300/300 rows",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Maricopa district board; Rio Salado is a member; other colleges included",
+      "careersUrl": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?Page=HRS_APP_JBPST_FL&Action=U&FOCUS=Applicant&SiteId=1000&JobOpeningId=322706&PostingSeq=1",
+      "ownershipEvidence": {
+        "file": "105668-initial/2.txt",
+        "matched": "Rio Salado",
+        "excerpt": "Rio Salado Community College Department Cashier Services Job Family Temporary Hourly Business Unit Rio Salado College Posted Date 10/09/2026 Close Date Open Until Filled"
+      },
+      "paginationEvidence": "105668-initial/result.json",
+      "paginationSha256": "a64cae3b7a0db011f090d513c08a7de8d493548e005e38d1e858f86206d388ed",
+      "officialReference": "https://www.riosalado.edu/about/leadership-and-administration/employee-services/faculty-services"
+    },
+    {
+      "id": "109350",
+      "name": "Antelope Valley Community College District",
+      "provider": "neogov",
+      "count": 140,
+      "complete": true,
+      "pagination": "15 requests; 140/140 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/avc",
+      "ownershipEvidence": {
+        "file": "109350-scoped/1.txt",
+        "matched": "Antelope Valley",
+        "excerpt": "Antelope Valley College invites applications for our applicant pool for the Accounting discipline. As an instructor in the growing Career Technical Education division, you"
+      },
+      "paginationEvidence": "109350-scoped/result.json",
+      "paginationSha256": "1815ba487dbe709376b4fa2f08472a514fd109b18b6c842eb0ead21ff9404914",
+      "officialReference": "https://www.schooljobs.com/careers/avc"
+    },
+    {
+      "id": "109819",
+      "name": "Bakersfield College",
+      "provider": "neogov",
+      "count": 128,
+      "complete": true,
+      "pagination": "14 requests; 128/128 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Bakersfield College department only; excludes other Kern colleges and district office",
+      "careersUrl": "https://www.schooljobs.com/careers/kccd?department=Bakersfield+College",
+      "ownershipEvidence": {
+        "file": "bakersfield-home.html",
+        "matched": "Bakersfield College",
+        "excerpt": "Bakersfield College --> Skip to content Bakersfield College Current Students New Students toggle main menu Current Students New Students Academics Enrollment & Aid Campus"
+      },
+      "paginationEvidence": "109819-campus/result.json",
+      "paginationSha256": "c876472c591fe2511f5f286500189ae667f82a65fea98d4d58abc5daba495031",
+      "officialReference": "https://www.schooljobs.com/careers/kccd?department=Bakersfield+College"
+    },
+    {
+      "id": "110219",
+      "name": "Bryan University",
+      "provider": "adp-workforcenow",
+      "count": 7,
+      "complete": true,
+      "pagination": "1 API pages; 7/7 requisitions",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d8572d2b-993f-4042-9138-81763f4d149e&ccId=19000101_000001&lang=en_US",
+      "ownershipEvidence": {
+        "file": "110219-ownership/1.html",
+        "matched": "Bryan University",
+        "excerpt": "Bryan University Online\u00a9 Skip to content BryanConnect Student Portal Student Help BU Retail Store Faculty Graduation 1 (888) 768 6861 Request Info Apply Now"
+      },
+      "paginationEvidence": "110219-initial/result.json",
+      "paginationSha256": "204500a48c9071768ad5b2df928338e39be14535e551ff4f461d32c8efc90233",
+      "officialReference": "https://bryanuniversity.edu/about/careers/"
+    },
+    {
+      "id": "111461",
+      "name": "College of the Canyons",
+      "provider": "neogov",
+      "count": 108,
+      "complete": true,
+      "pagination": "12 requests; 108/108 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://schooljobs.com/careers/canyons",
+      "ownershipEvidence": {
+        "file": "111461-ownership/0.html",
+        "matched": "College of the Canyons",
+        "excerpt": "College of the Canyons Employment For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable"
+      },
+      "paginationEvidence": "111461-scoped/result.json",
+      "paginationSha256": "a1f59cd5e4ff4586d757ae8a230208cd226ed856d0f57aaf42ae4cff26249ff3",
+      "officialReference": "https://jobs.canyons.edu/"
+    },
+    {
+      "id": "111939",
+      "name": "Chaffey College",
+      "provider": "neogov",
+      "count": 10,
+      "complete": true,
+      "pagination": "2 requests; 10/10 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/chaffey",
+      "ownershipEvidence": {
+        "file": "111939-ownership/0.html",
+        "matched": "Chaffey College",
+        "excerpt": "Chaffey College Employment Opportunities For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "111939-scoped/result.json",
+      "paginationSha256": "bd2b0f7b2102ea01a5d9e2e48a58f354e2c6ef6d053e6eef449682c6c534710a",
+      "officialReference": "https://www.chaffey.edu/hr/adjunct-faculty.php"
+    },
+    {
+      "id": "112172",
+      "name": "Citrus College",
+      "provider": "peopleadmin",
+      "count": 110,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://employment.citruscollege.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "112172-ownership/0.html",
+        "matched": "Citrus College",
+        "excerpt": "Citrus College Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log-In - Returning User /New User - Create Account"
+      },
+      "paginationEvidence": "112172-initial/result.json",
+      "paginationSha256": "662a2543547a70b862e26f1d38eb62f381291222102f1d22a64096ce025e6216",
+      "officialReference": "https://employment.citruscollege.edu/postings/530"
+    },
+    {
+      "id": "112190",
+      "name": "City College of San Francisco",
+      "provider": "peopleadmin",
+      "count": 33,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.ccsf.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "112190-ownership/0.html",
+        "matched": "City College of San Francisco",
+        "excerpt": "City College of San Francisco Portal | Search Jobs Skip to Main Content Human Resources Toggle navigation Home Search Jobs Search Position Description Library"
+      },
+      "paginationEvidence": "112190-initial/result.json",
+      "paginationSha256": "a27d49e52194f722519e3bbe072dca6cee55b8c1ff219ddc6a0cb012eaf3f835",
+      "officialReference": "https://jobs.ccsf.edu/"
+    },
+    {
+      "id": "112385",
+      "name": "Coastline Community College",
+      "provider": "neogov",
+      "count": 3,
+      "complete": true,
+      "pagination": "2 requests; 3/3 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Coastline department on classified/management board; faculty recruiting may use another board",
+      "careersUrl": "https://www.schooljobs.com/careers/cccd?department=Coastline+Community+College",
+      "ownershipEvidence": {
+        "file": "112385-ownership/0.html",
+        "matched": "Coastline Community College",
+        "excerpt": "Coastline Community College, Golden West College, Orange Coast College, and Coast Colleges District Office. ATTENTION : Before applying, please be sure to review the"
+      },
+      "paginationEvidence": "112385-campus-corrected/result.json",
+      "paginationSha256": "44bb63840918b262132484e1eb44e8a642f9a952b27a9b6ed5e8f905bfd6a2fe",
+      "officialReference": "https://www.coastline.edu/about/administration/human-resources/index.php"
+    },
+    {
+      "id": "112826",
+      "name": "Contra Costa College",
+      "provider": "peopleadmin",
+      "count": 3,
+      "complete": true,
+      "pagination": "1 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Contra Costa College campus filter 449[]=3",
+      "careersUrl": "https://www.4cdcareers.net/postings/search?449%5B%5D=3",
+      "ownershipEvidence": {
+        "file": "112826-ownership/0.html",
+        "matched": "Contra Costa",
+        "excerpt": "Contra Costa Community College District Employment Site | Search Jobs Skip to Main Content Join Our Mission To Transform Lives Toggle navigation Home Search"
+      },
+      "paginationEvidence": "112826-scoped/result.json",
+      "paginationSha256": "7e097079ca7c4fb045853a02021fa8289ac8187b0b4d34e1624abb0d24ec1099",
+      "officialReference": "https://www.4cdcareers.net/postings/search?449%5B%5D=3"
+    },
+    {
+      "id": "113193",
+      "name": "Cuesta College",
+      "provider": "neogov",
+      "count": 29,
+      "complete": true,
+      "pagination": "4 requests; 29/29 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/cuesta",
+      "ownershipEvidence": {
+        "file": "113193-ownership/0.html",
+        "matched": "Cuesta College",
+        "excerpt": "Cuesta College's employment opportunities! You can now apply online by clicking on the job title you are interested in and clicking on the \"Apply\""
+      },
+      "paginationEvidence": "113193-scoped/result.json",
+      "paginationSha256": "fcace5be84a5ded108aa777be33588fd8cb15e0ef66fd3e7b7ccd6bb46162189",
+      "officialReference": "https://www.schooljobs.com/careers/cuesta"
+    },
+    {
+      "id": "113573",
+      "name": "College of the Desert",
+      "provider": "neogov",
+      "count": 17,
+      "complete": true,
+      "pagination": "3 requests; 17/17 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/collegeofthedesertca",
+      "ownershipEvidence": {
+        "file": "113573-ownership/0.html",
+        "matched": "College of the Desert",
+        "excerpt": "College of the Desert Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable"
+      },
+      "paginationEvidence": "113573-scoped/result.json",
+      "paginationSha256": "d02603c46536b965a3ac1b23ec5d97397d867265ae09033ac1c63b34cf1948ed",
+      "officialReference": "https://www.schooljobs.com/careers/collegeofthedesertca"
+    },
+    {
+      "id": "113634",
+      "name": "Diablo Valley College",
+      "provider": "peopleadmin",
+      "count": 13,
+      "complete": true,
+      "pagination": "1 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Diablo Valley campus filter 449[]=4",
+      "careersUrl": "https://www.4cdcareers.net/postings/search?449%5B%5D=4",
+      "ownershipEvidence": {
+        "file": "113634-ownership/0.html",
+        "matched": "Diablo Valley",
+        "excerpt": "Diablo Valley College Los Medanos College San Ramon Campus District Office Not Specified Recruitment Type No Selection No Response Voluntary Transfer (Internal applicants only)"
+      },
+      "paginationEvidence": "113634-scoped/result.json",
+      "paginationSha256": "b98bae93ada3a60662414d4c296e451594d60c68a760b44b17474981ffe3198b",
+      "officialReference": "https://www.4cdcareers.net/postings/search?449%5B%5D=4"
+    },
+    {
+      "id": "114266",
+      "name": "Evergreen Valley College",
+      "provider": "peopleadmin",
+      "count": 32,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "San Jose\u2013Evergreen district board; Evergreen Valley and San Jose City included",
+      "careersUrl": "https://sjeccd.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "114266-ownership/0.html",
+        "matched": "San Jose Evergreen",
+        "excerpt": "San Jose Evergreen Community College District Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log In /Create Account Help"
+      },
+      "paginationEvidence": "114266-initial/result.json",
+      "paginationSha256": "b045f59094ffd16f287cd3424c19f4e88e939607cf2d942c3162e242cd9c85e4",
+      "officialReference": "https://sjeccd.peopleadmin.com/postings/search"
+    },
+    {
+      "id": "114716",
+      "name": "Foothill College",
+      "provider": "neogov",
+      "count": 170,
+      "complete": true,
+      "pagination": "18 requests; 170/170 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Foothill\u2013De Anza district board; both colleges and district jobs included",
+      "careersUrl": "https://www.schooljobs.com/careers/fhda",
+      "ownershipEvidence": {
+        "file": "114716-ownership/0.html",
+        "matched": "Foothill",
+        "excerpt": "Foothill-De Anza Community College Employment Opportunities For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to"
+      },
+      "paginationEvidence": "114716-scoped/result.json",
+      "paginationSha256": "3d876b93a81e528b42901bc608c63807451a55600ab6199562602f9f7ddcd028",
+      "officialReference": "https://foothill.edu/employment/"
+    },
+    {
+      "id": "115126",
+      "name": "Golden West College",
+      "provider": "neogov",
+      "count": 5,
+      "complete": true,
+      "pagination": "2 requests; 5/5 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Golden West department on classified/management board; faculty recruiting may use another board",
+      "careersUrl": "https://www.schooljobs.com/careers/cccd?department=Golden+West+College",
+      "ownershipEvidence": {
+        "file": "115126-ownership/0.html",
+        "matched": "Golden West",
+        "excerpt": "Golden West College, Orange Coast College, and Coast Colleges District Office. ATTENTION : Before applying, please be sure to review the Coast Colleges District"
+      },
+      "paginationEvidence": "115126-campus/result.json",
+      "paginationSha256": "3bddb3ea926641de99190b8980129ab9bfc538d8fbb1bf033af16da9e4ac9ebf",
+      "officialReference": "https://www.goldenwestcollege.edu/hr/careers/index.html"
+    },
+    {
+      "id": "117247",
+      "name": "Laney College",
+      "provider": "neogov",
+      "count": 56,
+      "complete": true,
+      "pagination": "7 requests; 56/56 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Peralta district board; Laney and the other district colleges included",
+      "careersUrl": "https://www.schooljobs.com/careers/peralta",
+      "ownershipEvidence": {
+        "file": "laney-employment.html",
+        "matched": "Laney",
+        "excerpt": "Laney College Employment Services Center <img height=\"1\" width=\"1\" style=\"display:none\" src=\"https://www.facebook.com/tr?id=3248926035247507&amp;ev=PageView&amp;noscript=1\"> Skip to main content Menu Academics Show submenu fo"
+      },
+      "paginationEvidence": "117247-scoped/result.json",
+      "paginationSha256": "0c87cf96d4d5205c3c467c76e68d8044333907c7af0afbf67ee775cadb03d1ba",
+      "officialReference": "https://www.schooljobs.com/careers/peralta"
+    },
+    {
+      "id": "117645",
+      "name": "Long Beach City College",
+      "provider": "neogov",
+      "count": 16,
+      "complete": true,
+      "pagination": "3 requests; 16/16 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/lbcc",
+      "ownershipEvidence": {
+        "file": "117645-ownership/0.html",
+        "matched": "Long Beach",
+        "excerpt": "Long Beach Community College District Application Process! ******** We are excited that you are here and eager to learn more about you and the"
+      },
+      "paginationEvidence": "117645-scoped/result.json",
+      "paginationSha256": "453fbfae39b76b93aa219258759866cba989d88b7701bf712d51dc53e31879f6",
+      "officialReference": "https://lbcc.edu/careers"
+    },
+    {
+      "id": "118718",
+      "name": "Merced College",
+      "provider": "neogov",
+      "count": 1,
+      "complete": true,
+      "pagination": "2 requests; 1/1 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Merced management careers board",
+      "careersUrl": "https://www.schooljobs.com/careers/mccd",
+      "ownershipEvidence": {
+        "file": "118718-ownership/1.html",
+        "matched": "Merced",
+        "excerpt": "Merced College Skip Main Navigation Merced College Enroll MC Portal Canvas Search Close Search Search Submit Menu Employment You are here: Home About Merced"
+      },
+      "paginationEvidence": "118718-scoped/result.json",
+      "paginationSha256": "92fdcf4df60e8fa7fe8d1a28bd0211a7ad310752205f3f88c03ef5c78fc949da",
+      "officialReference": "https://www.mccd.edu/about-merced-college/divisions/human-resources/jobs/"
+    },
+    {
+      "id": "118976",
+      "name": "Modesto Junior College",
+      "provider": "peopleadmin",
+      "count": 57,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Yosemite district board; Modesto and Columbia included",
+      "careersUrl": "https://yosemite.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "118976-ownership/0.html",
+        "matched": "Yosemite",
+        "excerpt": "Yosemite CCD Applicant Site | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log In /Create Account Help Equivalency Policy and"
+      },
+      "paginationEvidence": "118976-initial/result.json",
+      "paginationSha256": "d45e7e4274f55d4546b436be356889a507beae4b20294e2a2b6cebc9778a9230",
+      "officialReference": "https://yosemite.peopleadmin.com/postings/search"
+    },
+    {
+      "id": "119137",
+      "name": "Moorpark College",
+      "provider": "neogov",
+      "count": 78,
+      "complete": true,
+      "pagination": "9 requests; 78/78 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Ventura County district board; Moorpark, Oxnard, Ventura and district jobs included",
+      "careersUrl": "https://www.schooljobs.com/careers/vcccd",
+      "ownershipEvidence": {
+        "file": "moorpark-employment.html",
+        "matched": "Moorpark",
+        "excerpt": "Moorpark Oxnard Ventura VC East Alerts About Accessibility Accreditation Alerts Employee Directory Events Calendar Give Maps Newsroom Photo and Media Gallery Reports Students Schedule"
+      },
+      "paginationEvidence": "119137-scoped/result.json",
+      "paginationSha256": "8f880130386697c10130b577444fc800e0688c67a49f30d853a83ca89d1ab468",
+      "officialReference": "https://www.schooljobs.com/careers/vcccd"
+    },
+    {
+      "id": "119164",
+      "name": "Mt San Antonio College",
+      "provider": "peopleadmin",
+      "count": 130,
+      "complete": true,
+      "pagination": "5 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://hrjobs.mtsac.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "119164-ownership/0.html",
+        "matched": "Mt. San Antonio",
+        "excerpt": "Mt. San Antonio College Location: Administration Building 4, Room 1460(first floor) 1100 N. Grand Ave., Walnut, CA 91789 To ensure the security of your"
+      },
+      "paginationEvidence": "119164-initial/result.json",
+      "paginationSha256": "6fff3a433480270d41edf9b4d12ed0690687adb877bfb192d8059978317e25c6",
+      "officialReference": "https://hrjobs.mtsac.edu/postings/14314"
+    },
+    {
+      "id": "119605",
+      "name": "National University",
+      "provider": "workday",
+      "count": 55,
+      "complete": true,
+      "pagination": "3 listing pages, 55/55 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://nus.wd1.myworkdayjobs.com/en-US/Careers",
+      "ownershipEvidence": {
+        "file": "119605-detail.json",
+        "matched": "National University",
+        "excerpt": "National University team member. Location: Onsite, Vandenberg Space Force Base, CA Travel: N/A #LI-Onsite Candidate receiving offers will be offered a salary/pay rate commensurate"
+      },
+      "paginationEvidence": "119605-initial/result.json",
+      "paginationSha256": "a620723bfd9c60ad21410f56c6bfdd8cacae74c02172b6d16c2d69fc34d0d977",
+      "officialReference": "https://www.nu.edu/careers/"
+    },
+    {
+      "id": "120971",
+      "name": "Palomar College",
+      "provider": "peopleadmin",
+      "count": 86,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://palomar.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "120971-ownership/0.html",
+        "matched": "Palomar College",
+        "excerpt": "Palomar College Employment Opportunities | Search Jobs Skip to Main Content Job Opportunities Toggle navigation Home Search Jobs Job Alerts Log In /Create Account"
+      },
+      "paginationEvidence": "120971-initial/result.json",
+      "paginationSha256": "15338eec1a5791cb0b047a968a0ce94f9099a5220f2e546b3b552f7ea03893d5",
+      "officialReference": "https://www.palomar.edu/hr/employment/"
+    },
+    {
+      "id": "121044",
+      "name": "Pasadena City College",
+      "provider": "neogov",
+      "count": 11,
+      "complete": true,
+      "pagination": "3 requests; 11/11 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/pasadenaedu",
+      "ownershipEvidence": {
+        "file": "121044-ownership/0.html",
+        "matched": "Pasadena City College",
+        "excerpt": "Pasadena City College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript in"
+      },
+      "paginationEvidence": "121044-scoped/result.json",
+      "paginationSha256": "71160ee5bfd88f38bdfac7590a2a13f495c51c47a64f79193d053364feccb72a",
+      "officialReference": "https://www.pasadena.edu/hr/benefits/adjunctbenefits.php"
+    },
+    {
+      "id": "121886",
+      "name": "Rio Hondo College",
+      "provider": "peopleadmin",
+      "count": 42,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://riohondo.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "121886-ownership/0.html",
+        "matched": "Rio Hondo College",
+        "excerpt": "Rio Hondo College Applicant Portal | Search Jobs Skip to Main Content Calendar | Directory | Location/Centers | Distance Education Toggle navigation Home Search"
+      },
+      "paginationEvidence": "121886-initial/result.json",
+      "paginationSha256": "b71e4018e24c7e882e7af549764003a87a6d8d4d60cb5de0660d213fe7f79ba7",
+      "officialReference": "https://www.riohondo.edu/administration/hr/"
+    },
+    {
+      "id": "122205",
+      "name": "Saddleback College",
+      "provider": "neogov",
+      "count": 43,
+      "complete": true,
+      "pagination": "6 requests; 43/43 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "South Orange County district board; Saddleback and Irvine Valley included",
+      "careersUrl": "https://www.schooljobs.com/careers/socccd",
+      "ownershipEvidence": {
+        "file": "122205-ownership/0.html",
+        "matched": "Saddleback",
+        "excerpt": "Saddleback College : Saddleback College opened its doors to students in 1968 and has an annual student population of over 42,000. Designated a HSI"
+      },
+      "paginationEvidence": "122205-scoped/result.json",
+      "paginationSha256": "eaf53521d2b683e2c120b504d786b5ca90180b3474259664de29b2a37c05a8f4",
+      "officialReference": "https://www.schooljobs.com/careers/socccd"
+    },
+    {
+      "id": "122339",
+      "name": "San Diego City College",
+      "provider": "peopleadmin",
+      "count": 3,
+      "complete": true,
+      "pagination": "1 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "San Diego City organizational tier 2 = 6",
+      "careersUrl": "https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id%5B%5D=6",
+      "ownershipEvidence": {
+        "file": "122339-ownership/0.html",
+        "matched": "San Diego City",
+        "excerpt": "San Diego City College San Diego Mesa College San Diego Miramar College Job Category No Selection Classified Professionals: Full-Time / Part-time (Salaried) Classified Professionals:"
+      },
+      "paginationEvidence": "122339-scoped/result.json",
+      "paginationSha256": "dbb46851bbb07fcb0a7464681dc763669b299d8464c624fdb635cfb065bbab23",
+      "officialReference": "https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id%5B%5D=6"
+    },
+    {
+      "id": "122384",
+      "name": "San Diego Miramar College",
+      "provider": "peopleadmin",
+      "count": 3,
+      "complete": true,
+      "pagination": "1 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "San Diego Miramar organizational tier 2 = 266",
+      "careersUrl": "https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id%5B%5D=266",
+      "ownershipEvidence": {
+        "file": "122384-ownership/0.html",
+        "matched": "Miramar",
+        "excerpt": "Miramar College Job Category No Selection Classified Professionals: Full-Time / Part-time (Salaried) Classified Professionals: Temporary / Short-term College Faculty Tenure-Track/Restricted (Salaried) College Faculty Part-Time/"
+      },
+      "paginationEvidence": "122384-scoped/result.json",
+      "paginationSha256": "8c55d88913367f7ef4cdcb32c4474cb69cc2016877bd2835c49e6a66ec235d23",
+      "officialReference": "https://sdmiramar.edu/services/personnel/adjunct"
+    },
+    {
+      "id": "122658",
+      "name": "San Joaquin Delta College",
+      "provider": "neogov",
+      "count": 84,
+      "complete": true,
+      "pagination": "10 requests; 84/84 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/deltacollege",
+      "ownershipEvidence": {
+        "file": "122658-ownership/0.html",
+        "matched": "San Joaquin Delta College",
+        "excerpt": "San Joaquin Delta College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "122658-scoped/result.json",
+      "paginationSha256": "fe0a75af046e71cdb255308d49f17b7ad9a3aa77abadd5de9f4c615db3c7fc86",
+      "officialReference": "https://www.schooljobs.com/careers/deltacollege"
+    },
+    {
+      "id": "122889",
+      "name": "Santa Barbara City College",
+      "provider": "neogov",
+      "count": 9,
+      "complete": true,
+      "pagination": "2 requests; 9/9 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Santa Barbara administrator/classified/management careers board",
+      "careersUrl": "https://www.schooljobs.com/careers/sbcc",
+      "ownershipEvidence": {
+        "file": "122889-ownership/0.html",
+        "matched": "Santa Barbara City College",
+        "excerpt": "Santa Barbara City College Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable"
+      },
+      "paginationEvidence": "122889-scoped/result.json",
+      "paginationSha256": "fea756b7f2aea8b30ca4f3be16fea76b70bb77e2a5a57c682db38008a617652e",
+      "officialReference": "https://www.sbcc.edu/hr/adjuncthiringguidelines.php"
+    },
+    {
+      "id": "123013",
+      "name": "Santa Rosa Junior College",
+      "provider": "neogov",
+      "count": 120,
+      "complete": true,
+      "pagination": "13 requests; 120/120 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/santarosajc",
+      "ownershipEvidence": {
+        "file": "123013-ownership/0.html",
+        "matched": "SANTA ROSA JUNIOR COLLEGE",
+        "excerpt": "SANTA ROSA JUNIOR COLLEGE CURRENT EMPLOYMENT OPPORTUNITIES For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how"
+      },
+      "paginationEvidence": "123013-scoped/result.json",
+      "paginationSha256": "05d7dca7c69de86ca015b140ab7effe96d64160da02bd724973a77e858577722",
+      "officialReference": "https://hr.santarosa.edu/employment"
+    },
+    {
+      "id": "123341",
+      "name": "Sierra College",
+      "provider": "neogov",
+      "count": 5,
+      "complete": true,
+      "pagination": "2 requests; 5/5 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/sierracollege",
+      "ownershipEvidence": {
+        "file": "123341-ownership/0.html",
+        "matched": "Sierra College",
+        "excerpt": "Sierra College is an equal employment opportunity employer committed to nondiscrimination and the achievement of diversity and equity among its faculty, staff, and students."
+      },
+      "paginationEvidence": "123341-scoped/result.json",
+      "paginationSha256": "9ad78295cd749316282ada985572efdb8ee7958958aeec7559750ac77c5a9e12",
+      "officialReference": "https://www.schooljobs.com/careers/sierracollege"
+    },
+    {
+      "id": "123527",
+      "name": "San Bernardino Valley College",
+      "provider": "neogov",
+      "count": 223,
+      "complete": true,
+      "pagination": "24 requests; 223/223 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "San Bernardino district board; Valley and Crafton Hills included",
+      "careersUrl": "https://www.schooljobs.com/careers/sbccd",
+      "ownershipEvidence": {
+        "file": "valley-employment.html",
+        "matched": "San Bernardino Valley",
+        "excerpt": "San Bernardino Valley College and KVCR 91.9 FM and TV 24. Current Career Opportunities The link below is to current job openings and application"
+      },
+      "paginationEvidence": "123527-scoped/result.json",
+      "paginationSha256": "e5622fdbf9e8a5a7117f0268609cc85e64a78da612142f0812c22abd80d7bba1",
+      "officialReference": "https://www.schooljobs.com/careers/sbccd"
+    },
+    {
+      "id": "123961",
+      "name": "University of Southern California",
+      "provider": "workday",
+      "count": 689,
+      "complete": true,
+      "pagination": "35 listing pages, 690/690 raw records; 1 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "USC ExternalUSCCareers; replaces Advancement-only board",
+      "careersUrl": "https://usc.wd5.myworkdayjobs.com/ExternalUSCCareers",
+      "ownershipEvidence": {
+        "file": "123961-corrected-detail.json",
+        "matched": "USC",
+        "excerpt": "USC, a 343-bed acute care hospital, provides exceptional and innovative care for complex medical and surgical conditions across a wide range of specialties. The"
+      },
+      "paginationEvidence": "123961-scoped/result.json",
+      "paginationSha256": "fe4cc3f31f30ce4fd425e8c7fdc61aa830b03c13d7d1b5c009529883a13d878f",
+      "officialReference": "https://usccareers.usc.edu/job/los-angeles/pt-adjunct-lecturer/1209/98432271728"
+    },
+    {
+      "id": "125028",
+      "name": "Ventura College",
+      "provider": "neogov",
+      "count": 78,
+      "complete": true,
+      "pagination": "9 requests; 78/78 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Ventura County district board; same inventory as Moorpark",
+      "careersUrl": "https://www.schooljobs.com/careers/vcccd",
+      "ownershipEvidence": {
+        "file": "125028-ownership/0.html",
+        "matched": "Ventura",
+        "excerpt": "Ventura County Community College District Career Pages For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how"
+      },
+      "paginationEvidence": "125028-scoped/result.json",
+      "paginationSha256": "005cb6e2c1a0af098381667ba2b8c5fcdc908e3db62bd4e25975eed9956ac0b0",
+      "officialReference": "https://www.schooljobs.com/careers/vcccd"
+    },
+    {
+      "id": "125091",
+      "name": "Victor Valley College",
+      "provider": "neogov",
+      "count": 95,
+      "complete": true,
+      "pagination": "11 requests; 95/95 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/vvc",
+      "ownershipEvidence": {
+        "file": "125091-ownership/1.html",
+        "matched": "Victor Valley",
+        "excerpt": "Victor Valley College's Human Resources Department | Victor Valley College Skip to main content --> Search facebook https://www.facebook.com/VVCedu/ Twitter https://twitter.com/vvcedu Instagram https://www.instagram.com/vvcedu Utilit"
+      },
+      "paginationEvidence": "125091-scoped/result.json",
+      "paginationSha256": "c575a50c72531f2f19c6c3e31d361a2bf02c416c95e30c17132bf8114a486f4d",
+      "officialReference": "https://www.vvc.edu/part-time-faculty-salary-schedule"
+    },
+    {
+      "id": "126818",
+      "name": "Colorado State University-Fort Collins",
+      "provider": "workday",
+      "count": 283,
+      "complete": true,
+      "pagination": "15 listing pages, 283/283 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://csusystem.wd12.myworkdayjobs.com/en-US/fortcollins_careers/job/Adjunct-Faculty--Department-of-Accounting---Open-Pool_R2026105157",
+      "ownershipEvidence": {
+        "file": "126818-detail.json",
+        "matched": "Colorado State University",
+        "excerpt": "Colorado State University. The position is a fulltime professional position reporting directly the Executive Director of the Access Center and plays a mission critical"
+      },
+      "paginationEvidence": "126818-initial/result.json",
+      "paginationSha256": "a0c0af7c057e73aad58bd5c6eef737244d23f94cc65a68cdc6844a3913b59ebf",
+      "officialReference": "https://jobs.colostate.edu/"
+    },
+    {
+      "id": "127200",
+      "name": "Front Range Community College",
+      "provider": "neogov",
+      "count": 4,
+      "complete": true,
+      "pagination": "2 requests; 4/4 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Front Range department on Colorado state board",
+      "careersUrl": "https://www.governmentjobs.com/careers/colorado?department[0]=Front%20Range%20Community%20College",
+      "ownershipEvidence": {
+        "file": "front-range.html",
+        "matched": "Front Range Community College",
+        "excerpt": "Front Range Community College - Open Jobs Careers Skip to main menu Skip to main content --> Go back to main site Give to"
+      },
+      "paginationEvidence": "127200-scoped/result.json",
+      "paginationSha256": "6bd5d44aec15e73ac3e851ebe1c51d385b1fba095ab1b86b7035c93f2d416ba5",
+      "officialReference": "https://www.governmentjobs.com/careers/colorado?department[0]=Front%20Range%20Community%20College"
+    },
+    {
+      "id": "127565",
+      "name": "Metropolitan State University of Denver",
+      "provider": "workday",
+      "count": 124,
+      "complete": true,
+      "pagination": "7 listing pages, 124/124 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://msudenver.wd1.myworkdayjobs.com/MSUDenver",
+      "ownershipEvidence": {
+        "file": "127565-detail.json",
+        "matched": "Metropolitan State University of Denver",
+        "excerpt": "Metropolitan State University of Denver is dedicated to ensuring a safe and secure environment for our faculty, staff, students, and visitors. To Assist in"
+      },
+      "paginationEvidence": "127565-initial/result.json",
+      "paginationSha256": "300a2b52133e6d348579c6f569381535095dabf62a4c7ae8c673a4d934ac8bc1",
+      "officialReference": "https://www.msudenver.edu/careers/"
+    },
+    {
+      "id": "128106",
+      "name": "Colorado State University Pueblo",
+      "provider": "neogov",
+      "count": 2,
+      "complete": true,
+      "pagination": "2 requests; 2/2 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "CSU Pueblo department on Colorado state board",
+      "careersUrl": "https://www.governmentjobs.com/careers/colorado?department[0]=Colorado%20State%20University%20Pueblo",
+      "ownershipEvidence": {
+        "file": "128106-ownership/1.html",
+        "matched": "CSU Pueblo",
+        "excerpt": "CSU Pueblo Skip To Top Navigation Skip To Section Navigation Skip To Content Skip To Left Navigation Skip To Search Skip To Footer Human"
+      },
+      "paginationEvidence": "128106-scoped/result.json",
+      "paginationSha256": "19e93648352dddc0e2825c2e498d2076c31441707a6ebd8e830e6e156e27cf37",
+      "officialReference": "https://www.csupueblo.edu/human-resources/employment/"
+    },
+    {
+      "id": "132709",
+      "name": "Broward College",
+      "provider": "workday",
+      "count": 113,
+      "complete": true,
+      "pagination": "6 listing pages, 113/113 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Broward PT public board",
+      "careersUrl": "https://browardcollege.wd5.myworkdayjobs.com/en-US/PT/job/Adjunct-Faculty--Math--Pooled-Position--Central-Campus-_REQ-000048832-1",
+      "ownershipEvidence": {
+        "file": "132709-detail.json",
+        "matched": "Broward College",
+        "excerpt": "Broward College, our leaders embody a culture of competence, care, character, composure, and courage. We prioritize serving each other and our students through high-quality"
+      },
+      "paginationEvidence": "132709-initial/result.json",
+      "paginationSha256": "49b8302067a3a3d93505bc1d1fdb5b8c036e8b295a49f06cebd1dd02d9305f4a",
+      "officialReference": "https://www.broward.edu/jobs/"
+    },
+    {
+      "id": "132903",
+      "name": "University of Central Florida",
+      "provider": "workday",
+      "count": 96,
+      "complete": true,
+      "pagination": "5 listing pages, 96/96 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://ucf.wd1.myworkdayjobs.com/en-US/careers/job/Adjunct--College-of-Science_R113365",
+      "ownershipEvidence": {
+        "file": "132903-detail.json",
+        "matched": "University of Central Florida",
+        "excerpt": "University of Central Florida is an equal opportunity employer that does not discriminate against any employee or applicant for employment based on any characteristic"
+      },
+      "paginationEvidence": "132903-initial/result.json",
+      "paginationSha256": "e741efdfbc74384db3909b7594cf7c7ced321b361b73601a785865863bcb3c69",
+      "officialReference": "https://jobs.ucf.edu/jobs/adjunct-college-of-science-orlando-florida-united-states"
+    },
+    {
+      "id": "133386",
+      "name": "Daytona State College",
+      "provider": "neogov",
+      "count": 110,
+      "complete": true,
+      "pagination": "12 requests; 110/110 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/daytonastate",
+      "ownershipEvidence": {
+        "file": "133386-ownership/0.html",
+        "matched": "Daytona State",
+        "excerpt": "Daytona State College! We're excited to meet passionate individuals who are ready to make a difference. Explore career opportunities and discover how you can"
+      },
+      "paginationEvidence": "133386-scoped/result.json",
+      "paginationSha256": "789a9d983d138df6d110e558358a47b6a808d602e308d1b7bf2a133e58a96dc2",
+      "officialReference": "https://www.daytonastate.edu/faculty-and-staff/human-resources/careers.html"
+    },
+    {
+      "id": "133669",
+      "name": "Florida Atlantic University",
+      "provider": "workday",
+      "count": 52,
+      "complete": true,
+      "pagination": "3 listing pages, 52/52 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://fau.wd1.myworkdayjobs.com/en-US/FAU/job/Nursing-Adjuncts_REQ21767",
+      "ownershipEvidence": {
+        "file": "133669-detail.json",
+        "matched": "Florida Atlantic University",
+        "excerpt": "Florida Atlantic University is seeking an Assistant Director, Department Administration - Boca Raton, FL. The Assistant Director, Department Administration position supports the mission of"
+      },
+      "paginationEvidence": "133669-initial/result.json",
+      "paginationSha256": "345dac748d7fadcfd2e62e34c8e06bbf512bb5fe4182fc6a208e0d609efff4f9",
+      "officialReference": "https://www.fau.edu/jobs/"
+    },
+    {
+      "id": "133881",
+      "name": "Florida Institute of Technology",
+      "provider": "workday",
+      "count": 43,
+      "complete": true,
+      "pagination": "3 listing pages, 43/43 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://floridatech.wd5.myworkdayjobs.com/en-US/FloridaTechCareers/job/Adjunct-Faculty-Orlando_R7840",
+      "ownershipEvidence": {
+        "file": "133881-detail.json",
+        "matched": "Florida Institute of Technology",
+        "excerpt": "Florida Institute of Technology Job type: Full time Posted: Posted 3 Days Ago Req ID: R9675 The Florida Tech Department of Security Officers are"
+      },
+      "paginationEvidence": "133881-initial/result.json",
+      "paginationSha256": "7e4789fc38372b5e3f3bd206f69fadc7c3507c39ea8afebd26ba3cffe53cba3b",
+      "officialReference": "https://www.fit.edu/provost/academic-standards-guidelines-and-processes/adjunct-faculty-appointments-and-performance-eval/"
+    },
+    {
+      "id": "134097",
+      "name": "Florida State University",
+      "provider": "peoplesoft",
+      "count": 234,
+      "complete": true,
+      "pagination": "5 search responses; 234/234 rows",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.omni.fsu.edu/psc/sprdhr_er/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&Page=HRS_APP_SCHJOB&Action=U&SiteId=1&",
+      "ownershipEvidence": {
+        "file": "134097-ownership/0.html",
+        "matched": "Florida State University",
+        "excerpt": "Florida State University Florida State University Hi User Home Sign Out PeopleSoft OMNI We're sorry. You cannot access this page. If you need help,"
+      },
+      "paginationEvidence": "134097-initial/result.json",
+      "paginationSha256": "10ac0806406c54bc18597bf6106d29989b8ece8372a21283c358982ecb7e0072",
+      "officialReference": "https://comm.cci.fsu.edu/adjunct-faculty-application/"
+    },
+    {
+      "id": "134237",
+      "name": "Full Sail University",
+      "provider": "workday",
+      "count": 79,
+      "complete": true,
+      "pagination": "4 listing pages, 79/79 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://fullsail.wd1.myworkdayjobs.com/en-US/External/job/Adjunct-Faculty---Creative-Writing_R00011724",
+      "ownershipEvidence": {
+        "file": "134237-detail.json",
+        "matched": "Full Sail University",
+        "excerpt": "Full Sail University. You'll find your choice of career opportunities, great benefits, an environment that welcomes and values creativity, and a work experience that"
+      },
+      "paginationEvidence": "134237-initial/result.json",
+      "paginationSha256": "4a23a4a466ca9279573386e6dc8fd1b6b415a41b1ccec16483e5c5acc14733f0",
+      "officialReference": "https://go.fullsail.edu/join-our-team"
+    },
+    {
+      "id": "134495",
+      "name": "Hillsborough College",
+      "provider": "workday",
+      "count": 160,
+      "complete": true,
+      "pagination": "8 listing pages, 160/160 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://hcfl.wd1.myworkdayjobs.com/en-US/hcjobs?jobFamilyGroup=e866224a84421001b00d5c2cc09b0000",
+      "ownershipEvidence": {
+        "file": "134495-detail.json",
+        "matched": "Hillsborough Community College",
+        "excerpt": "Hillsborough Community College is an Equal Opportunity Employer, we believe that diversity and inclusion among our applicants and employees is critical to our success"
+      },
+      "paginationEvidence": "134495-initial/result.json",
+      "paginationSha256": "4b707523d953d2d0022359c1c31afa7c64cf58808a66b300cbd8ad4c33ce60e2",
+      "officialReference": "https://hcfl.wd1.myworkdayjobs.com/en-US/hcjobs?jobFamilyGroup=e866224a84421001b00d5c2cc09b0000"
+    },
+    {
+      "id": "134608",
+      "name": "Indian River State College",
+      "provider": "workday",
+      "count": 121,
+      "complete": true,
+      "pagination": "7 listing pages, 121/121 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://irsc.wd5.myworkdayjobs.com/en-US/External/job/Adjunct-Human-Services_R5576",
+      "ownershipEvidence": {
+        "file": "134608-detail.json",
+        "matched": "Indian River State College",
+        "excerpt": "Indian River State College is a leading public institution on Florida\u2019s Treasure Coast, serving students across multiple campuses in four counties. We are committed"
+      },
+      "paginationEvidence": "134608-initial/result.json",
+      "paginationSha256": "5445bdeb18cd5bea0a0bc6a721876b08d9b5b755e7eaa7f549e091ec355623c7",
+      "officialReference": "https://irsc.edu/human-resources/jobs/"
+    },
+    {
+      "id": "136516",
+      "name": "Polk State College",
+      "provider": "neogov",
+      "count": 39,
+      "complete": true,
+      "pagination": "5 requests; 39/39 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/polkstate",
+      "ownershipEvidence": {
+        "file": "136516-ownership/0.html",
+        "matched": "Polk State College",
+        "excerpt": "Polk State College Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "136516-scoped/result.json",
+      "paginationSha256": "83a3cf3584846765ec9e25abad6bc028bfa6efe0c96090779939471634bad367",
+      "officialReference": "https://www.schooljobs.com/careers/polkstate"
+    },
+    {
+      "id": "137032",
+      "name": "Saint Leo University",
+      "provider": "workday",
+      "count": 71,
+      "complete": true,
+      "pagination": "4 listing pages, 71/71 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://saintleo.wd503.myworkdayjobs.com/en-US/SLU/job/Adjunct---Social-Work_R4244",
+      "ownershipEvidence": {
+        "file": "137032-detail.json",
+        "matched": "Saint Leo University",
+        "excerpt": "Saint Leo University rules and regulations, supporting the philosophy, goals, and mission of the University and its intercollegiate athletics program as well as adherence"
+      },
+      "paginationEvidence": "137032-initial/result.json",
+      "paginationSha256": "a27cd078d1c7316e4055a85c164c06a4605bc4c5c0bbd97c10bd6f290276512a",
+      "officialReference": "https://www.saintleo.edu/taxonomy/term/1272"
+    },
+    {
+      "id": "137351",
+      "name": "University of South Florida",
+      "provider": "oraclecloud",
+      "count": 236,
+      "complete": true,
+      "pagination": "2 API pages; 236/236 jobs",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://fa-ewkd-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/USF/jobs",
+      "ownershipEvidence": {
+        "file": "137351-ownership/0.html",
+        "matched": "University of South Florida",
+        "excerpt": "University of South Florida"
+      },
+      "paginationEvidence": "137351-initial/result.json",
+      "paginationSha256": "b61c61eb27a81a77c5b01267d00136bcaad85267c64559d800452e29f22c8732",
+      "officialReference": "https://jobs.usf.edu/"
+    },
+    {
+      "id": "137759",
+      "name": "Tallahassee State College",
+      "provider": "workday",
+      "count": 35,
+      "complete": true,
+      "pagination": "2 listing pages, 35/35 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://tscfl.wd12.myworkdayjobs.com/en-US/TSC_External_Career_Site/jobs?q=adjunct",
+      "ownershipEvidence": {
+        "file": "137759-detail.json",
+        "matched": "Tallahassee",
+        "excerpt": "Tallahassee State College Career Development Specialist Opportunity Tallahassee State College (TSC), recently recognized as one of the Most Promising Places to Work in Community"
+      },
+      "paginationEvidence": "137759-initial/result.json",
+      "paginationSha256": "6f8ca175497950b8f3370a625b0423b4a9f9e619fa94e340a88f25edaaf803de",
+      "officialReference": "http://fl.edu/about/college/administrative-services/human-resources/recruitment/adjunct-and-faculty/"
+    },
+    {
+      "id": "139940",
+      "name": "Georgia State University",
+      "provider": "peopleadmin",
+      "count": 99,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Georgia State faculty public board",
+      "careersUrl": "https://facultycareers.gsu.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "139940-ownership/0.html",
+        "matched": "Georgia State University",
+        "excerpt": "Georgia State University |Applicant Portal | Search Jobs Skip to Main Content Perimeter College Toggle navigation Home Search Jobs Log In /Create Account Help"
+      },
+      "paginationEvidence": "139940-initial/result.json",
+      "paginationSha256": "29760687815c3f22ca6bce6c1a6e8e2259df511ef64b0d95d87a4870e6becf7b",
+      "officialReference": "https://hr.gsu.edu/careers/"
+    },
+    {
+      "id": "140012",
+      "name": "Gwinnett Technical College",
+      "provider": "workday",
+      "count": 63,
+      "complete": true,
+      "pagination": "4 listing pages, 64/64 raw records; 1 source records lack title/URL",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Gwinnett Technical hiringCompany facet on Georgia state board",
+      "careersUrl": "https://georgia.wd5.myworkdayjobs.com/TGC/job/Lawrenceville/Adjunct-Faculty---Degree-Level-Mathematics_JR0000001276",
+      "ownershipEvidence": {
+        "file": "140012-corrected-detail.json",
+        "matched": "Gwinnett Technical College",
+        "excerpt": "Gwinnett Technical College Job Requisition ID: JR0000006764 Shift: Any (United States of America) Compensation Details: $67,000/YR. Job Description: This is a full time, benefited"
+      },
+      "paginationEvidence": "140012-filtered/result.json",
+      "paginationSha256": "bc4bc5ac5ed0b373573927a5f850ccb5dbbce02535d5336c0e0bc534d2ffeae4",
+      "officialReference": "https://georgia.wd5.myworkdayjobs.com/TGC/job/Lawrenceville/Adjunct-Faculty---Degree-Level-Mathematics_JR0000001276"
+    },
+    {
+      "id": "142522",
+      "name": "Brigham Young University-Idaho",
+      "provider": "workday",
+      "count": 52,
+      "complete": true,
+      "pagination": "3 listing pages, 52/52 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "BYU-Idaho faculty opportunities",
+      "careersUrl": "https://wd501.myworkdaysite.com/recruiting/byui/BYU-Idaho_Faculty_Opportunities",
+      "ownershipEvidence": {
+        "file": "142522-ownership/1.html",
+        "matched": "BYU-Idaho",
+        "excerpt": "BYU-Idaho Employment | Human Resources | BYU-Idaho Skip to main content ` Search Human Resources myBYUI Directories A-Z Index Give Home About HR Benefits"
+      },
+      "paginationEvidence": "142522-initial/result.json",
+      "paginationSha256": "77d2325f800b8d543227ef97601b3ca5eb3039be5a27adb81664e19c3760d450",
+      "officialReference": "https://www.byui.edu/human-resources/employment"
+    },
+    {
+      "id": "146472",
+      "name": "College of Lake County",
+      "provider": "workday",
+      "count": 35,
+      "complete": true,
+      "pagination": "2 listing pages, 35/35 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://clc.wd115.myworkdayjobs.com/en-US/External/job/Adjunct-Faculty--Community-and-Workforce-Education_REQ-00001040-1",
+      "ownershipEvidence": {
+        "file": "146472-detail.json",
+        "matched": "College of Lake County",
+        "excerpt": "College of Lake County for your next opportunity? The College of Lake County (CLC) offers a competitive salary, excellent benefits that includes Blue Cross"
+      },
+      "paginationEvidence": "146472-initial/result.json",
+      "paginationSha256": "0128837d795ac33d6372cffff4efbc85a29be45af618e6a422cf2fc766902fc5",
+      "officialReference": "https://clc.wd115.myworkdayjobs.com/en-US/External/job/Adjunct-Faculty--Community-and-Workforce-Education_REQ-00001040-1"
+    },
+    {
+      "id": "150136",
+      "name": "Ball State University",
+      "provider": "workday",
+      "count": 59,
+      "complete": true,
+      "pagination": "3 listing pages, 59/59 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://bsu.wd12.myworkdayjobs.com/External",
+      "ownershipEvidence": {
+        "file": "150136-detail.json",
+        "matched": "Ball State University",
+        "excerpt": "Ball State University Job type: Part time Posted: Posted Today Req ID: R-03471 Position Title: PT Crossing Guard Salary Grade: Staff 6 Compensation: $11.65"
+      },
+      "paginationEvidence": "150136-initial/result.json",
+      "paginationSha256": "0cf6225ea5b4f66188d8606673adab12a0b6152e88ef2c3af0a5e3413467d882",
+      "officialReference": "https://www.bsu.edu/about/administrativeoffices/humanresources/jobs"
+    },
+    {
+      "id": "150987",
+      "name": "Ivy Tech Community College",
+      "provider": "workday",
+      "count": 519,
+      "complete": true,
+      "pagination": "26 listing pages, 519/519 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://ivytech.wd1.myworkdayjobs.com/Ivy_Tech_Careers/job/Bloomington-IN/Adjunct---Business-Administration_JR0000106908/apply",
+      "ownershipEvidence": {
+        "file": "150987-detail.json",
+        "matched": "Ivy Tech Community College",
+        "excerpt": "Ivy Tech Community College is an accredited, equal opportunity/affirmative action employer. All qualified applicants will receive consideration for employment without regard to race, color,"
+      },
+      "paginationEvidence": "150987-initial/result.json",
+      "paginationSha256": "67dc618042d3808f1f0aea22dad9f7da60bf5de6ebf489ae9db09a98ef466ce7",
+      "officialReference": "https://ivytech.wd1.myworkdayjobs.com/Ivy_Tech_Careers/job/Bloomington-IN/Adjunct---Business-Administration_JR0000106908/apply"
+    },
+    {
+      "id": "153214",
+      "name": "Des Moines Area Community College",
+      "provider": "peopleadmin",
+      "count": 90,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.dmacc.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "153214-ownership/0.html",
+        "matched": "Des Moines Area Community College",
+        "excerpt": "Des Moines Area Community College Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account"
+      },
+      "paginationEvidence": "153214-initial/result.json",
+      "paginationSha256": "5178de3ba00a658a18771dc3a01f695a42d854e73c09837b3db8178ea556ef49",
+      "officialReference": "https://jobs.dmacc.edu/postings/15360"
+    },
+    {
+      "id": "153630",
+      "name": "Iowa Western Community College",
+      "provider": "neogov",
+      "count": 41,
+      "complete": true,
+      "pagination": "6 requests; 41/41 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/iwcc",
+      "ownershipEvidence": {
+        "file": "153630-ownership/0.html",
+        "matched": "Iowa Western Community College",
+        "excerpt": "Iowa Western Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "153630-scoped/result.json",
+      "paginationSha256": "ab3f8c416300d4217e793ee0d49fe6eb444156ffdacdfae70342d123273d366e",
+      "officialReference": "https://www.schooljobs.com/careers/iwcc"
+    },
+    {
+      "id": "155061",
+      "name": "Fort Hays State University",
+      "provider": "workday",
+      "count": 26,
+      "complete": true,
+      "pagination": "2 listing pages, 26/26 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://fhsu.wd503.myworkdayjobs.com/CAREERS",
+      "ownershipEvidence": {
+        "file": "155061-detail.json",
+        "matched": "FHSU",
+        "excerpt": "FHSU Main Campus (Hays, Kansas) Job type: Full time Posted: Posted 3 Days Ago Req ID: R-05208 Department Office of Events and Communication Job"
+      },
+      "paginationEvidence": "155061-initial/result.json",
+      "paginationSha256": "9b0ff379f66da37ba7c959bcd5cc6ed18763edfe1dbb451d8ea694bbdd0b8b3e",
+      "officialReference": "https://www.fhsu.edu/teachereducation/careers/"
+    },
+    {
+      "id": "157085",
+      "name": "University of Kentucky",
+      "provider": "peopleadmin",
+      "count": 804,
+      "complete": true,
+      "pagination": "27 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://ukjobs.uky.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "157085-ownership/0.html",
+        "matched": "University of Kentucky",
+        "excerpt": "University of Kentucky Applicant Site | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Sign Up For Job Alerts! Log In"
+      },
+      "paginationEvidence": "157085-initial/result.json",
+      "paginationSha256": "d0856f8ceb454afaae066eea4ef90c96ac72b16e84044d597a0c02c883dcb721",
+      "officialReference": "https://hr.uky.edu/careers"
+    },
+    {
+      "id": "157289",
+      "name": "University of Louisville",
+      "provider": "workday",
+      "count": 135,
+      "complete": true,
+      "pagination": "7 listing pages, 135/135 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://uofl.wd1.myworkdayjobs.com/UofLCareerSite?jobFamilyGroup=122eabeb58371000c79b8793f92f0000",
+      "ownershipEvidence": {
+        "file": "157289-detail.json",
+        "matched": "University of Louisville",
+        "excerpt": "University of Louisville, School of Medicine, is seeking highly motivated emergency medicine residency-trained, board certified, or board eligible/ABEM/ABOEM physician for a full-time faculty position"
+      },
+      "paginationEvidence": "157289-initial/result.json",
+      "paginationSha256": "f12f85c18e36fbd5070d30e1ab082619618a7cdf658c6d20ee915d2a7d3c45b8",
+      "officialReference": "https://louisville.edu/about/departments/human-resources/careers"
+    },
+    {
+      "id": "157447",
+      "name": "Northern Kentucky University",
+      "provider": "workday",
+      "count": 91,
+      "complete": true,
+      "pagination": "5 listing pages, 91/91 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://nku.wd108.myworkdayjobs.com/en-US/NKU_External/job/Part-time-faculty_JR100071",
+      "ownershipEvidence": {
+        "file": "157447-detail.json",
+        "matched": "Northern Kentucky University",
+        "excerpt": "Northern Kentucky University. - \u200b The successful candidate will be required to demonstrate competent solo patrol and investigative abilities by satisfying the knowledge and"
+      },
+      "paginationEvidence": "157447-initial/result.json",
+      "paginationSha256": "12f90d870b5e4091051483b0c3066acc89af601740283023a7da070327cdf55f",
+      "officialReference": "https://jobs.nku.edu/postings/14011/print_preview"
+    },
+    {
+      "id": "159391",
+      "name": "Louisiana State University and Agricultural & Mechanical College",
+      "provider": "workday",
+      "count": 314,
+      "complete": true,
+      "pagination": "16 listing pages, 314/314 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "LSU public employer board; campus/unit assignment requires posting review",
+      "careersUrl": "https://lsu.wd1.myworkdayjobs.com/en-US/LSU/job/Part-time-Adjunct-Instructor--Biology_R00106821",
+      "ownershipEvidence": {
+        "file": "159391-detail.json",
+        "matched": "Louisiana State University",
+        "excerpt": "Louisiana State University\u2019s partner, nextSource Workforce Solutions, for Employer of Record Services including but not limited to employment, benefits, payroll, and tax compliance. Positions"
+      },
+      "paginationEvidence": "159391-initial/result.json",
+      "paginationSha256": "4438ea954cc54cfa6999855386b1bd607cd74a971c32cc5e06b33df5b3fd870c",
+      "officialReference": "https://geauxbig.lsu.edu/hrm/careers/index.php"
+    },
+    {
+      "id": "159416",
+      "name": "Louisiana State University-Shreveport",
+      "provider": "neogov",
+      "count": 3,
+      "complete": true,
+      "pagination": "2 requests; 3/3 unique advertised postings",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "LSU-Shreveport department on Louisiana state board",
+      "careersUrl": "https://www.governmentjobs.com/careers/louisiana?department=LSU-Shreveport",
+      "ownershipEvidence": {
+        "file": "lsus-posting.html",
+        "matched": "LSU-Shreveport",
+        "excerpt": "LSU-Shreveport Opening Date 09/28/2026 Closing Date 10/31/2026 11:59 PM Central Description Benefits About this Job LSU in Shreveport invites applications for the position of"
+      },
+      "paginationEvidence": "159416-filtered/result.json",
+      "paginationSha256": "18aea3c0b75547208dac62d07fb7d96d3905807328f363628c11d9c109178d2f",
+      "officialReference": "https://www.lsus.edu/faculty-and-staff/human-resources/hiring-adjuncts"
+    },
+    {
+      "id": "161457",
+      "name": "University of New England",
+      "provider": "peopleadmin",
+      "count": 74,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://une.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "161457-ownership/0.html",
+        "matched": "University of New England",
+        "excerpt": "University of New England Career Opportunities | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log In /Create Account Help Policies"
+      },
+      "paginationEvidence": "161457-initial/result.json",
+      "paginationSha256": "43bc7916453f0f83e602d11d8ba209783b9dc66d2689e3aaf8b9070ec3db9e2b",
+      "officialReference": "https://une.peopleadmin.com/postings/search"
+    },
+    {
+      "id": "163657",
+      "name": "Prince George's Community College",
+      "provider": "peopleadmin",
+      "count": 170,
+      "complete": true,
+      "pagination": "6 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://pgcc.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "163657-ownership/0.html",
+        "matched": "Prince George's",
+        "excerpt": "Prince George's Community College Employment Opportunities | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account"
+      },
+      "paginationEvidence": "163657-initial/result.json",
+      "paginationSha256": "88b5506f7a689e846dad15cb977a596f222291e6a049e3b5134a59913e1193af",
+      "officialReference": "https://www.pgcc.edu/careers/"
+    },
+    {
+      "id": "166027",
+      "name": "Harvard University",
+      "provider": "peopleadmin",
+      "count": 231,
+      "complete": true,
+      "pagination": "8 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Harvard academic positions",
+      "careersUrl": "https://academicpositions.harvard.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "166027-ownership/0.html",
+        "matched": "Harvard University",
+        "excerpt": "Harvard University invite applications for a tenure track position with a rank of Assistant Professor. We seek outstanding candidates working in the field of"
+      },
+      "paginationEvidence": "166027-initial/result.json",
+      "paginationSha256": "60e828336702aafe6da75b5681da2eb16f37f446e45d48174017e075d0d0a3ce",
+      "officialReference": "https://hr.harvard.edu/careers"
+    },
+    {
+      "id": "170790",
+      "name": "Macomb Community College",
+      "provider": "neogov",
+      "count": 33,
+      "complete": true,
+      "pagination": "5 requests; 33/33 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/macombcc",
+      "ownershipEvidence": {
+        "file": "170790-ownership/0.html",
+        "matched": "Macomb Community College",
+        "excerpt": "Macomb Community College Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "170790-scoped/result.json",
+      "paginationSha256": "2b8162439503946189fef38c712c67c5856dae72869b0a17a7c635099b348913",
+      "officialReference": "https://www.schooljobs.com/careers/macombcc"
+    },
+    {
+      "id": "172617",
+      "name": "Washtenaw Community College",
+      "provider": "peopleadmin",
+      "count": 96,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.wccnet.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "172617-ownership/0.html",
+        "matched": "Washtenaw Community College",
+        "excerpt": "Washtenaw Community College | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account Help Contact Us"
+      },
+      "paginationEvidence": "172617-initial/result.json",
+      "paginationSha256": "c4cdae570853ae333e1c6e7cdc4474e316e72c8a72771d1bda3f5fe9089a5aa6",
+      "officialReference": "https://www.wccnet.edu/mywcc/faculty-staff/human-resources/jobs.php"
+    },
+    {
+      "id": "174428",
+      "name": "Normandale Community College",
+      "provider": "workday",
+      "count": 3,
+      "complete": true,
+      "pagination": "1 listing pages, 3/3 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Normandale Institution facet on Minnesota State board",
+      "careersUrl": "https://minnstate.wd115.myworkdayjobs.com/en-US/Minnesota_State_Careers",
+      "ownershipEvidence": {
+        "file": "174428-detail.json",
+        "matched": "Normandale Community College",
+        "excerpt": "Normandale Community College Classification Title: Information Technology Spec 2 Bargaining Unit / Union: 214: Minnesota Association of Professional Employees City: Bloomington FLSA: Non Job"
+      },
+      "paginationEvidence": "174428-scoped/result.json",
+      "paginationSha256": "e67846a38450ff0af187e08873c7785873fb7112c0a6b34f3de41c17feb33b03",
+      "officialReference": "https://www.normandale.edu/why-normandale/about/human-resources/index.html"
+    },
+    {
+      "id": "175014",
+      "name": "Rasmussen University-Minnesota",
+      "provider": "ultipro",
+      "count": 76,
+      "complete": true,
+      "pagination": "2 API pages; 76/76 opportunities",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Rasmussen employer board across campuses; not Minnesota-only",
+      "careersUrl": "https://recruiting.ultipro.com/AME1070/JobBoard/cbf863ee-da68-4d60-9da0-e17b3404411c/?q=&o=postedDateDesc",
+      "ownershipEvidence": {
+        "file": "175014-ownership/0.html",
+        "matched": "Rasmussen",
+        "excerpt": "Rasmussen University You are using an unsupported browser. To use this site, please use a supported browser. Download Firefox Download Chrome Download Internet Explorer"
+      },
+      "paginationEvidence": "175014-initial/result.json",
+      "paginationSha256": "357fedf56ebe7f449fc7e375dfae75d5f4dbcaa31866d799cac2b5a98dea6551",
+      "officialReference": "https://www.rasmussen.edu/about-rasmussen/careers/adjunct-careers/"
+    },
+    {
+      "id": "178721",
+      "name": "Park University",
+      "provider": "workday",
+      "count": 10,
+      "complete": true,
+      "pagination": "1 listing pages, 10/10 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://park.wd1.myworkdayjobs.com/ParkUniversityCareers?timeType=1851260486fd100728d3e4fb5bf60000",
+      "ownershipEvidence": {
+        "file": "178721-detail.json",
+        "matched": "Park University",
+        "excerpt": "Park University\u2019s online programs to local military, corporate, and community partners tied to the region. - Execute targeted outreach and follow-up strategies to cultivate"
+      },
+      "paginationEvidence": "178721-initial/result.json",
+      "paginationSha256": "fa8c934cb4d173495300735844c25ed6323f601e518646405f251aa2adbc9f94",
+      "officialReference": "https://www.park.edu/careers/"
+    },
+    {
+      "id": "179308",
+      "name": "Saint Louis Community College",
+      "provider": "neogov",
+      "count": 120,
+      "complete": true,
+      "pagination": "26 requests; 120/120 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/stlcc",
+      "ownershipEvidence": {
+        "file": "179308-ownership/1.html",
+        "matched": "St. Louis Community College",
+        "excerpt": "St. Louis Community College, you\u2019re not just filling a role \u2014 you\u2019re helping open doors for students who are building better futures for themselves"
+      },
+      "paginationEvidence": "179308-recovered/result.json",
+      "paginationSha256": "27194278413e1ba12c7e5e92dbe899105927f8b730539830679a1e12ee2cee5f",
+      "officialReference": "https://stlcc.edu/careers/"
+    },
+    {
+      "id": "180814",
+      "name": "Bellevue University",
+      "provider": "adp-workforcenow",
+      "count": 4,
+      "complete": true,
+      "pagination": "1 API pages; 4/4 requisitions",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=191fb38a-3b70-4f49-b37f-cb2eda186474&ccId=9201943375161_2&lang=en_US",
+      "ownershipEvidence": {
+        "file": "180814-ownership/1.html",
+        "matched": "Bellevue University",
+        "excerpt": "Bellevue University Careers | Bellevue University Skip to main content Visit Campus Bruin Support Current Students Login Search Programs Get Started Tuition & Aid"
+      },
+      "paginationEvidence": "180814-initial/result.json",
+      "paginationSha256": "5d05d8c4b5871e3abfb12aafe5cf548dfde46a2e5279d77290fb8ef4067869f8",
+      "officialReference": "https://web.bellevue.edu/adjunct_OpenPositions/"
+    },
+    {
+      "id": "181303",
+      "name": "Metropolitan Community College Area",
+      "provider": "workday",
+      "count": 67,
+      "complete": true,
+      "pagination": "4 listing pages, 67/67 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://mccneb.wd5.myworkdayjobs.com/en-US/mccnebjobs/job/English-Adjunct-Instructor_JR100368",
+      "ownershipEvidence": {
+        "file": "181303-detail.json",
+        "matched": "Metropolitan Community College",
+        "excerpt": "Metropolitan Community College. This position develops relationships and is first point of contact for individuals in the suspect to college applicant conversion journey. The"
+      },
+      "paginationEvidence": "181303-initial/result.json",
+      "paginationSha256": "02d7dc58c6dff4d115d0b0fab6d5890cf2264150df4e999a1a881d9f5376fd5e",
+      "officialReference": "https://www.mccneb.edu/about-mcc/employment"
+    },
+    {
+      "id": "182005",
+      "name": "College of Southern Nevada",
+      "provider": "workday",
+      "count": 169,
+      "complete": true,
+      "pagination": "9 listing pages, 169/169 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://nshe.wd1.myworkdayjobs.com/en-US/CSN-External/job/CSN---Charleston-Campus/Adjunct-Mathematics-Instructor---FY-2021-2022_R0125823",
+      "ownershipEvidence": {
+        "file": "182005-detail.json",
+        "matched": "College of Southern Nevada",
+        "excerpt": "College of Southern Nevada appreciates your interest in employment at our growing institution. We want your application process to go smoothly and quickly. We"
+      },
+      "paginationEvidence": "182005-initial/result.json",
+      "paginationSha256": "22a1ed365721a2c49065a82cd4fa812a900dac51443285bedd3373be335c6bf9",
+      "officialReference": "https://nshe.wd1.myworkdayjobs.com/en-US/CSN-External/job/CSN---Charleston-Campus/Adjunct-Mathematics-Instructor---FY-2021-2022_R0125823"
+    },
+    {
+      "id": "183026",
+      "name": "Southern New Hampshire University",
+      "provider": "workday",
+      "count": 60,
+      "complete": true,
+      "pagination": "3 listing pages, 60/60 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://snhu.wd503.myworkdayjobs.com/External_Career_Site/job/On-Site-New-Hampshire/On-Campus-Adjunct-Instructor---Engineering_R0014807/apply",
+      "ownershipEvidence": {
+        "file": "183026-detail.json",
+        "matched": "Southern New Hampshire University",
+        "excerpt": "Southern New Hampshire University is a team of innovators. World changers. Individuals who believe in progress with purpose. Since 1932, our people-centered strategy has"
+      },
+      "paginationEvidence": "183026-initial/result.json",
+      "paginationSha256": "023e10eff806bb5623924c93f569e0de6545b575c16aeb71c8e25eccd1a09f6e",
+      "officialReference": "https://jobs.snhu.edu/en/career-areas/online-teaching-jobs/"
+    },
+    {
+      "id": "183877",
+      "name": "Rowan College at Burlington County",
+      "provider": "neogov",
+      "count": 27,
+      "complete": true,
+      "pagination": "4 requests; 27/27 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/rcbcedu",
+      "ownershipEvidence": {
+        "file": "183877-ownership/0.html",
+        "matched": "Rowan College at Burlington County",
+        "excerpt": "Rowan College at Burlington County For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable"
+      },
+      "paginationEvidence": "183877-scoped/result.json",
+      "paginationSha256": "7474ae871d0324c733951c5f0e3426ef03d4eadd42a1e2b515a12a0a8779512a",
+      "officialReference": "https://www.schooljobs.com/careers/rcbcedu"
+    },
+    {
+      "id": "186380",
+      "name": "Rutgers University-New Brunswick",
+      "provider": "peopleadmin",
+      "count": 960,
+      "complete": true,
+      "pagination": "32 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Rutgers university-wide board; not New Brunswick-only",
+      "careersUrl": "https://jobs.rutgers.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "186380-ownership/0.html",
+        "matched": "Rutgers",
+        "excerpt": "Rutgers University Employment Opportunities | Search Jobs Skip to Main Content Universitywide | New Brunswick | Newark | Camden | RBHS University Search University"
+      },
+      "paginationEvidence": "186380-initial/result.json",
+      "paginationSha256": "d56544e857db68668aac7dd7d1bc34d8f8173f7a3fd29191f24422d67e57a33d",
+      "officialReference": "https://jobs.rutgers.edu/postings/271795"
+    },
+    {
+      "id": "187046",
+      "name": "Thomas Edison State University",
+      "provider": "adp-workforcenow",
+      "count": 11,
+      "complete": true,
+      "pagination": "1 API pages; 11/11 requisitions",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=089b582f-0a35-44db-98f2-170a98083ab9&ccId=19000101_000001&lang=en_US",
+      "ownershipEvidence": {
+        "file": "tesu-employment.html",
+        "matched": "Thomas Edison State University",
+        "excerpt": "Thomas Edison State University Skip to main content Return to home Higher Education. For Adults with Higher Expectations. Info For Prospective Students Current Students"
+      },
+      "paginationEvidence": "187046-initial/result.json",
+      "paginationSha256": "81710eefb2f28d2ba4ebaa7396c3ece6ad96749aecef0fd3e2da965a49811318",
+      "officialReference": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=089b582f-0a35-44db-98f2-170a98083ab9&ccId=19000101_000001&lang=en_US"
+    },
+    {
+      "id": "187532",
+      "name": "Central New Mexico Community College",
+      "provider": "workday",
+      "count": 73,
+      "complete": true,
+      "pagination": "4 listing pages, 73/73 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://chess.wd1.myworkdayjobs.com/CNMJOBS",
+      "ownershipEvidence": {
+        "file": "187532-detail.json",
+        "matched": "Central New Mexico Community College",
+        "excerpt": "Central New Mexico Community College will not discriminate in our employment practices based on an applicant\u2019s race, ethnicity, color, religion, sex, sexual orientation, gender"
+      },
+      "paginationEvidence": "187532-initial/result.json",
+      "paginationSha256": "87db8559f817cdc6070d27bf7aad0ef0313c6310eb52a0526470170a1d260c72",
+      "officialReference": "https://www.cnm.edu/depts/hr/apply-for-jobs-at-cnm"
+    },
+    {
+      "id": "187648",
+      "name": "Eastern New Mexico University-Main Campus",
+      "provider": "neogov",
+      "count": 37,
+      "complete": true,
+      "pagination": "5 requests; 37/37 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/enmu",
+      "ownershipEvidence": {
+        "file": "187648-scoped/1.txt",
+        "matched": "Eastern New Mexico",
+        "excerpt": "Eastern New Mexico University, an NCAA Division II institution and a member of the Lone Star Conference, is seeking applicants for an assistant athletic"
+      },
+      "paginationEvidence": "187648-scoped/result.json",
+      "paginationSha256": "d3c572f8c902b1e3f563f0faff204f6ea161ad3fb5e9ce7db95528e186fc841f",
+      "officialReference": "https://www.schooljobs.com/careers/enmu"
+    },
+    {
+      "id": "190521",
+      "name": "CUNY Borough of Manhattan Community College",
+      "provider": "local-parser",
+      "count": 21,
+      "complete": true,
+      "pagination": "Official single-page vacancy list, 21 linked vacancies including PDF/Word documents",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "BMCC official single-page vacancies, including linked PDF/Word postings",
+      "careersUrl": "https://www.bmcc.cuny.edu/job-opportunities/",
+      "ownershipEvidence": {
+        "file": "bmcc-official.html",
+        "matched": "Borough of Manhattan",
+        "excerpt": "Borough of Manhattan Community College The City University of New York 199 Chambers Street New York, NY 10007 Directions (212) 220-8000 Directory Notice of"
+      },
+      "paginationEvidence": "190521-browser.json",
+      "paginationSha256": "577f9febf52b346e673e9cff770fa73d1fda6764f9def014e755c0da34fb361c",
+      "officialReference": "https://www.bmcc.cuny.edu/job-opportunities/"
+    },
+    {
+      "id": "198154",
+      "name": "Cape Fear Community College",
+      "provider": "neogov",
+      "count": 145,
+      "complete": true,
+      "pagination": "16 requests; 145/145 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/cfcc",
+      "ownershipEvidence": {
+        "file": "198154-scoped/10.txt",
+        "matched": "Cape Fear",
+        "excerpt": "Cape Fear Community College (CFCC) facilities for (CE) courses as needed. SUPERVISION RECEIVED AND EXERCISED: Receives general supervision from the EWD Director, Pender County"
+      },
+      "paginationEvidence": "198154-scoped/result.json",
+      "paginationSha256": "100473428c233fc0c46c04111e2f22a89b10607ab4f24154060ea7fedd612b53",
+      "officialReference": "https://www.schooljobs.com/careers/cfcc"
+    },
+    {
+      "id": "198260",
+      "name": "Central Piedmont Community College",
+      "provider": "neogov",
+      "count": 47,
+      "complete": true,
+      "pagination": "6 requests; 47/47 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/cpcc",
+      "ownershipEvidence": {
+        "file": "198260-ownership/0.html",
+        "matched": "Central Piedmont Community College",
+        "excerpt": "Central Piedmont Community College application process! We recommend creating an account to receive timely alerts for new job postings and stay connected with the"
+      },
+      "paginationEvidence": "198260-scoped/result.json",
+      "paginationSha256": "7aaaf833397f00d27606faf747e81c3b5233acb594a350b29d4bc399a7e8282b",
+      "officialReference": "https://www.schooljobs.com/careers/cpcc"
+    },
+    {
+      "id": "198455",
+      "name": "Durham Technical Community College",
+      "provider": "neogov",
+      "count": 50,
+      "complete": true,
+      "pagination": "6 requests; 50/50 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/durhamtech",
+      "ownershipEvidence": {
+        "file": "198455-ownership/0.html",
+        "matched": "Durham Technical Community College",
+        "excerpt": "Durham Technical Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "198455-scoped/result.json",
+      "paginationSha256": "44e1441eec5b755e3671fc0b82ff21ee6e4581006d10ba294bc17d62105b5992",
+      "officialReference": "https://www.schooljobs.com/careers/durhamtech"
+    },
+    {
+      "id": "198464",
+      "name": "East Carolina University",
+      "provider": "peopleadmin",
+      "count": 255,
+      "complete": true,
+      "pagination": "9 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://ecu.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "198464-ownership/0.html",
+        "matched": "East Carolina University",
+        "excerpt": "East Carolina University Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Applicant Interest Card Notifications Log In /Create Account"
+      },
+      "paginationEvidence": "198464-initial/result.json",
+      "paginationSha256": "e6bb65d5a6fef2dcee4813f7f592d0f1454e98c4e674e34b39973abbaf327400",
+      "officialReference": "https://ecu.peopleadmin.com/postings/search"
+    },
+    {
+      "id": "198534",
+      "name": "Fayetteville Technical Community College",
+      "provider": "peopleadmin",
+      "count": 232,
+      "complete": true,
+      "pagination": "8 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://faytechcc.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "198534-ownership/0.html",
+        "matched": "Fayetteville Technical Community College",
+        "excerpt": "Fayetteville Technical Community College Applicant Portal | Search Jobs Skip to Main Content Home Search Jobs Log In /Create Account Help COLLEGE VIDEO ABOUT"
+      },
+      "paginationEvidence": "198534-initial/result.json",
+      "paginationSha256": "4cb195f4cc2c164b4efb9abb01d25f35ee80aeea677bfcda2d0f5a2735330520",
+      "officialReference": "https://faytechcc.edu/campus-offices/office-human-resources/"
+    },
+    {
+      "id": "198552",
+      "name": "Forsyth Technical Community College",
+      "provider": "peopleadmin",
+      "count": 70,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://careers.forsythtech.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "198552-ownership/0.html",
+        "matched": "Forsyth Technical Community College",
+        "excerpt": "Forsyth Technical Community College Employment Opportunities | Search Jobs Skip to Main Content Home Search Jobs Log In /Create Account Help Community Links City"
+      },
+      "paginationEvidence": "198552-initial/result.json",
+      "paginationSha256": "4642a0156d1b3ed23d52eb8e5f27f5ce963316846f551e090b0054ee3ba85547",
+      "officialReference": "https://careers.forsythtech.edu/postings/11695"
+    },
+    {
+      "id": "198622",
+      "name": "Guilford Technical Community College",
+      "provider": "peopleadmin",
+      "count": 160,
+      "complete": true,
+      "pagination": "6 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://gtcc.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "198622-ownership/0.html",
+        "matched": "Guilford Technical Community College",
+        "excerpt": "Guilford Technical Community College Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account Help"
+      },
+      "paginationEvidence": "198622-initial/result.json",
+      "paginationSha256": "a6fe79f5684d46b147ca44cc97469219173c0b416cc3e37c77f944fc1f30089b",
+      "officialReference": "https://gtcc.edu/about/employment/index.php"
+    },
+    {
+      "id": "199148",
+      "name": "University of North Carolina at Greensboro",
+      "provider": "peopleadmin",
+      "count": 114,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://spartantalent.uncg.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "199148-ownership/0.html",
+        "matched": "University of North Carolina at Greensboro",
+        "excerpt": "University of North Carolina at Greensboro. The postdoctoral scholar will be working on an NSF-sponsored project titled \u201cCollaborative Research: Broadening Instructional Innovation in the"
+      },
+      "paginationEvidence": "199148-initial/result.json",
+      "paginationSha256": "0828443e6d245a83503aa2a364228a64110108efbdf8bac1b2ad18041d3b67f7",
+      "officialReference": "https://spartantalent.uncg.edu/postings/33841"
+    },
+    {
+      "id": "199218",
+      "name": "University of North Carolina Wilmington",
+      "provider": "peopleadmin",
+      "count": 78,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.uncw.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "199218-ownership/0.html",
+        "matched": "University of North Carolina Wilmington",
+        "excerpt": "University of North Carolina Wilmington Employment Opportunities | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create"
+      },
+      "paginationEvidence": "199218-initial/result.json",
+      "paginationSha256": "cc03c70a1d634b56db7af21f3a08fa92378cdecce2e851d47fc6bb3a902ccca3",
+      "officialReference": "https://jobs.uncw.edu/postings/38946"
+    },
+    {
+      "id": "199281",
+      "name": "University of North Carolina at Pembroke",
+      "provider": "peopleadmin",
+      "count": 62,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.uncp.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "199281-ownership/0.html",
+        "matched": "University of North Carolina at Pembroke",
+        "excerpt": "University of North Carolina at Pembroke invites applications for a full-time, tenure-track Assistant Professor of Analytical and Forensic Chemistry position beginning August 2027.UNC Pembroke"
+      },
+      "paginationEvidence": "199281-initial/result.json",
+      "paginationSha256": "9a27dedc5d01f29e1488246a5ff1757e90c6617393690c4b9c8f5035ace24aee",
+      "officialReference": "https://jobs.uncp.edu/postings/13522"
+    },
+    {
+      "id": "199333",
+      "name": "Pitt Community College",
+      "provider": "neogov",
+      "count": 33,
+      "complete": true,
+      "pagination": "5 requests; 33/33 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/pittccedu",
+      "ownershipEvidence": {
+        "file": "199333-ownership/0.html",
+        "matched": "Pitt Community",
+        "excerpt": "Pitt Community College employment opportunities portal and thank you for your interest in joining the Bulldog Family. We recommend creating an account to receive"
+      },
+      "paginationEvidence": "199333-scoped/result.json",
+      "paginationSha256": "0cdc003cbb5aeda1fdbb282c0cee65788642062c0a5e34b4f56b75cdc0dff309",
+      "officialReference": "https://www.schooljobs.com/careers/pittccedu"
+    },
+    {
+      "id": "199856",
+      "name": "Wake Technical Community College",
+      "provider": "neogov",
+      "count": 33,
+      "complete": true,
+      "pagination": "5 requests; 33/33 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/waketechedu",
+      "ownershipEvidence": {
+        "file": "199856-ownership/0.html",
+        "matched": "Wake Tech",
+        "excerpt": "Wake Tech Community College Job Opportunities For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to"
+      },
+      "paginationEvidence": "199856-scoped/result.json",
+      "paginationSha256": "75ec77ba18d08819e2477aab1056a759a71689f91cd3336f3aa9d517a586c366",
+      "officialReference": "http://www.waketech.edu/post/wt-news-story/996852"
+    },
+    {
+      "id": "201885",
+      "name": "University of Cincinnati-Main Campus",
+      "provider": "successfactors",
+      "count": 327,
+      "complete": true,
+      "pagination": "33 API pages; 327/327 distinct IDs",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "University of Cincinnati Main Campus facet",
+      "careersUrl": "https://jobs.uc.edu/",
+      "ownershipEvidence": {
+        "file": "201885-ownership/0.html",
+        "matched": "University of Cincinnati",
+        "excerpt": "University of Cincinnati is required by federal law to comply with the Jeanne Clery Disclosure of Campus Security Policy and Campus Crime Statistics Act"
+      },
+      "paginationEvidence": "201885-corrected/result.json",
+      "paginationSha256": "468524d8532dc3cc8427f65ae40f0d7b5b431fbef43f015d37cee884ab0d98ce",
+      "officialReference": "https://jobs.uc.edu/job/Adjunct-Instructor%2C-Department-of-Management%2C-Lindner-College-of-Business/101694-en_US/"
+    },
+    {
+      "id": "201946",
+      "name": "University of Cincinnati-Clermont College",
+      "provider": "successfactors",
+      "count": 13,
+      "complete": true,
+      "pagination": "2 API pages; 13/13 distinct IDs",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "University of Cincinnati Clermont College facet",
+      "careersUrl": "https://jobs.uc.edu/",
+      "ownershipEvidence": {
+        "file": "201946-corrected/2.json",
+        "matched": "Clermont",
+        "excerpt": "Clermont College\"],\"unifiedUrlTitle\":\"Adjunct-Instructor%2C-Public-Health-and-Rural-Population-Health%2C-UC-Clermont\",\"unifiedStandardStart\":\"10/15/26\",\"filter2\":[\"Part-Time Faculty\"],\"custRCM_workArrangement\":[\"Hybrid\"],\"id\":\"1"
+      },
+      "paginationEvidence": "201946-corrected/result.json",
+      "paginationSha256": "2e577e36d541893635335b69cc2bdde0b6809447358f0e6eb8304289b5066b10",
+      "officialReference": "https://jobs.uc.edu/"
+    },
+    {
+      "id": "201955",
+      "name": "University of Cincinnati-Blue Ash College",
+      "provider": "successfactors",
+      "count": 14,
+      "complete": true,
+      "pagination": "2 API pages; 14/14 distinct IDs",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "University of Cincinnati Blue Ash Campus facet",
+      "careersUrl": "https://jobs.uc.edu/",
+      "ownershipEvidence": {
+        "file": "201955-corrected/2.json",
+        "matched": "Blue Ash",
+        "excerpt": "Blue Ash Campus\"],\"unifiedUrlTitle\":\"Assistant-Professor%2C-Physics%2C-Tenure-Track%2C-UC-Blue-Ash-College\",\"unifiedStandardStart\":\"10/5/26\",\"filter2\":[\"Full-Time Faculty\"],\"custRCM_workArrangement\":[\"Onsite\"],\"id\":\"104336\",\"uni"
+      },
+      "paginationEvidence": "201955-corrected/result.json",
+      "paginationSha256": "18e8ae344988c6424f6a50986e12059131772cf96ddb0f1da61bc51868ca93b7",
+      "officialReference": "https://jobs.uc.edu/"
+    },
+    {
+      "id": "202222",
+      "name": "Columbus State Community College",
+      "provider": "workday",
+      "count": 116,
+      "complete": true,
+      "pagination": "6 listing pages, 116/116 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://cscc.wd1.myworkdayjobs.com/en-US/CSCC_ext/job/Adjunct---COLS-1100_JR001547",
+      "ownershipEvidence": {
+        "file": "202222-detail.json",
+        "matched": "Columbus State Community College",
+        "excerpt": "Columbus State Community College, please l og in to Workday to use the internal application process. Thank you for your interest in positions at"
+      },
+      "paginationEvidence": "202222-initial/result.json",
+      "paginationSha256": "e411e7d00484878bc8f46ba23dc7bd4a3dfae5f5d541e46e30468df8a1958ad4",
+      "officialReference": "https://www.cscc.edu/about/policies-procedures/3-02F.pdf"
+    },
+    {
+      "id": "202806",
+      "name": "Franklin University",
+      "provider": "ultipro",
+      "count": 18,
+      "complete": true,
+      "pagination": "1 API pages; 18/18 opportunities",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://recruiting.ultipro.com/FRA1012FRANK/JobBoard/e51857cc-39da-44b8-a30e-839c982ff791/?q=&o=postedDateDesc",
+      "ownershipEvidence": {
+        "file": "202806-ownership/1.html",
+        "matched": "Franklin University",
+        "excerpt": "Franklin University Job Posting Home Adjunct Faculty-Education (Cuyahoga County, OH) Apply Today Position Type: Part Time Faculty Location: Cuyahoga County Franklin University has an"
+      },
+      "paginationEvidence": "202806-initial/result.json",
+      "paginationSha256": "13caa3c955f7a338f64058eac1971f32c125449cbe0afe1a532ba84009482077",
+      "officialReference": "https://www.franklin.edu/about-us/careers-at-franklin/positions/adjunct-faculty-education-cuyahoga-county-oh"
+    },
+    {
+      "id": "204857",
+      "name": "Ohio University-Main Campus",
+      "provider": "peopleadmin",
+      "count": 131,
+      "complete": true,
+      "pagination": "5 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Ohio University employer board; regional campuses may be included",
+      "careersUrl": "https://www.ohiouniversityjobs.com/postings/search",
+      "ownershipEvidence": {
+        "file": "204857-ownership/0.html",
+        "matched": "Ohio University",
+        "excerpt": "Ohio University - Job Site | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account Help"
+      },
+      "paginationEvidence": "204857-initial/result.json",
+      "paginationSha256": "2739bc66004eef1f942e2da46ca8d79ebfa4196ffb30f52b022539802a824a6f",
+      "officialReference": "https://www.ohiouniversityjobs.com/postings/search"
+    },
+    {
+      "id": "205470",
+      "name": "Sinclair Community College",
+      "provider": "peopleadmin",
+      "count": 106,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.sinclair.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "205470-ownership/0.html",
+        "matched": "Sinclair Community College",
+        "excerpt": "Sinclair Community College Career Site | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account Help"
+      },
+      "paginationEvidence": "205470-initial/result.json",
+      "paginationSha256": "743f956168ceb17f105a0a2d4b1651867e7d0861d44defb12a2ca73c2695a443",
+      "officialReference": "https://jobs.sinclair.edu/postings/19275"
+    },
+    {
+      "id": "207449",
+      "name": "Oklahoma City Community College",
+      "provider": "peopleadmin",
+      "count": 147,
+      "complete": true,
+      "pagination": "5 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.occcjobs.com/postings/search",
+      "ownershipEvidence": {
+        "file": "207449-ownership/0.html",
+        "matched": "Oklahoma City Community College",
+        "excerpt": "Oklahoma City Community College | Search Jobs Skip to Main Content Home Search Jobs Log In /Create Account Help OCCC Home Campus Security Report"
+      },
+      "paginationEvidence": "207449-initial/result.json",
+      "paginationSha256": "c0834a44232a925d4e262ee8ea892e877e39913840811c10f9b78fe0d6d8b4ab",
+      "officialReference": "https://www.occcjobs.com/postings/search"
+    },
+    {
+      "id": "207847",
+      "name": "Southeastern Oklahoma State University",
+      "provider": "csod",
+      "count": 20,
+      "complete": true,
+      "pagination": "1 API pages; 20/20 requisitions",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://seok.csod.com/ux/ats/careersite/1/home?c=seok",
+      "ownershipEvidence": {
+        "file": "207847-ownership/1.html",
+        "matched": "Southeastern Oklahoma State University",
+        "excerpt": "Southeastern Oklahoma State University\u2019s mission by providing services in the areas of human resources including: employee benefits, salary administration, worker\u2019s compensation, human resource development"
+      },
+      "paginationEvidence": "207847-initial/result.json",
+      "paginationSha256": "234b5a9d2e0625c962026922fd16ef42301f089a29803c9f14581b4a0fcba3a4",
+      "officialReference": "https://www.se.edu/human-resources/"
+    },
+    {
+      "id": "207935",
+      "name": "Tulsa Community College",
+      "provider": "neogov",
+      "count": 79,
+      "complete": true,
+      "pagination": "9 requests; 79/79 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/tulsacc",
+      "ownershipEvidence": {
+        "file": "207935-ownership/0.html",
+        "matched": "Tulsa Community College",
+        "excerpt": "Tulsa Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript in"
+      },
+      "paginationEvidence": "207935-scoped/result.json",
+      "paginationSha256": "443b900bb533ba0ecdafcb7e460582d0f78b9cbcb295f7ef693bbe352b6c2f30",
+      "officialReference": "https://www.tulsacc.edu/about-tcc/employment"
+    },
+    {
+      "id": "209542",
+      "name": "Oregon State University",
+      "provider": "peopleadmin",
+      "count": 59,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Oregon State employer board across locations",
+      "careersUrl": "https://jobs.oregonstate.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "209542-ownership/0.html",
+        "matched": "Oregon State University",
+        "excerpt": "Oregon State University Jobs Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account FAQs"
+      },
+      "paginationEvidence": "209542-initial/result.json",
+      "paginationSha256": "4dce1af253cdbecfa33b4f257e547c30cdcd24a54d284d9afa1e8178d4cc762e",
+      "officialReference": "https://jobs.oregonstate.edu/postings/166742"
+    },
+    {
+      "id": "209746",
+      "name": "Portland Community College",
+      "provider": "workday",
+      "count": 114,
+      "complete": true,
+      "pagination": "6 listing pages, 114/114 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://portlandcc.wd12.myworkdayjobs.com/External",
+      "ownershipEvidence": {
+        "file": "209746-detail.json",
+        "matched": "Portland Community College",
+        "excerpt": "Portland Community College, Portland, OR Job type: Part time Posted: Posted 3 Days Ago Req ID: JR-2562 Join our Team at Portland Community College"
+      },
+      "paginationEvidence": "209746-initial/result.json",
+      "paginationSha256": "f852dadd0abbe934ef40b4ddc99fdfa775766ebbf8a6a83d26e4e4cabd8f2462",
+      "officialReference": "https://portlandcc.wd12.myworkdayjobs.com/External"
+    },
+    {
+      "id": "212133",
+      "name": "Eastern University",
+      "provider": "neogov",
+      "count": 66,
+      "complete": true,
+      "pagination": "8 requests; 66/66 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/easternpa",
+      "ownershipEvidence": {
+        "file": "212133-ownership/0.html",
+        "matched": "Eastern University",
+        "excerpt": "Eastern University Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript in"
+      },
+      "paginationEvidence": "212133-scoped/result.json",
+      "paginationSha256": "dfd1645cece65dd8b6ce561f42cd427c9f43f0924458902171c6b9a30680de69",
+      "officialReference": "https://www.schooljobs.com/careers/easternpa"
+    },
+    {
+      "id": "214111",
+      "name": "Montgomery County Community College",
+      "provider": "neogov",
+      "count": 74,
+      "complete": true,
+      "pagination": "9 requests; 74/74 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/mc3",
+      "ownershipEvidence": {
+        "file": "214111-ownership/0.html",
+        "matched": "Montgomery County Community College",
+        "excerpt": "Montgomery County Community College For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "214111-scoped/result.json",
+      "paginationSha256": "3a1cd4e95836c02c60b4f09a9d4a985e6e933c631aa3f27db2f0cc2c28e24271",
+      "officialReference": "https://www.schooljobs.com/careers/mc3"
+    },
+    {
+      "id": "218113",
+      "name": "Greenville Technical College",
+      "provider": "csod",
+      "count": 30,
+      "complete": true,
+      "pagination": "2 API pages; 30/30 requisitions",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://gvltec.csod.com/ux/ats/careersite/1/home?c=gvltec",
+      "ownershipEvidence": {
+        "file": "218113-ownership/1.html",
+        "matched": "Greenville Technical College",
+        "excerpt": "Greenville Technical College COVID-19 precautions for safety \u00bb --> Presidential Search --> --> Skip to Main Content APPLY NOW Calendar Student Login GTC4me GTC4me"
+      },
+      "paginationEvidence": "218113-initial/result.json",
+      "paginationSha256": "58b537ef82a03bd017d90588ee5af26a8a50c7cbb1ace3bd61640c418f6b95f4",
+      "officialReference": "https://www.gvltec.edu/about_greenvilletech/employment/index.html"
+    },
+    {
+      "id": "218894",
+      "name": "Trident Technical College",
+      "provider": "neogov",
+      "count": 38,
+      "complete": true,
+      "pagination": "5 requests; 38/38 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.governmentjobs.com/careers/sc/tridenttech",
+      "ownershipEvidence": {
+        "file": "218894-ownership/0.html",
+        "matched": "Trident Technical College",
+        "excerpt": "Trident Technical College Help & Support Translate Back To Filter Categories Current Filter Title Current Filter Mobile Title Reset All Close Current Filter Description"
+      },
+      "paginationEvidence": "218894-scoped/result.json",
+      "paginationSha256": "3f7177fa957e3b06f39212f2836870dec33fd2abead99770a625d21865b721fd",
+      "officialReference": "https://www.governmentjobs.com/careers/sc/tridenttech"
+    },
+    {
+      "id": "219471",
+      "name": "University of South Dakota",
+      "provider": "peopleadmin",
+      "count": 46,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "University of South Dakota organizational tier 1 = 1259",
+      "careersUrl": "https://yourfuture.sdbor.edu/postings/search?query_organizational_tier_1_id%5B%5D=1259",
+      "ownershipEvidence": {
+        "file": "219471-ownership/0.html",
+        "matched": "University of South Dakota",
+        "excerpt": "University of South Dakota Posting Number City No Selection Unspecified Aberdeen Alexandria Armour Belle Fourche Beresford Bison Britton Brookings Buffalo Burke Canton Chamberlain Clark"
+      },
+      "paginationEvidence": "219471-scoped/result.json",
+      "paginationSha256": "b60b0413736eafa75bb4957acf9949198cfb6fc87a7ada68f3ff1eaf13be08d3",
+      "officialReference": "https://www.usd.edu/About/Departments-Offices-and-Resources/Human-Resources/Employment"
+    },
+    {
+      "id": "220862",
+      "name": "University of Memphis",
+      "provider": "oraclecloud",
+      "count": 165,
+      "complete": true,
+      "pagination": "1 API pages; 165/165 jobs",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://ibqajb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/jobs",
+      "ownershipEvidence": {
+        "file": "220862-ownership/1.html",
+        "matched": "Memphis",
+        "excerpt": "Memphis Search Search Search MENU | Search Search Admissions & Aid Undergraduate Graduate Transfer Dual Enrollment International Law School Scholarship Financial Aid Academics Academic"
+      },
+      "paginationEvidence": "220862-initial/result.json",
+      "paginationSha256": "b823d8f40e5a7efc888a99aa8ca8e682990335aa4017c2d8ee4270219a50f45f",
+      "officialReference": "https://www.memphis.edu/universityschools/employment/"
+    },
+    {
+      "id": "222992",
+      "name": "Austin Community College District",
+      "provider": "workday",
+      "count": 88,
+      "complete": true,
+      "pagination": "5 listing pages, 88/88 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://austincc.wd1.myworkdayjobs.com/en-US/External?timeType=2f34dcec13810172ce244b0c661f6000&jobFamilyGroup=38af3f28ce3701e5f984329054033c61",
+      "ownershipEvidence": {
+        "file": "222992-ownership/1.html",
+        "matched": "Austin Community College District",
+        "excerpt": "Austin Community College District Select this link if you are using screen reading or another assistive technology before continuing to enable accessible content on"
+      },
+      "paginationEvidence": "222992-initial/result.json",
+      "paginationSha256": "1d064a0d23e1698c4e9a845876d58fb935a8a0421f802dab887fbdd359a5b840",
+      "officialReference": "https://www.austincc.edu/jobs/"
+    },
+    {
+      "id": "223427",
+      "name": "Blinn College District",
+      "provider": "csod",
+      "count": 61,
+      "complete": true,
+      "pagination": "3 API pages; 61/61 requisitions",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://blinn.csod.com/ux/ats/careersite/1/home?c=blinn",
+      "ownershipEvidence": {
+        "file": "blinn-ownership.json",
+        "matched": "Official Blinn employment redirect",
+        "excerpt": "Official Blinn page links the blinn.csod.com public career site."
+      },
+      "paginationEvidence": "223427-initial/result.json",
+      "paginationSha256": "3b40919ac3b3bbaf3ea3f499fa9ef2bfec1fc48e98c6afb33ff553073b440161",
+      "officialReference": "https://www.blinn.edu/EmploymentSite.html"
+    },
+    {
+      "id": "223816",
+      "name": "Central Texas College",
+      "provider": "neogov",
+      "count": 49,
+      "complete": true,
+      "pagination": "6 requests; 49/49 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/ctcd",
+      "ownershipEvidence": {
+        "file": "223816-ownership/0.html",
+        "matched": "Central Texas College",
+        "excerpt": "Central Texas College Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "223816-scoped/result.json",
+      "paginationSha256": "8bef6d8ef0033c86f6b11bc41ae9786fb81c2974356033804f55eecfa97a8a58",
+      "officialReference": "https://www.ctcd.edu/academics/instructional-departments/child-development/child-development-and-teacher-education-faculty/adjunct-faculty/"
+    },
+    {
+      "id": "224110",
+      "name": "North Central Texas College",
+      "provider": "peopleadmin",
+      "count": 96,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://employment.nctc.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "224110-ownership/0.html",
+        "matched": "North Central Texas College",
+        "excerpt": "North Central Texas College and partner independent school districts (ISDs), this role ensures alignment of dual credit programs with institutional priorities, state mandates, and"
+      },
+      "paginationEvidence": "224110-initial/result.json",
+      "paginationSha256": "dd24021df9c0ca7da2ee2fe0f7edfa350b04168c96078ee5e6be94fdb816e3e7",
+      "officialReference": "https://employment.nctc.edu/postings/11857"
+    },
+    {
+      "id": "224554",
+      "name": "East Texas A&M University",
+      "provider": "workday",
+      "count": 85,
+      "complete": true,
+      "pagination": "5 listing pages, 85/85 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://tamus.wd1.myworkdayjobs.com/en-US/ETAMU_External/job/Adjunct-Faculty---CID-Human-Resources_R-073825",
+      "ownershipEvidence": {
+        "file": "224554-detail.json",
+        "matched": "East Texas A&M University",
+        "excerpt": "East Texas A&M University Department University Police Proposed Minimum Salary Commensurate Job Location Commerce, Texas Job Type Staff Job Description INSTRUCTIONS TO APPLICANT: During"
+      },
+      "paginationEvidence": "224554-initial/result.json",
+      "paginationSha256": "4189b051a156ef517f5292a4a1c573343b59cb3860babeccda9d88fba7bf678d",
+      "officialReference": "https://www.etamu.edu/human-resources/employment/"
+    },
+    {
+      "id": "224615",
+      "name": "Dallas College",
+      "provider": "workday",
+      "count": 47,
+      "complete": true,
+      "pagination": "3 listing pages, 47/47 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://dallascollege.wd1.myworkdayjobs.com/en-US/Dallas_College_Careers/job/Adjunct-Faculty--CEF-Instructors-AY-26-27_R14008",
+      "ownershipEvidence": {
+        "file": "224615-detail.json",
+        "matched": "Dallas College",
+        "excerpt": "Dallas College policy. - Academic (Faculty) positions require an on-campus presence, even when teaching online courses, in accordance with state law. Position Type Staff"
+      },
+      "paginationEvidence": "224615-initial/result.json",
+      "paginationSha256": "ff2cd618234fafbb4a9fb28bd0e43745dd84b1c85283f1ece4330644d4c8f267",
+      "officialReference": "https://careers.dallascollege.edu/us/en/faculty-jobs"
+    },
+    {
+      "id": "224642",
+      "name": "El Paso Community College",
+      "provider": "neogov",
+      "count": 160,
+      "complete": true,
+      "pagination": "17 requests; 160/160 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/epcc",
+      "ownershipEvidence": {
+        "file": "224642-ownership/0.html",
+        "matched": "El Paso Community College",
+        "excerpt": "El Paso Community College Employment The El Paso Community College District does not discriminate on the basis of race, color, national origin, religion, sex,"
+      },
+      "paginationEvidence": "224642-scoped/result.json",
+      "paginationSha256": "ab05123bc0cc17c82f56a2ea9be1868076927d5ca3ea397e927afb38e4d1e043",
+      "officialReference": "https://www.schooljobs.com/careers/epcc"
+    },
+    {
+      "id": "226091",
+      "name": "Lamar University",
+      "provider": "neogov",
+      "count": 63,
+      "complete": true,
+      "pagination": "8 requests; 63/63 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/lamar",
+      "ownershipEvidence": {
+        "file": "226091-ownership/0.html",
+        "matched": "Lamar University",
+        "excerpt": "Lamar University | . For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "226091-scoped/result.json",
+      "paginationSha256": "65560e508e77be399ecc938963b370c4f104fb2655b571fc52f09fe18d9fabdf",
+      "officialReference": "https://jobs.lamar.edu/postings/search?query=&query_v0_posted_at_date=&261=&262=&263=&264=1&commit=Search"
+    },
+    {
+      "id": "226578",
+      "name": "McLennan Community College",
+      "provider": "neogov",
+      "count": 43,
+      "complete": true,
+      "pagination": "6 requests; 43/43 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/mclennan",
+      "ownershipEvidence": {
+        "file": "226578-ownership/0.html",
+        "matched": "McLennan Community College",
+        "excerpt": "McLennan Community College | Job Openings For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to"
+      },
+      "paginationEvidence": "226578-scoped/result.json",
+      "paginationSha256": "99884f32209ad9d2a70d6ec2a6f00d960b7e9f5ccf8b6e8cc42f31cd15adf2e2",
+      "officialReference": "https://mclennan.edu/employment/"
+    },
+    {
+      "id": "227304",
+      "name": "Odessa College",
+      "provider": "peopleadmin",
+      "count": 209,
+      "complete": true,
+      "pagination": "7 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.odessa.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "227304-ownership/0.html",
+        "matched": "Odessa College",
+        "excerpt": "Odessa College Portal | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log In /Create Account Help Search Postings (209) Hide"
+      },
+      "paginationEvidence": "227304-initial/result.json",
+      "paginationSha256": "e6e593cb9e126c376b6bfeb1bf7d5977a686f1a6e7e5e935a065f7a4b64e4781",
+      "officialReference": "https://jobs.odessa.edu/postings/15305"
+    },
+    {
+      "id": "227368",
+      "name": "The University of Texas Rio Grande Valley",
+      "provider": "peopleadmin",
+      "count": 167,
+      "complete": true,
+      "pagination": "6 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://careers.utrgv.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "227368-ownership/0.html",
+        "matched": "The University of Texas Rio Grande Valley",
+        "excerpt": "The University of Texas Rio Grande Valley Job Site | Search Jobs Skip to Main Content Home Search Jobs Job Alerts Log In /Create"
+      },
+      "paginationEvidence": "227368-initial/result.json",
+      "paginationSha256": "0843871b35530f36d3987a6c6cb6d5e96c3bf95eeda3743e7a6f70454b2c686e",
+      "officialReference": "https://careers.utrgv.edu/postings/search"
+    },
+    {
+      "id": "227881",
+      "name": "Sam Houston State University",
+      "provider": "peopleadmin",
+      "count": 396,
+      "complete": true,
+      "pagination": "14 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://shsu.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "227881-ownership/0.html",
+        "matched": "Sam Houston State University",
+        "excerpt": "Sam Houston State University | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Job Alerts Log In /Create Account Help Application"
+      },
+      "paginationEvidence": "227881-initial/result.json",
+      "paginationSha256": "f52c6a0f8e7e5c045c0baf64ad5e9264d0eaa59bbc9ecca6e47a69caacec28b9",
+      "officialReference": "https://www.shsu.edu/hiring/"
+    },
+    {
+      "id": "228723",
+      "name": "Texas A&M University-College Station",
+      "provider": "workday",
+      "count": 113,
+      "complete": true,
+      "pagination": "6 listing pages, 113/113 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Texas A&M University external board; excludes other TAMU system agencies",
+      "careersUrl": "https://tamus.wd1.myworkdayjobs.com/TAMU_External",
+      "ownershipEvidence": {
+        "file": "tamu-jobs.html",
+        "matched": "Texas A&M University",
+        "excerpt": "Texas A&M University Search Search Jobs at Texas A&M Texas A&M University Human Resources & Organizational Effectiveness Menu & Search Close Search Search About"
+      },
+      "paginationEvidence": "228723-scoped/result.json",
+      "paginationSha256": "e15ade800fea818b2670dc98fd7e63e9f21f4a650732db7de97f74ce9cd3c1e0",
+      "officialReference": "https://tamus.wd1.myworkdayjobs.com/TAMU_External"
+    },
+    {
+      "id": "230418",
+      "name": "Ensign College",
+      "provider": "workday",
+      "count": 14,
+      "complete": true,
+      "pagination": "1 listing pages, 14/14 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://wd501.myworkdaysite.com/recruiting/ensigncollege/EnsignCollege",
+      "ownershipEvidence": {
+        "file": "230418-ownership/1.html",
+        "matched": "Ensign College",
+        "excerpt": "Ensign College | Join the Ensign Team Skips to main content Mobile Navigation Admissions Admissions: Start Here Domestic Admissions International Admissions English Proficiency Requirements"
+      },
+      "paginationEvidence": "230418-initial/result.json",
+      "paginationSha256": "d8cc016f66ebd3929470e459c819f3b99f1e5aa8c25beddd72d66f66ebbf955f",
+      "officialReference": "https://www.ensign.edu/employment-opportunities"
+    },
+    {
+      "id": "230603",
+      "name": "Southern Utah University",
+      "provider": "neogov",
+      "count": 28,
+      "complete": true,
+      "pagination": "4 requests; 28/28 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/suu",
+      "ownershipEvidence": {
+        "file": "230603-ownership/0.html",
+        "matched": "Southern Utah University",
+        "excerpt": "Southern Utah University Employment Opportunities For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable"
+      },
+      "paginationEvidence": "230603-scoped/result.json",
+      "paginationSha256": "a04c14bbb90c8954bebe703f3bb8b71fa83860657903e9e5be0919d632abefb2",
+      "officialReference": "https://my.suu.edu/jobs"
+    },
+    {
+      "id": "230737",
+      "name": "Utah Valley University",
+      "provider": "neogov",
+      "count": 73,
+      "complete": true,
+      "pagination": "9 requests; 73/73 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/uvu",
+      "ownershipEvidence": {
+        "file": "230737-ownership/0.html",
+        "matched": "Utah Valley University",
+        "excerpt": "Utah Valley University Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable JavaScript"
+      },
+      "paginationEvidence": "230737-scoped/result.json",
+      "paginationSha256": "745081d630b097eef4dfd39c27b5fee993e14d89bd8cb2baa4a266224faa65e1",
+      "officialReference": "https://policy.uvu.edu/getDisplayFile/563a414765db23201153c280"
+    },
+    {
+      "id": "230746",
+      "name": "Salt Lake Community College",
+      "provider": "neogov",
+      "count": 132,
+      "complete": true,
+      "pagination": "15 requests; 132/132 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/slcc",
+      "ownershipEvidence": {
+        "file": "230746-ownership/0.html",
+        "matched": "Salt Lake Community College",
+        "excerpt": "Salt Lake Community College Careers For full functionality of this page it is necessary to enable JavaScript. Here are the instructions how to enable"
+      },
+      "paginationEvidence": "230746-scoped/result.json",
+      "paginationSha256": "5bb7868d9878489ab4e200e502c3cd9ba1fbbe0e342883387151c6327398e8ba",
+      "officialReference": "https://jobs.slcc.edu/postings/search?page=2&sort=708+desc"
+    },
+    {
+      "id": "230782",
+      "name": "Weber State University",
+      "provider": "peopleadmin",
+      "count": 162,
+      "complete": true,
+      "pagination": "6 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.weber.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "230782-ownership/0.html",
+        "matched": "Weber State University",
+        "excerpt": "Weber State University - Ogden, UT Weber State Davis - Layton, UT Morgan Center - Morgan, UT West Center - Roy, UT Center for"
+      },
+      "paginationEvidence": "230782-initial/result.json",
+      "paginationSha256": "d75ddf945725428673d36b376ef9d7b1006ba85ac2a0a1d70dd60cbd43d71d1c",
+      "officialReference": "https://jobs.weber.edu/postings/26540"
+    },
+    {
+      "id": "230861",
+      "name": "Community College of Vermont",
+      "provider": "workday",
+      "count": 16,
+      "complete": true,
+      "pagination": "1 listing pages, 16/16 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://vsc.wd108.myworkdayjobs.com/en-US/CCV/job/Part-time-Faculty-in-Arts--Communication--and-Humanities_R-2026103-1",
+      "ownershipEvidence": {
+        "file": "230861-ownership/1.html",
+        "matched": "Community College of Vermont",
+        "excerpt": "Community College of Vermont Skip to content Academics All Programs Areas of Study Credentials & Training Course Schedule Programs for Middle & High School"
+      },
+      "paginationEvidence": "230861-initial/result.json",
+      "paginationSha256": "016ceccdb8be4f0840b34af4a9f269ae39ee68389fde52f99ba35460eeb08255",
+      "officialReference": "https://ccv.edu/about/employment-at-ccv/"
+    },
+    {
+      "id": "232557",
+      "name": "Liberty University",
+      "provider": "workday",
+      "count": 56,
+      "complete": true,
+      "pagination": "3 listing pages, 56/56 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Liberty faculty board",
+      "careersUrl": "https://liberty.wd5.myworkdayjobs.com/en-US/lu_job_board_faculty/job/Residential-Adjunct-Faculty-Marketing---School-of-Business_R0004448",
+      "ownershipEvidence": {
+        "file": "232557-detail.json",
+        "matched": "Liberty University",
+        "excerpt": "Liberty University\u2019s mission of Training Champions for Christ. It is expected that \u200e\u200e\u200e\u200e\u200e\u200ea faculty member model a personal commitment to the goals and values"
+      },
+      "paginationEvidence": "232557-initial/result.json",
+      "paginationSha256": "7dd1328bc2b0ea945a93796475603dddff51698a3c14bd403e1f74ce297ee647",
+      "officialReference": "https://www.liberty.edu/jobs/"
+    },
+    {
+      "id": "232946",
+      "name": "Northern Virginia Community College",
+      "provider": "peopleadmin",
+      "count": 51,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Northern Virginia organizational tier 1 = 7897",
+      "careersUrl": "https://jobs.vccs.edu/postings/search?query_organizational_tier_1_id%5B%5D=7897",
+      "ownershipEvidence": {
+        "file": "232946-scoped/1.txt",
+        "matched": "Northern Virginia",
+        "excerpt": "Northern Virginia Community College (NOVA) invites applications for qualified individuals to join our faculty to support the mission and vision of the largest institution"
+      },
+      "paginationEvidence": "232946-scoped/result.json",
+      "paginationSha256": "7aed3d70d293b67061381122e7d9946aada5ce32e8e3c3a37468dda54e79345f",
+      "officialReference": "https://jobs.vccs.edu/postings/search?query_organizational_tier_1_id%5B%5D=7897"
+    },
+    {
+      "id": "232982",
+      "name": "Old Dominion University",
+      "provider": "peopleadmin",
+      "count": 75,
+      "complete": true,
+      "pagination": "3 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://jobs.odu.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "232982-ownership/0.html",
+        "matched": "Old Dominion University",
+        "excerpt": "Old Dominion University\u2019s Department of Educational Leadership & Workforce Development seeks applications for a full-time Assistant/Associate Professor (10-month appointment with summer employment) in the"
+      },
+      "paginationEvidence": "232982-initial/result.json",
+      "paginationSha256": "11aa790040911a5f9b18e2a42d61f1f9927d578485424bbf165adfd7126169fc",
+      "officialReference": "https://jobs.odu.edu/postings/26839"
+    },
+    {
+      "id": "233772",
+      "name": "Tidewater Community College",
+      "provider": "peopleadmin",
+      "count": 37,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "Tidewater organizational tier 1 = 7886",
+      "careersUrl": "https://jobs.vccs.edu/postings/search?query_organizational_tier_1_id%5B%5D=7886",
+      "ownershipEvidence": {
+        "file": "233772-ownership/0.html",
+        "matched": "Tidewater Community College",
+        "excerpt": "Tidewater Community College VCCS-Fellowship VCCS-Shared Services Center VCCS-System Office Virginia Highlands Community College Virginia Peninsula Community College Virginia Western Community College Wytheville Community College"
+      },
+      "paginationEvidence": "233772-scoped/result.json",
+      "paginationSha256": "cb9d60e9e6c75ad7d3312a91257e6ea8a43d88f52d8b9c6c85c829a52f16d50c",
+      "officialReference": "https://www.tcc.edu/tcc-is-hiring-adjunct-faculty/"
+    },
+    {
+      "id": "236939",
+      "name": "Washington State University",
+      "provider": "workday",
+      "count": 68,
+      "complete": true,
+      "pagination": "4 listing pages, 68/68 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Washington State university-wide board; not Pullman-only",
+      "careersUrl": "https://wsu.wd5.myworkdayjobs.com/en-US/WSU_Jobs/job/Adjunct-Faculty---College-of-Nursing--WSU-Tri-Cities--Richland--WA-_R-14709",
+      "ownershipEvidence": {
+        "file": "236939-detail.json",
+        "matched": "Washington State University",
+        "excerpt": "Washington State University (WSU) Eggert Family Organic Farm. You will help manage crop production, including vegetables and fruit; perform equipment operation and maintenance; maintain"
+      },
+      "paginationEvidence": "236939-initial/result.json",
+      "paginationSha256": "a031b39eaa3b2d87f4fbe58d080e8b76afb53636f0d47450099eee7d4e9a33ee",
+      "officialReference": "https://hrs.wsu.edu/managers/recruitment-toolkit/faculty-recruitment-toolkit/"
+    },
+    {
+      "id": "239248",
+      "name": "Milwaukee Area Technical College",
+      "provider": "neogov",
+      "count": 66,
+      "complete": true,
+      "pagination": "8 requests; 66/66 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/matc",
+      "ownershipEvidence": {
+        "file": "239248-ownership/0.html",
+        "matched": "Milwaukee Area Technical College",
+        "excerpt": "Milwaukee Area Technical College will not discriminate against any employee, applicant for employment, student, or applicant for admission on the basis of race, color,"
+      },
+      "paginationEvidence": "239248-scoped/result.json",
+      "paginationSha256": "d84353bf7b11e82ebee55cefcdd2180e66d3286f4efdac7a0ef2142369451c3b",
+      "officialReference": "https://www.schooljobs.com/careers/matc"
+    },
+    {
+      "id": "240392",
+      "name": "Herzing University-Madison",
+      "provider": "ultipro",
+      "count": 68,
+      "complete": true,
+      "pagination": "2 API pages; 68/68 opportunities",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Herzing employer board across campuses; not Madison-only",
+      "careersUrl": "https://recruiting2.ultipro.com/HER1009HRZ/JobBoard/267d2e37-abff-4559-8a18-a754503d3749/OpportunityDetail?opportunityId=324e0eba-5103-4680-ae3e-aaa991163ccf&postingId=457133ab-22a4-4cf1-8294-c8edb0403891",
+      "ownershipEvidence": {
+        "file": "240392-ownership/1.html",
+        "matched": "Herzing",
+        "excerpt": "Herzing is known for. View all Locations Visit our Online Campus Ground Campus Locations Akron Atlanta Birmingham Brookfield/Milwaukee Clarksville Dallas Kenosha Madison Minneapolis Nashville"
+      },
+      "paginationEvidence": "240392-initial/result.json",
+      "paginationSha256": "7d536a84d4bfadd1eacde9a2e06444f98e18b1eaa1abdf9a608996ceb3caae91",
+      "officialReference": "https://www.herzing.edu/about/career-advancement"
+    },
+    {
+      "id": "243780",
+      "name": "Purdue University-Main Campus",
+      "provider": "successfactors",
+      "count": 452,
+      "complete": true,
+      "pagination": "46 API pages; 452/452 distinct IDs",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Purdue shared careers board; includes Fort Wayne, Northwest and Global brands",
+      "careersUrl": "https://careers.purdue.edu/",
+      "ownershipEvidence": {
+        "file": "243780-ownership/0.html",
+        "matched": "Purdue",
+        "excerpt": "Purdue Careers By continuing to use and navigate this website, you are agreeing to the use of cookies. Accept Close Purdue Careers Skip to"
+      },
+      "paginationEvidence": "243780-corrected/result.json",
+      "paginationSha256": "dcf264f934e092d67559585550fd08213ac9e1f89275d2c46ba05cfef7aa2d62",
+      "officialReference": "https://careers.purdue.edu/"
+    },
+    {
+      "id": "244437",
+      "name": "Georgia State University-Perimeter College",
+      "provider": "peopleadmin",
+      "count": 99,
+      "complete": true,
+      "pagination": "4 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Georgia State faculty board; Perimeter and other GSU units included",
+      "careersUrl": "https://facultycareers.gsu.edu/postings/search",
+      "ownershipEvidence": {
+        "file": "244437-ownership/0.html",
+        "matched": "Perimeter",
+        "excerpt": "Perimeter College Toggle navigation Home Search Jobs Log In /Create Account Help Home Georgia State University Academics Office of Faculty Affairs Search Postings (99)"
+      },
+      "paginationEvidence": "244437-initial/result.json",
+      "paginationSha256": "dcacf3e9feebc13aa8e6924ca06d8054726d85b30c696f80e900299a62dc4325",
+      "officialReference": "https://facultycareers.gsu.edu/"
+    },
+    {
+      "id": "247834",
+      "name": "Collin County Community College District",
+      "provider": "workday",
+      "count": 47,
+      "complete": true,
+      "pagination": "3 listing pages, 47/47 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Collin external faculty board",
+      "careersUrl": "https://collin.wd1.myworkdayjobs.com/en-US/ExternalFacultyCareerSite/job/Adjunct-Professor--Economics--Applicant-Pool-2026-2027-_R-8005",
+      "ownershipEvidence": {
+        "file": "247834-detail.json",
+        "matched": "Collin",
+        "excerpt": "Collin Higher Education Center | McKinney Campus | Celina Campus | Technical Campus | Farmersville Campus | Wylie Campus | Plano Campus | Frisco"
+      },
+      "paginationEvidence": "247834-initial/result.json",
+      "paginationSha256": "cf575da40343cb75ab8633debb71f7d22383861a1bb19cca68e1677ea8f24aba",
+      "officialReference": "https://www.collin.edu/hr/employment/hiringprocess"
+    },
+    {
+      "id": "248934",
+      "name": "ECPI University",
+      "provider": "ultipro",
+      "count": 191,
+      "complete": true,
+      "pagination": "4 API pages; 191/191 opportunities",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://recruiting.ultipro.com/ECP1000ECPI/JobBoard/e017f5e5-4f5e-4a98-a5d2-83db591e186f",
+      "ownershipEvidence": {
+        "file": "248934-ownership/0.html",
+        "matched": "ECPI University",
+        "excerpt": "ECPI University's current job openings You are using an unsupported browser. To use this site, please use a supported browser. Download Firefox Download Chrome"
+      },
+      "paginationEvidence": "248934-initial/result.json",
+      "paginationSha256": "da09146c2c0d9ac477cc2321282154c6ccecbef039c8883c1571709fb8bce59e",
+      "officialReference": "https://www.ecpi.edu/employment"
+    },
+    {
+      "id": "262086",
+      "name": "University of Massachusetts Global",
+      "provider": "workday",
+      "count": 2,
+      "complete": true,
+      "pagination": "1 listing pages, 2/2 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://umassglobal.wd5.myworkdayjobs.com/en-US/UMassGlobalCareers/job/Adjunct-Faculty---California-Multiple-Subject-Credential-MAT-Programs--Remote-_R-2098",
+      "ownershipEvidence": {
+        "file": "262086-detail.json",
+        "matched": "University of Massachusetts Global",
+        "excerpt": "University of Massachusetts Global is a private, nonprofit affiliate of the University of Massachusetts, created to help working adults change their lives through flexible,"
+      },
+      "paginationEvidence": "262086-initial/result.json",
+      "paginationSha256": "a5edd0ef24a00010b9254b25b9bc8ec6d1df92a7bce33af27c535687de96b73c",
+      "officialReference": "https://www.umassglobal.edu/careers/frequently-asked-questions"
+    },
+    {
+      "id": "399212",
+      "name": "Santiago Canyon College",
+      "provider": "neogov",
+      "count": 2,
+      "complete": true,
+      "pagination": "2 requests; 2/2 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Rancho Santiago district classified/management board; current jobs are district/Santa Ana, not Santiago-specific",
+      "careersUrl": "https://www.schooljobs.com/careers/rsccd",
+      "ownershipEvidence": {
+        "file": "santiago-employment.html",
+        "matched": "Santiago Canyon",
+        "excerpt": "Santiago Canyon College is accepting applications for the following positions:\u200b Faculty & Academic Administrative Opportunities Positions at Santiago Canyon Collegethat are considered academic are"
+      },
+      "paginationEvidence": "399212-scoped/result.json",
+      "paginationSha256": "f9bd048bcdccfe04c04232bb77b43f51700dd0ed7db539e7ea7f902b31b66a45",
+      "officialReference": "https://www.schooljobs.com/careers/rsccd"
+    },
+    {
+      "id": "409315",
+      "name": "South Texas College",
+      "provider": "workday",
+      "count": 58,
+      "complete": true,
+      "pagination": "3 listing pages, 58/58 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://southtexascollege.wd12.myworkdayjobs.com/en-US/STC/job/Adjunct-Faculty-Pool--Division-of-Liberal-Arts---2026---2027-_JR101173",
+      "ownershipEvidence": {
+        "file": "409315-detail.json",
+        "matched": "South Texas College",
+        "excerpt": "South Texas College Office of Human Resources will not be held responsible for redacting any confidential or sensitive information from the documents that you"
+      },
+      "paginationEvidence": "409315-initial/result.json",
+      "paginationSha256": "96345ddaf66fa76a6a4dfdab4afc65e448e4f79a7f108bbc831565aa6836e909",
+      "officialReference": "https://careers.southtexascollege.edu/part-time-faculty.html"
+    },
+    {
+      "id": "413413",
+      "name": "Capella University",
+      "provider": "workday",
+      "count": 12,
+      "complete": true,
+      "pagination": "1 listing pages, 12/12 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Capella public employer board; some roles serve both Capella and Strayer",
+      "careersUrl": "https://strayer.wd1.myworkdayjobs.com/CU_Careers",
+      "ownershipEvidence": {
+        "file": "413413-ownership/1.html",
+        "matched": "Capella University",
+        "excerpt": "Capella University Your browser does not support JavaScript! or JavaScript is currently disabled. Skip to main section View our commitment to accessibility Your browser"
+      },
+      "paginationEvidence": "413413-initial/result.json",
+      "paginationSha256": "788782e39d3e3afeb3aabf1e8c628a16a43039f36f21162e97c87778db170121",
+      "officialReference": "https://www.capella.edu/careers/"
+    },
+    {
+      "id": "426314",
+      "name": "Embry-Riddle Aeronautical University-Worldwide",
+      "provider": "workday",
+      "count": 36,
+      "complete": true,
+      "pagination": "2 listing pages, 36/36 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Embry-Riddle adjunct board across campuses; not Worldwide-only",
+      "careersUrl": "https://embryriddle.wd1.myworkdayjobs.com/AdjunctFacultyOpportunities",
+      "ownershipEvidence": {
+        "file": "426314-detail.json",
+        "matched": "Embry-Riddle",
+        "excerpt": "Embry-Riddle Aeronautical University\u2019s David B. O\u2019Maley College of Business invites applications for an adjunct faculty position in the Department of Management, Marketing and Operations."
+      },
+      "paginationEvidence": "426314-initial/result.json",
+      "paginationSha256": "3cd2c971d1de9813e6c48a0d4402cda8c39fe9bb1d686485f31e9f1c8d1987f6",
+      "officialReference": "https://careers.erau.edu/"
+    },
+    {
+      "id": "434672",
+      "name": "Community College of Baltimore County",
+      "provider": "neogov",
+      "count": 164,
+      "complete": true,
+      "pagination": "18 requests; 164/164 unique advertised postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://www.schooljobs.com/careers/ccbcmd",
+      "ownershipEvidence": {
+        "file": "434672-ownership/0.html",
+        "matched": "Community College of Baltimore County",
+        "excerpt": "Community College of Baltimore County's application process. We are proud to offer a variety of job opportunities, competitive employee benefits, and an inclusive work"
+      },
+      "paginationEvidence": "434672-scoped/result.json",
+      "paginationSha256": "a6657fa8420e87f35295f5edf417245e6490b7db34bbf51959b7ac29ebc4ccba",
+      "officialReference": "https://www.ccbcmd.edu/_media/PDFs/For/Job-seekers/Adjunct%20Scales%202nd%20half%20FY.pdf"
+    },
+    {
+      "id": "444130",
+      "name": "Northcentral University",
+      "provider": "workday",
+      "count": 55,
+      "complete": true,
+      "pagination": "3 listing pages, 55/55 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "successor-employer",
+      "scope": "National University successor board after Northcentral merger; same inventory as National University, not a separate employer",
+      "careersUrl": "https://nus.wd1.myworkdayjobs.com/en-US/Careers",
+      "ownershipEvidence": {
+        "file": "ncu-merger.html",
+        "matched": "National University",
+        "excerpt": "National University Skip to Content Espa\u00f1ol Login Live Chat 1-800-NAT-UNIV (628-8648) National University Degrees & Programs Teaching & Education Bachelor's Bachelor of Arts in"
+      },
+      "paginationEvidence": "444130-initial/result.json",
+      "paginationSha256": "fc585df357cd005ff6efcc4896a1232ce574b07c9c9746745fa9fc7ce5ff9154",
+      "officialReference": "https://www.nu.edu/national-and-northcentral-have-merged/"
+    },
+    {
+      "id": "449339",
+      "name": "American Public University System",
+      "provider": "ultipro",
+      "count": 3,
+      "complete": true,
+      "pagination": "1 API pages; 3/3 opportunities",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://recruiting.ultipro.com/AME1070/JobBoard/711bd40f-864c-42db-8c62-3c62f2edc13f?o=postedDateDesc",
+      "ownershipEvidence": {
+        "file": "449339-ownership/1.html",
+        "matched": "American Public University System",
+        "excerpt": "American Public University System Skip Navigation About back Office of the President Accreditation Mission & Vision History Fast Facts Leadership Employer Relations Government Relations"
+      },
+      "paginationEvidence": "449339-initial/result.json",
+      "paginationSha256": "192e29fef063b7e3a745a888a0408622d68e5b8d1cbccfc81ffd409e22baa9fd",
+      "officialReference": "https://www.apus.edu/about/careers/faculty/"
+    },
+    {
+      "id": "449889",
+      "name": "American College of Education",
+      "provider": "rippling",
+      "count": 8,
+      "complete": true,
+      "pagination": "1 API pages; 8/8 items",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://ats.rippling.com/ace/jobs/8750e45f-a397-460b-ad3a-a1f5d6569500",
+      "ownershipEvidence": {
+        "file": "449889-ownership/0.html",
+        "matched": "American College of Education",
+        "excerpt": "American College of Education Founded in 2005, American College of Education continues to be a leader in professional development through our online programs. The"
+      },
+      "paginationEvidence": "449889-initial/result.json",
+      "paginationSha256": "08c55d6537feca5ee1eb258b0ced4e49659fc53267f122a05443608b56feb565",
+      "officialReference": "https://ace.edu/about/careers/"
+    },
+    {
+      "id": "458919",
+      "name": "Strayer University-Georgia",
+      "provider": "workday",
+      "count": 8,
+      "complete": true,
+      "pagination": "1 listing pages, 8/8 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Strayer employer board across locations; not Georgia-only; some shared Capella roles",
+      "careersUrl": "https://strayer.wd1.myworkdayjobs.com/en-US/CAREERS/job/Adjunct-Faculty--Accounting--Atlanta--Hybrid-_R30978-1",
+      "ownershipEvidence": {
+        "file": "458919-detail.json",
+        "matched": "Strayer",
+        "excerpt": "Strayer and Capella Universities serves as liaison with multiple internal cross-functional partners. Collaborate with the SBL team, Academic Leadership Team, Program directors, Licensure Team,"
+      },
+      "paginationEvidence": "458919-initial/result.json",
+      "paginationSha256": "fd9957494a1ff66c42060db21cfb731bbe35f3d89d0a0fd0e87702bf3bfd689b",
+      "officialReference": "https://www.strayer.edu/careers/"
+    },
+    {
+      "id": "459994",
+      "name": "Strayer University-Global Region",
+      "provider": "workday",
+      "count": 8,
+      "complete": true,
+      "pagination": "1 listing pages, 8/8 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Strayer employer board across locations; same inventory as Georgia entry",
+      "careersUrl": "https://strayer.wd1.myworkdayjobs.com/careers/",
+      "ownershipEvidence": {
+        "file": "459994-detail.json",
+        "matched": "Strayer",
+        "excerpt": "Strayer and Capella Universities serves as liaison with multiple internal cross-functional partners. Collaborate with the SBL team, Academic Leadership Team, Program directors, Licensure Team,"
+      },
+      "paginationEvidence": "459994-initial/result.json",
+      "paginationSha256": "8a15ccbe39b0585d85a22d2a20b6f05e9155ba434e38100442ef58641f5816f1",
+      "officialReference": "https://www.strayer.edu/careers/"
+    },
+    {
+      "id": "476975",
+      "name": "Colorado State University Global",
+      "provider": "greenhouse",
+      "count": 1,
+      "complete": true,
+      "pagination": "Complete board API; 1/1 postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "CSU Global faculty board",
+      "careersUrl": "https://job-boards.greenhouse.io/csuglobalfaculty/jobs/4438362009",
+      "ownershipEvidence": {
+        "file": "476975-detail.json",
+        "matched": "CSU Global",
+        "excerpt": "CSU Global as a Course Instructor for Construction Management ! Under the guidance of the Provost, Program Manager & Faculty Operations Specialist, you will"
+      },
+      "paginationEvidence": "476975-initial/result.json",
+      "paginationSha256": "54409bb7ef8e56e7f2da0a44475bb86b90ea82ffe55a0891fc40c3452302e983",
+      "officialReference": "https://csuglobal.edu/about/careers"
+    },
+    {
+      "id": "479956",
+      "name": "Pennsylvania State University-World Campus",
+      "provider": "workday",
+      "count": 421,
+      "complete": true,
+      "pagination": "22 listing pages, 421/421 raw records; 0 source records lack title/URL",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Penn State academic board across campuses; not World Campus-only",
+      "careersUrl": "https://psu.wd1.myworkdayjobs.com/en-US/PSU_Academic/job/Part-Time---English-Composition---Adjunct-Instructors_REQ_0000054095-1",
+      "ownershipEvidence": {
+        "file": "479956-detail.json",
+        "matched": "Penn State",
+        "excerpt": "Penn State University Park Job type: Full time Posted: Posted Today Req ID: REQ_0000083511 APPLICATION INSTRUCTIONS: - CURRENT PENN STATE EMPLOYEE (faculty, staff, technical"
+      },
+      "paginationEvidence": "479956-initial/result.json",
+      "paginationSha256": "d42417232e12d794c7ae788ed3a5c768a57a4d323b718bed21b0b8240d815eb3",
+      "officialReference": "https://www.worldcampus.psu.edu/about-us/employment"
+    },
+    {
+      "id": "480091",
+      "name": "Bryant & Stratton College-Online",
+      "provider": "ultipro",
+      "count": 185,
+      "complete": true,
+      "pagination": "4 API pages; 185/185 opportunities",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "Bryant & Stratton employer board across campuses; not Online-only",
+      "careersUrl": "https://recruiting.ultipro.com/BRY1002BSC/JobBoard/6b838b9a-cd2b-436a-903b-0de7b6e17b4f/?q=&o=postedDateDesc",
+      "ownershipEvidence": {
+        "file": "480091-ownership/1.html",
+        "matched": "Bryant & Stratton",
+        "excerpt": "Bryant & Stratton College Student Portal Athletics Continuing Ed B&SC Blog Newsroom Events Calendar Schedule a Visit 1.866.948.0571 Search Search What are you looking"
+      },
+      "paginationEvidence": "480091-initial/result.json",
+      "paginationSha256": "dc052b89b4e68fae3a48249d78ad39739121581973445ae45d99b79cfefa4258",
+      "officialReference": "https://www.bryantstratton.edu/careers/"
+    },
+    {
+      "id": "484613",
+      "name": "University of Phoenix-Arizona",
+      "provider": "avature",
+      "count": 20,
+      "complete": true,
+      "pagination": "3 pages; final short page, 20 postings",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://uop.avature.net/careers/SearchJobs",
+      "ownershipEvidence": {
+        "file": "484613-ownership/0.html",
+        "matched": "University of Phoenix",
+        "excerpt": "University of Phoenix learning objectives and course outlines, engaging with students to drive academic rigor and student success. In addition to... Read more Associate"
+      },
+      "paginationEvidence": "484613-initial/result.json",
+      "paginationSha256": "8e2ce58c6c4f7392aba04f574850b55ef7573de682bbff713396bf688796eae7",
+      "officialReference": "https://www.phoenix.edu/jobs/faculty-career-areas.html"
+    },
+    {
+      "id": "489201",
+      "name": "Clovis Community College",
+      "provider": "neogov",
+      "count": 18,
+      "complete": true,
+      "pagination": "3 requests; 18/18 unique advertised postings",
+      "status": "working",
+      "scopeType": "shared-employer",
+      "scope": "State Center district board; Clovis, Fresno, Reedley, Madera and district jobs included",
+      "careersUrl": "https://www.schooljobs.com/careers/scccd",
+      "ownershipEvidence": {
+        "file": "clovis-faculty.html",
+        "matched": "Clovis",
+        "excerpt": "Clovis Community College Madera Community College Madera Community College at Oakhurst Donate Here About Accessibility Support Board of Trustees Bond Measures Campus Security and"
+      },
+      "paginationEvidence": "489201-scoped/result.json",
+      "paginationSha256": "ff99912622119320a534bccf3f3eb2062ab4f6ef9d378f800d128f0b9559a521",
+      "officialReference": "https://www.schooljobs.com/careers/scccd"
+    },
+    {
+      "id": "489779",
+      "name": "Purdue University Global",
+      "provider": "successfactors",
+      "count": 26,
+      "complete": true,
+      "pagination": "3 API pages; 26/26 distinct IDs",
+      "status": "working",
+      "scopeType": "institution-filtered",
+      "scope": "PurdueUniversityGlobal brand; excludes other Purdue brands",
+      "careersUrl": "https://careers.purdue.edu/PurdueUniversityGlobal",
+      "ownershipEvidence": {
+        "file": "489779-ownership/0.html",
+        "matched": "Purdue Global",
+        "excerpt": "Purdue Global and Purdue University Online, we bring together students and employees from every background, every perspective and every walk of life. Join our"
+      },
+      "paginationEvidence": "489779-corrected/result.json",
+      "paginationSha256": "56cf7ce1f0e06095fc5c561b682490e36276b2fba946c92245075d27a5761a52",
+      "officialReference": "https://www.purdueglobal.edu/about/careers/"
+    },
+    {
+      "id": "498571",
+      "name": "Pennsylvania Western University",
+      "provider": "peopleadmin",
+      "count": 49,
+      "complete": true,
+      "pagination": "2 pages; final page has no next-page link",
+      "status": "working",
+      "scopeType": "employer-site",
+      "scope": "Employer public board; complete inventory of this configured site, not every separate recruiting site",
+      "careersUrl": "https://pennwest.peopleadmin.com/postings/search",
+      "ownershipEvidence": {
+        "file": "498571-ownership/0.html",
+        "matched": "Pennsylvania Western University",
+        "excerpt": "Pennsylvania Western University | Search Jobs Skip to Main Content Toggle navigation Home Search Jobs Log In /Create Account Help Search Postings (49) Hide"
+      },
+      "paginationEvidence": "498571-initial/result.json",
+      "paginationSha256": "f41c6c59ec2fa3c11ff2d8b6f14c4ca92e5b667082273f2a852ae0ab395e722d",
+      "officialReference": "https://pennwest.peopleadmin.com/postings/search"
+    }
+  ],
+  "verification": {
+    "rootSuite": {
+      "command": "node test-all.mjs",
+      "passed": 12861,
+      "failed": 0,
+      "warnings": 9,
+      "log": "full-tests-final.log"
+    },
+    "additionalChecks": [
+      "node tests/college-provider-config.test.mjs",
+      "node tests/providers/college-employer-filters.test.mjs (including institution-preserving partition recovery)",
+      "node tests/providers/neogov-completeness.test.mjs",
+      "node tests/browser-job-search.integration.mjs",
+      "node scripts/check-syntax.mjs",
+      "node validate-system-paths-coverage.mjs",
+      "git diff --check"
+    ],
+    "skipped": [
+      "Optional H1B live API and token-mint tests (not enabled; unrelated to college searches)",
+      "Separate web build/tests and dashboard Go tests (no web or Go source changed; root suite built dashboard)"
+    ]
+  }
+}

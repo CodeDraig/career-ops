@@ -311,10 +311,14 @@ function resolveCsbMaxPages(entry) {
 /** @param {import('./_types.js').PortalEntry} entry @param {any} cfg @param {import('./_types.js').Context} ctx @param {{probe?: boolean}} [opts] */
 async function fetchCsb(entry, cfg, ctx, { probe = false } = {}) {
   let locales = CSB_DEFAULT_LOCALES;
+  let brand = '';
   try {
     const html = await ctx.fetchText(cfg.searchPage, { redirect: 'error', headers: { accept: 'text/html' } });
     const discovered = extractLocales(html);
     if (discovered.length) locales = discovered;
+    // Current CSB brand pages use the root API with a brand body field,
+    // rather than /<brand>/services/... (which may return a false empty).
+    brand = html.match(/\bbrand:\s*["']([A-Za-z0-9_-]+)["']/)?.[1] || '';
   } catch {
     // Discovery is best-effort; fall back to the default locale set.
   }
@@ -336,11 +340,11 @@ async function fetchCsb(entry, cfg, ctx, { probe = false } = {}) {
     for (let page = 0; page < maxPages; page++) {
       let json;
       try {
-        json = await ctx.fetchJson(cfg.jobsApi, {
+        json = await ctx.fetchJson(brand ? `${cfg.origin}/services/recruiting/v1/jobs` : cfg.jobsApi, {
           method: 'POST',
           redirect: 'error',
           headers: { 'content-type': 'application/json', accept: 'application/json' },
-          body: JSON.stringify({ keywords: '', locale, location: '', pageNumber: page, sortBy: 'recent' }),
+          body: JSON.stringify({ keywords: '', locale, location: '', pageNumber: page, sortBy: 'date', ...(brand ? { brand } : {}), ...(entry.successfactors?.facet_filters ? { facetFilters: entry.successfactors.facet_filters } : {}) }),
         });
       } catch (err) {
         firstErr ??= err;

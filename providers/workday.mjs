@@ -820,6 +820,14 @@ export default {
         referer: `${ep.jobBase}/`,
       },
     };
+    // Explicit public facet IDs let a college select its institution on a
+    // shared system board. Keep them on every page and during partitioning.
+    const configuredFacets = entry.workday?.applied_facets ?? {};
+    if (!configuredFacets || typeof configuredFacets !== 'object' || Array.isArray(configuredFacets)
+      || Object.entries(configuredFacets).some(([key, values]) => !/^[A-Za-z][A-Za-z0-9_]*$/.test(key)
+        || !Array.isArray(values) || !values.length || values.some(value => typeof value !== 'string' || !/^[A-Za-z0-9_-]+$/.test(value)))) {
+      throw new Error('workday: applied_facets must map facet names to nonempty arrays of public IDs');
+    }
     const makeBody = (offset, appliedFacets) => JSON.stringify({ limit: PAGE_SIZE, offset, searchText: '', appliedFacets });
     const sinceMs = typeof ctx?.sinceMs === 'number' ? ctx.sinceMs : null;
     const maxPages = resolveMaxPages(entry);
@@ -948,7 +956,7 @@ export default {
 
     let root;
     try {
-      root = await runQuery({});
+      root = await runQuery(configuredFacets);
     } catch (err) {
       if (CONFIRMED_DEAD_API_STATUSES.has(err.status) && await confirmDeadViaCareersPage(ep, ctx)) {
         const notFound = new Error(`workday: ${entry.name} confirmed dead (maintenance page)`);
@@ -1085,7 +1093,7 @@ export default {
         }
       };
 
-      await split(root, {}, 0, []);
+      await split(root, configuredFacets, 0, Object.keys(configuredFacets));
       jobs = out;
 
       // Distinct from the cap warning below: nothing about this tenant's entry

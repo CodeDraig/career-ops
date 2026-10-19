@@ -71,12 +71,14 @@ function resolveTarget(entry) {
  * @param {{origin: string, agency: string, folder: string, departments: string[]}} t
  * @param {number} page
  */
-function pageUrl(t, page) {
+function pageUrl(t, page, descending = false) {
   const q = new URLSearchParams({ agency: t.agency });
   if (t.folder) q.set('departmentFolder', t.folder);
   for (const department of t.departments) q.append('department', department);
-  q.set('sort', 'PostingDate');
-  q.set('isDescendingSort', 'true');
+  // Bulk faculty pools share posting dates. The server's date tie ordering
+  // changes between pages, skipping jobs; title ordering avoids those ties.
+  q.set('sort', 'PositionTitle');
+  q.set('isDescendingSort', String(descending));
   q.set('page', String(page));
   return `${t.origin}/careers/home/index?${q}`;
 }
@@ -102,33 +104,46 @@ export default {
     const seen = new Set();
     let stoppedOnEmpty = false;
     let pagesFetched = 0;
-    for (let page = 1; page <= pagesToFetch; page++) {
-      if (page > 1) await sleep(INTER_PAGE_DELAY_MS, ctx);
-      // No catch: rejections (incl. the probe's ProbePageBudgetReached) propagate
-      // unwrapped, and a real failure fails the target rather than returning a
-      // partial list.
-      const html = await fetchTextWithRetry(ctx, pageUrl(t, page), {
-        redirect: 'error',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      });
-      pagesFetched++;
-      const found = parseNeogovPage(html, entry.name, t.origin);
-      // A page that adds nothing new is the end — or the site ignoring `page`
-      // and repeating itself. Either way, stop instead of looping.
-      let fresh = 0;
-      for (const job of found) {
-        if (seen.has(job.url)) continue;
-        seen.add(job.url);
-        jobs.push(job);
-        fresh++;
+    let reportedTotal = null;
+    // Identical titles can still tie. If the advertised count exposes a gap,
+    // one reverse-order pass can recover records displaced at page boundaries.
+    for (const descending of [false, true]) {
+      stoppedOnEmpty = false;
+      pagesFetched = 0;
+      for (let page = 1; page <= pagesToFetch; page++) {
+        if (page > 1) await sleep(INTER_PAGE_DELAY_MS, ctx);
+        // No catch: rejections (incl. the probe's ProbePageBudgetReached) propagate
+        // unwrapped, and a real failure fails the target rather than returning a
+        // partial list.
+        const html = await fetchTextWithRetry(ctx, pageUrl(t, page, descending), {
+          redirect: 'error',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        pagesFetched++;
+        const total = html.match(/id=["']job-postings-number["'][^>]*>\s*([\d,]+)/i);
+        if (total) reportedTotal = Number(total[1].replaceAll(',', ''));
+        const found = parseNeogovPage(html, entry.name, t.origin);
+        // Stop an ascending walk that repeats itself. The reverse recovery
+        // may cross already-seen pages before reaching the missing records.
+        let fresh = 0;
+        for (const job of found) {
+          if (seen.has(job.url)) continue;
+          seen.add(job.url);
+          jobs.push(job);
+          fresh++;
+        }
+        if (!found.length || (!descending && fresh === 0)) {
+          stoppedOnEmpty = true;
+          break;
+        }
       }
-      if (fresh === 0) {
-        stoppedOnEmpty = true;
-        break;
-      }
+      if (ctxMax > 0 || reportedTotal === null || jobs.length >= reportedTotal) break;
     }
     if (!stoppedOnEmpty && pagesFetched >= ceiling && !(ctxMax > 0 && ctxMax < ceiling)) {
       console.warn(`neogov: ${entry.name}: stopped at ${ceiling} pages (${ceiling * PAGE_SIZE} postings); raise max_pages on this entry`);
+    }
+    if (!(ctxMax > 0) && reportedTotal !== null && jobs.length < reportedTotal) {
+      throw new Error(`neogov: incomplete search for ${entry.name}: received ${jobs.length} of ${reportedTotal} advertised postings`);
     }
     return jobs;
   },

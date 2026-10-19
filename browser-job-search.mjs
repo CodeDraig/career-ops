@@ -10,6 +10,7 @@ import { isMainModule } from './lib/is-main-module.mjs';
 import { validateFlags, flagValue } from './lib/cli-flags.mjs';
 
 export const RECIPES = {
+  bmcc: { container: '.entry-content .content-box', links: '.entry-content .content-box li a[href]', jobHosts: ['cuny.jobs', 'rfcuny.wd108.myworkdayjobs.com', 'bmccprodstroac.blob.core.windows.net'], path: '(?:/job/?$|/(?:job|details)/|/uploads/.*\\.(?:pdf|docx)$)' },
   clinch: { container: '[id^="jobs_search_results_"]', links: 'a[id^="link_job_title_"]', next: 'a[rel="next"]', row: 'article,tr', location: '.job-search-results-location,.job-component-location' },
   pageup: { container: '#search-results-content', links: '#search-results-content a.job-link', next: 'a.more-link', row: 'tr', location: '.location' },
   interviewexchange: { container: '.job-card', links: '.job-card h2 a', row: '.job-card' },

@@ -1,0 +1,1416 @@
+# Original 172 college routes validated 2026-10-19. Example only; not auto-loaded.
+# See docs/COLLEGE_PROVIDER_VALIDATION.md for employer scope and evidence.
+# Merge desired entries into DATA_ROOT portals.yml; preserve personal filters.
+tracked_companies:
+  # UNITID 100663
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 418 postings in the dated validation.
+  - provider: peopleadmin
+    name: University of Alabama at Birmingham
+    careers_url: https://uab.peopleadmin.com/postings/search
+    max_pages: 200
+    enabled: true
+  # UNITID 101505
+  # Jefferson State institutional folder; excludes other Alabama colleges
+  # 3 postings in the dated validation.
+  - name: Jefferson State Community College
+    careers_url: https://www.schooljobs.com/careers/accs/jefferson
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 102076
+  # Snead State institutional folder; explicit zero-job response
+  # 0 postings in the dated validation.
+  - name: Snead State Community College
+    careers_url: https://www.schooljobs.com/careers/accs/sneadstate
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 102094
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 41 postings in the dated validation.
+  - name: University of South Alabama
+    careers_url: https://southalabama.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 102368
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 213 postings in the dated validation.
+  - name: Troy University
+    careers_url: https://www.troyuniversityjobs.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 104717
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 259 postings in the dated validation.
+  - name: Grand Canyon University
+    careers_url: https://gcu.wd1.myworkdayjobs.com/GCU
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 105525
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 23 postings in the dated validation.
+  - name: Pima Community College
+    careers_url: https://www.schooljobs.com/careers/pimacc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 105668
+  # Maricopa district board; Rio Salado is a member; other colleges included
+  # 300 postings in the dated validation.
+  - name: Rio Salado College (shared employer board)
+    careers_url: https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?Page=HRS_APP_JBPST_FL&Action=U&FOCUS=Applicant&SiteId=1000&JobOpeningId=322706&PostingSeq=1
+    provider: peoplesoft
+    max_pages: 200
+    enabled: true
+  # UNITID 109350
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 140 postings in the dated validation.
+  - name: Antelope Valley Community College District
+    careers_url: https://www.schooljobs.com/careers/avc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 109819
+  # Bakersfield College department only; excludes other Kern colleges and district office
+  # 128 postings in the dated validation.
+  - name: Bakersfield College
+    careers_url: https://www.schooljobs.com/careers/kccd?department=Bakersfield+College
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 110219
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 7 postings in the dated validation.
+  - name: Bryan University
+    careers_url: https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d8572d2b-993f-4042-9138-81763f4d149e&ccId=19000101_000001&lang=en_US
+    provider: adp-workforcenow
+    max_pages: 200
+    enabled: true
+  # UNITID 111461
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 108 postings in the dated validation.
+  - name: College of the Canyons
+    careers_url: https://schooljobs.com/careers/canyons
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 111939
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 10 postings in the dated validation.
+  - name: Chaffey College
+    careers_url: https://www.schooljobs.com/careers/chaffey
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 112172
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 110 postings in the dated validation.
+  - name: Citrus College
+    careers_url: https://employment.citruscollege.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 112190
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 33 postings in the dated validation.
+  - name: City College of San Francisco
+    careers_url: https://jobs.ccsf.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 112385
+  # Coastline department on classified/management board; faculty recruiting may use another board
+  # 3 postings in the dated validation.
+  - name: Coastline Community College
+    careers_url: https://www.schooljobs.com/careers/cccd?department=Coastline+Community+College
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 112826
+  # Contra Costa College campus filter 449[]=3
+  # 3 postings in the dated validation.
+  - name: Contra Costa College
+    careers_url: https://www.4cdcareers.net/postings/search?449%5B%5D=3
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 113193
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 29 postings in the dated validation.
+  - name: Cuesta College
+    careers_url: https://www.schooljobs.com/careers/cuesta
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 113573
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 17 postings in the dated validation.
+  - name: College of the Desert
+    careers_url: https://www.schooljobs.com/careers/collegeofthedesertca
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 113634
+  # Diablo Valley campus filter 449[]=4
+  # 13 postings in the dated validation.
+  - name: Diablo Valley College
+    careers_url: https://www.4cdcareers.net/postings/search?449%5B%5D=4
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 114266
+  # San Jose–Evergreen district board; Evergreen Valley and San Jose City included
+  # 32 postings in the dated validation.
+  - name: Evergreen Valley College (shared employer board)
+    careers_url: https://sjeccd.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 114716
+  # Foothill–De Anza district board; both colleges and district jobs included
+  # 170 postings in the dated validation.
+  - name: Foothill College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/fhda
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 115126
+  # Golden West department on classified/management board; faculty recruiting may use another board
+  # 5 postings in the dated validation.
+  - name: Golden West College
+    careers_url: https://www.schooljobs.com/careers/cccd?department=Golden+West+College
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 117247
+  # Peralta district board; Laney and the other district colleges included
+  # 56 postings in the dated validation.
+  - name: Laney College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/peralta
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 117645
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 16 postings in the dated validation.
+  - name: Long Beach City College
+    careers_url: https://www.schooljobs.com/careers/lbcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 118718
+  # Merced management careers board
+  # 1 postings in the dated validation.
+  - name: Merced College
+    careers_url: https://www.schooljobs.com/careers/mccd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 118976
+  # Yosemite district board; Modesto and Columbia included
+  # 57 postings in the dated validation.
+  - name: Modesto Junior College (shared employer board)
+    careers_url: https://yosemite.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 119137
+  # Ventura County district board; Moorpark, Oxnard, Ventura and district jobs included
+  # 78 postings in the dated validation.
+  - name: Moorpark College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/vcccd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 119164
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 130 postings in the dated validation.
+  - name: Mt San Antonio College
+    careers_url: https://hrjobs.mtsac.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 119605
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 55 postings in the dated validation.
+  - name: National University
+    careers_url: https://nus.wd1.myworkdayjobs.com/en-US/Careers
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 120971
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 86 postings in the dated validation.
+  - name: Palomar College
+    careers_url: https://palomar.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 121044
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 11 postings in the dated validation.
+  - name: Pasadena City College
+    careers_url: https://www.schooljobs.com/careers/pasadenaedu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 121886
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 42 postings in the dated validation.
+  - name: Rio Hondo College
+    careers_url: https://riohondo.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 122205
+  # South Orange County district board; Saddleback and Irvine Valley included
+  # 43 postings in the dated validation.
+  - name: Saddleback College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/socccd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 122339
+  # San Diego City organizational tier 2 = 6
+  # 3 postings in the dated validation.
+  - name: San Diego City College
+    careers_url: https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id%5B%5D=6
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 122384
+  # San Diego Miramar organizational tier 2 = 266
+  # 3 postings in the dated validation.
+  - name: San Diego Miramar College
+    careers_url: https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id%5B%5D=266
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 122658
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 84 postings in the dated validation.
+  - name: San Joaquin Delta College
+    careers_url: https://www.schooljobs.com/careers/deltacollege
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 122889
+  # Santa Barbara administrator/classified/management careers board
+  # 9 postings in the dated validation.
+  - name: Santa Barbara City College
+    careers_url: https://www.schooljobs.com/careers/sbcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 123013
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 120 postings in the dated validation.
+  - name: Santa Rosa Junior College
+    careers_url: https://www.schooljobs.com/careers/santarosajc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 123341
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 5 postings in the dated validation.
+  - name: Sierra College
+    careers_url: https://www.schooljobs.com/careers/sierracollege
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 123527
+  # San Bernardino district board; Valley and Crafton Hills included
+  # 223 postings in the dated validation.
+  - name: San Bernardino Valley College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/sbccd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 123961
+  # USC ExternalUSCCareers; replaces Advancement-only board
+  # 689 postings in the dated validation.
+  - name: University of Southern California
+    careers_url: https://usc.wd5.myworkdayjobs.com/ExternalUSCCareers
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 125028
+  # Ventura County district board; same inventory as Moorpark
+  # 78 postings in the dated validation.
+  - name: Ventura College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/vcccd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 125091
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 95 postings in the dated validation.
+  - name: Victor Valley College
+    careers_url: https://www.schooljobs.com/careers/vvc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 126818
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 283 postings in the dated validation.
+  - name: Colorado State University-Fort Collins
+    careers_url: https://csusystem.wd12.myworkdayjobs.com/en-US/fortcollins_careers/job/Adjunct-Faculty--Department-of-Accounting---Open-Pool_R2026105157
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 127200
+  # Front Range department on Colorado state board
+  # 4 postings in the dated validation.
+  - name: Front Range Community College
+    careers_url: https://www.governmentjobs.com/careers/colorado?department[0]=Front%20Range%20Community%20College
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 127565
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 124 postings in the dated validation.
+  - name: Metropolitan State University of Denver
+    careers_url: https://msudenver.wd1.myworkdayjobs.com/MSUDenver
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 128106
+  # CSU Pueblo department on Colorado state board
+  # 2 postings in the dated validation.
+  - name: Colorado State University Pueblo
+    careers_url: https://www.governmentjobs.com/careers/colorado?department[0]=Colorado%20State%20University%20Pueblo
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 132709
+  # Broward PT public board
+  # 113 postings in the dated validation.
+  - name: Broward College
+    careers_url: https://browardcollege.wd5.myworkdayjobs.com/en-US/PT/job/Adjunct-Faculty--Math--Pooled-Position--Central-Campus-_REQ-000048832-1
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 132903
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 96 postings in the dated validation.
+  - name: University of Central Florida
+    careers_url: https://ucf.wd1.myworkdayjobs.com/en-US/careers/job/Adjunct--College-of-Science_R113365
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 133386
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 110 postings in the dated validation.
+  - name: Daytona State College
+    careers_url: https://www.schooljobs.com/careers/daytonastate
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 133669
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 52 postings in the dated validation.
+  - name: Florida Atlantic University
+    careers_url: https://fau.wd1.myworkdayjobs.com/en-US/FAU/job/Nursing-Adjuncts_REQ21767
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 133881
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 43 postings in the dated validation.
+  - name: Florida Institute of Technology
+    careers_url: https://floridatech.wd5.myworkdayjobs.com/en-US/FloridaTechCareers/job/Adjunct-Faculty-Orlando_R7840
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 134097
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 234 postings in the dated validation.
+  - name: Florida State University
+    careers_url: https://jobs.omni.fsu.edu/psc/sprdhr_er/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&Page=HRS_APP_SCHJOB&Action=U&SiteId=1&
+    provider: peoplesoft
+    max_pages: 200
+    enabled: true
+  # UNITID 134237
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 79 postings in the dated validation.
+  - name: Full Sail University
+    careers_url: https://fullsail.wd1.myworkdayjobs.com/en-US/External/job/Adjunct-Faculty---Creative-Writing_R00011724
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 134495
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 160 postings in the dated validation.
+  - name: Hillsborough College
+    careers_url: https://hcfl.wd1.myworkdayjobs.com/en-US/hcjobs?jobFamilyGroup=e866224a84421001b00d5c2cc09b0000
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 134608
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 121 postings in the dated validation.
+  - name: Indian River State College
+    careers_url: https://irsc.wd5.myworkdayjobs.com/en-US/External/job/Adjunct-Human-Services_R5576
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 136516
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 39 postings in the dated validation.
+  - name: Polk State College
+    careers_url: https://www.schooljobs.com/careers/polkstate
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 137032
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 71 postings in the dated validation.
+  - name: Saint Leo University
+    careers_url: https://saintleo.wd503.myworkdayjobs.com/en-US/SLU/job/Adjunct---Social-Work_R4244
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 137351
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 236 postings in the dated validation.
+  - name: University of South Florida
+    careers_url: https://fa-ewkd-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/USF/jobs
+    provider: oraclecloud
+    max_pages: 200
+    enabled: true
+  # UNITID 137759
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 35 postings in the dated validation.
+  - name: Tallahassee State College
+    careers_url: https://tscfl.wd12.myworkdayjobs.com/en-US/TSC_External_Career_Site/jobs?q=adjunct
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 139940
+  # Georgia State faculty public board
+  # 99 postings in the dated validation.
+  - name: Georgia State University
+    careers_url: https://facultycareers.gsu.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 140012
+  # Gwinnett Technical hiringCompany facet on Georgia state board
+  # 63 postings in the dated validation.
+  - name: Gwinnett Technical College
+    careers_url: https://georgia.wd5.myworkdayjobs.com/TGC/job/Lawrenceville/Adjunct-Faculty---Degree-Level-Mathematics_JR0000001276
+    provider: workday
+    max_pages: 200
+    workday:
+      applied_facets:
+        hiringCompany:
+          - 3f907d8292e51000cddb6c225ce90000
+    enabled: true
+  # UNITID 142522
+  # BYU-Idaho faculty opportunities
+  # 52 postings in the dated validation.
+  - name: Brigham Young University-Idaho
+    careers_url: https://wd501.myworkdaysite.com/recruiting/byui/BYU-Idaho_Faculty_Opportunities
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 146472
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 35 postings in the dated validation.
+  - name: College of Lake County
+    careers_url: https://clc.wd115.myworkdayjobs.com/en-US/External/job/Adjunct-Faculty--Community-and-Workforce-Education_REQ-00001040-1
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 150136
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 59 postings in the dated validation.
+  - name: Ball State University
+    careers_url: https://bsu.wd12.myworkdayjobs.com/External
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 150987
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 519 postings in the dated validation.
+  - name: Ivy Tech Community College
+    careers_url: https://ivytech.wd1.myworkdayjobs.com/Ivy_Tech_Careers/job/Bloomington-IN/Adjunct---Business-Administration_JR0000106908/apply
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 153214
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 90 postings in the dated validation.
+  - name: Des Moines Area Community College
+    careers_url: https://jobs.dmacc.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 153630
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 41 postings in the dated validation.
+  - name: Iowa Western Community College
+    careers_url: https://www.schooljobs.com/careers/iwcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 155061
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 26 postings in the dated validation.
+  - name: Fort Hays State University
+    careers_url: https://fhsu.wd503.myworkdayjobs.com/CAREERS
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 157085
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 804 postings in the dated validation.
+  - name: University of Kentucky
+    careers_url: https://ukjobs.uky.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 157289
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 135 postings in the dated validation.
+  - name: University of Louisville
+    careers_url: https://uofl.wd1.myworkdayjobs.com/UofLCareerSite?jobFamilyGroup=122eabeb58371000c79b8793f92f0000
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 157447
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 91 postings in the dated validation.
+  - name: Northern Kentucky University
+    careers_url: https://nku.wd108.myworkdayjobs.com/en-US/NKU_External/job/Part-time-faculty_JR100071
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 159391
+  # LSU public employer board; campus/unit assignment requires posting review
+  # 314 postings in the dated validation.
+  - name: Louisiana State University and Agricultural & Mechanical College (shared employer board)
+    careers_url: https://lsu.wd1.myworkdayjobs.com/en-US/LSU/job/Part-time-Adjunct-Instructor--Biology_R00106821
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 159416
+  # LSU-Shreveport department on Louisiana state board
+  # 3 postings in the dated validation.
+  - name: Louisiana State University-Shreveport
+    careers_url: https://www.governmentjobs.com/careers/louisiana?department=LSU-Shreveport
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 161457
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 74 postings in the dated validation.
+  - name: University of New England
+    careers_url: https://une.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 163657
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 170 postings in the dated validation.
+  - name: Prince George's Community College
+    careers_url: https://pgcc.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 166027
+  # Harvard academic positions
+  # 231 postings in the dated validation.
+  - name: Harvard University
+    careers_url: https://academicpositions.harvard.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 170790
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 33 postings in the dated validation.
+  - name: Macomb Community College
+    careers_url: https://www.schooljobs.com/careers/macombcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 172617
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 96 postings in the dated validation.
+  - name: Washtenaw Community College
+    careers_url: https://jobs.wccnet.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 174428
+  # Normandale Institution facet on Minnesota State board
+  # 3 postings in the dated validation.
+  - name: Normandale Community College
+    careers_url: https://minnstate.wd115.myworkdayjobs.com/en-US/Minnesota_State_Careers
+    provider: workday
+    max_pages: 200
+    workday:
+      applied_facets:
+        Institution:
+          - a7c1912089511000d545db1c894b0000
+    enabled: true
+  # UNITID 175014
+  # Rasmussen employer board across campuses; not Minnesota-only
+  # 76 postings in the dated validation.
+  - name: Rasmussen University-Minnesota (shared employer board)
+    careers_url: https://recruiting.ultipro.com/AME1070/JobBoard/cbf863ee-da68-4d60-9da0-e17b3404411c/?q=&o=postedDateDesc
+    provider: ultipro
+    max_pages: 200
+    enabled: true
+  # UNITID 178721
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 10 postings in the dated validation.
+  - name: Park University
+    careers_url: https://park.wd1.myworkdayjobs.com/ParkUniversityCareers?timeType=1851260486fd100728d3e4fb5bf60000
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 179308
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 120 postings in the dated validation.
+  - name: Saint Louis Community College
+    careers_url: https://www.schooljobs.com/careers/stlcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 180814
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 4 postings in the dated validation.
+  - name: Bellevue University
+    careers_url: https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=191fb38a-3b70-4f49-b37f-cb2eda186474&ccId=9201943375161_2&lang=en_US
+    provider: adp-workforcenow
+    max_pages: 200
+    enabled: true
+  # UNITID 181303
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 67 postings in the dated validation.
+  - name: Metropolitan Community College Area
+    careers_url: https://mccneb.wd5.myworkdayjobs.com/en-US/mccnebjobs/job/English-Adjunct-Instructor_JR100368
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 182005
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 169 postings in the dated validation.
+  - name: College of Southern Nevada
+    careers_url: https://nshe.wd1.myworkdayjobs.com/en-US/CSN-External/job/CSN---Charleston-Campus/Adjunct-Mathematics-Instructor---FY-2021-2022_R0125823
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 183026
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 60 postings in the dated validation.
+  - name: Southern New Hampshire University
+    careers_url: https://snhu.wd503.myworkdayjobs.com/External_Career_Site/job/On-Site-New-Hampshire/On-Campus-Adjunct-Instructor---Engineering_R0014807/apply
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 183877
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 27 postings in the dated validation.
+  - name: Rowan College at Burlington County
+    careers_url: https://www.schooljobs.com/careers/rcbcedu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 186380
+  # Rutgers university-wide board; not New Brunswick-only
+  # 960 postings in the dated validation.
+  - name: Rutgers University-New Brunswick (shared employer board)
+    careers_url: https://jobs.rutgers.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 187046
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 11 postings in the dated validation.
+  - name: Thomas Edison State University
+    careers_url: https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=089b582f-0a35-44db-98f2-170a98083ab9&ccId=19000101_000001&lang=en_US
+    provider: adp-workforcenow
+    max_pages: 200
+    enabled: true
+  # UNITID 187532
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 73 postings in the dated validation.
+  - name: Central New Mexico Community College
+    careers_url: https://chess.wd1.myworkdayjobs.com/CNMJOBS
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 187648
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 37 postings in the dated validation.
+  - name: Eastern New Mexico University-Main Campus
+    careers_url: https://www.schooljobs.com/careers/enmu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 190521
+  # BMCC official single-page vacancies, including linked PDF/Word postings
+  # 21 postings in the dated validation.
+  - name: CUNY Borough of Manhattan Community College
+    provider: local-parser
+    careers_url: https://www.bmcc.cuny.edu/job-opportunities/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - bmcc
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 198154
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 145 postings in the dated validation.
+  - name: Cape Fear Community College
+    careers_url: https://www.schooljobs.com/careers/cfcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 198260
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 47 postings in the dated validation.
+  - name: Central Piedmont Community College
+    careers_url: https://www.schooljobs.com/careers/cpcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 198455
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 50 postings in the dated validation.
+  - name: Durham Technical Community College
+    careers_url: https://www.schooljobs.com/careers/durhamtech
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 198464
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 255 postings in the dated validation.
+  - name: East Carolina University
+    careers_url: https://ecu.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 198534
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 232 postings in the dated validation.
+  - name: Fayetteville Technical Community College
+    careers_url: https://faytechcc.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 198552
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 70 postings in the dated validation.
+  - name: Forsyth Technical Community College
+    careers_url: https://careers.forsythtech.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 198622
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 160 postings in the dated validation.
+  - name: Guilford Technical Community College
+    careers_url: https://gtcc.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 199148
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 114 postings in the dated validation.
+  - name: University of North Carolina at Greensboro
+    careers_url: https://spartantalent.uncg.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 199218
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 78 postings in the dated validation.
+  - name: University of North Carolina Wilmington
+    careers_url: https://jobs.uncw.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 199281
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 62 postings in the dated validation.
+  - name: University of North Carolina at Pembroke
+    careers_url: https://jobs.uncp.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 199333
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 33 postings in the dated validation.
+  - name: Pitt Community College
+    careers_url: https://www.schooljobs.com/careers/pittccedu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 199856
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 33 postings in the dated validation.
+  - name: Wake Technical Community College
+    careers_url: https://www.schooljobs.com/careers/waketechedu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 201885
+  # University of Cincinnati Main Campus facet
+  # 327 postings in the dated validation.
+  - provider: successfactors
+    name: University of Cincinnati-Main Campus
+    careers_url: https://jobs.uc.edu/
+    max_pages: 200
+    sfVariant: csb
+    successfactors:
+      facet_filters:
+        filter1:
+          - Main Campus
+    enabled: true
+  # UNITID 201946
+  # University of Cincinnati Clermont College facet
+  # 13 postings in the dated validation.
+  - provider: successfactors
+    name: University of Cincinnati-Clermont College
+    careers_url: https://jobs.uc.edu/
+    max_pages: 200
+    sfVariant: csb
+    successfactors:
+      facet_filters:
+        filter1:
+          - Clermont College
+    enabled: true
+  # UNITID 201955
+  # University of Cincinnati Blue Ash Campus facet
+  # 14 postings in the dated validation.
+  - provider: successfactors
+    name: University of Cincinnati-Blue Ash College
+    careers_url: https://jobs.uc.edu/
+    max_pages: 200
+    sfVariant: csb
+    successfactors:
+      facet_filters:
+        filter1:
+          - Blue Ash Campus
+    enabled: true
+  # UNITID 202222
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 116 postings in the dated validation.
+  - name: Columbus State Community College
+    careers_url: https://cscc.wd1.myworkdayjobs.com/en-US/CSCC_ext/job/Adjunct---COLS-1100_JR001547
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 202806
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 18 postings in the dated validation.
+  - name: Franklin University
+    careers_url: https://recruiting.ultipro.com/FRA1012FRANK/JobBoard/e51857cc-39da-44b8-a30e-839c982ff791/?q=&o=postedDateDesc
+    provider: ultipro
+    max_pages: 200
+    enabled: true
+  # UNITID 204857
+  # Ohio University employer board; regional campuses may be included
+  # 131 postings in the dated validation.
+  - name: Ohio University-Main Campus (shared employer board)
+    careers_url: https://www.ohiouniversityjobs.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 205470
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 106 postings in the dated validation.
+  - name: Sinclair Community College
+    careers_url: https://jobs.sinclair.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 207449
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 147 postings in the dated validation.
+  - name: Oklahoma City Community College
+    careers_url: https://www.occcjobs.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 207847
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 20 postings in the dated validation.
+  - name: Southeastern Oklahoma State University
+    careers_url: https://seok.csod.com/ux/ats/careersite/1/home?c=seok
+    provider: csod
+    max_pages: 200
+    enabled: true
+  # UNITID 207935
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 79 postings in the dated validation.
+  - name: Tulsa Community College
+    careers_url: https://www.schooljobs.com/careers/tulsacc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 209542
+  # Oregon State employer board across locations
+  # 59 postings in the dated validation.
+  - name: Oregon State University (shared employer board)
+    careers_url: https://jobs.oregonstate.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 209746
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 114 postings in the dated validation.
+  - name: Portland Community College
+    careers_url: https://portlandcc.wd12.myworkdayjobs.com/External
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 212133
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 66 postings in the dated validation.
+  - name: Eastern University
+    careers_url: https://www.schooljobs.com/careers/easternpa
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 214111
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 74 postings in the dated validation.
+  - name: Montgomery County Community College
+    careers_url: https://www.schooljobs.com/careers/mc3
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 218113
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 30 postings in the dated validation.
+  - name: Greenville Technical College
+    careers_url: https://gvltec.csod.com/ux/ats/careersite/1/home?c=gvltec
+    provider: csod
+    max_pages: 200
+    enabled: true
+  # UNITID 218894
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 38 postings in the dated validation.
+  - name: Trident Technical College
+    careers_url: https://www.governmentjobs.com/careers/sc/tridenttech
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 219471
+  # University of South Dakota organizational tier 1 = 1259
+  # 46 postings in the dated validation.
+  - name: University of South Dakota
+    careers_url: https://yourfuture.sdbor.edu/postings/search?query_organizational_tier_1_id%5B%5D=1259
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 220862
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 165 postings in the dated validation.
+  - name: University of Memphis
+    careers_url: https://ibqajb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/jobs
+    provider: oraclecloud
+    max_pages: 200
+    enabled: true
+  # UNITID 222992
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 88 postings in the dated validation.
+  - name: Austin Community College District
+    careers_url: https://austincc.wd1.myworkdayjobs.com/en-US/External?timeType=2f34dcec13810172ce244b0c661f6000&jobFamilyGroup=38af3f28ce3701e5f984329054033c61
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 223427
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 61 postings in the dated validation.
+  - name: Blinn College District
+    careers_url: https://blinn.csod.com/ux/ats/careersite/1/home?c=blinn
+    provider: csod
+    max_pages: 200
+    enabled: true
+  # UNITID 223816
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 49 postings in the dated validation.
+  - name: Central Texas College
+    careers_url: https://www.schooljobs.com/careers/ctcd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 224110
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 96 postings in the dated validation.
+  - name: North Central Texas College
+    careers_url: https://employment.nctc.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 224554
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 85 postings in the dated validation.
+  - name: East Texas A&M University
+    careers_url: https://tamus.wd1.myworkdayjobs.com/en-US/ETAMU_External/job/Adjunct-Faculty---CID-Human-Resources_R-073825
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 224615
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 47 postings in the dated validation.
+  - name: Dallas College
+    careers_url: https://dallascollege.wd1.myworkdayjobs.com/en-US/Dallas_College_Careers/job/Adjunct-Faculty--CEF-Instructors-AY-26-27_R14008
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 224642
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 160 postings in the dated validation.
+  - name: El Paso Community College
+    careers_url: https://www.schooljobs.com/careers/epcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 226091
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 63 postings in the dated validation.
+  - name: Lamar University
+    careers_url: https://www.schooljobs.com/careers/lamar
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 226578
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 43 postings in the dated validation.
+  - name: McLennan Community College
+    careers_url: https://www.schooljobs.com/careers/mclennan
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 227304
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 209 postings in the dated validation.
+  - name: Odessa College
+    careers_url: https://jobs.odessa.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 227368
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 167 postings in the dated validation.
+  - name: The University of Texas Rio Grande Valley
+    careers_url: https://careers.utrgv.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 227881
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 396 postings in the dated validation.
+  - name: Sam Houston State University
+    careers_url: https://shsu.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 228723
+  # Texas A&M University external board; excludes other TAMU system agencies
+  # 113 postings in the dated validation.
+  - name: Texas A&M University-College Station
+    careers_url: https://tamus.wd1.myworkdayjobs.com/TAMU_External
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 230418
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 14 postings in the dated validation.
+  - name: Ensign College
+    careers_url: https://wd501.myworkdaysite.com/recruiting/ensigncollege/EnsignCollege
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 230603
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 28 postings in the dated validation.
+  - name: Southern Utah University
+    careers_url: https://www.schooljobs.com/careers/suu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 230737
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 73 postings in the dated validation.
+  - name: Utah Valley University
+    careers_url: https://www.schooljobs.com/careers/uvu
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 230746
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 132 postings in the dated validation.
+  - name: Salt Lake Community College
+    careers_url: https://www.schooljobs.com/careers/slcc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 230782
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 162 postings in the dated validation.
+  - name: Weber State University
+    careers_url: https://jobs.weber.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 230861
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 16 postings in the dated validation.
+  - name: Community College of Vermont
+    careers_url: https://vsc.wd108.myworkdayjobs.com/en-US/CCV/job/Part-time-Faculty-in-Arts--Communication--and-Humanities_R-2026103-1
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 232557
+  # Liberty faculty board
+  # 56 postings in the dated validation.
+  - name: Liberty University
+    careers_url: https://liberty.wd5.myworkdayjobs.com/en-US/lu_job_board_faculty/job/Residential-Adjunct-Faculty-Marketing---School-of-Business_R0004448
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 232946
+  # Northern Virginia organizational tier 1 = 7897
+  # 51 postings in the dated validation.
+  - name: Northern Virginia Community College
+    careers_url: https://jobs.vccs.edu/postings/search?query_organizational_tier_1_id%5B%5D=7897
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 232982
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 75 postings in the dated validation.
+  - name: Old Dominion University
+    careers_url: https://jobs.odu.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 233772
+  # Tidewater organizational tier 1 = 7886
+  # 37 postings in the dated validation.
+  - name: Tidewater Community College
+    careers_url: https://jobs.vccs.edu/postings/search?query_organizational_tier_1_id%5B%5D=7886
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 236939
+  # Washington State university-wide board; not Pullman-only
+  # 68 postings in the dated validation.
+  - name: Washington State University (shared employer board)
+    careers_url: https://wsu.wd5.myworkdayjobs.com/en-US/WSU_Jobs/job/Adjunct-Faculty---College-of-Nursing--WSU-Tri-Cities--Richland--WA-_R-14709
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 239248
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 66 postings in the dated validation.
+  - name: Milwaukee Area Technical College
+    careers_url: https://www.schooljobs.com/careers/matc
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 240392
+  # Herzing employer board across campuses; not Madison-only
+  # 68 postings in the dated validation.
+  - name: Herzing University-Madison (shared employer board)
+    careers_url: https://recruiting2.ultipro.com/HER1009HRZ/JobBoard/267d2e37-abff-4559-8a18-a754503d3749/OpportunityDetail?opportunityId=324e0eba-5103-4680-ae3e-aaa991163ccf&postingId=457133ab-22a4-4cf1-8294-c8edb0403891
+    provider: ultipro
+    max_pages: 200
+    enabled: true
+  # UNITID 243780
+  # Purdue shared careers board; includes Fort Wayne, Northwest and Global brands
+  # 452 postings in the dated validation.
+  - provider: successfactors
+    name: Purdue University-Main Campus (shared employer board)
+    careers_url: https://careers.purdue.edu/
+    max_pages: 200
+    sfVariant: csb
+    enabled: true
+  # UNITID 244437
+  # Georgia State faculty board; Perimeter and other GSU units included
+  # 99 postings in the dated validation.
+  - name: Georgia State University-Perimeter College (shared employer board)
+    careers_url: https://facultycareers.gsu.edu/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true
+  # UNITID 247834
+  # Collin external faculty board
+  # 47 postings in the dated validation.
+  - name: Collin County Community College District
+    careers_url: https://collin.wd1.myworkdayjobs.com/en-US/ExternalFacultyCareerSite/job/Adjunct-Professor--Economics--Applicant-Pool-2026-2027-_R-8005
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 248934
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 191 postings in the dated validation.
+  - name: ECPI University
+    careers_url: https://recruiting.ultipro.com/ECP1000ECPI/JobBoard/e017f5e5-4f5e-4a98-a5d2-83db591e186f
+    provider: ultipro
+    max_pages: 200
+    enabled: true
+  # UNITID 262086
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 2 postings in the dated validation.
+  - name: University of Massachusetts Global
+    careers_url: https://umassglobal.wd5.myworkdayjobs.com/en-US/UMassGlobalCareers/job/Adjunct-Faculty---California-Multiple-Subject-Credential-MAT-Programs--Remote-_R-2098
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 399212
+  # Rancho Santiago district classified/management board; current jobs are district/Santa Ana, not Santiago-specific
+  # 2 postings in the dated validation.
+  - name: Santiago Canyon College (shared employer board)
+    careers_url: https://www.schooljobs.com/careers/rsccd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 409315
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 58 postings in the dated validation.
+  - name: South Texas College
+    careers_url: https://southtexascollege.wd12.myworkdayjobs.com/en-US/STC/job/Adjunct-Faculty-Pool--Division-of-Liberal-Arts---2026---2027-_JR101173
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 413413
+  # Capella public employer board; some roles serve both Capella and Strayer
+  # 12 postings in the dated validation.
+  - name: Capella University (shared employer board)
+    careers_url: https://strayer.wd1.myworkdayjobs.com/CU_Careers
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 426314
+  # Embry-Riddle adjunct board across campuses; not Worldwide-only
+  # 36 postings in the dated validation.
+  - name: Embry-Riddle Aeronautical University-Worldwide (shared employer board)
+    careers_url: https://embryriddle.wd1.myworkdayjobs.com/AdjunctFacultyOpportunities
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 434672
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 164 postings in the dated validation.
+  - name: Community College of Baltimore County
+    careers_url: https://www.schooljobs.com/careers/ccbcmd
+    provider: neogov
+    max_pages: 200
+    enabled: true
+  # UNITID 444130
+  # National University successor board after Northcentral merger; same inventory as National University, not a separate employer
+  # 55 postings in the dated validation.
+  - name: Northcentral University (successor employer)
+    careers_url: https://nus.wd1.myworkdayjobs.com/en-US/Careers
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 449339
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 3 postings in the dated validation.
+  - name: American Public University System
+    careers_url: https://recruiting.ultipro.com/AME1070/JobBoard/711bd40f-864c-42db-8c62-3c62f2edc13f?o=postedDateDesc
+    provider: ultipro
+    max_pages: 200
+    enabled: true
+  # UNITID 449889
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 8 postings in the dated validation.
+  - name: American College of Education
+    careers_url: https://ats.rippling.com/ace/jobs/8750e45f-a397-460b-ad3a-a1f5d6569500
+    provider: rippling
+    max_pages: 200
+    enabled: true
+  # UNITID 458919
+  # Strayer employer board across locations; not Georgia-only; some shared Capella roles
+  # 8 postings in the dated validation.
+  - name: Strayer University-Georgia (shared employer board)
+    careers_url: https://strayer.wd1.myworkdayjobs.com/en-US/CAREERS/job/Adjunct-Faculty--Accounting--Atlanta--Hybrid-_R30978-1
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 459994
+  # Strayer employer board across locations; same inventory as Georgia entry
+  # 8 postings in the dated validation.
+  - name: Strayer University-Global Region (shared employer board)
+    careers_url: https://strayer.wd1.myworkdayjobs.com/careers/
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 476975
+  # CSU Global faculty board
+  # 1 postings in the dated validation.
+  - name: Colorado State University Global
+    careers_url: https://job-boards.greenhouse.io/csuglobalfaculty/jobs/4438362009
+    provider: greenhouse
+    max_pages: 200
+    enabled: true
+  # UNITID 479956
+  # Penn State academic board across campuses; not World Campus-only
+  # 421 postings in the dated validation.
+  - name: Pennsylvania State University-World Campus (shared employer board)
+    careers_url: https://psu.wd1.myworkdayjobs.com/en-US/PSU_Academic/job/Part-Time---English-Composition---Adjunct-Instructors_REQ_0000054095-1
+    provider: workday
+    max_pages: 200
+    enabled: true
+  # UNITID 480091
+  # Bryant & Stratton employer board across campuses; not Online-only
+  # 185 postings in the dated validation.
+  - name: Bryant & Stratton College-Online (shared employer board)
+    careers_url: https://recruiting.ultipro.com/BRY1002BSC/JobBoard/6b838b9a-cd2b-436a-903b-0de7b6e17b4f/?q=&o=postedDateDesc
+    provider: ultipro
+    max_pages: 200
+    enabled: true
+  # UNITID 484613
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 20 postings in the dated validation.
+  - name: University of Phoenix-Arizona
+    careers_url: https://uop.avature.net/careers/SearchJobs
+    provider: avature
+    max_pages: 200
+    enabled: true
+  # UNITID 489201
+  # State Center district board; Clovis, Fresno, Reedley, Madera and district jobs included
+  # 18 postings in the dated validation.
+  - name: Clovis Community College (shared employer board)
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/scccd
+    max_pages: 200
+    enabled: true
+  # UNITID 489779
+  # PurdueUniversityGlobal brand; excludes other Purdue brands
+  # 26 postings in the dated validation.
+  - provider: successfactors
+    name: Purdue University Global
+    careers_url: https://careers.purdue.edu/PurdueUniversityGlobal
+    max_pages: 200
+    sfVariant: csb
+    enabled: true
+  # UNITID 498571
+  # Employer public board; complete inventory of this configured site, not every separate recruiting site
+  # 49 postings in the dated validation.
+  - name: Pennsylvania Western University
+    careers_url: https://pennwest.peopleadmin.com/postings/search
+    provider: peopleadmin
+    max_pages: 200
+    enabled: true

@@ -12,7 +12,10 @@ Validated on **2026-10-19** against the 60 schools previously classified as
 Counts are dated observations, not remote-adjunct matches. Some schools share an
 employer board or use a faculty-only category. The scope column identifies those
 limits. UF and UF Online use the same inventory; do not sum posting counts as
-unique jobs. This validation does not re-test the other 286 schools.
+unique jobs. This 60-school validation does not re-test the other 286 schools. The subsequent
+[original 172-school validation](COLLEGE_PROVIDER_VALIDATION.md) checks employer
+ownership and complete pagination. Together they establish **231/346 (66.8%)**
+successful routes: 229 non-empty and 2 verified empty searches.
 
 ## Run a search
 
