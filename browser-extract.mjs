@@ -835,8 +835,7 @@ export function parseArgs(argv) {
 
 // Read the raw DOM inside the page: title, main visible text, and visible
 // anchors. Runs in the browser context; returns plain data only.
-export async function readDom(page) {
-  return page.evaluate(() => {
+function readPageDom() {
     const title = (document.querySelector('h1')?.innerText || document.title || '').trim();
 
     // Main text: prefer <main>/[role=main]/<article>, else body; strip nav chrome.
@@ -913,8 +912,41 @@ export async function readDom(page) {
       }
     }
 
-    return { title, text, anchors, jsonLdDescription, jsonLdTitle };
-  });
+    return { title, text, anchors, jsonLdDescription, jsonLdTitle, documentUrl: location.href, readyState: document.readyState };
+}
+
+// Chromium's isolated world shares the DOM but not page-script modifications
+// to DOM prototypes (Herzing's analytics wraps querySelector and throws).
+// Recreate the world after a redirect destroys it; never retry arbitrary errors.
+export async function readDom(page, timeout = DEFAULT_TIMEOUT_MS) {
+  const session = await page.context().newCDPSession(page);
+  const deadline = Date.now() + timeout;
+  try {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        await page.waitForLoadState('domcontentloaded', { timeout: Math.max(1, deadline - Date.now()) });
+        const { frameTree } = await session.send('Page.getFrameTree');
+        const { executionContextId } = await session.send('Page.createIsolatedWorld', {
+          frameId: frameTree.frame.id, worldName: 'career-ops-reader',
+        });
+        const result = await session.send('Runtime.callFunctionOn', {
+          functionDeclaration: readPageDom.toString(), executionContextId,
+          returnByValue: true,
+        });
+        if (result.exceptionDetails) {
+          throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
+        }
+        if (result.result.value?.readyState === 'loading') throw new Error('document still loading');
+        return result.result.value;
+      } catch (error) {
+        if (attempt >= 2 || Date.now() >= deadline || !/execution context was destroyed|cannot find context|cannot find execution context|no frame with given id|document still loading/i.test(error.message)) throw error;
+        await page.waitForLoadState('domcontentloaded', { timeout: Math.max(1, deadline - Date.now()) });
+        await page.waitForTimeout(Math.min(HYDRATION_WAIT_MS, Math.max(1, deadline - Date.now())));
+      }
+    }
+  } finally {
+    await session.detach().catch(() => {});
+  }
 }
 
 async function main() {
@@ -990,15 +1022,14 @@ async function main() {
     await page.waitForTimeout(HYDRATION_WAIT_MS); // let SPAs hydrate
 
     // Belt-and-suspenders: never emit content read from a private final URL.
-    const finalUrl = page.url();
+    const raw = await readDom(page, timeout);
+    const finalUrl = raw.documentUrl;
     const finalGuard = rejectPrivateOrInvalid(finalUrl);
     if (finalGuard) {
       console.error(JSON.stringify({ error: `blocked final URL: ${finalGuard.reason}`, code: finalGuard.code }));
       process.exitCode = 1;
       return;
     }
-    const raw = await readDom(page);
-
     if (mode === 'listing') {
       process.stdout.write(JSON.stringify(normalizeListing(raw.anchors, finalUrl, max)));
     } else {

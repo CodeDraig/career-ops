@@ -125,6 +125,12 @@ function parseLocation(block) {
  * @param {string} url
  */
 export function assertParsedSomething(html, url) {
+  // Phoenix renders an explicit empty result card alongside featured jobs.
+  // Only accept that marker inside the results section and only when that
+  // section itself has no posting links; keep detecting broken result markup.
+  const results = String(html ?? '').match(/<section\b[^>]*class=["'][^"']*\bsection--job-list\b[^"']*["'][^>]*>([\s\S]*?)<\/section>/i)?.[1];
+  if (results && /<li\b[^>]*class=["'][^"']*\blistSingleColumnItem\b[^"']*["'][^>]*>\s*No jobs found\s*<\/li>/i.test(results) &&
+      !/\/JobDetail\//i.test(results)) return;
   if (!/\/JobDetail\/[^"'\s]+/i.test(String(html ?? ''))) return;
   throw new Error(
     `avature: ${url} still contains JobDetail links but no article could be parsed — the listing markup changed`,

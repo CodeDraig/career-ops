@@ -20,3 +20,20 @@ try {
   assert.ok(!jobs.some(j => j.title === 'Featured'));
   pass('Avature legacy list cards decode titles, exclude featured duplicates and paginate by the observed ten-row stride');
 } catch (e) { fail(`Avature legacy lists: ${e.stack}`); }
+
+try {
+  const { assertParsedSomething } = await import('../../providers/avature.mjs');
+  const empty = '<section class="section section--job-list"><ul class="listSingleColumn"><li class="listSingleColumnItem">No jobs found\n</li></ul></section>';
+  const url = 'https://uop.avature.net/careers/SearchJobs/?3_94_3=2850925';
+  const calls = [];
+  const jobs = await avature.fetch({ name: 'Phoenix', careers_url: url }, {
+    sleep: async () => {}, fetchText: async u => { calls.push(u); return empty + featured; },
+  });
+  assert.deepEqual(jobs, []);
+  assert.equal(calls.length, 1);
+  assert.equal(new URL(calls[0]).searchParams.get('3_94_3'), '2850925');
+  assert.throws(() => assertParsedSomething(featured, url), /markup changed/);
+  assert.throws(() => assertParsedSomething('<p>No jobs found</p>' + featured, url), /markup changed/);
+  assert.throws(() => assertParsedSomething(empty.replace('</section>', featured + '</section>'), url), /markup changed/);
+  pass('Avature accepts explicit empty results with external featured jobs but still detects broken result markup');
+} catch (e) { fail(`Avature empty legacy search: ${e.stack}`); process.exitCode = 1; }

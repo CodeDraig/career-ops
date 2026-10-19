@@ -33,6 +33,62 @@ try {
     {href: '?sort=title', label: 'Job Title'},
   ], 'https://jobs.example.edu/search');
   assert.equal(queryJobs.jobs.length, 2);
+  // A third-party script can replace DOM methods in the main world.
+  await page.evaluate(() => {
+    Document.prototype.querySelector = () => { throw new TypeError('analytics wrapper failed'); };
+    Element.prototype.querySelectorAll = () => { throw new TypeError('analytics wrapper failed'); };
+  });
+  const isolated = await readDom(page);
+  assert.deepEqual(isolated.anchors, raw.anchors);
+  assert.equal(isolated.text, raw.text);
+  pass('DOM extraction survives page-script replacements of native DOM methods');
+
+  // Force a real redirect between world creation and extraction, rather than
+  // relying on a timing-sensitive sleep to reproduce a destroyed context.
+  await page.route('https://redirect.example/**', route => route.fulfill({
+    contentType: 'text/html', body: '<main><h1>Destination</h1><a href="/jobs/42">Faculty Position</a></main>',
+  }));
+  const context = page.context();
+  const newSession = context.newCDPSession.bind(context);
+  let attempts = 0;
+  context.newCDPSession = async target => {
+    const session = await newSession(target);
+    const send = session.send.bind(session);
+    session.send = async (method, params) => {
+      if (method === 'Runtime.callFunctionOn' && attempts++ === 0) {
+        await page.goto('https://redirect.example/final');
+      }
+      return send(method, params);
+    };
+    return session;
+  };
+  try {
+    const redirected = await readDom(page);
+    assert.equal(attempts, 2);
+    assert.equal(redirected.title, 'Destination');
+    assert.equal(redirected.documentUrl, 'https://redirect.example/final');
+    assert.equal(normalizeListing(redirected.anchors, redirected.documentUrl).jobs[0].url, 'https://redirect.example/jobs/42');
+  } finally { context.newCDPSession = newSession; }
+  pass('DOM extraction retries a destroyed context and returns the destination URL with its content');
+  for (const [message, expectedAttempts] of [
+    ['Cannot find context with specified id', 3],
+    ['Unexpected extraction failure', 1],
+  ]) {
+    let calls = 0;
+    let detached = false;
+    const fakePage = {
+      context: () => ({ newCDPSession: async () => ({
+        send: async () => { calls++; throw new Error(message); },
+        detach: async () => { detached = true; },
+      }) }),
+      waitForLoadState: async () => {},
+      waitForTimeout: async () => {},
+    };
+    await assert.rejects(readDom(fakePage), error => error.message === message);
+    assert.equal(calls, expectedAttempts);
+    assert.equal(detached, true);
+  }
+  pass('Navigation retries are bounded, unrelated failures propagate, and CDP sessions detach on failure');
   pass('Browser listing excludes navigation, pairs button links with their own heading and rejects ambiguous cards before applying the cap');
 } catch (e) { fail(`Browser listing cards: ${e.stack}`); process.exitCode = 1; }
 finally { await browser?.close(); }
