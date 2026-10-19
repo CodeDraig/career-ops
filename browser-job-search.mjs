@@ -10,6 +10,21 @@ import { isMainModule } from './lib/is-main-module.mjs';
 import { validateFlags, flagValue } from './lib/cli-flags.mjs';
 
 export const RECIPES = {
+  jobsyn: { stopAtTotal: true, container: '#main', links: '#jobs a[href$="/job/"]', row: 'a', title: '.job-title', next: 'button[aria-label="Load more jobs"]', clickNext: true, buttonNext: true, totalPattern: '(\\d+) Jobs', requireTotal: true, emptyPattern: 'No results were found for your current search\\.' },
+  neoed: { container: '[id^="jobs-list-"]', links: 'a.jobs__box', row: 'a', title: '.jobs__box__heading', location: '.jobs__box__text', jobHosts: ['www.governmentjobs.com','www.schooljobs.com'], next: '.pagination a', nextText: '❯', clickNext: true, buttonNext: true },
+  brassring: { startButton: '#clearResumeJobsBtn', container: 'a[id^="Job_title"][href*="jobid="]', links: 'a[id^="Job_title"][href*="jobid="]', next: 'button[aria-label="Go to next page"]', clickNext: true, buttonNext: true, totalPattern: '(\\d+) results', requireTotal: true },
+  exacthire: { container: 'a[data-testid^="jobDetailsLink"]', links: 'a[data-testid^="jobDetailsLink"]', row: 'div:has(> a[data-testid^="jobDetailsLink"])', title: 'h6', next: 'button', nextText: 'Load More Jobs', clickNext: true, buttonNext: true, totalPattern: '(\\d+) Results', requireTotal: true, stopAtTotal: true },
+  brcc: { container: '#main table', links: '#main table a[href]', jobHosts: ['careers.lctcs.edu','www.governmentjobs.com'], path: '/(?:jobs/\\d+|careers/louisiana/jobs/\\d+)' },
+  cunySps: { container: '.field--node-body', links: '.field--node-body li a[href]', jobHosts: ['media.sps.cuny.edu'], path: '(?:\\.pdf$|adjunct-faculty$|college-assistant)' },
+  easyhr: { container: '[id$="_GridView1"]', links: '[id$="_GridView1"] a[id$="_HyperLink1"]', row: 'tr', location: '[id$="_Label4"]' },
+  dayforce: { container: 'a[job-posting-id]', links: 'a[job-posting-id]', row: '.ant-card', location: '[test-id="job-location"]', next: '.ant-pagination-next', clickNext: true, buttonNext: true, paginationLabel: '.ant-pagination[aria-label]' },
+  paycor: { container: 'a[href*="JobIntroduction.action?"]', links: 'a[href*="JobIntroduction.action?"]', frameHost: 'recruitingbypaycor.com' },
+  paycom: { container: 'a[href*="/portal/"][href*="/jobs/"]', links: 'a[href*="/portal/"][href*="/jobs/"]', row: 'a', title: 'h2', next: 'button:has(svg[aria-label="forward arrow"])', clickNext: true, buttonNext: true, totalPattern: '(\\d+) Results', requireTotal: true },
+  lctcs: { container: 'div.grid', links: 'a[href^="/jobs/"]', row: 'div.grid', title: 'div[title] p', totalPattern: 'Showing (\\d+) job', requireTotal: true },
+  agmu: { container: '#Form1', links: 'a[href*="page-job-info?"]', row: 'a', title: 'h4' },
+  easternFlorida: { container: 'table.responsive', links: 'table.responsive a[href*="opening-position.cfm?"]', row: 'tr', excludeRowText: 'Position Closed|No Longer Accepting' },
+  paylocity: { container: '.job-listing-job-item', links: '.job-item-title a', row: '.job-listing-job-item', location: '.job-location', totalPattern: 'of (\\d+) Job Opportunities', requireTotal: true },
+  kingsborough: { container: '#main-content', links: '#main-content table a[href*="cuny.jobs/"]', jobHosts: ['cuny.jobs'], path: '/job/?$' },
   bmcc: { container: '.entry-content .content-box', links: '.entry-content .content-box li a[href]', jobHosts: ['cuny.jobs', 'rfcuny.wd108.myworkdayjobs.com', 'bmccprodstroac.blob.core.windows.net'], path: '(?:/job/?$|/(?:job|details)/|/uploads/.*\\.(?:pdf|docx)$)' },
   clinch: { container: '[id^="jobs_search_results_"]', links: 'a[id^="link_job_title_"]', next: 'a[rel="next"]', row: 'article,tr', location: '.job-search-results-location,.job-component-location' },
   pageup: { container: '#search-results-content', links: '#search-results-content a.job-link', next: 'a.more-link', row: 'tr', location: '.location' },
@@ -34,10 +49,12 @@ export function readSearchPage(recipe) {
   const text = document.body?.innerText || '';
   const rows = [...document.querySelectorAll(recipe.links)].map(a => {
     const row = recipe.row ? a.closest(recipe.row) : null;
+    if (recipe.excludeRowText && new RegExp(recipe.excludeRowText, 'i').test(row?.innerText || '')) return null;
     return { title: (recipe.title ? row?.querySelector(recipe.title)?.innerText : a.innerText)?.trim(), url: recipe.rowUrl ? row?.getAttribute(recipe.rowUrl) : a.href, location: recipe.location ? row?.querySelector(recipe.location)?.innerText.trim() || '' : '', description: row?.querySelector('.job-search-results-summary')?.innerText.trim() || '' };
-  });
-  const next = recipe.next ? [...document.querySelectorAll(recipe.next)].find(a => a.getAttribute('href') && !a.closest('.disabled,[aria-disabled="true"]'))?.href : null;
-  return { rows, next, pageToken: recipe.pageToken ? document.querySelector(recipe.pageToken)?.textContent.trim() : null, pageCount: recipe.pageCount ? Number(document.querySelector(recipe.pageCount)?.textContent) : null, recognized: Boolean(document.querySelector(recipe.container)), text,
+  }).filter(Boolean);
+  const next = recipe.next ? [...document.querySelectorAll(recipe.next)].find(a => (!recipe.nextText || a.innerText.trim() === recipe.nextText) && (a.getAttribute('href') || recipe.buttonNext) && !a.closest('.disabled,[aria-disabled="true"],[disabled]')) : null;
+  const nextUrl = next ? (recipe.buttonNext ? location.href.split('#')[0] + '#after=' + encodeURIComponent(rows.at(-1)?.url || 'empty') : next.href) : null;
+  return { rows, next: nextUrl, pageToken: recipe.pageToken ? document.querySelector(recipe.pageToken)?.textContent.trim() : null, pageCount: recipe.paginationLabel ? Number(document.querySelector(recipe.paginationLabel)?.getAttribute('aria-label')?.match(/of (\d+)/)?.[1]) : recipe.pageCount ? Number(document.querySelector(recipe.pageCount)?.textContent) : null, recognized: Boolean(document.querySelector(recipe.container)), text,
     documentUrl: location.href, readyState: document.readyState };
 }
 
@@ -57,6 +74,7 @@ export function normalizeSearchPage(raw, { url, company, kind }) {
     const title = String(row.title || '').replace(/\s+/g, ' ').trim();
     if (!title || /^(?:apply(?: now)?|read more|view details|detail)$/i.test(title)) continue;
     u.hash = '';
+    if (kind === 'neoed') for (const key of ['visitor','session']) u.searchParams.delete(key);
     if (seen.has(u.href)) continue;
     seen.add(u.href);
     jobs.push({ title, url: u.href, company, location: row.location || '', ...(row.description ? { description: row.description } : {}) });
@@ -76,7 +94,9 @@ export function normalizeSearchPage(raw, { url, company, kind }) {
     if (!recipe.clickNext) u.hash = '';
     next = u.href;
   }
-  const total = recipe.totalPattern ? (raw.text || '').replace(/\s+/g, ' ').match(new RegExp(recipe.totalPattern, 'i'))?.[1] : null;
+  let total = recipe.totalPattern ? (raw.text || '').replace(/\s+/g, ' ').match(new RegExp(recipe.totalPattern, 'i'))?.[1] : null;
+  if (total == null && !jobs.length && recipe.emptyPattern && new RegExp(recipe.emptyPattern).test(raw.text || '')) total = '0';
+  if (recipe.requireTotal && total == null) throw new Error('Search is missing its advertised result count');
   if (kind === 'georgia' && !jobs.length && total == null) throw new Error('Georgia search returned no results without its count; empty search is unverified');
   return { jobs, next, reportedTotal: total == null ? null : Number(total) };
 }
@@ -95,11 +115,12 @@ export async function searchBrowserJobs({ url, company, kind, maxPages = 100, ti
     const jobs = [], visited = new Set(), seen = new Set();
     let reportedTotal = null;
     let next = url;
+    let previousSignature = null;
     for (let n = 1; n <= maxPages; n++) {
       if (visited.has(next)) throw new Error('Job search pagination repeated a page');
       visited.add(next);
       if (n > 1 && recipe.clickNext) {
-        await page.locator(recipe.next).first().click({ timeout });
+        await (recipe.nextText ? page.locator(recipe.next).filter({ hasText: recipe.nextText }) : page.locator(recipe.next)).first().click({ timeout });
       } else {
         const response = await page.goto(next, { waitUntil: 'domcontentloaded', timeout, ...(n > 1 ? { referer: page.url() } : {}) });
         // A challenge response may navigate to the public page after its own
@@ -107,6 +128,7 @@ export async function searchBrowserJobs({ url, company, kind, maxPages = 100, ti
         // a challenge an empty search or emit the preceding partial pages.
         if (response && response.status() >= 400 && response.status() !== 403) throw new Error(`Job search HTTP ${response.status()}: ${next}`);
       }
+      if (n === 1 && recipe.startButton) await page.locator(recipe.startButton).click({ timeout });
       if (n === 1 && recipe.startSearch) {
         // Search IDs are session-specific; never save/reuse a historical ID.
         // Some themes bind the button after DOMContentLoaded. Repeat only this
@@ -122,8 +144,9 @@ export async function searchBrowserJobs({ url, company, kind, maxPages = 100, ti
       const deadline = Date.now() + timeout;
       do {
         await page.waitForTimeout(500);
-        raw = await readDom(page, Math.max(1,deadline-Date.now()), readSearchPage, RECIPES[kind]);
-        if ((!recipe.clickNext || raw.pageToken === String(n)) && raw.recognized && (raw.rows.length || /no (?:matching |open |current )?(?:jobs|positions|vacancies)|0 (?:jobs|positions|results)|no results?/i.test(raw.text))) break;
+        const frameUrl = recipe.frameHost ? page.frames().find(f => { try { return new URL(f.url()).hostname === recipe.frameHost; } catch { return false; } })?.url() : undefined;
+        raw = await readDom(page, Math.max(1,deadline-Date.now()), readSearchPage, RECIPES[kind], frameUrl);
+        if ((!recipe.pageToken || raw.pageToken === String(n)) && (!recipe.buttonNext || JSON.stringify(raw.rows.map(r => r.url)) !== previousSignature) && (!recipe.requireTotal || new RegExp(recipe.totalPattern, 'i').test(raw.text.replace(/\s+/g, ' ')) || (recipe.emptyPattern && new RegExp(recipe.emptyPattern).test(raw.text))) && raw.recognized && (raw.rows.length || /no (?:matching |open |current )?(?:jobs|positions|vacancies)|0 (?:jobs|positions|results)|no results?/i.test(raw.text))) break;
       } while (Date.now() < deadline);
       // This Drupal board intermittently serves an HTTP-200 "No result found"
       // fragment without its result count, even for a populated agency. Retry
@@ -136,13 +159,14 @@ export async function searchBrowserJobs({ url, company, kind, maxPages = 100, ti
         }
       }
       if (rejectPrivateOrInvalid(raw.documentUrl)) throw new Error('Blocked final job search URL');
-      if (recipe.clickNext && raw.pageToken !== String(n)) throw new Error(`Search did not advance to page ${n} (reported ${raw.pageToken})`);
+      if (recipe.pageToken && raw.pageToken !== String(n)) throw new Error(`Search did not advance to page ${n} (reported ${raw.pageToken})`);
+      previousSignature = JSON.stringify(raw.rows.map(r => r.url));
       const parsed = normalizeSearchPage(raw, { url: next, company, kind });
       if (parsed.reportedTotal !== null) reportedTotal = parsed.reportedTotal;
       let fresh = 0;
       for (const job of parsed.jobs) if (!seen.has(job.url)) { seen.add(job.url); jobs.push(job); fresh++; }
       if (n > 1 && parsed.jobs.length && !fresh) throw new Error('Job search pagination repeated its postings');
-      if (!parsed.next) {
+      if (!parsed.next || (recipe.stopAtTotal && reportedTotal !== null && jobs.length === reportedTotal)) {
         if ((reportedTotal !== null && jobs.length < reportedTotal) || raw.pageCount > n) throw new Error('Search ended before its advertised total; incomplete results were not emitted');
         return { jobs, pages: n, complete: true, source: url, ...(reportedTotal === null ? {} : { reportedTotal }) };
       }

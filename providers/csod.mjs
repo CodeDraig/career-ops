@@ -59,8 +59,11 @@ export function resolveConfig(entry) {
   const host = u.host.toLowerCase();
   if (host !== 'csod.com' && !host.endsWith('.csod.com')) return null;
   const m = u.pathname.match(/\/ux\/ats\/careersite\/(\d+)\//i) || u.pathname.match(/\/ux\/ats\/careersite\/(\d+)$/i);
-  if (!m) return null;
-  const siteId = Number(m[1]);
+  // Institutions still publish the legacy careersite URL. Its `site` is the
+  // same public site ID used by the current UX bootstrap and search API.
+  const legacySite = /^\/ats\/careersite\/search\.aspx$/i.test(u.pathname) ? u.searchParams.get('site') : null;
+  if (!m && !/^\d+$/.test(legacySite || '')) return null;
+  const siteId = Number(m ? m[1] : legacySite);
   const corpName = u.searchParams.get('c') || host.split('.')[0];
   return {
     origin: u.origin,

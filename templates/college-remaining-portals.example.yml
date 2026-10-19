@@ -1,0 +1,941 @@
+# Validated remaining-school routes, 2026-10-19. Example only; not auto-loaded.
+# Merge selected entries into DATA_ROOT portals.yml tracked_companies.
+# Scope and failures: docs/COLLEGE_REMAINING_VALIDATION.md.
+tracked_companies:
+  # UNITID 100751: Institution public employer board
+  - name: The University of Alabama
+    provider: local-parser
+    careers_url: https://careers.ua.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 101514: Calhoun full-time public board; separate part-time listings outside this route
+  - name: John C Calhoun State Community College
+    careers_url: https://www.schooljobs.com/careers/accs/calhoun
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 101587: Institution public employer board
+  - name: University of West Alabama
+    provider: interfolio-wordpress
+    careers_url: https://www.uwa.edu/employment/
+    max_pages: 200
+    enabled: true
+  # UNITID 104151: Shared ASU staff board; includes campus and digital operations; not faculty
+  - name: Arizona State University Campus Immersion — Shared ASU staff board
+    provider: workday
+    careers_url: https://asu.wd1.myworkdayjobs.com/ASUStaffCareers
+    max_pages: 200
+    enabled: true
+  # UNITID 104179: Institution public employer board
+  - name: University of Arizona
+    careers_url: https://arizona.csod.com/ux/ats/careersite/4/home?c=arizona
+    max_pages: 200
+    provider: csod
+    enabled: true
+  # UNITID 104708: Shared Maricopa district board; includes other member colleges
+  - name: Glendale Community College — Shared Maricopa district board
+    provider: peoplesoft
+    careers_url: https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000
+    max_pages: 200
+    enabled: true
+  # UNITID 105154: Shared Maricopa district board; includes other member colleges
+  - name: Mesa Community College — Shared Maricopa district board
+    provider: peoplesoft
+    careers_url: https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000
+    max_pages: 200
+    enabled: true
+  # UNITID 105428: Shared Maricopa district board; includes other member colleges
+  - name: Phoenix College — Shared Maricopa district board
+    provider: peoplesoft
+    careers_url: https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000
+    max_pages: 200
+    enabled: true
+  # UNITID 108667: Shared Peralta district board; Alameda, Berkeley, Laney and Merritt
+  - name: College of Alameda — Shared Peralta district board
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/peralta
+    max_pages: 200
+    enabled: true
+  # UNITID 109208: Shared Los Rios district board, all member colleges
+  - name: American River College — Shared Los Rios district board, all member colleges
+    careers_url: https://www.schooljobs.com/careers/losriosccd
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 111887: Institution public board
+  - name: Cerritos College
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/cerritosedu
+    max_pages: 200
+    enabled: true
+  # UNITID 113096: Shared Los Rios district faculty board, all member colleges
+  - name: Cosumnes River College — Shared Los Rios district faculty board, all member colleges
+    careers_url: https://www.schooljobs.com/careers/losriosccd/Faculty
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 113218: Grossmont-Cuyamaca shared district
+  - name: Cuyamaca College
+    provider: workday
+    careers_url: https://gcccd.wd1.myworkdayjobs.com/gcccdcareers
+    max_pages: 200
+    enabled: true
+  # UNITID 113236: Shared North Orange County district board, Cypress and Fullerton
+  - name: Cypress College — Shared North Orange County district board, Cypress and Fullerton
+    provider: peopleadmin
+    careers_url: https://nocccd.peopleadmin.com/
+    max_pages: 200
+    enabled: true
+  # UNITID 113333: Shared Foothill-De Anza district board
+  - name: De Anza College — Shared Foothill-De Anza district board
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/fhda
+    max_pages: 200
+    enabled: true
+  # UNITID 113856: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: East Los Angeles College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 114789: Shared State Center district classified board; separate faculty recruitment is outside this route
+  - name: Fresno City College — Shared State Center district classified board
+    careers_url: https://www.schooljobs.com/careers/scccd
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 114859: Shared North Orange County district board, Cypress and Fullerton
+  - name: Fullerton College — Shared North Orange County district board, Cypress and Fullerton
+    careers_url: https://nocccd.peopleadmin.com/
+    max_pages: 200
+    provider: peopleadmin
+    enabled: true
+  # UNITID 115001: Institution public employer board
+  - name: Glendale Community College
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/gccedu
+    max_pages: 200
+    enabled: true
+  # UNITID 115296: Grossmont-Cuyamaca shared district
+  - name: Grossmont College
+    provider: workday
+    careers_url: https://gcccd.wd1.myworkdayjobs.com/gcccdcareers
+    max_pages: 200
+    enabled: true
+  # UNITID 116439: Shared South Orange County district board; Saddleback and Irvine Valley
+  - name: Irvine Valley College — Shared South Orange County district board
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/socccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117052: Shared State Center district classified board; separate faculty recruitment is outside this route
+  - name: Reedley College — Shared State Center district classified board
+    careers_url: https://www.schooljobs.com/careers/scccd
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 117690: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: Los Angeles Harbor College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117706: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: Los Angeles Pierce College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117715: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: >-
+      Los Angeles Southwest College — Shared Los Angeles Community College District academic board, all nine member
+      colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117724: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: >-
+      Los Angeles Trade Technical College — Shared Los Angeles Community College District academic board, all nine member
+      colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117733: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: Los Angeles Valley College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117788: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: Los Angeles City College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 117867: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: Los Angeles Mission College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 118772: Shared Peralta district board; Alameda, Berkeley, Laney and Merritt
+  - name: Merritt College — Shared Peralta district board
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/peralta
+    max_pages: 200
+    enabled: true
+  # UNITID 121619: Shared Rancho Santiago district board; separate recruiting categories are outside this route
+  - name: Santa Ana College — Shared Rancho Santiago district board
+    careers_url: https://www.schooljobs.com/careers/rsccd
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 121901: Shared RCCD district board; Riverside, Moreno Valley and Norco
+  - name: Riverside City College — Shared RCCD district board
+    provider: peopleadmin
+    careers_url: https://jobs.rccd.edu/postings
+    max_pages: 200
+    enabled: true
+  # UNITID 122180: Shared Los Rios district faculty board, all member colleges
+  - name: Sacramento City College — Shared Los Rios district faculty board, all member colleges
+    careers_url: https://www.schooljobs.com/careers/losriosccd/Faculty
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 122375: San Diego Mesa campus filter 265 within SDCCD
+  - name: San Diego Mesa College
+    provider: peopleadmin
+    careers_url: https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id[]=265
+    max_pages: 200
+    enabled: true
+  # UNITID 122791: Shared San Mateo County district part-time faculty pools
+  - name: College of San Mateo — Shared San Mateo County district part-time faculty pools
+    provider: local-parser
+    careers_url: https://smccd.interviewexchange.com/static/clients/628SCM1/index.jsp?catid=2082
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - interviewexchange
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 123299: Current Shasta NEOED board; replaces incomplete two-record SchoolJobs mirror
+  - name: Shasta College
+    provider: local-parser
+    careers_url: https://shastacc.attract.neoed.com/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - neoed
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 123800: Institution public employer board
+  - name: Southwestern College
+    careers_url: https://www.schooljobs.com/careers/southwesterncollege
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 125170: Shared Peralta district board; Alameda, Berkeley, Laney and Merritt
+  - name: Berkeley City College — Shared Peralta district board
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/peralta
+    max_pages: 200
+    enabled: true
+  # UNITID 125471: Shared Los Angeles Community College District academic board, all nine member colleges
+  - name: West Los Angeles College — Shared Los Angeles Community College District academic board, all nine member colleges
+    provider: csod
+    careers_url: https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd
+    max_pages: 200
+    enabled: true
+  # UNITID 125499: West Valley campus filter 573
+  - name: West Valley College
+    provider: peopleadmin
+    careers_url: https://wvm.peopleadmin.com/postings/search?query_organizational_tier_1_id[]=573
+    max_pages: 200
+    enabled: true
+  # UNITID 126827: Institution public employer board
+  - name: Colorado Technical University-Colorado Springs
+    provider: local-parser
+    careers_url: https://myjobs.adp.com/ctu/cx/job-listing
+    enabled: true
+    parser:
+      command: node
+      script: adp-myjobs-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 131113: Wilmington adjunct faculty category cws=60
+  - name: Wilmington University
+    provider: local-parser
+    careers_url: https://phh.tbe.taleo.net/phh02/ats/careers/v2/searchResults?org=WILMU&cws=60
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - taleoBusiness
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 131469: Institution public employer board
+  - name: George Washington University
+    careers_url: https://www.gwu.jobs/postings/search
+    max_pages: 200
+    provider: peopleadmin
+    enabled: true
+  # UNITID 132693: Institution public employer board
+  - name: Eastern Florida State College
+    provider: local-parser
+    careers_url: https://webapps.easternflorida.edu/hr/employment-opportunities.cfm
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - easternFlorida
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 133508: Institution public employer board
+  - name: Florida SouthWestern State College
+    provider: silkroad
+    careers_url: https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom
+    max_pages: 200
+    enabled: true
+  # UNITID 133702: Institution board
+  - name: Florida State College at Jacksonville
+    provider: peoplesoft
+    careers_url: https://jobs.fscj.edu/psc/Applicant/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1
+    max_pages: 200
+    enabled: true
+  # UNITID 136358: Institution public employer board
+  - name: Palm Beach State College
+    careers_url: https://palmbeachstate.wd1.myworkdayjobs.com/external
+    max_pages: 200
+    provider: workday
+    enabled: true
+  # UNITID 137078: Institution public employer board
+  - name: St Petersburg College
+    provider: peoplesoft
+    careers_url: https://spchrs.spcollege.edu/psc/GUEST/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant
+    max_pages: 100
+    enabled: true
+  # UNITID 138187: Institution public board
+  - name: Valencia College
+    provider: peopleadmin
+    careers_url: https://valenciacollege.peopleadmin.com/
+    max_pages: 200
+    enabled: true
+  # UNITID 139931: Institution public employer board
+  - name: Georgia Southern University
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=39000
+    max_pages: 200
+    provider: peoplesoft
+    enabled: true
+  # UNITID 141264: Institution public board
+  - name: Valdosta State University
+    provider: peoplesoft
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=51000
+    max_pages: 200
+    enabled: true
+  # UNITID 141334: Institution public employer board
+  - name: University of West Georgia
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=54000
+    max_pages: 200
+    provider: peoplesoft
+    enabled: true
+  # UNITID 141811: Leeward campus location filters from official employment link
+  - name: Leeward Community College
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/hawaiiedu?location[0]=Leeward%20CC,%20Pearl%20City&location[1]=Leeward%20CC,%20Various%20Locations
+    max_pages: 200
+    enabled: true
+  # UNITID 144865: Institution public employer board
+  - name: College of DuPage
+    careers_url: https://cod.csod.com/ux/ats/careersite/4/home/requisition/2884?c=cod&sq=k-8
+    max_pages: 200
+    provider: csod
+    enabled: true
+  # UNITID 145600: UIC academic/university site 1; separate UI Health site excluded
+  - name: University of Illinois Chicago
+    careers_url: https://uic.csod.com/ux/ats/careersite/1/home/?c=uic
+    max_pages: 200
+    provider: csod
+    enabled: true
+  # UNITID 147536: Institution public employer board
+  - name: National Louis University
+    careers_url: https://careers-nl.icims.com/
+    max_pages: 200
+    provider: icims
+    enabled: true
+  # UNITID 154022: Institution public employer board
+  - name: University of Arizona Global Campus
+    provider: local-parser
+    careers_url: https://uagc.careers/jobs/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - jobsyn
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 154697: Institution public employer board
+  - name: Barton County Community College
+    provider: agilehr
+    careers_url: https://bartonccc.agilehr.com/careers/
+    max_pages: 200
+    enabled: true
+  # UNITID 156541: Institution public employer board
+  - name: University of the Cumberlands
+    careers_url: https://ucumberlands.wd1.myworkdayjobs.com/careers
+    max_pages: 200
+    provider: workday
+    enabled: true
+  # UNITID 158662: Institution public employer board
+  - name: Delgado Community College
+    provider: local-parser
+    careers_url: https://careers.lctcs.edu/?colleges=DCC
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - lctcs
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 161572: Institution public employer board
+  - name: Unity Environmental University
+    provider: local-parser
+    careers_url: https://www.paycomonline.net/v4/ats/web.php/portal/ED9820B3EB18F3366E468E5024A065B8/career-page
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - paycom
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 163426: Institution public employer board
+  - name: Montgomery College
+    careers_url: https://mc.wd1.myworkdayjobs.com/external
+    max_pages: 200
+    provider: workday
+    enabled: true
+  # UNITID 164988: Institution public employer board
+  - name: Boston University
+    provider: silkroad
+    careers_url: https://jobs.silkroad.com/BU/External
+    max_pages: 200
+    enabled: true
+  # UNITID 170055: Institution public employer board
+  - name: Grand Rapids Community College
+    provider: clearcompany
+    careers_url: https://www.grcc.edu/faculty-staff/human-resources/careers
+    clearcompany_id: c93db35e-a99d-6540-27c0-301f8f589f9a
+    enabled: true
+  # UNITID 171535: Institution public employer board
+  - name: Oakland Community College
+    careers_url: https://www.schooljobs.com/careers/oaklandcc/
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 176372: Institution public employer board
+  - name: University of Southern Mississippi
+    provider: csod
+    careers_url: https://usm.csod.com/ats/careersite/search.aspx?site=1&c=usm
+    max_pages: 200
+    enabled: true
+  # UNITID 177065: Institution public employer board
+  - name: Columbia College
+    provider: local-parser
+    careers_url: https://www.ccis.edu/careers/jobs
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - paycor
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 178059: Maryville adjunct faculty MyJobs board
+  - name: Maryville University of Saint Louis
+    provider: local-parser
+    careers_url: https://myjobs.adp.com/adjunctmaryvilleuniversityexternalcs/cx/job-listing
+    enabled: true
+    parser:
+      command: node
+      script: adp-myjobs-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 181394: Institution public employer board
+  - name: University of Nebraska at Omaha
+    careers_url: https://unomaha.peopleadmin.com/
+    max_pages: 200
+    provider: peopleadmin
+    enabled: true
+  # UNITID 182500: Institution public employer board
+  - name: Truckee Meadows Community College
+    provider: workday
+    careers_url: https://nshe.wd1.myworkdayjobs.com/TMCC-External
+    max_pages: 200
+    enabled: true
+  # UNITID 187444: Institution public board
+  - name: William Paterson University of New Jersey
+    provider: workday
+    careers_url: https://wpunj.wd1.myworkdayjobs.com/ext
+    max_pages: 200
+    enabled: true
+  # UNITID 190576: CUNY School of Professional Studies part-time opportunities; Graduate Center administrative family, not main-campus coverage
+  - name: CUNY Graduate School and University Center — CUNY School of Professional Studies part-time opportunities
+    provider: local-parser
+    careers_url: https://sps.cuny.edu/about/directory/office-human-resources/jobs
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - cunySps
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 190619: Institution public employer board
+  - name: Kingsborough Community College
+    provider: local-parser
+    careers_url: https://www.kbcc.cuny.edu/humanresources/kccjoblistings.html
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - kingsborough
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 196592: Institution public employer board
+  - name: Touro University
+    careers_url: https://tcnycareers-touro.icims.com/jobs/7550/adjunct-instructor%3A-bilingual-advanced-certificate-program%28online-long-island-brooklyn-staten-island-manhattan-queens%29/job
+    max_pages: 200
+    provider: icims
+    enabled: true
+  # UNITID 202356: Institution public employer board
+  - name: Cuyahoga Community College District
+    careers_url: https://tri-c.csod.com/ux/ats/careersite/10/home?c=tri-c
+    max_pages: 200
+    provider: csod
+    enabled: true
+  # UNITID 207500: Institution public employer board
+  - name: University of Oklahoma-Norman Campus
+    provider: local-parser
+    careers_url: https://jobs.ou.edu/jobs/search/all
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 210605: Institution public employer board
+  - name: Community College of Allegheny County
+    provider: csod
+    careers_url: https://ccac.csod.com/ats/careersite/search.aspx?site=3&c=ccac
+    max_pages: 200
+    enabled: true
+  # UNITID 210809: Institution public employer board
+  - name: American College of Financial Services
+    provider: local-parser
+    careers_url: https://www.paycomonline.net/v4/ats/web.php/portal/0EC6D26D6ACC066E0F0E668BFD94D104/career-page
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - paycom
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 215239: Institution public employer board
+  - name: Community College of Philadelphia
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/ccp
+    max_pages: 200
+    enabled: true
+  # UNITID 220552: Institution public employer board
+  - name: South College
+    provider: local-parser
+    careers_url: https://recruiting.paylocity.com/recruiting/jobs/List/1539/SOUTH-COLLEGE
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - paylocity
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 227182: Lone Star adjunct job-family filter; other job families excluded
+  - name: Lone Star College System
+    provider: local-parser
+    careers_url: https://hcm.lonestar.edu/hcmjob.jsp
+    enabled: true
+    parser:
+      command: node
+      script: peoplesoft-browser-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --family
+        - Adjunct
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 227854: Shared Alamo district faculty board, not St. Philip's only
+  - name: St Philip's College — Shared Alamo district faculty board, not St. Philip's only
+    provider: csod
+    careers_url: https://alamo.csod.com/ats/careersite/search.aspx?site=1&c=alamo
+    max_pages: 200
+    enabled: true
+  # UNITID 227924: Alamo San Antonio College faculty site 12
+  - name: San Antonio College
+    provider: csod
+    careers_url: https://alamo.csod.com/ats/careersite/search.aspx?site=12&c=alamo
+    max_pages: 200
+    enabled: true
+  # UNITID 227979: Institution public employer board
+  - name: San Jacinto Community College
+    careers_url: https://sanjac.csod.com/ux/ats/careersite/3/home?c=sanjac
+    max_pages: 200
+    provider: csod
+    enabled: true
+  # UNITID 228769: UT Arlington faculty position type 3
+  - name: The University of Texas at Arlington
+    careers_url: https://uta.peopleadmin.com/postings/search?utf8=%E2%9C%93&query=&query_v0_posted_at_date=&query_position_type_id%5B%5D=3&435=&commit=Search
+    max_pages: 200
+    provider: peopleadmin
+    enabled: true
+  # UNITID 229027: UT San Antonio academic PeopleSoft site 21; UT Health staff Oracle board excluded
+  - name: The University of Texas at San Antonio
+    provider: peoplesoft
+    careers_url: https://zahr-prd-candidate-ada.utshare.utsystem.edu/psc/ZAHRPRDADA/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&Page=HRS_APP_SCHJOB&Action=U&FOCUS=Applicant&SiteId=21
+    max_pages: 100
+    enabled: true
+  # UNITID 229115: Texas Tech faculty BrassRing site 5637; staff, students and TTUHSC excluded
+  - name: Texas Tech University
+    provider: local-parser
+    careers_url: https://sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=25898&siteid=5637#keyWordSearch=
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - brassring
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 242972: Shared Northbridge/NUC employer board, multiple campuses and brands; not Puerto Rico campus-only
+  - name: NUC University — Shared Northbridge/NUC employer board, multiple campuses and brands
+    careers_url: https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=20fa69cd-7a48-410e-9cba-87c44786fb7b&ccId=19000101_000001&lang=es_US&selectedMenuKey=CareerCenter&langChange=true
+    max_pages: 200
+    provider: adp-workforcenow
+    enabled: true
+  # UNITID 246354: Alamo Palo Alto College faculty site 18
+  - name: Palo Alto College
+    provider: csod
+    careers_url: https://alamo.csod.com/ats/careersite/search.aspx?site=18&c=alamo
+    max_pages: 200
+    enabled: true
+  # UNITID 364025: Shared Maricopa district board; includes other member colleges
+  - name: Chandler-Gilbert Community College — Shared Maricopa district board
+    provider: peoplesoft
+    careers_url: https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000
+    max_pages: 200
+    enabled: true
+  # UNITID 420398: Alamo Northwest Vista College faculty site 15
+  - name: Northwest Vista College
+    provider: csod
+    careers_url: https://alamo.csod.com/ats/careersite/search.aspx?site=15&c=alamo
+    max_pages: 200
+    enabled: true
+  # UNITID 436429: Institution public employer board
+  - name: Los Angeles Film School
+    provider: local-parser
+    careers_url: https://lafilm.exacthire.com/All_Open_Jobs_at_All_Locations?jobs=[]
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - exacthire
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 437103: Institution public employer board
+  - name: Baton Rouge Community College
+    provider: local-parser
+    careers_url: https://mybrcc.edu/about-brcc/human-resources/employment_opportunities.php
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - brcc
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 444219: Shared Los Rios district board, all member colleges
+  - name: Folsom Lake College — Shared Los Rios district board, all member colleges
+    careers_url: https://www.schooljobs.com/careers/losriosccd
+    max_pages: 200
+    provider: neogov
+    enabled: true
+  # UNITID 445027: Institution public employer board
+  - name: American InterContinental University System
+    provider: local-parser
+    careers_url: https://myjobs.adp.com/aiu/cx/job-listing
+    enabled: true
+    parser:
+      command: node
+      script: adp-myjobs-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 450933: Columbia Southern faculty openings
+  - name: Columbia Southern University
+    provider: local-parser
+    careers_url: https://www.columbiasouthern.edu/careers/faculty-careers/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - paycor
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 460394: Shared RCCD district board; Riverside, Moreno Valley and Norco
+  - name: Moreno Valley College — Shared RCCD district board
+    provider: peopleadmin
+    careers_url: https://jobs.rccd.edu/postings
+    max_pages: 200
+    enabled: true
+  # UNITID 460464: Shared RCCD district board; Riverside, Moreno Valley and Norco
+  - name: Norco College — Shared RCCD district board
+    provider: peopleadmin
+    careers_url: https://jobs.rccd.edu/postings
+    max_pages: 200
+    enabled: true
+  # UNITID 475121: Institution public employer board
+  - name: South University
+    provider: local-parser
+    careers_url: https://jobs.dayforcehcm.com/southu/CANDIDATEPORTAL
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - dayforce
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 482477: Institution public employer board
+  - name: DeVry University
+    provider: local-parser
+    careers_url: https://jobs.dayforcehcm.com/devry/CANDIDATEPORTAL
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - dayforce
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 482680: Institution public employer board
+  - name: University of North Georgia
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=53000
+    max_pages: 200
+    provider: peoplesoft
+    enabled: true
+  # UNITID 483045: Central Georgia current part-time/adjunct category 436; five posting PDFs
+  - name: Central Georgia Technical College
+    provider: local-parser
+    careers_url: https://www.easyhrweb.com/JC_Central_GA/JobListings/Description.aspx?Parameter=JobListings&PositionID=436
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - easyhr
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 483124: Shared ASU staff board; includes campus and digital operations; not faculty
+  - name: Arizona State University Digital Immersion — Shared ASU staff board
+    provider: workday
+    careers_url: https://asu.wd1.myworkdayjobs.com/ASUStaffCareers
+    max_pages: 200
+    enabled: true
+  # UNITID 483595: Institution public employer board
+  - name: Ana G. Mendez University
+    provider: local-parser
+    careers_url: https://jobs.agmu.edu/page-jobs-category?lang=en-us&cat=All
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - agmu
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 485111: Institution public employer board
+  - name: Georgia Military College
+    provider: local-parser
+    careers_url: https://www.paycomonline.net/v4/ats/web.php/portal/10157A1AD949DDFC26908FA0C8684BC5/career-page
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - paycom
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 486840: Institution public employer board
+  - name: Kennesaw State University
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=43000&&Page=HRS_CAREERS_FL&
+    max_pages: 200
+    provider: peoplesoft
+    enabled: true
+  # UNITID 497046: Shared State Center district classified board; separate faculty recruitment is outside this route
+  - name: Madera Community College — Shared State Center district classified board
+    careers_url: https://www.schooljobs.com/careers/scccd
+    max_pages: 200
+    provider: neogov
+    enabled: true

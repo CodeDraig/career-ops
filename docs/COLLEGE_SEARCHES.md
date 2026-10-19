@@ -1,5 +1,7 @@
 # College job searches
 
+**Latest coverage:** the [remaining-school validation](COLLEGE_REMAINING_VALIDATION.md) raises the combined total to **338/346 (97.7%)**. Counts below describe this earlier pass.
+
 Validated on **2026-10-19** against the 60 schools previously classified as
 `browser_posting_links_only` in the 346-school saved-site audit.
 

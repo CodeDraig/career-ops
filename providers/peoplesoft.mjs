@@ -812,7 +812,7 @@ export default {
     let stopCause = null;
     let stopDetail = '';
     while (loadMoreCount < maxLoadMore) {
-      if (reportedTotal !== null && byId.size >= reportedTotal) break;
+      if (reportedTotal !== null && (byId.size >= reportedTotal || currentState.rows.length >= reportedTotal)) break;
       await sleep(INTER_REQUEST_DELAY_MS, ctx);
       let next;
       const postedStateNum = currentState.formFields?.ICStateNum;
@@ -864,7 +864,10 @@ export default {
     // complete sweep — no warning, no marker, no reason. Mirrors
     // workday.mjs's stopReason, which never depends on ever having seen a
     // total.
-    const reachedKnownTotal = reportedTotal !== null && byId.size >= reportedTotal;
+    // Some tenants publish the same opening twice. The count describes grid
+    // rows, while our output deduplicates job IDs. A complete cumulative grid
+    // satisfies the server count even when the unique job count is smaller.
+    const reachedKnownTotal = reportedTotal !== null && (byId.size >= reportedTotal || currentState.rows.length >= reportedTotal);
     const cleanlyExhausted = reachedKnownTotal || (reportedTotal === null && stopCause === 'load-more-no-progress');
     const complete = probing || cleanlyExhausted;
     if (!probing && !complete) {

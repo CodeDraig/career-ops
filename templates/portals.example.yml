@@ -3259,3 +3259,11 @@ job_boards:
     careers_url: https://www.python.org/jobs/
     enabled: false
     notes: "Official Python Software Foundation job board (public RSS feed)"
+
+# Public embedded ClearCompany boards require the employer UUID from the page.
+# Add under tracked_companies after replacing the example values:
+# - name: Example employer
+#   provider: clearcompany
+#   careers_url: https://example.org/careers
+#   clearcompany_id: 00000000-0000-0000-0000-000000000000
+#   enabled: false

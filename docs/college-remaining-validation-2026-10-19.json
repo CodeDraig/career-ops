@@ -1,0 +1,4197 @@
+{
+  "checkedOn": "2026-10-19",
+  "inventorySize": 346,
+  "priorValidated": 231,
+  "priorNonempty": 229,
+  "priorEmpty": 2,
+  "schoolsRetested": 115,
+  "newValidated": 107,
+  "newNonempty": 103,
+  "newEmpty": 4,
+  "validatedTotal": 338,
+  "nonemptyTotal": 332,
+  "emptyTotal": 6,
+  "unresolvedTotal": 8,
+  "coveragePercent": 97.69,
+  "evidenceRoot": "/home/cadwaladyr/Downloads/college-remaining-validation-2026-10-19",
+  "sourceDatabaseSha256": "913b31191a624b65fe72c8fb858ffaffc9719aa1125f66062315bd89afe4276e",
+  "schools": [
+    {
+      "unitid": "100751",
+      "institution": "The University of Alabama",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.ua.edu/jobs/law-part-time-temporary-faculty-519514-tuscaloosa-alabama-united-states",
+        "https://careers.ua.edu/jobs/civil-construction-and-environmental-engineering-part-time-temporary-instructor-528957-tuscaloosa-alabama-united-states",
+        "https://careers.ua.edu/jobs/bcas-instructor-of-english-528844-tuscaloosa-alabama-united-states",
+        "https://careers.ua.edu/home",
+        "http://jobs.ua.edu/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:clinch",
+      "postings": 199,
+      "careersUrl": "https://careers.ua.edu/jobs/search",
+      "scope": "Institution public employer board",
+      "pagination": "7 pages; terminal pager",
+      "resultEvidence": "100751-search.json",
+      "resultSha256": "00975296602a586cef7b8d1b720844c96fc9020b68be179b2ffe61e51ead6e5c",
+      "ownershipEvidence": "https://facultyjobs.ua.edu/",
+      "entry": {
+        "name": "The University of Alabama",
+        "provider": "local-parser",
+        "careers_url": "https://careers.ua.edu/jobs/search",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "clinch"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "100751-discovery/1.json",
+        "100751-discovery/2.json",
+        "100751-discovery/3.json",
+        "100751-discovery/4.json",
+        "100751-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "101514",
+      "institution": "John C Calhoun State Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://calhoun.edu/calhoun-community-college-hosts-career-fair-to-find-talented-new-adjunct-instructors/",
+        "https://calhoun.edu/about/hr-employment/job-seeker-resources/",
+        "https://calhoun.edu/about/hr-employment/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 5,
+      "careersUrl": "https://www.schooljobs.com/careers/accs/calhoun",
+      "scope": "Calhoun full-time public board; separate part-time listings outside this route",
+      "pagination": "2 requests; 5/5 unique advertised postings",
+      "resultEvidence": "101514-initial/result.json",
+      "resultSha256": "844f9c2d9abf338f4aec469d05cea37cd492f5d0821b4750833fc5426539fb1a",
+      "ownershipEvidence": "101514-discovery/2.json",
+      "entry": {
+        "name": "John C Calhoun State Community College",
+        "careers_url": "https://www.schooljobs.com/careers/accs/calhoun",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "101514-discovery/1.json",
+        "101514-discovery/2.json",
+        "101514-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "101587",
+      "institution": "University of West Alabama",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.uwa.edu/employment/",
+        "https://www.uwa.edu/university-departments/human-resources/",
+        "https://www.uwa.edu/university-departments/human-resources/teacher-retirement-system-of-alabama/",
+        "https://www.uwa.edu/university-departments/human-resources/family-medical-leave/",
+        "https://www.uwa.edu/university-departments/human-resources/holiday-schedule/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "interfolio-wordpress",
+      "postings": 40,
+      "careersUrl": "https://www.uwa.edu/employment/",
+      "scope": "Institution public employer board",
+      "pagination": "Complete public WordPress opportunity array; 40 rows",
+      "resultEvidence": "101587-initial/result.json",
+      "resultSha256": "daafee674c993224ef74a7f76703fc8f91cc2448e3373c816c7c59537e313401",
+      "ownershipEvidence": "101587-browser.json",
+      "entry": {
+        "name": "University of West Alabama",
+        "provider": "interfolio-wordpress",
+        "careers_url": "https://www.uwa.edu/employment/",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "101587-discovery/1.json",
+        "101587-discovery/2.json",
+        "101587-discovery/3.json",
+        "101587-discovery/4.json",
+        "101587-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "104151",
+      "institution": "Arizona State University Campus Immersion",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://nursingandhealth.asu.edu/faculty/employment",
+        "https://film.asu.edu/about/employment",
+        "https://herbergerinstitute.asu.edu/about/employment",
+        "https://nursingandhealth.asu.edu/faculty-and-research/employment/192007/faculty-associate-baccalaureate-health-programs-pool",
+        "https://film.asu.edu/about/employment/film-faculty-associate"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 147,
+      "careersUrl": "https://asu.wd1.myworkdayjobs.com/ASUStaffCareers",
+      "scope": "Shared ASU staff board; includes campus and digital operations; not faculty",
+      "pagination": "8 listing pages, 147/147 raw records; 0 source records lack title/URL",
+      "resultEvidence": "104151-initial/result.json",
+      "resultSha256": "4b443851a999f9ab0f4f80914bf91ee2d53cacf3963376f80e9873996c200b81",
+      "ownershipEvidence": "https://cfo.asu.edu/applicant",
+      "entry": {
+        "name": "Arizona State University Campus Immersion \u2014 Shared ASU staff board",
+        "provider": "workday",
+        "careers_url": "https://asu.wd1.myworkdayjobs.com/ASUStaffCareers",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "104151-discovery/1.json",
+        "104151-discovery/2.json",
+        "104151-discovery/3.json",
+        "104151-discovery/4.json",
+        "104151-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "104179",
+      "institution": "University of Arizona",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://arizona.csod.com/ux/ats/careersite/4/home?c=arizona",
+        "https://uafoundation.org/careers",
+        "https://uagc.careers/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 393,
+      "careersUrl": "https://arizona.csod.com/ux/ats/careersite/4/home?c=arizona",
+      "scope": "Institution public employer board",
+      "pagination": "16 API pages; 393/393 requisitions",
+      "resultEvidence": "104179-initial/result.json",
+      "resultSha256": "de251e10eb8828b8c6fe5bc97cf5ffe4b2b7c451ebd819948ed0b55a215f26ec",
+      "ownershipEvidence": "https://uafoundation.org/careers",
+      "entry": {
+        "name": "University of Arizona",
+        "careers_url": "https://arizona.csod.com/ux/ats/careersite/4/home?c=arizona",
+        "max_pages": 200,
+        "provider": "csod",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "104179-discovery/1.json",
+        "104179-discovery/2.json",
+        "104179-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "104708",
+      "institution": "Glendale Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.gccaz.edu/about/careers/jobs",
+        "https://www.gccaz.edu/about/careers"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 300,
+      "careersUrl": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+      "scope": "Shared Maricopa district board; includes other member colleges",
+      "pagination": "6 search responses; 300/300 grid rows, 300 unique jobs",
+      "resultEvidence": "104708-initial/result.json",
+      "resultSha256": "02fbb288545b481ae8fbf9bc06964209fd1e7373e94ebbc2904b4f13542e89a8",
+      "ownershipEvidence": "https://www.maricopa.edu/about/careers",
+      "entry": {
+        "name": "Glendale Community College \u2014 Shared Maricopa district board",
+        "provider": "peoplesoft",
+        "careers_url": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "104708-discovery/1.json",
+        "104708-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "105154",
+      "institution": "Mesa Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.mesacc.edu/career/jobs-listings/jobs-campus/part-time-jobs-mesacc"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 300,
+      "careersUrl": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+      "scope": "Shared Maricopa district board; includes other member colleges",
+      "pagination": "6 search responses; 300/300 grid rows, 300 unique jobs",
+      "resultEvidence": "105154-initial/result.json",
+      "resultSha256": "bcc499f481251ef763b64cc552a0b142e0d392d9098e8d42e1003b2d52b98eac",
+      "ownershipEvidence": "https://www.maricopa.edu/about/careers",
+      "entry": {
+        "name": "Mesa Community College \u2014 Shared Maricopa district board",
+        "provider": "peoplesoft",
+        "careers_url": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "105154-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "105428",
+      "institution": "Phoenix College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.phoenixcollege.edu/employees/human-resources/hiring",
+        "https://www.phoenixcollege.edu/employees/human-resources/job-opportunities",
+        "https://www.phoenixcollege.edu/employees/human-resources/faculty-services",
+        "https://www.phoenixcollege.edu/employees/human-resources",
+        "https://maricopa.sharepoint.com/sites/DO/faculty/Pages/min-qual.aspx"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 300,
+      "careersUrl": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+      "scope": "Shared Maricopa district board; includes other member colleges",
+      "pagination": "6 search responses; 300/300 grid rows, 300 unique jobs",
+      "resultEvidence": "105428-initial/result.json",
+      "resultSha256": "01007f5fb91283301b83b21c827b718da91fb65fe68dc0a03f6baf7335956b53",
+      "ownershipEvidence": "https://www.maricopa.edu/about/careers",
+      "entry": {
+        "name": "Phoenix College \u2014 Shared Maricopa district board",
+        "provider": "peoplesoft",
+        "careers_url": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "105428-discovery/1.json",
+        "105428-discovery/2.json",
+        "105428-discovery/3.json",
+        "105428-discovery/4.json",
+        "105428-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "108667",
+      "institution": "College of Alameda",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://alameda.edu/current-jobs/",
+        "https://alameda.edu/academics/cte"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 56,
+      "careersUrl": "https://www.schooljobs.com/careers/peralta",
+      "scope": "Shared Peralta district board; Alameda, Berkeley, Laney and Merritt",
+      "pagination": "7 requests; 56/56 unique advertised postings",
+      "resultEvidence": "108667-initial/result.json",
+      "resultSha256": "8c962bbdd7f8a5cd7fa74058ea3695fa1109d9259d16284788bc91a8daca5d03",
+      "ownershipEvidence": "https://www.peralta.edu/hr",
+      "entry": {
+        "name": "College of Alameda \u2014 Shared Peralta district board",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/peralta",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "108667-discovery/1.json",
+        "108667-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "109208",
+      "institution": "American River College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://employees.losrios.edu/human-resources-and-benefits/how-to-hire-hiring-resources/hiring-adjunct-faculty"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 104,
+      "careersUrl": "https://www.schooljobs.com/careers/losriosccd",
+      "scope": "Shared Los Rios district board, all member colleges",
+      "pagination": "12 requests; 104/104 unique advertised postings",
+      "resultEvidence": "109208-initial/result.json",
+      "resultSha256": "8744cd0d8aa60dee9eecc267529264fc06215ba985b692f806eb825c4ab914e7",
+      "ownershipEvidence": "109208-discovery/1.json",
+      "entry": {
+        "name": "American River College \u2014 Shared Los Rios district board, all member colleges",
+        "careers_url": "https://www.schooljobs.com/careers/losriosccd",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "109208-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "111887",
+      "institution": "Cerritos College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.cerritos.edu/hr/Part-Time-Faculty-Medical-Enrollment.htm",
+        "https://www.cerritos.edu/hr/PT_Fac_Reimbursement.htm",
+        "https://www.cerritos.edu/hr/employment.htm",
+        "https://www.cerritos.edu/hr/default.htm",
+        "https://www.cerritos.edu/hr/salary-schedule.htm"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 17,
+      "careersUrl": "https://www.schooljobs.com/careers/cerritosedu",
+      "scope": "Institution public board",
+      "pagination": "3 requests; 17/17 unique advertised postings",
+      "resultEvidence": "111887-initial/result.json",
+      "resultSha256": "2c84f6777775960eae6842f0cb0209974fbbe76f2c6d8aa8cc6d10746027ea5d",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "Cerritos College",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/cerritosedu",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "111887-discovery/1.json",
+        "111887-discovery/2.json",
+        "111887-discovery/3.json",
+        "111887-discovery/4.json",
+        "111887-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "113096",
+      "institution": "Cosumnes River College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://losrios.edu/community/jobs-at-los-rios/prospective-faculty-resources/adjunct-faculty-hiring",
+        "https://employees.losrios.edu/employee-groups/academic-employees/new-adjunct-employees",
+        "https://employees.crc.losrios.edu/faculty-and-staff/faculty-and-staff-resource-guide/adjunct-faculty",
+        "https://losrios.edu/community/jobs-at-los-rios",
+        "https://employees.losrios.edu/human-resources-and-benefits/how-to-hire-hiring-resources/hiring-adjunct-faculty"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 64,
+      "careersUrl": "https://www.schooljobs.com/careers/losriosccd/Faculty",
+      "scope": "Shared Los Rios district faculty board, all member colleges",
+      "pagination": "8 requests; 64/64 unique advertised postings",
+      "resultEvidence": "113096-initial/result.json",
+      "resultSha256": "4a2e72ac0cda643f464b52ee6dc11fa82b362d823d14fa71ad45f559e2937737",
+      "ownershipEvidence": "113096-discovery/1.json",
+      "entry": {
+        "name": "Cosumnes River College \u2014 Shared Los Rios district faculty board, all member colleges",
+        "careers_url": "https://www.schooljobs.com/careers/losriosccd/Faculty",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "113096-discovery/1.json",
+        "113096-discovery/2.json",
+        "113096-discovery/3.json",
+        "113096-discovery/4.json",
+        "113096-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "113218",
+      "institution": "Cuyamaca College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.cuyamaca.edu/academics/academic-and-career-pathways.php",
+        "https://www.cuyamaca.edu/academics/academic-and-career-pathways/behavioral-and-social-sciences/index.php",
+        "https://www.cuyamaca.edu/academics/academic-and-career-pathways/business-and-professional-studies/index.php",
+        "https://www.cuyamaca.edu/academics/academic-and-career-pathways/culture-people-ideas/",
+        "https://www.cuyamaca.edu/academics/academic-and-career-pathways/environmental-and-applied-technology/index.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 87,
+      "careersUrl": "https://gcccd.wd1.myworkdayjobs.com/gcccdcareers",
+      "scope": "Grossmont-Cuyamaca shared district",
+      "pagination": "5 listing pages, 87/87 raw records; 0 source records lack title/URL",
+      "resultEvidence": "113218-initial/result.json",
+      "resultSha256": "70d6e82214312ed2a238a8b949f0c01678acfa056594381ba54b8c0c5618322f",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "Cuyamaca College",
+        "provider": "workday",
+        "careers_url": "https://gcccd.wd1.myworkdayjobs.com/gcccdcareers",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "113218-discovery/1.json",
+        "113218-discovery/2.json",
+        "113218-discovery/3.json",
+        "113218-discovery/4.json",
+        "113218-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "113236",
+      "institution": "Cypress College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.cypresscollege.edu/",
+        "https://careers.cypresscollege.edu/high-school-articulation/",
+        "https://careers.cypresscollege.edu/program-finder/",
+        "https://careers.cypresscollege.edu/department/administration-of-justice/",
+        "https://careers.cypresscollege.edu/department/air-conditioning-refrigeration/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 48,
+      "careersUrl": "https://nocccd.peopleadmin.com/",
+      "scope": "Shared North Orange County district board, Cypress and Fullerton",
+      "pagination": "2 pages; final page has no next-page link",
+      "resultEvidence": "113236-initial/result.json",
+      "resultSha256": "6f98c2870a88f93c9ca79db0ec649719863c41c23b6a77b1dba4f42e2c0f160c",
+      "ownershipEvidence": "https://www.nocccd.edu/work-us/careers-nocccd",
+      "entry": {
+        "name": "Cypress College \u2014 Shared North Orange County district board, Cypress and Fullerton",
+        "provider": "peopleadmin",
+        "careers_url": "https://nocccd.peopleadmin.com/",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "113236-discovery/1.json",
+        "113236-discovery/2.json",
+        "113236-discovery/3.json",
+        "113236-discovery/4.json",
+        "113236-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "113333",
+      "institution": "De Anza College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.deanza.edu/about-us/jobs.html",
+        "https://www.deanza.edu/gov/college_council/memos/2026-03-02.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 170,
+      "careersUrl": "https://www.schooljobs.com/careers/fhda",
+      "scope": "Shared Foothill-De Anza district board",
+      "pagination": "18 requests; 170/170 unique advertised postings",
+      "resultEvidence": "113333-initial/result.json",
+      "resultSha256": "81d5b3aacf443aa6774b6c04bcedcdaf58d653245d18bab856c1cfc44337f938",
+      "ownershipEvidence": "https://hr.fhda.edu/",
+      "entry": {
+        "name": "De Anza College \u2014 Shared Foothill-De Anza district board",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/fhda",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "113333-discovery/1.json",
+        "113333-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "113856",
+      "institution": "East Los Angeles College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "113856-initial/result.json",
+      "resultSha256": "506da5ecd8f319d8e4ef7a7e7427cf65eb1ab8a057b944f3c6a676b0a13b5d8f",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "East Los Angeles College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "113856-discovery/1.json",
+        "113856-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "113980",
+      "institution": "El Camino Community College District",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://elcamino.iGreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-004",
+        "https://elcamino.iGreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-005",
+        "https://elcamino.iGreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-006",
+        "https://elcamino.iGreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-007",
+        "https://elcamino.iGreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-008"
+      ],
+      "status": "session-dependent",
+      "complete": false,
+      "postings": null,
+      "reason": "iGreentree search and job-detail POSTs load, but no working stable public posting URL was verified. GET with the observed ReqKey did not reproduce the detail.",
+      "resultEvidence": "113980-interact4.json",
+      "resultSha256": "c162d544bda8a058fd24ab2440fcee662089a9d2407f49d58d6c9fad3e96fc73",
+      "discoveryEvidence": [
+        "113980-discovery/1.json",
+        "113980-discovery/2.json",
+        "113980-discovery/3.json",
+        "113980-discovery/4.json",
+        "113980-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "114789",
+      "institution": "Fresno City College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://scccd.edu/career-opportunities/faculty-information.html",
+        "https://www.scccd.edu/career-opportunities/index.html",
+        "https://www.fresnocitycollege.edu/campus-life/cec/jobs-and-internships.html",
+        "https://www.fresnocitycollege.edu/campus-life/cec/index.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 18,
+      "careersUrl": "https://www.schooljobs.com/careers/scccd",
+      "scope": "Shared State Center district classified board; separate faculty recruitment is outside this route",
+      "pagination": "3 requests; 18/18 unique advertised postings",
+      "resultEvidence": "114789-initial/result.json",
+      "resultSha256": "7c86e807f3eb0448016a40a486f00b17d0fa5cab93d28e4d32b9500687b9e34b",
+      "ownershipEvidence": "114789-discovery/2.json",
+      "entry": {
+        "name": "Fresno City College \u2014 Shared State Center district classified board",
+        "careers_url": "https://www.schooljobs.com/careers/scccd",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "114789-discovery/1.json",
+        "114789-discovery/2.json",
+        "114789-discovery/3.json",
+        "114789-discovery/4.json"
+      ]
+    },
+    {
+      "unitid": "114859",
+      "institution": "Fullerton College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.nocccd.edu/employees-departments/departments/human-resources",
+        "https://www.nocccd.edu/work-us",
+        "https://www.nocccd.edu/work-us/careers-nocccd",
+        "https://www.nocccd.edu/work-us/vendor-contractor-information",
+        "https://www.nocccd.edu/work-us/donate-goods-supplies"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 48,
+      "careersUrl": "https://nocccd.peopleadmin.com/",
+      "scope": "Shared North Orange County district board, Cypress and Fullerton",
+      "pagination": "2 pages; final page has no next-page link",
+      "resultEvidence": "114859-initial/result.json",
+      "resultSha256": "dafddd292194beebeb00bd3dfb1fcdc18f1200fb788282d93728ac5e3613675e",
+      "ownershipEvidence": "114859-discovery/1.json",
+      "entry": {
+        "name": "Fullerton College \u2014 Shared North Orange County district board, Cypress and Fullerton",
+        "careers_url": "https://nocccd.peopleadmin.com/",
+        "max_pages": 200,
+        "provider": "peopleadmin",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "114859-discovery/1.json",
+        "114859-discovery/2.json",
+        "114859-discovery/3.json",
+        "114859-discovery/4.json",
+        "114859-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "115001",
+      "institution": "Glendale Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.glendale.edu/about-gcc/faculty-and-staff/adjunct-faculty/index.html",
+        "https://www.glendale.edu/about-gcc/faculty-and-staff/adjunct-faculty/crucial-adjunct-must-do-s.html",
+        "https://www.glendale.edu/about-gcc/faculty-and-staff/adjunct-faculty/academic-honesty.html",
+        "https://www.glendale.edu/about-gcc/faculty-and-staff/adjunct-faculty/canvas.html",
+        "https://www.glendale.edu/about-gcc/faculty-and-staff/adjunct-faculty/course-planning.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 100,
+      "careersUrl": "https://www.schooljobs.com/careers/gccedu",
+      "scope": "Institution public employer board",
+      "pagination": "11 requests; 100/100 unique advertised postings",
+      "resultEvidence": "115001-corrected/result.json",
+      "resultSha256": "572df37c23e38de49f18261dc41677d7be8fb3c718bf635c6f9c8c454dda1f16",
+      "ownershipEvidence": "115001-browser.json",
+      "entry": {
+        "name": "Glendale Community College",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/gccedu",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "115001-discovery/1.json",
+        "115001-discovery/2.json",
+        "115001-discovery/3.json",
+        "115001-discovery/4.json",
+        "115001-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "115296",
+      "institution": "Grossmont College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.grossmont.edu/why-choose-grossmont/resilient-jobs/index.php",
+        "https://www.grossmont.edu/why-choose-grossmont/resilient-jobs/training.php",
+        "https://www.grossmont.edu/why-choose-grossmont/resilient-jobs/support.php",
+        "https://grossmont.emsicc.com/",
+        "https://www.grossmont.edu/why-choose-grossmont/resilient-jobs/resources.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 87,
+      "careersUrl": "https://gcccd.wd1.myworkdayjobs.com/gcccdcareers",
+      "scope": "Grossmont-Cuyamaca shared district",
+      "pagination": "5 listing pages, 87/87 raw records; 0 source records lack title/URL",
+      "resultEvidence": "115296-initial/result.json",
+      "resultSha256": "8f4221b6e83e4538bd7370b68e21a7e3a9a4c815155c7a36350871586809e473",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "Grossmont College",
+        "provider": "workday",
+        "careers_url": "https://gcccd.wd1.myworkdayjobs.com/gcccdcareers",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "115296-discovery/1.json",
+        "115296-discovery/2.json",
+        "115296-discovery/3.json",
+        "115296-discovery/4.json",
+        "115296-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "116439",
+      "institution": "Irvine Valley College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.ivc.edu/transfer-center/tpp/job-opportunities",
+        "https://edjoin.org/",
+        "https://docs.google.com/spreadsheets/d/1MrQJbZ3xI-S9ri48Iw2DfWbohat7vlIrXD_THK2oB5E/edit?usp=sharing",
+        "https://www.ivc.edu/academics/professional",
+        "https://www.ivc.edu/academics/career-education"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 44,
+      "careersUrl": "https://www.schooljobs.com/careers/socccd",
+      "scope": "Shared South Orange County district board; Saddleback and Irvine Valley",
+      "pagination": "6 requests; 44/44 unique advertised postings",
+      "resultEvidence": "116439-initial/result.json",
+      "resultSha256": "6884878fd59a7a732de09aca5ef4b323de8680ed11268599b8ef7ad7788f60de",
+      "ownershipEvidence": "https://www.socccd.edu/human-resources",
+      "entry": {
+        "name": "Irvine Valley College \u2014 Shared South Orange County district board",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/socccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "116439-discovery/1.json",
+        "116439-discovery/2.json",
+        "116439-discovery/3.json",
+        "116439-discovery/4.json",
+        "116439-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "117052",
+      "institution": "Reedley College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://scccd.edu/career-opportunities/faculty-information.html",
+        "https://www.scccd.edu/career-opportunities/index.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 18,
+      "careersUrl": "https://www.schooljobs.com/careers/scccd",
+      "scope": "Shared State Center district classified board; separate faculty recruitment is outside this route",
+      "pagination": "3 requests; 18/18 unique advertised postings",
+      "resultEvidence": "117052-initial/result.json",
+      "resultSha256": "6461b8e5124ea1db273c9408d51496b07dec077e80180c865d61c21203bf81e2",
+      "ownershipEvidence": "117052-discovery/2.json",
+      "entry": {
+        "name": "Reedley College \u2014 Shared State Center district classified board",
+        "careers_url": "https://www.schooljobs.com/careers/scccd",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117052-discovery/1.json",
+        "117052-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "117690",
+      "institution": "Los Angeles Harbor College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117690-initial/result.json",
+      "resultSha256": "d96a4343710faf6e2de5c724e12b78c8085346e0828c36096c980d2a081cecf7",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles Harbor College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117690-discovery/1.json",
+        "117690-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "117706",
+      "institution": "Los Angeles Pierce College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions",
+        "https://www.lapc.edu/academic-services/academic-success/employment"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117706-initial/result.json",
+      "resultSha256": "825260d50bce7e16134117dc2a46f0010e1d6f19b655177a7903b6daba141a61",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles Pierce College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117706-discovery/1.json",
+        "117706-discovery/2.json",
+        "117706-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "117715",
+      "institution": "Los Angeles Southwest College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117715-initial/result.json",
+      "resultSha256": "343be192ffda9503fe9eea9cbd65d0e593642d8ba58407c3f73756ae6e2c88c3",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles Southwest College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117715-discovery/1.json",
+        "117715-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "117724",
+      "institution": "Los Angeles Trade Technical College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117724-initial/result.json",
+      "resultSha256": "742333cfe0a51aa4ae6aee16139fe997ae687e663b05d1c20886acbaad40e881",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles Trade Technical College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117724-discovery/1.json",
+        "117724-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "117733",
+      "institution": "Los Angeles Valley College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions",
+        "https://www.lavc.edu/academic-resources/employment"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117733-initial/result.json",
+      "resultSha256": "323b72e9bd9da9293a8fe064dcd9328ada65cb4eb5bd6001a6bf0cb205d619ec",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles Valley College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117733-discovery/1.json",
+        "117733-discovery/2.json",
+        "117733-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "117788",
+      "institution": "Los Angeles City College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions",
+        "https://www.lacc.edu/academics/pathways/pae/cinema-tv-dept/employment"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117788-initial/result.json",
+      "resultSha256": "4eb74f6a0764bf2efffe44c50989e657116a97153eadcf2ca73406f461fdb361",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles City College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117788-discovery/1.json",
+        "117788-discovery/2.json",
+        "117788-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "117867",
+      "institution": "Los Angeles Mission College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "117867-initial/result.json",
+      "resultSha256": "b4a36454adc2c11c4e9b46ffe56300fa4816f5195201afdd854ce87e767b1d0d",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "Los Angeles Mission College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "117867-discovery/1.json",
+        "117867-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "118772",
+      "institution": "Merritt College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://merritt.edu/you-can-afford-merritt-college",
+        "https://merritt.edu/academic-and-career-pathways",
+        "https://merritt.edu/career-education"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 56,
+      "careersUrl": "https://www.schooljobs.com/careers/peralta",
+      "scope": "Shared Peralta district board; Alameda, Berkeley, Laney and Merritt",
+      "pagination": "7 requests; 56/56 unique advertised postings",
+      "resultEvidence": "118772-initial/result.json",
+      "resultSha256": "478a5eee2dd6563c1d6442510c65b539d9ee00cb0c5c8e3ceaaf7627073f6ad0",
+      "ownershipEvidence": "https://www.peralta.edu/hr",
+      "entry": {
+        "name": "Merritt College \u2014 Shared Peralta district board",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/peralta",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "118772-discovery/1.json",
+        "118772-discovery/2.json",
+        "118772-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "121619",
+      "institution": "Santa Ana College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://rsccd.edu/divisions/human_resources/Recruitment/careers.aspx"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 2,
+      "careersUrl": "https://www.schooljobs.com/careers/rsccd",
+      "scope": "Shared Rancho Santiago district board; separate recruiting categories are outside this route",
+      "pagination": "2 requests; 2/2 unique advertised postings",
+      "resultEvidence": "121619-initial/result.json",
+      "resultSha256": "9a4a72704d90317fc34697b975acac5adccd32115b81a39408b1a094a1d4cbee",
+      "ownershipEvidence": "121619-discovery/1.json",
+      "entry": {
+        "name": "Santa Ana College \u2014 Shared Rancho Santiago district board",
+        "careers_url": "https://www.schooljobs.com/careers/rsccd",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "121619-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "121901",
+      "institution": "Riverside City College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://pa379.peopleadmin.com/"
+      ],
+      "status": "verified-empty",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 0,
+      "careersUrl": "https://jobs.rccd.edu/postings",
+      "scope": "Shared RCCD district board; Riverside, Moreno Valley and Norco",
+      "pagination": "1 pages; final page has no next-page link",
+      "resultEvidence": "121901-corrected/result.json",
+      "resultSha256": "b0340cc3df3dc428f874ce973dd002ed265ed6c84f97d80162a6accebe6b0cea",
+      "ownershipEvidence": "https://pa379.peopleadmin.com/",
+      "entry": {
+        "name": "Riverside City College \u2014 Shared RCCD district board",
+        "provider": "peopleadmin",
+        "careers_url": "https://jobs.rccd.edu/postings",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "121901-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "122180",
+      "institution": "Sacramento City College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://employees.losrios.edu/",
+        "https://losrios.edu/community/jobs-at-los-rios",
+        "https://inside.scc.losrios.edu/district-resources/jobs-at-los-rios",
+        "https://losrios.edu/",
+        "https://employees.losrios.edu/human-resources-and-benefits/how-to-hire-hiring-resources/hiring-adjunct-faculty"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 64,
+      "careersUrl": "https://www.schooljobs.com/careers/losriosccd/Faculty",
+      "scope": "Shared Los Rios district faculty board, all member colleges",
+      "pagination": "8 requests; 64/64 unique advertised postings",
+      "resultEvidence": "122180-initial/result.json",
+      "resultSha256": "e1a77b32d8b006d2d9d856d8129eb40932c1d5124abe5708b318eae06918333c",
+      "ownershipEvidence": "122180-discovery/2.json",
+      "entry": {
+        "name": "Sacramento City College \u2014 Shared Los Rios district faculty board, all member colleges",
+        "careers_url": "https://www.schooljobs.com/careers/losriosccd/Faculty",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "122180-discovery/1.json",
+        "122180-discovery/2.json",
+        "122180-discovery/3.json",
+        "122180-discovery/4.json",
+        "122180-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "122375",
+      "institution": "San Diego Mesa College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://aftguild.org/part-time-faculty-committee",
+        "https://aftguild.org/adjunct-resources",
+        "https://aftguild.org/adb",
+        "https://www.sdmesa.edu/about-mesa/admin-services/business-services/business-office-support.shtml",
+        "https://www.sdmesa.edu/about-mesa/cte-office"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 2,
+      "careersUrl": "https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id[]=265",
+      "scope": "San Diego Mesa campus filter 265 within SDCCD",
+      "pagination": "1 pages; final page has no next-page link",
+      "resultEvidence": "122375-initial/result.json",
+      "resultSha256": "f1af4e83276d138cddd74799e90cf1f1a9d4d85b43fd0946685ca8754284f1af",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "San Diego Mesa College",
+        "provider": "peopleadmin",
+        "careers_url": "https://www.sdccdjobs.com/postings/search?query_organizational_tier_2_id[]=265",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "122375-discovery/1.json",
+        "122375-discovery/2.json",
+        "122375-discovery/3.json",
+        "122375-discovery/4.json",
+        "122375-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "122791",
+      "institution": "College of San Mateo",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.collegeofsanmateo.edu/communities/language.php",
+        "https://www.collegeofsanmateo.edu/communities/",
+        "https://www.collegeofsanmateo.edu/communities/explorers.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:interviewexchange",
+      "postings": 47,
+      "careersUrl": "https://smccd.interviewexchange.com/static/clients/628SCM1/index.jsp?catid=2082",
+      "scope": "Shared San Mateo County district part-time faculty pools",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "122791-search.json",
+      "resultSha256": "fade3ac19884cb85e471c4dedcd83de9b0b2b147eec5ebabf0a3b1d899103ed9",
+      "ownershipEvidence": "122791-browser.json",
+      "entry": {
+        "name": "College of San Mateo \u2014 Shared San Mateo County district part-time faculty pools",
+        "provider": "local-parser",
+        "careers_url": "https://smccd.interviewexchange.com/static/clients/628SCM1/index.jsp?catid=2082",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "interviewexchange"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "122791-discovery/1.json",
+        "122791-discovery/2.json",
+        "122791-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "123299",
+      "institution": "Shasta College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.governmentjobs.com/home/applicationguide",
+        "https://www.governmentjobs.com/",
+        "https://employer.governmentjobs.com/",
+        "https://www.governmentjobs.com/inbox",
+        "https://www.governmentjobs.com/ProfileSettings"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:neoed",
+      "postings": 46,
+      "careersUrl": "https://shastacc.attract.neoed.com/",
+      "scope": "Current Shasta NEOED board; replaces incomplete two-record SchoolJobs mirror",
+      "pagination": "4 pages; terminal pager",
+      "resultEvidence": "123299-search13.json",
+      "resultSha256": "3ff0faad41731db988f566dbe8d8814c567c11597177c637fa83a85d256668ce",
+      "ownershipEvidence": "https://shastacc.attract.neoed.com/",
+      "entry": {
+        "name": "Shasta College",
+        "provider": "local-parser",
+        "careers_url": "https://shastacc.attract.neoed.com/",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "neoed"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "123299-discovery/1.json",
+        "123299-discovery/2.json",
+        "123299-discovery/3.json",
+        "123299-discovery/4.json",
+        "123299-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "123800",
+      "institution": "Southwestern College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.swccd.edu/administration/human-resources/recruitment-toolkit/part-time-faculty.aspx",
+        "https://www.swccd.edu/administration/human-resources/index.aspx",
+        "https://www.swccd.edu/administration/human-resources/employee-relations/index.aspx",
+        "https://www.swccd.edu/administration/human-resources/employee-resources.aspx",
+        "https://www.swccd.edu/administration/human-resources/executive-recruitment/index.aspx"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 40,
+      "careersUrl": "https://www.schooljobs.com/careers/southwesterncollege",
+      "scope": "Institution public employer board",
+      "pagination": "5 requests; 40/40 unique advertised postings",
+      "resultEvidence": "123800-initial/result.json",
+      "resultSha256": "9e7d1e7e75c0926e39f9958430ee4388045776b4e252545384f14a51a3a5c380",
+      "ownershipEvidence": "123800-discovery/2.json",
+      "entry": {
+        "name": "Southwestern College",
+        "careers_url": "https://www.schooljobs.com/careers/southwesterncollege",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "123800-discovery/1.json",
+        "123800-discovery/2.json",
+        "123800-discovery/3.json",
+        "123800-discovery/4.json",
+        "123800-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "125170",
+      "institution": "Berkeley City College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "http://www.usajobs.gov/",
+        "https://bayareamanufacturingcareers.com/newsletters.html",
+        "https://psychologyjobs.com/",
+        "https://www.usajobs.gov/",
+        "https://www.usajobs.gov/applicant/profile/dashboard/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 56,
+      "careersUrl": "https://www.schooljobs.com/careers/peralta",
+      "scope": "Shared Peralta district board; Alameda, Berkeley, Laney and Merritt",
+      "pagination": "7 requests; 56/56 unique advertised postings",
+      "resultEvidence": "125170-initial/result.json",
+      "resultSha256": "a9f47f67dbc7a5be6d5f44dc6e7bde72eeae5ea974f9fec85cd1d6d4b2d69863",
+      "ownershipEvidence": "https://www.peralta.edu/hr",
+      "entry": {
+        "name": "Berkeley City College \u2014 Shared Peralta district board",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/peralta",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "125170-discovery/1.json",
+        "125170-discovery/2.json",
+        "125170-discovery/3.json",
+        "125170-discovery/4.json",
+        "125170-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "125471",
+      "institution": "West Los Angeles College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.laccd.edu/offices/employment",
+        "https://www.laccd.edu/offices/hr/academic-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 83,
+      "careersUrl": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+      "scope": "Shared Los Angeles Community College District academic board, all nine member colleges",
+      "pagination": "4 API pages; 83/83 requisitions",
+      "resultEvidence": "125471-initial/result.json",
+      "resultSha256": "04dd02666bc0001157ff464c3ca4858b4f720706c6cb7f2611fc1a7b0147c162",
+      "ownershipEvidence": "https://www.laccd.edu/sites/laccd.edu/files/2024-09/InterimChancellorAnnouncement-LACCD-ada.pdf",
+      "entry": {
+        "name": "West Los Angeles College \u2014 Shared Los Angeles Community College District academic board, all nine member colleges",
+        "provider": "csod",
+        "careers_url": "https://laccd.csod.com/ats/careersite/search.aspx?site=6&c=laccd",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "125471-discovery/1.json",
+        "125471-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "125499",
+      "institution": "West Valley College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.wvm.edu/careers/",
+        "https://wvm.edu/services/human-resources/just-report-it/",
+        "https://www.wvm.edu/careers/index.html?utm_source=westvalleyedu&utm_medium=redir&utm_campaign=work-at-wvc",
+        "https://www.westvalley.edu/faculty/_jobs-in-ecucation.html",
+        "https://www.westvalley.edu/schools/continuing-education/google-IT.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 73,
+      "careersUrl": "https://wvm.peopleadmin.com/postings/search?query_organizational_tier_1_id[]=573",
+      "scope": "West Valley campus filter 573",
+      "pagination": "3 pages; final page has no next-page link",
+      "resultEvidence": "125499-corrected/result.json",
+      "resultSha256": "fa5de8d875520f428cf9dd959985b9175f1c282015ce74fff8a40af2efa016e6",
+      "ownershipEvidence": "https://www.wvm.edu/hr/careers",
+      "entry": {
+        "name": "West Valley College",
+        "provider": "peopleadmin",
+        "careers_url": "https://wvm.peopleadmin.com/postings/search?query_organizational_tier_1_id[]=573",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "125499-discovery/1.json",
+        "125499-discovery/2.json",
+        "125499-discovery/3.json",
+        "125499-discovery/4.json",
+        "125499-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "126827",
+      "institution": "Colorado Technical University-Colorado Springs",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://myjobs.adp.com/ctu/cx",
+        "https://www.coloradotech.edu/about/jobs"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:adp-myjobs",
+      "postings": 48,
+      "careersUrl": "https://myjobs.adp.com/ctu/cx/job-listing",
+      "scope": "Institution public employer board",
+      "pagination": "5 API pages; 48/48 jobs",
+      "resultEvidence": "126827-adp.json",
+      "resultSha256": "170c6b6ad7c60a15277f32a63dc23a5e0d18b4c5a2ca7b70d66000854f2d6de0",
+      "ownershipEvidence": "126827-browser.json",
+      "entry": {
+        "name": "Colorado Technical University-Colorado Springs",
+        "provider": "local-parser",
+        "careers_url": "https://myjobs.adp.com/ctu/cx/job-listing",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "adp-myjobs-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "126827-discovery/1.json",
+        "126827-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "131113",
+      "institution": "Wilmington University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.wilmu.edu/jobs/",
+        "https://phh.tbe.taleo.net/phh02/ats/careers/v2/viewRequisition?org=WILMU&cws=60&rid=1271",
+        "https://phh.tbe.taleo.net/phh02/ats/careers/v2/viewRequisition?org=WILMU&cws=60&rid=1269",
+        "https://phh.tbe.taleo.net/phh02/ats/careers/v2/viewRequisition?org=WILMU&cws=60&rid=1265",
+        "https://phh.tbe.taleo.net/phh02/ats/careers/v2/viewRequisition?org=WILMU&cws=60&rid=1151"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:taleoBusiness",
+      "postings": 8,
+      "careersUrl": "https://phh.tbe.taleo.net/phh02/ats/careers/v2/searchResults?org=WILMU&cws=60",
+      "scope": "Wilmington adjunct faculty category cws=60",
+      "pagination": "1 pages; terminal pager; 8 advertised postings",
+      "resultEvidence": "131113-search.json",
+      "resultSha256": "9790c174bf6daf8905719612b59880bd5136e8fc328ee74e25114abce8583c35",
+      "ownershipEvidence": "131113-browser.json",
+      "entry": {
+        "name": "Wilmington University",
+        "provider": "local-parser",
+        "careers_url": "https://phh.tbe.taleo.net/phh02/ats/careers/v2/searchResults?org=WILMU&cws=60",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "taleoBusiness"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "131113-discovery/1.json",
+        "131113-discovery/2.json",
+        "131113-discovery/3.json",
+        "131113-discovery/4.json",
+        "131113-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "131469",
+      "institution": "George Washington University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.gwu.edu/frequently-asked-questions",
+        "https://careers.gwu.edu/?utm_medium=link&utm_campaign=gwhomepage-footer&utm_source=careers",
+        "https://careers.gwu.edu/",
+        "https://careers.gwu.edu/our-opportunities",
+        "https://careers.gwu.edu/our-community"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 119,
+      "careersUrl": "https://www.gwu.jobs/postings/search",
+      "scope": "Institution public employer board",
+      "pagination": "4 pages; final page has no next-page link",
+      "resultEvidence": "131469-initial/result.json",
+      "resultSha256": "e00de3aff963b245b8d1fb551049afef09f078050b8338368809f94da655d147",
+      "ownershipEvidence": "131469-discovery/1.json",
+      "entry": {
+        "name": "George Washington University",
+        "careers_url": "https://www.gwu.jobs/postings/search",
+        "max_pages": 200,
+        "provider": "peopleadmin",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "131469-discovery/1.json",
+        "131469-discovery/2.json",
+        "131469-discovery/3.json",
+        "131469-discovery/4.json",
+        "131469-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "132693",
+      "institution": "Eastern Florida State College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.easternflorida.edu/hr/adjuncts/index.php",
+        "https://www.easternflorida.edu/hr/adjuncts/pre-employment.php",
+        "https://www.easternflorida.edu/hr/adjuncts/forms.php",
+        "https://www.easternflorida.edu/hr/adjuncts/quick-start.php",
+        "https://www.easternflorida.edu/hr/adjuncts/office-spaces.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:easternFlorida",
+      "postings": 36,
+      "careersUrl": "https://webapps.easternflorida.edu/hr/employment-opportunities.cfm",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "132693-search3.json",
+      "resultSha256": "4f0139baaa50851d344606e904635c9d56e81cea134e2a3508c757934ebf5feb",
+      "ownershipEvidence": "132693-browser.json",
+      "entry": {
+        "name": "Eastern Florida State College",
+        "provider": "local-parser",
+        "careers_url": "https://webapps.easternflorida.edu/hr/employment-opportunities.cfm",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "easternFlorida"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "132693-discovery/1.json",
+        "132693-discovery/2.json",
+        "132693-discovery/3.json",
+        "132693-discovery/4.json",
+        "132693-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "133508",
+      "institution": "Florida SouthWestern State College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom?SearchString=adjunct&page=1",
+        "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom/jobs/1422",
+        "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom/jobs/1534",
+        "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom/jobs/1694",
+        "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom/jobs/1734"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "silkroad",
+      "postings": 41,
+      "careersUrl": "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom",
+      "scope": "Institution public employer board",
+      "pagination": "5 pages, provider verifies final page number and all preceding pages",
+      "resultEvidence": "133508-initial/result.json",
+      "resultSha256": "60ace868f57af55d6ecfc7998234501dfa00335e81c7771e1bc691f64a579a59",
+      "ownershipEvidence": "133508-browser.json",
+      "entry": {
+        "name": "Florida SouthWestern State College",
+        "provider": "silkroad",
+        "careers_url": "https://jobs.silkroad.com/FSWSC/fswsccareerssilkroadcom",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "133508-discovery/1.json",
+        "133508-discovery/2.json",
+        "133508-discovery/3.json",
+        "133508-discovery/4.json",
+        "133508-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "133702",
+      "institution": "Florida State College at Jacksonville",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.fscj.edu/",
+        "https://fscjcareers.buzzsprout.com/",
+        "https://fscjcareers.buzzsprout.com/856579",
+        "https://fscjcareers.buzzsprout.com/856579/episodes",
+        "https://fscjcareers.buzzsprout.com/856579/about"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 57,
+      "careersUrl": "https://jobs.fscj.edu/psc/Applicant/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1",
+      "scope": "Institution board",
+      "pagination": "2 search responses; 57/57 grid rows, 57 unique jobs",
+      "resultEvidence": "133702-initial/result.json",
+      "resultSha256": "f9f88638254e29b47b9f3f82c97cd13552e97af1e014cb90b6776c16264059ab",
+      "ownershipEvidence": "https://jobs.fscj.edu/",
+      "entry": {
+        "name": "Florida State College at Jacksonville",
+        "provider": "peoplesoft",
+        "careers_url": "https://jobs.fscj.edu/psc/Applicant/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "133702-discovery/1.json",
+        "133702-discovery/2.json",
+        "133702-discovery/3.json",
+        "133702-discovery/4.json",
+        "133702-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "136358",
+      "institution": "Palm Beach State College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.palmbeachstate.edu/employment/",
+        "https://www.palmbeachstate.edu/hr/",
+        "https://www.palmbeachstate.edu/employment/default.aspx",
+        "https://www.palmbeachstate.edu/hr/default.aspx",
+        "https://palmbeachstate.emsicc.com/?radius=25%20miles\u00aeion=Palm%20Beach%20State%20College"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 270,
+      "careersUrl": "https://palmbeachstate.wd1.myworkdayjobs.com/external",
+      "scope": "Institution public employer board",
+      "pagination": "14 listing pages, 270/270 raw records; 0 source records lack title/URL",
+      "resultEvidence": "136358-initial/result.json",
+      "resultSha256": "81d1a526ad0de0b305928c79337edb159ae533f8d8988192b6b929dba6d22fa1",
+      "ownershipEvidence": "136358-discovery/1.json",
+      "entry": {
+        "name": "Palm Beach State College",
+        "careers_url": "https://palmbeachstate.wd1.myworkdayjobs.com/external",
+        "max_pages": 200,
+        "provider": "workday",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "136358-discovery/1.json",
+        "136358-discovery/2.json",
+        "136358-discovery/3.json",
+        "136358-discovery/4.json",
+        "136358-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "137078",
+      "institution": "St Petersburg College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://hr.spcollege.edu/work-at-spc/prospective-employees",
+        "https://hr.spcollege.edu/faculty",
+        "https://hr.spcollege.edu/",
+        "https://hr.spcollege.edu/contact-hr",
+        "https://www.spcollege.edu/spc-newsroom/job-fair-to-be-held-april-30-for-adjunct-faculty-positions"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 217,
+      "careersUrl": "https://spchrs.spcollege.edu/psc/GUEST/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant",
+      "scope": "Institution public employer board",
+      "pagination": "5 search responses; 217/217 grid rows, 217 unique jobs",
+      "resultEvidence": "137078-corrected/result.json",
+      "resultSha256": "ba0e1328a56d8ed615a232a5452fec84a5d50a7b9f94f9310565639d6fd05f37",
+      "ownershipEvidence": "137078-browser.html",
+      "entry": {
+        "name": "St Petersburg College",
+        "provider": "peoplesoft",
+        "careers_url": "https://spchrs.spcollege.edu/psc/GUEST/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant",
+        "max_pages": 100,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "137078-discovery/1.json",
+        "137078-discovery/2.json",
+        "137078-discovery/3.json",
+        "137078-discovery/4.json",
+        "137078-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "138187",
+      "institution": "Valencia College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://valenciacollege.edu/employees/human-resources/",
+        "https://valenciacollege.edu/employees/human-resources/index.php",
+        "https://valenciacollege.edu/employees/human-resources/compensation.php",
+        "https://valenciacollege.edu/employees/human-resources/recognition.php",
+        "https://valenciacollege.edu/employees/human-resources/learning-and-development.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 28,
+      "careersUrl": "https://valenciacollege.peopleadmin.com/",
+      "scope": "Institution public board",
+      "pagination": "1 pages; final page has no next-page link",
+      "resultEvidence": "138187-initial/result.json",
+      "resultSha256": "ee0baee263195d37d256bcffd9ceb46e8b8e52e0ab6dfd5f77db288aee7c6be5",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "Valencia College",
+        "provider": "peopleadmin",
+        "careers_url": "https://valenciacollege.peopleadmin.com/",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "138187-discovery/1.json",
+        "138187-discovery/2.json",
+        "138187-discovery/3.json",
+        "138187-discovery/4.json",
+        "138187-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "139931",
+      "institution": "Georgia Southern University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=39000",
+        "https://selfservice.hprod.onehcm.usg.edu/psc/hprodsssso/HCMSS/HCMSS/c/HRS_HRAM_EMP_FL.HRS_CG_SEARCH_FL.GBL?Action=U&FOCUS=Employee&SiteID=39000&PortalKeyStruct=yes&Page=HRS_CAREERS_FL",
+        "https://www.georgiasouthern.edu/offices/human-resources/careers",
+        "https://careers.hprod.onehcm.usg.edu/psp/careers/?cmd=login&languageCd=ENG",
+        "https://www.georgiasouthern.edu/offices/human-resources"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 217,
+      "careersUrl": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=39000",
+      "scope": "Institution public employer board",
+      "pagination": "5 search responses; 217/217 grid rows, 217 unique jobs",
+      "resultEvidence": "139931-initial/result.json",
+      "resultSha256": "da749f682550ded7c5e46676f949140d4954dc74f58c181c6aae17d7536bb968",
+      "ownershipEvidence": "https://www.georgiasouthern.edu/offices/human-resources/careers",
+      "entry": {
+        "name": "Georgia Southern University",
+        "careers_url": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=39000",
+        "max_pages": 200,
+        "provider": "peoplesoft",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "139931-discovery/1.json",
+        "139931-discovery/2.json",
+        "139931-discovery/3.json",
+        "139931-discovery/4.json",
+        "139931-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "141264",
+      "institution": "Valdosta State University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.valdosta.edu/colleges/education/ltwd/part-time-faculty.php",
+        "http://assistive.usablenet.com/tt/www.valdosta.edu/colleges/education/ltwd/part-time-faculty.php",
+        "https://www.valdosta.edu/about/directory/profile/jvandoorn",
+        "https://www.valdosta.edu/about/directory/profile/josemartin",
+        "https://www.valdosta.edu/about/directory/profile/ljudah"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 97,
+      "careersUrl": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=51000",
+      "scope": "Institution public board",
+      "pagination": "2 search responses; 97/97 grid rows, 97 unique jobs",
+      "resultEvidence": "141264-initial/result.json",
+      "resultSha256": "335bbebafbbb8a6630a4c2eac8ac8fdccba0800e6b9dc021cf682d2d3ddd7725",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "Valdosta State University",
+        "provider": "peoplesoft",
+        "careers_url": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=51000",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "141264-discovery/1.json",
+        "141264-discovery/2.json",
+        "141264-discovery/3.json",
+        "141264-discovery/4.json",
+        "141264-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "141334",
+      "institution": "University of West Georgia",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=54000",
+        "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=54000&",
+        "https://careers.hprod.onehcm.usg.edu/psp/careers/?cmd=login&languageCd=ENG",
+        "https://www.westga.edu/hr/index.php",
+        "https://www.westga.edu/academics/nursing/employment-opportunities.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 143,
+      "careersUrl": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=54000",
+      "scope": "Institution public employer board",
+      "pagination": "3 search responses; 143/143 grid rows, 143 unique jobs",
+      "resultEvidence": "141334-initial/result.json",
+      "resultSha256": "a0af174cf15649e61b33c54fc9ba32bda7812e7c593e21dd35ec6075a54d21ab",
+      "ownershipEvidence": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=54000",
+      "entry": {
+        "name": "University of West Georgia",
+        "careers_url": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=54000",
+        "max_pages": 200,
+        "provider": "peoplesoft",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "141334-discovery/1.json",
+        "141334-discovery/2.json",
+        "141334-discovery/3.json",
+        "141334-discovery/4.json",
+        "141334-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "141811",
+      "institution": "Leeward Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.leeward.hawaii.edu/leewardjobs/",
+        "https://intranet.leeward.hawaii.edu/ohr/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 46,
+      "careersUrl": "https://www.schooljobs.com/careers/hawaiiedu?location[0]=Leeward%20CC,%20Pearl%20City&location[1]=Leeward%20CC,%20Various%20Locations",
+      "scope": "Leeward campus location filters from official employment link",
+      "pagination": "6 requests; 46/46 unique advertised postings",
+      "resultEvidence": "141811-corrected/result.json",
+      "resultSha256": "a7b52558f36812644b93b08e6fdd7142b6fd1347db6661fac2b82fb4a89a4612",
+      "ownershipEvidence": "https://www.leeward.hawaii.edu/leewardjobs",
+      "entry": {
+        "name": "Leeward Community College",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/hawaiiedu?location[0]=Leeward%20CC,%20Pearl%20City&location[1]=Leeward%20CC,%20Various%20Locations",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "141811-discovery/1.json",
+        "141811-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "144865",
+      "institution": "College of DuPage",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://cod.edu/academics/continuing-education/youth-academy/summer-jobs.html",
+        "https://cod.csod.com/ux/ats/careersite/4/home/requisition/2884?c=cod&sq=k-8",
+        "https://cod.csod.com/ux/ats/careersite/4/home/requisition/2886?c=cod&sq=algebra%20II",
+        "https://cod.edu/about/human-resources/employment.html",
+        "https://cod.edu/academics/faculty/adjunct-faculty/expectations.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 111,
+      "careersUrl": "https://cod.csod.com/ux/ats/careersite/4/home/requisition/2884?c=cod&sq=k-8",
+      "scope": "Institution public employer board",
+      "pagination": "5 API pages; 111/111 requisitions",
+      "resultEvidence": "144865-initial/result.json",
+      "resultSha256": "cc3ead3f15e7f83951d6587d69816fedb4fd276c42230ea9afd89efc44cbced0",
+      "ownershipEvidence": "https://cod.edu/academics/faculty/adjunct-faculty/expectations.html",
+      "entry": {
+        "name": "College of DuPage",
+        "careers_url": "https://cod.csod.com/ux/ats/careersite/4/home/requisition/2884?c=cod&sq=k-8",
+        "max_pages": 200,
+        "provider": "csod",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "144865-discovery/1.json",
+        "144865-discovery/2.json",
+        "144865-discovery/3.json",
+        "144865-discovery/4.json",
+        "144865-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "145600",
+      "institution": "University of Illinois Chicago",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.uic.edu/",
+        "https://jobs.uic.edu/working-at-uic/",
+        "https://jobs.uic.edu/working-at-uic/chicago/",
+        "https://jobs.uic.edu/diversity/",
+        "https://jobs.uic.edu/request-and-accomodation/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 150,
+      "careersUrl": "https://uic.csod.com/ux/ats/careersite/1/home/?c=uic",
+      "scope": "UIC academic/university site 1; separate UI Health site excluded",
+      "pagination": "6 API pages; 150/150 requisitions",
+      "resultEvidence": "145600-initial/result.json",
+      "resultSha256": "a46628dd74397c2ec0ec48c932c088dce2e8f218b5e57dfe1a1a6d48764e59b4",
+      "ownershipEvidence": "145600-discovery/1.json",
+      "entry": {
+        "name": "University of Illinois Chicago",
+        "careers_url": "https://uic.csod.com/ux/ats/careersite/1/home/?c=uic",
+        "max_pages": 200,
+        "provider": "csod",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "145600-discovery/1.json",
+        "145600-discovery/2.json",
+        "145600-discovery/3.json",
+        "145600-discovery/4.json",
+        "145600-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "147536",
+      "institution": "National Louis University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.nl.edu/",
+        "https://nl.edu/employment/adjunct-applicant-process/",
+        "https://nl.edu/employment/",
+        "https://nl.edu/jobs/",
+        "https://ww.nl.edu/employment/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "icims",
+      "postings": 61,
+      "careersUrl": "https://careers-nl.icims.com/",
+      "scope": "Institution public employer board",
+      "pagination": "3 requests; final iCIMS page has no next-page control",
+      "resultEvidence": "147536-initial/result.json",
+      "resultSha256": "9da71087f97fb214dd95386419b9d1b44189ed4bddb6b5b204812d3500b9cf99",
+      "ownershipEvidence": "147536-discovery/1.json",
+      "entry": {
+        "name": "National Louis University",
+        "careers_url": "https://careers-nl.icims.com/",
+        "max_pages": 200,
+        "provider": "icims",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "147536-discovery/1.json",
+        "147536-discovery/2.json",
+        "147536-discovery/3.json",
+        "147536-discovery/4.json",
+        "147536-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "154022",
+      "institution": "The University of Arizona Global Campus",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://uagc.careers/careers/",
+        "https://uagc.careers/jobs/",
+        "https://uagc.careers/",
+        "https://uagc.careers/university-arizona-global-campus/"
+      ],
+      "status": "verified-empty",
+      "complete": true,
+      "provider": "browser:jobsyn",
+      "postings": 0,
+      "careersUrl": "https://uagc.careers/jobs/",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager; 0 advertised postings",
+      "resultEvidence": "154022-search15.json",
+      "resultSha256": "931ff15c14325beb0b24dc973b410fa79186cb14a209e4a607d257acff32434a",
+      "ownershipEvidence": "154022-browser.json",
+      "entry": {
+        "name": "University of Arizona Global Campus",
+        "provider": "local-parser",
+        "careers_url": "https://uagc.careers/jobs/",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "jobsyn"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "154022-discovery/1.json",
+        "154022-discovery/2.json",
+        "154022-discovery/3.json",
+        "154022-discovery/4.json"
+      ]
+    },
+    {
+      "unitid": "154493",
+      "institution": "Upper Iowa University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://uiu.edu/employment/",
+        "https://my.uiu.edu/ICS/Employment_Opportunities.jnz",
+        "https://my.uiu.edu/ICS/Employment_Opportunities.jnz?portlet=Employment_Opportunities",
+        "https://my.uiu.edu/ICS/Employment_Opportunities.jnz?portlet=Free-form_Content",
+        "https://jenzabarhelp.jenzabar.com/ews/help/JICS/released/en/employment-position-application.html"
+      ],
+      "status": "blocked",
+      "complete": false,
+      "postings": null,
+      "reason": "myUIU employment portal serves Cloudflare to the isolated browser; its public search could not be executed.",
+      "resultEvidence": "154493-browser.json",
+      "resultSha256": "79353dc2fe999db3fd53661d4790c6b0bc296862c1618ff0e875b55a0d335d99",
+      "discoveryEvidence": [
+        "154493-discovery/1.json",
+        "154493-discovery/2.json",
+        "154493-discovery/3.json",
+        "154493-discovery/4.json",
+        "154493-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "154697",
+      "institution": "Barton County Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.bartonccc.edu/",
+        "https://bartonccc.agilehr.com/careers/",
+        "https://bartonccc.edu/aboutbarton/employment",
+        "https://www.bartonccc.edu/aboutbarton/employment",
+        "https://internal.bartonccc.edu/humres/hiring"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "agilehr",
+      "postings": 37,
+      "careersUrl": "https://bartonccc.agilehr.com/careers/",
+      "scope": "Institution public employer board",
+      "pagination": "Public getall API; 37/37 rows",
+      "resultEvidence": "154697-initial/result.json",
+      "resultSha256": "8e4ca39b0588eeff80b17b68aeafd144b3b1df0d46609c595bd3bd63cfd99a6b",
+      "ownershipEvidence": "154697-browser.json",
+      "entry": {
+        "name": "Barton County Community College",
+        "provider": "agilehr",
+        "careers_url": "https://bartonccc.agilehr.com/careers/",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "154697-discovery/1.json",
+        "154697-discovery/2.json",
+        "154697-discovery/3.json",
+        "154697-discovery/4.json",
+        "154697-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "156471",
+      "institution": "Galen College of Nursing-Louisville",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.hcahealthcare.com/jobs/17809793-adjunct-clinical-nursing-faculty",
+        "https://careers.hcahealthcare.com/jobs/18207439-adjunct-communications-instructor",
+        "https://careers.hcahealthcare.com/jobs/18027379-adjunct-clinical-nursing-faculty",
+        "https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs?bid=45&cfm10%5B%5D=27750&cfm10%5B%5D=27750GKY&cfm10%5B%5D=27750GOH&cfm10%5B%5D=27751&cfm10%5B%5D=27752&cfm10%5B%5D=01385GFL&cfm10%5B%5D=01588GTX&search_type=talemetry",
+        "https://www.careeronestop.org/Toolkit/Wages/find-salary.aspx?keyword=Registered%20Nurses&soccode=291141&location=Orlando,%20FL&keywordSearched=Registered%20Nurses"
+      ],
+      "status": "blocked",
+      "complete": false,
+      "postings": null,
+      "reason": "HCA returns first-page postings but Cloudflare blocks page two; partial output is rejected.",
+      "resultEvidence": "156471-search7.json",
+      "resultSha256": "48f1c0c833f2538ca252cdefddac6952f15e8383e711af1e9fe59338e6102638",
+      "discoveryEvidence": [
+        "156471-discovery/1.json",
+        "156471-discovery/2.json",
+        "156471-discovery/3.json",
+        "156471-discovery/4.json",
+        "156471-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "156541",
+      "institution": "University of the Cumberlands",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.ucumberlands.edu/about/work-us"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 30,
+      "careersUrl": "https://ucumberlands.wd1.myworkdayjobs.com/careers",
+      "scope": "Institution public employer board",
+      "pagination": "2 listing pages, 30/30 raw records; 0 source records lack title/URL",
+      "resultEvidence": "156541-initial/result.json",
+      "resultSha256": "136e7f947e95e8f576c35c22c31ade6b24ef66de138ef2b34b1c2bd8fd4ac083",
+      "ownershipEvidence": "156541-discovery/1.json",
+      "entry": {
+        "name": "University of the Cumberlands",
+        "careers_url": "https://ucumberlands.wd1.myworkdayjobs.com/careers",
+        "max_pages": 200,
+        "provider": "workday",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "156541-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "158662",
+      "institution": "Delgado Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.lctcs.edu/jobs/495768/commercial-vehicle-operator-adjunct-instructor",
+        "https://careers.lctcs.edu/jobs/495660/adjunct-instructor-criminal-justice",
+        "https://careers.lctcs.edu/jobs/494505/adjunct-instructor-health",
+        "https://careers.lctcs.edu/jobs/494283/adjunct-instructor-care-and-development-of-young-children",
+        "https://careers.lctcs.edu/jobs/494204/adjunct-instructor-french"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:lctcs",
+      "postings": 31,
+      "careersUrl": "https://careers.lctcs.edu/?colleges=DCC",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager; 31 advertised postings",
+      "resultEvidence": "158662-search3.json",
+      "resultSha256": "0f34e4caa7417652974805100f7b4562ccf83b84cf97b6500b30bd6f8af5cce0",
+      "ownershipEvidence": "158662-browser.json",
+      "entry": {
+        "name": "Delgado Community College",
+        "provider": "local-parser",
+        "careers_url": "https://careers.lctcs.edu/?colleges=DCC",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "lctcs"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "158662-discovery/1.json",
+        "158662-discovery/2.json",
+        "158662-discovery/3.json",
+        "158662-discovery/4.json",
+        "158662-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "161572",
+      "institution": "Unity Environmental University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://unity.edu/careers/",
+        "https://unity.edu/careers/jobs-that-require-masters-degree/",
+        "https://unity.edu/careers/adventure-therapist/",
+        "https://unity.edu/careers/agronomist/",
+        "https://unity.edu/careers/animal-care-specialist/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:paycom",
+      "postings": 41,
+      "careersUrl": "https://www.paycomonline.net/v4/ats/web.php/portal/ED9820B3EB18F3366E468E5024A065B8/career-page",
+      "scope": "Institution public employer board",
+      "pagination": "5 pages; terminal pager; 41 advertised postings",
+      "resultEvidence": "161572-search3.json",
+      "resultSha256": "a6940aae1b6a94f6c9646ac5a483e8e1840dfce2c5aa5aaf4bab64cdb71e017b",
+      "ownershipEvidence": "161572-browser.json",
+      "entry": {
+        "name": "Unity Environmental University",
+        "provider": "local-parser",
+        "careers_url": "https://www.paycomonline.net/v4/ats/web.php/portal/ED9820B3EB18F3366E468E5024A065B8/career-page",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "paycom"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "161572-discovery/1.json",
+        "161572-discovery/2.json",
+        "161572-discovery/3.json",
+        "161572-discovery/4.json",
+        "161572-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "163426",
+      "institution": "Montgomery College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://info.montgomerycollege.edu/offices/human-resources/recruiting.html",
+        "https://www.montgomerycollege.edu/about-mc/careers/index.html",
+        "https://info.montgomerycollege.edu/resources/part-time-faculty/index.html",
+        "https://info.montgomerycollege.edu/resources/part-time-faculty/part-time-faculty-associates-and-coordinators.html",
+        "https://info.montgomerycollege.edu/resources/part-time-faculty/part-time-faculty-space-list.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 39,
+      "careersUrl": "https://mc.wd1.myworkdayjobs.com/external",
+      "scope": "Institution public employer board",
+      "pagination": "2 listing pages, 39/39 raw records; 0 source records lack title/URL",
+      "resultEvidence": "163426-initial/result.json",
+      "resultSha256": "7558f447790d25a043864d51b171e9250150c6faeea015111604d78b0c3c8db7",
+      "ownershipEvidence": "163426-discovery/2.json",
+      "entry": {
+        "name": "Montgomery College",
+        "careers_url": "https://mc.wd1.myworkdayjobs.com/external",
+        "max_pages": 200,
+        "provider": "workday",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "163426-discovery/1.json",
+        "163426-discovery/2.json",
+        "163426-discovery/3.json",
+        "163426-discovery/4.json",
+        "163426-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "164988",
+      "institution": "Boston University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.silkroad.com/BU/External",
+        "https://jobs.silkroad.com/BU/Faculty",
+        "https://jobs.silkroad.com/BUCareers/Faculty",
+        "https://jobs.silkroad.com/BU/External/Profile",
+        "https://jobs.silkroad.com/BU/External/jobs/317361"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "silkroad",
+      "postings": 195,
+      "careersUrl": "https://jobs.silkroad.com/BU/External",
+      "scope": "Institution public employer board",
+      "pagination": "20 pages, provider verifies final page number and all preceding pages",
+      "resultEvidence": "164988-initial/result.json",
+      "resultSha256": "c9d6a7adc692ffc0592fda3dfc077b08bddb4abbf9ac984dc58dc564bbf7314f",
+      "ownershipEvidence": "164988-browser.json",
+      "entry": {
+        "name": "Boston University",
+        "provider": "silkroad",
+        "careers_url": "https://jobs.silkroad.com/BU/External",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "164988-discovery/1.json",
+        "164988-discovery/2.json",
+        "164988-discovery/3.json",
+        "164988-discovery/4.json",
+        "164988-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "165033",
+      "institution": "Bristol Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://bristolcc.edu/bristolcommunity/facultystaff/humanresources/index.html",
+        "https://bristolcc.edu/bristolcommunity/facultystaff/humanresources/benefits/adjunctfacultyandpart-timeemployees/index.html",
+        "https://bristolcc.edu/bristolcommunity/facultystaff/humanresources/benefits/adjunctfacultyandpart-timeemployees/categoricalwaiverandorstatetuitionremission.html",
+        "https://bristolcc.edu/bristolcommunity/facultystaff/humanresources/benefits/adjunctfacultyandpart-timeemployees/massstateretirement.html",
+        "https://bristolcc.edu/bristolcommunity/facultystaff/humanresources/benefits/adjunctfacultyandpart-timeemployees/savingsplans.html"
+      ],
+      "status": "blocked",
+      "complete": false,
+      "postings": null,
+      "reason": "InterviewExchange route did not expose recognized posting titles through the isolated browser; WAF/unrecognized listing.",
+      "resultEvidence": "165033-search.json",
+      "resultSha256": "a54b6ce76f7278012e873d64509856c1689929ce861f737668cf88c3ec23282c",
+      "discoveryEvidence": [
+        "165033-discovery/1.json",
+        "165033-discovery/2.json",
+        "165033-discovery/3.json",
+        "165033-discovery/4.json",
+        "165033-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "170055",
+      "institution": "Grand Rapids Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.grcc.edu/humanresources/employeegroups/adjunctfaculty/adjunctfacultypayrates",
+        "https://www.grcc.edu/schools-departments/school-workforce-training/job-training-programs",
+        "https://www.grcc.edu/events/exercise-science-transfer-career-day",
+        "https://www.grcc.edu/faculty-staff/human-resources/careers",
+        "https://www.grcc.edu/faculty-staff/human-resources/employee-groups-resources/employee-groups/adjunct-faculty"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "clearcompany",
+      "postings": 42,
+      "careersUrl": "https://www.grcc.edu/faculty-staff/human-resources/careers",
+      "scope": "Institution public employer board",
+      "pagination": "Complete public API; 42/42 rows",
+      "resultEvidence": "170055-initial/result.json",
+      "resultSha256": "10ee9c539475f3d9f551aeabe8cd08658b1b9283e0dd91cd5eac1f7fbdcb91db",
+      "ownershipEvidence": "170055-browser.json",
+      "entry": {
+        "name": "Grand Rapids Community College",
+        "provider": "clearcompany",
+        "careers_url": "https://www.grcc.edu/faculty-staff/human-resources/careers",
+        "clearcompany_id": "c93db35e-a99d-6540-27c0-301f8f589f9a",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "170055-discovery/1.json",
+        "170055-discovery/2.json",
+        "170055-discovery/3.json",
+        "170055-discovery/4.json",
+        "170055-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "171535",
+      "institution": "Oakland Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.oaklandcc.edu/employment/human-resources/",
+        "https://www.oaklandcc.edu/employment/human-resources/full-time_adjunct_faculty",
+        "https://www.oaklandcc.edu/employment/",
+        "https://www.oaklandcc.edu/employment",
+        "https://www.oaklandcc.edu/employment/human-resources/employee-groups"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 95,
+      "careersUrl": "https://www.schooljobs.com/careers/oaklandcc/",
+      "scope": "Institution public employer board",
+      "pagination": "11 requests; 95/95 unique advertised postings",
+      "resultEvidence": "171535-initial/result.json",
+      "resultSha256": "0fc3a7f78c7927b01b383c32f8a1d5581176fba8d44cc5373a1e93e44563ac02",
+      "ownershipEvidence": "171535-discovery/1.json",
+      "entry": {
+        "name": "Oakland Community College",
+        "careers_url": "https://www.schooljobs.com/careers/oaklandcc/",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "171535-discovery/1.json",
+        "171535-discovery/2.json",
+        "171535-discovery/3.json",
+        "171535-discovery/4.json",
+        "171535-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "176372",
+      "institution": "University of Southern Mississippi",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://usm.csod.com/ats/careersite/search.aspx?site=1&c=usm",
+        "https://www.usm.edu/employment-human-resources/new-employee-forms.php",
+        "https://www.usm.edu/employment-human-resources/",
+        "https://www.usm.edu/employment-human-resources/about-hr.php",
+        "https://www.usm.edu/employment-human-resources/applicants.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 142,
+      "careersUrl": "https://usm.csod.com/ats/careersite/search.aspx?site=1&c=usm",
+      "scope": "Institution public employer board",
+      "pagination": "6 API pages; 142/142 requisitions",
+      "resultEvidence": "176372-initial/result.json",
+      "resultSha256": "59788111f9980de3ab8695f14ddc06052f7c183a31dee82fdd1b418acff6524a",
+      "ownershipEvidence": "https://www.usm.edu/employment-human-resources/new-employee-forms.php",
+      "entry": {
+        "name": "University of Southern Mississippi",
+        "provider": "csod",
+        "careers_url": "https://usm.csod.com/ats/careersite/search.aspx?site=1&c=usm",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "176372-discovery/1.json",
+        "176372-discovery/2.json",
+        "176372-discovery/3.json",
+        "176372-discovery/4.json",
+        "176372-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "177065",
+      "institution": "Columbia College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.ccis.edu/careers/jobs",
+        "https://www.ccis.edu/careers/index",
+        "https://ccis.edu2.com/topic/programsteps"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:paycor",
+      "postings": 27,
+      "careersUrl": "https://www.ccis.edu/careers/jobs",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "177065-search5.json",
+      "resultSha256": "c42d4d089c4cc5daf88a92bab4231b633ee31d1c23ca64e0d745b47c004ee051",
+      "ownershipEvidence": "177065-browser.json",
+      "entry": {
+        "name": "Columbia College",
+        "provider": "local-parser",
+        "careers_url": "https://www.ccis.edu/careers/jobs",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "paycor"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "177065-discovery/1.json",
+        "177065-discovery/2.json",
+        "177065-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "178059",
+      "institution": "Maryville University of Saint Louis",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.maryville.edu/?_ga=2.65064999.867605969.1689610591-885137803.1623179314",
+        "https://careers.maryville.edu/",
+        "https://myjobs.adp.com/adjunctmaryvilleuniversityexternalcs",
+        "https://myjobs.adp.com/facultyandstaffmaryvilleuniversityexternalcs",
+        "https://www.maryville.edu/employment/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:adp-myjobs",
+      "postings": 34,
+      "careersUrl": "https://myjobs.adp.com/adjunctmaryvilleuniversityexternalcs/cx/job-listing",
+      "scope": "Maryville adjunct faculty MyJobs board",
+      "pagination": "4 API pages; 34/34 jobs",
+      "resultEvidence": "178059-adp.json",
+      "resultSha256": "f0ccfd6bee0c697b46380c612de9539799c41e1852ce013ee32b9a8af5c3a144",
+      "ownershipEvidence": "178059-browser.json",
+      "entry": {
+        "name": "Maryville University of Saint Louis",
+        "provider": "local-parser",
+        "careers_url": "https://myjobs.adp.com/adjunctmaryvilleuniversityexternalcs/cx/job-listing",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "adp-myjobs-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "178059-discovery/1.json",
+        "178059-discovery/2.json",
+        "178059-discovery/3.json",
+        "178059-discovery/4.json",
+        "178059-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "181394",
+      "institution": "University of Nebraska at Omaha",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.unomaha.edu/human-resources/employment/",
+        "https://www.unomaha.edu/human-resources/employment/index.php",
+        "https://www.unomaha.edu/human-resources/index.php",
+        "https://www.unomaha.edu/human-resources",
+        "https://www.unomaha.edu/human-resources/about-us/index.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 52,
+      "careersUrl": "https://unomaha.peopleadmin.com/",
+      "scope": "Institution public employer board",
+      "pagination": "2 pages; final page has no next-page link",
+      "resultEvidence": "181394-initial/result.json",
+      "resultSha256": "c9fcbc6c8cf00999743fd68abaffd6a8324c24692a1b34c91894e32dfcc3b242",
+      "ownershipEvidence": "181394-discovery/1.json",
+      "entry": {
+        "name": "University of Nebraska at Omaha",
+        "careers_url": "https://unomaha.peopleadmin.com/",
+        "max_pages": 200,
+        "provider": "peopleadmin",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "181394-discovery/1.json",
+        "181394-discovery/2.json",
+        "181394-discovery/3.json",
+        "181394-discovery/4.json",
+        "181394-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "182500",
+      "institution": "Truckee Meadows Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.tmcc.edu/human-resources-civil-rights/employment",
+        "https://www.tmcc.edu/human-resources-civil-rights"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 92,
+      "careersUrl": "https://nshe.wd1.myworkdayjobs.com/TMCC-External",
+      "scope": "Institution public employer board",
+      "pagination": "5 listing pages, 92/92 raw records; 0 source records lack title/URL",
+      "resultEvidence": "182500-initial/result.json",
+      "resultSha256": "da1b2ac7b622fd8dfa37ef0b9ee88d00122d6e638c6ad18e0979e1ce51a17403",
+      "ownershipEvidence": "182500-browser.json",
+      "entry": {
+        "name": "Truckee Meadows Community College",
+        "provider": "workday",
+        "careers_url": "https://nshe.wd1.myworkdayjobs.com/TMCC-External",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "182500-discovery/1.json",
+        "182500-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "187444",
+      "institution": "William Paterson University of New Jersey",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.wpunj.edu/human-resources/jobs-careers-comp/recruitment/pre-employment-process",
+        "https://www.wpunj.edu/human-resources/jobs-careers-comp/recruitment/unclassified-employees/adjunct-faculty",
+        "https://www.wpunj.edu/human-resources/jobs-careers-comp/employment-opportunities",
+        "https://www.wpunj.edu/human-resources/",
+        "https://www.wpunj.edu/human-resources/index.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 54,
+      "careersUrl": "https://wpunj.wd1.myworkdayjobs.com/ext",
+      "scope": "Institution public board",
+      "pagination": "3 listing pages, 54/54 raw records; 0 source records lack title/URL",
+      "resultEvidence": "187444-initial/result.json",
+      "resultSha256": "a1d3395cde8381c6a88ce7cbcd501d37dad11d117c47ccaabcb5d146f0b6af74",
+      "ownershipEvidence": "Official employer HR page captured in follow/browser evidence",
+      "entry": {
+        "name": "William Paterson University of New Jersey",
+        "provider": "workday",
+        "careers_url": "https://wpunj.wd1.myworkdayjobs.com/ext",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "187444-discovery/1.json",
+        "187444-discovery/2.json",
+        "187444-discovery/3.json",
+        "187444-discovery/4.json",
+        "187444-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "190576",
+      "institution": "CUNY Graduate School and University Center",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://cuny.jobs/jobs/",
+        "https://sps.cuny.edu/about/directory/office-human-resources/jobs",
+        "https://www.cuny.edu/about/employment/",
+        "https://www.cuny.edu/employment/",
+        "http://www.cuny.edu/employment/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:cunySps",
+      "postings": 4,
+      "careersUrl": "https://sps.cuny.edu/about/directory/office-human-resources/jobs",
+      "scope": "CUNY School of Professional Studies part-time opportunities; Graduate Center administrative family, not main-campus coverage",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "190576-search7.json",
+      "resultSha256": "286324b87ccb5ebfbefd69c0dd93d11a17eba982e2f1d06caf1d76644ac1aca4",
+      "ownershipEvidence": "190576-browser.json",
+      "entry": {
+        "name": "CUNY Graduate School and University Center \u2014 CUNY School of Professional Studies part-time opportunities",
+        "provider": "local-parser",
+        "careers_url": "https://sps.cuny.edu/about/directory/office-human-resources/jobs",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "cunySps"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "ownershipReference": "https://www.gc.cuny.edu/about",
+      "discoveryEvidence": [
+        "190576-discovery/1.json",
+        "190576-discovery/2.json",
+        "190576-discovery/3.json",
+        "190576-discovery/4.json",
+        "190576-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "190619",
+      "institution": "CUNY Kingsborough Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.kbcc.cuny.edu/humanresources/kccjoblistings.html",
+        "https://www.kbcc.cuny.edu/humanresources/",
+        "https://www.kbcc.cuny.edu/career/index.html",
+        "https://cuny.jobs/brooklyn-ny/adjunct-faculty-open-rank-baking-pastry/F8569262C2B64D0E9B33F1E22655655C/job/",
+        "https://cuny.jobs/brooklyn-ny/adjunct-faculty-open-rank-culinary-arts/462C529C8EE34AB3964BBF3DF49FFE67/job/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:kingsborough",
+      "postings": 19,
+      "careersUrl": "https://www.kbcc.cuny.edu/humanresources/kccjoblistings.html",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "190619-search2.json",
+      "resultSha256": "ebd1464c9fb5465797fe1fc43d5bd8c558f92c63beaa0bd8e7fe1f61731133b6",
+      "ownershipEvidence": "190619-browser.json",
+      "entry": {
+        "name": "Kingsborough Community College",
+        "provider": "local-parser",
+        "careers_url": "https://www.kbcc.cuny.edu/humanresources/kccjoblistings.html",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "kingsborough"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "190619-discovery/1.json",
+        "190619-discovery/2.json",
+        "190619-discovery/3.json",
+        "190619-discovery/4.json",
+        "190619-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "196264",
+      "institution": "Empire State University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://ptacademicjobs.sunyempire.edu/adjunct-apply/",
+        "https://ptacademicjobs.sunyempire.edu/image-captcha-refresh/node_perspective_adjunct_form",
+        "https://ptacademicjobs.sunyempire.edu/",
+        "https://ptacademicjobs.sunyempire.edu/?_gl=1*1fol59k*_gcl_au*MzIwNTE0NTkwLjE3Mzc0NzY2NTE.*_ga*MTAzNDQ2MDg2OC4xNzQxMzYwNzM5*_ga_NXDP907WP8*MTc0MTM2MDczOS4xLjEuMTc0MTM2MTkwMy4xOS4wLjA",
+        "https://media.sunyempire.edu/web-archive/oleg-archives/human-resources/employment-opportunities/"
+      ],
+      "status": "no-listing",
+      "complete": false,
+      "postings": null,
+      "reason": "Saved adjunct route is a CV submission repository/form, not a vacancy search. Official legacy HR referral could not be loaded.",
+      "resultEvidence": "196264-browser.json",
+      "resultSha256": "02e0fbc62699a7e950524de653b582340ebbe833cbd421d0b1744a44b73b9220",
+      "discoveryEvidence": [
+        "196264-discovery/1.json",
+        "196264-discovery/2.json",
+        "196264-discovery/3.json",
+        "196264-discovery/4.json",
+        "196264-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "196592",
+      "institution": "Touro University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://tcnycareers-touro.icims.com/jobs/7550/adjunct-instructor%3A-bilingual-advanced-certificate-program%28online-long-island-brooklyn-staten-island-manhattan-queens%29/job",
+        "https://tcnycareers-touro.icims.com/jobs/10961/online-adjunct-professor%2C-graduate-school-of-social-work/job",
+        "https://tcnycareers-touro.icims.com/jobs/13109/adjunct-faculty---cybersecurity-%28ai-governance%2C-risk-%26-auditing%29/job",
+        "https://tcnycareers-touro.icims.com/",
+        "https://touro.icims.com/icims2/servlet/icims2?module=Root&action=samlAuthnRequest&RelayState=https%3A%2F%2Finternal-touro.icims.com%2Fr.jsp"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "icims",
+      "postings": 257,
+      "careersUrl": "https://tcnycareers-touro.icims.com/jobs/7550/adjunct-instructor%3A-bilingual-advanced-certificate-program%28online-long-island-brooklyn-staten-island-manhattan-queens%29/job",
+      "scope": "Institution public employer board",
+      "pagination": "7 requests; final iCIMS page has no next-page control",
+      "resultEvidence": "196592-initial/result.json",
+      "resultSha256": "5c45f92090974e046212f8140f7ce521b1b927b12956b1a8785e0a8ad55d43a2",
+      "ownershipEvidence": "https://www.touro.edu/careers/",
+      "entry": {
+        "name": "Touro University",
+        "careers_url": "https://tcnycareers-touro.icims.com/jobs/7550/adjunct-instructor%3A-bilingual-advanced-certificate-program%28online-long-island-brooklyn-staten-island-manhattan-queens%29/job",
+        "max_pages": 200,
+        "provider": "icims",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "196592-discovery/1.json",
+        "196592-discovery/2.json",
+        "196592-discovery/3.json",
+        "196592-discovery/4.json",
+        "196592-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "202356",
+      "institution": "Cuyahoga Community College District",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.tri-c.edu/administrative-departments/human-resources/careers.html",
+        "http://www.addtoany.com/share_save?linkurl=https%3A%2F%2Fwww.tri-c.edu%2Fadministrative-departments%2Fhuman-resources%2Fcareers.html&linkname=Careers",
+        "https://www.tri-c.edu/administrative-departments/human-resources/index.html",
+        "https://www.tri-c.edu/faculty-central/adjunct-services/index.html",
+        "https://www.tri-c.edu/faculty-central/adjunct-services/adjunct-faculty-stipend-program.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 352,
+      "careersUrl": "https://tri-c.csod.com/ux/ats/careersite/10/home?c=tri-c",
+      "scope": "Institution public employer board",
+      "pagination": "15 API pages; 352/352 requisitions",
+      "resultEvidence": "202356-initial/result.json",
+      "resultSha256": "8c46975141f4219a3dc8d0d9051b274ab3b3538f71bd39acafb6abcf75fbe242",
+      "ownershipEvidence": "202356-discovery/1.json",
+      "entry": {
+        "name": "Cuyahoga Community College District",
+        "careers_url": "https://tri-c.csod.com/ux/ats/careersite/10/home?c=tri-c",
+        "max_pages": 200,
+        "provider": "csod",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "202356-discovery/1.json",
+        "202356-discovery/2.json",
+        "202356-discovery/3.json",
+        "202356-discovery/4.json",
+        "202356-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "207500",
+      "institution": "University of Oklahoma-Norman Campus",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.ou.edu/",
+        "https://jobs.ou.edu/jobs/search/all",
+        "https://jobs.ou.edu/jobs/search",
+        "http://www.ou.edu/facultyrecruitment.html",
+        "https://www.ou.edu/facultyrecruitment.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:clinch",
+      "postings": 323,
+      "careersUrl": "https://jobs.ou.edu/jobs/search/all",
+      "scope": "Institution public employer board",
+      "pagination": "11 pages; terminal pager",
+      "resultEvidence": "207500-search.json",
+      "resultSha256": "d52c8b89962e224e0904f4d54bbac5a2db94aad56d6c1f1c8ea18de1833149ba",
+      "ownershipEvidence": "207500-browser.json",
+      "entry": {
+        "name": "University of Oklahoma-Norman Campus",
+        "provider": "local-parser",
+        "careers_url": "https://jobs.ou.edu/jobs/search/all",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "clinch"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "207500-discovery/1.json",
+        "207500-discovery/2.json",
+        "207500-discovery/3.json",
+        "207500-discovery/4.json",
+        "207500-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "210605",
+      "institution": "Community College of Allegheny County",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://ccac.emsicc.com/",
+        "https://ccac.elluciancrmrecruit.com/Apply/Events/List?ID=13",
+        "https://ccac.elluciancrmrecruit.com/Apply/Events/List?ID=10",
+        "https://ccac.elluciancrmrecruit.com/Apply/Events/List?ID=20",
+        "https://www.ccac.edu/about/working-at-ccac.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 115,
+      "careersUrl": "https://ccac.csod.com/ats/careersite/search.aspx?site=3&c=ccac",
+      "scope": "Institution public employer board",
+      "pagination": "5 API pages; 115/115 requisitions",
+      "resultEvidence": "210605-initial/result.json",
+      "resultSha256": "8d34532c3e6a3591b327b3f1581c516c7c49ed4f204043a54bb61b3c6246f869",
+      "ownershipEvidence": "210605-browser.json",
+      "entry": {
+        "name": "Community College of Allegheny County",
+        "provider": "csod",
+        "careers_url": "https://ccac.csod.com/ats/careersite/search.aspx?site=3&c=ccac",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "210605-discovery/1.json",
+        "210605-discovery/2.json",
+        "210605-discovery/3.json",
+        "210605-discovery/4.json",
+        "210605-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "210809",
+      "institution": "American College of Financial Services",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.paycomonline.net/v4/ats/web.php/jobs?clientkey=0EC6D26D6ACC066E0F0E668BFD94D104"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:paycom",
+      "postings": 5,
+      "careersUrl": "https://www.paycomonline.net/v4/ats/web.php/portal/0EC6D26D6ACC066E0F0E668BFD94D104/career-page",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager; 5 advertised postings",
+      "resultEvidence": "210809-search3.json",
+      "resultSha256": "c51d0ce114af879f42a83ce5135c926123971fab864e5bcb764bff8639d37317",
+      "ownershipEvidence": "210809-browser.json",
+      "entry": {
+        "name": "American College of Financial Services",
+        "provider": "local-parser",
+        "careers_url": "https://www.paycomonline.net/v4/ats/web.php/portal/0EC6D26D6ACC066E0F0E668BFD94D104/career-page",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "paycom"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "210809-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "215239",
+      "institution": "Community College of Philadelphia",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.ccp.edu/postings/10272/print_preview",
+        "https://jobs.ccp.edu/postings/search?commit=Search&page=1&query_position_type_id=1",
+        "https://jobs.ccp.edu/postings/9564/print_preview",
+        "https://jobs.ccp.edu/postings/search?commit=Search&page=1&query_organizational_tier_3_id=any&query_position_type_id=1&sort=226+asc",
+        "https://www.ccp.edu/about-ccp/news-events/career-opportunities"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 47,
+      "careersUrl": "https://www.schooljobs.com/careers/ccp",
+      "scope": "Institution public employer board",
+      "pagination": "6 requests; 47/47 unique advertised postings",
+      "resultEvidence": "215239-corrected/result.json",
+      "resultSha256": "925bd21ee7c691f9bf01739c01d119ebd68bda8435ea7ad8d8cba95cb4508dc1",
+      "ownershipEvidence": "215239-official-referral.json",
+      "entry": {
+        "name": "Community College of Philadelphia",
+        "provider": "neogov",
+        "careers_url": "https://www.schooljobs.com/careers/ccp",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "215239-discovery/1.json",
+        "215239-discovery/2.json",
+        "215239-discovery/3.json",
+        "215239-discovery/4.json",
+        "215239-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "220552",
+      "institution": "South College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4171936",
+        "https://recruiting.paylocity.com/Recruiting/Jobs/Apply/4444963/",
+        "https://recruiting.paylocity.com/Recruiting/Jobs/Apply/4171936",
+        "https://recruiting.paylocity.com/recruiting/jobs/List/1539/SOUTH-COLLEGE",
+        "https://www.bls.gov/ooh/business-and-financial/human-resources-specialists.htm"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:paylocity",
+      "postings": 134,
+      "careersUrl": "https://recruiting.paylocity.com/recruiting/jobs/List/1539/SOUTH-COLLEGE",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager; 134 advertised postings",
+      "resultEvidence": "220552-search2.json",
+      "resultSha256": "29ea82b9e76680b1fd02064f876da42073711d3ff650023d0c6b5598ebd9ac00",
+      "ownershipEvidence": "220552-browser.json",
+      "entry": {
+        "name": "South College",
+        "provider": "local-parser",
+        "careers_url": "https://recruiting.paylocity.com/recruiting/jobs/List/1539/SOUTH-COLLEGE",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "paylocity"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "220552-discovery/1.json",
+        "220552-discovery/2.json",
+        "220552-discovery/3.json",
+        "220552-discovery/4.json",
+        "220552-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "227182",
+      "institution": "Lone Star College System",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.lonestar.edu/employment/",
+        "http://www.lonestar.edu/employment",
+        "https://www.lonestar.edu/employment",
+        "https://www.lonestar.edu/employment/1095-C",
+        "https://www.lonestar.edu/programs-of-study/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:peoplesoft",
+      "postings": 388,
+      "careersUrl": "https://hcm.lonestar.edu/hcmjob.jsp",
+      "scope": "Lone Star adjunct job-family filter; other job families excluded",
+      "pagination": "8 pages; 388/388 adjunct rows",
+      "resultEvidence": "227182-fluid2.json",
+      "resultSha256": "5529c67c90b1aafad854bc8db93ed6a7e1d98c257bff9357cb4d145025388117",
+      "ownershipEvidence": "227182-browser.json",
+      "entry": {
+        "name": "Lone Star College System",
+        "provider": "local-parser",
+        "careers_url": "https://hcm.lonestar.edu/hcmjob.jsp",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "peoplesoft-browser-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--family",
+            "Adjunct"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "227182-discovery/1.json",
+        "227182-discovery/2.json",
+        "227182-discovery/3.json",
+        "227182-discovery/4.json",
+        "227182-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "227854",
+      "institution": "St Philip's College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=1&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=2&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=3&c=alamo",
+        "https://www.alamo.edu/link/dba994a1c9f340ec95aaab945a8bcc77.aspx",
+        "https://www.alamo.edu/about-us/jobs-across-the-alamo-colleges/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 214,
+      "careersUrl": "https://alamo.csod.com/ats/careersite/search.aspx?site=1&c=alamo",
+      "scope": "Shared Alamo district faculty board, not St. Philip's only",
+      "pagination": "9 API pages; 214/214 requisitions",
+      "resultEvidence": "227854-initial/result.json",
+      "resultSha256": "582479b82283c3ac4c02dbf9e40cfec340c8b3a6d90b6f48ac0786bca1896992",
+      "ownershipEvidence": "https://www.alamo.edu/link/dba994a1c9f340ec95aaab945a8bcc77.aspx",
+      "entry": {
+        "name": "St Philip's College \u2014 Shared Alamo district faculty board, not St. Philip's only",
+        "provider": "csod",
+        "careers_url": "https://alamo.csod.com/ats/careersite/search.aspx?site=1&c=alamo",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "227854-discovery/1.json",
+        "227854-discovery/2.json",
+        "227854-discovery/3.json",
+        "227854-discovery/4.json",
+        "227854-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "227924",
+      "institution": "San Antonio College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=12&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=13&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=14&c=alamo",
+        "https://www.alamo.edu/sac/about-sac/our-college/careers-and-employment/",
+        "https://www.alamo.edu/sac/experience-sac/current-students/career-readiness-experiential-opportunities-office/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 49,
+      "careersUrl": "https://alamo.csod.com/ats/careersite/search.aspx?site=12&c=alamo",
+      "scope": "Alamo San Antonio College faculty site 12",
+      "pagination": "2 API pages; 49/49 requisitions",
+      "resultEvidence": "227924-initial/result.json",
+      "resultSha256": "d20028f68cb6ef7b7605455ea65108a36438b57aabe654220e3d0515d30b4076",
+      "ownershipEvidence": "https://www.alamo.edu/sac/experience-sac/current-students/career-readiness-experiential-opportunities-office/",
+      "entry": {
+        "name": "San Antonio College",
+        "provider": "csod",
+        "careers_url": "https://alamo.csod.com/ats/careersite/search.aspx?site=12&c=alamo",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "227924-discovery/1.json",
+        "227924-discovery/2.json",
+        "227924-discovery/3.json",
+        "227924-discovery/4.json",
+        "227924-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "227979",
+      "institution": "San Jacinto Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://sanjac.csod.com/ux/ats/careersite/3/home?c=sanjac",
+        "https://www.sanjac.edu/transparency/equal-opportunity-institution/index.php",
+        "https://yuja.sanjac.edu/V/Video?v=15911309&node=68307681&a=130169344",
+        "https://yuja.sanjac.edu/V/Video?v=15911311&node=68307683&a=76898891",
+        "https://www.sanjac.edu/support/career-support/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 209,
+      "careersUrl": "https://sanjac.csod.com/ux/ats/careersite/3/home?c=sanjac",
+      "scope": "Institution public employer board",
+      "pagination": "9 API pages; 209/209 requisitions",
+      "resultEvidence": "227979-initial/result.json",
+      "resultSha256": "a97a1d04d644e1263bffb7d7f0bd539581a6c686bb9c3a269fd4e7f96565d356",
+      "ownershipEvidence": "https://www.sanjac.edu/support/career-support/",
+      "entry": {
+        "name": "San Jacinto Community College",
+        "careers_url": "https://sanjac.csod.com/ux/ats/careersite/3/home?c=sanjac",
+        "max_pages": 200,
+        "provider": "csod",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "227979-discovery/1.json",
+        "227979-discovery/2.json",
+        "227979-discovery/3.json",
+        "227979-discovery/4.json",
+        "227979-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "228769",
+      "institution": "The University of Texas at Arlington",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.uta.edu/hr/mavtemp",
+        "https://www.uta.edu/hr/careers",
+        "https://resources.uta.edu/hr/services/international/index.php",
+        "https://www.uta.edu/hr/new-employee/staff/i9-process",
+        "https://www.uta.edu/about/careers-at-uta"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 42,
+      "careersUrl": "https://uta.peopleadmin.com/postings/search?utf8=%E2%9C%93&query=&query_v0_posted_at_date=&query_position_type_id%5B%5D=3&435=&commit=Search",
+      "scope": "UT Arlington faculty position type 3",
+      "pagination": "2 pages; final page has no next-page link",
+      "resultEvidence": "228769-initial/result.json",
+      "resultSha256": "3eb3995a8045be7ce30cd77c151b22e8f853cdd3e50d8418567f8bb51183ebdb",
+      "ownershipEvidence": "228769-discovery/2.json",
+      "entry": {
+        "name": "The University of Texas at Arlington",
+        "careers_url": "https://uta.peopleadmin.com/postings/search?utf8=%E2%9C%93&query=&query_v0_posted_at_date=&query_position_type_id%5B%5D=3&435=&commit=Search",
+        "max_pages": 200,
+        "provider": "peopleadmin",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "228769-discovery/1.json",
+        "228769-discovery/2.json",
+        "228769-discovery/3.json",
+        "228769-discovery/4.json",
+        "228769-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "229027",
+      "institution": "The University of Texas at San Antonio",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://dental-jobs.uthscsa.edu/",
+        "https://www.utsa.edu/about/careers/",
+        "https://www.utsa.edu/people-excellence/careers/",
+        "https://wp.uthscsa.edu/careers/",
+        "https://www.utsa.edu/people-excellence/careers/faculty-positions.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 53,
+      "careersUrl": "https://zahr-prd-candidate-ada.utshare.utsystem.edu/psc/ZAHRPRDADA/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&Page=HRS_APP_SCHJOB&Action=U&FOCUS=Applicant&SiteId=21",
+      "scope": "UT San Antonio academic PeopleSoft site 21; UT Health staff Oracle board excluded",
+      "pagination": "2 search responses; 53/53 grid rows, 53 unique jobs",
+      "resultEvidence": "229027-corrected/result.json",
+      "resultSha256": "f9275d782eacaea9523aebdb4d2ec1af909c0f1a2bc71f39d5f4cab210183dcb",
+      "ownershipEvidence": "229027-discovery/5.json",
+      "entry": {
+        "name": "The University of Texas at San Antonio",
+        "provider": "peoplesoft",
+        "careers_url": "https://zahr-prd-candidate-ada.utshare.utsystem.edu/psc/ZAHRPRDADA/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&Page=HRS_APP_SCHJOB&Action=U&FOCUS=Applicant&SiteId=21",
+        "max_pages": 100,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "229027-discovery/1.json",
+        "229027-discovery/2.json",
+        "229027-discovery/3.json",
+        "229027-discovery/4.json",
+        "229027-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "229115",
+      "institution": "Texas Tech University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.brassring.com/1033/ASP/TG/cim_home.asp?partnerid=25898&siteid=5281",
+        "https://jobs.brassring.com/1033/ASP/TG/cim_home.asp?partnerid=25898&siteid=5283",
+        "https://jobs.brassring.com/1033/ASP/TG/cim_home.asp?partnerid=25898&siteid=5284",
+        "https://jobs.brassring.com/1033/ASP/TG/cim_home.asp?partnerid=25898&siteid=5625",
+        "https://sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=25898&siteid=5637"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:brassring",
+      "postings": 53,
+      "careersUrl": "https://sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=25898&siteid=5637#keyWordSearch=",
+      "scope": "Texas Tech faculty BrassRing site 5637; staff, students and TTUHSC excluded",
+      "pagination": "2 pages; terminal pager; 53 advertised postings",
+      "resultEvidence": "229115-search12.json",
+      "resultSha256": "efa61750f107592edc83ad2510f6262c98ba6d7792beeabf7108918438f90ce2",
+      "ownershipEvidence": "229115-browser.json",
+      "entry": {
+        "name": "Texas Tech University",
+        "provider": "local-parser",
+        "careers_url": "https://sjobs.brassring.com/TGnewUI/Search/Home/Home?partnerid=25898&siteid=5637#keyWordSearch=",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "brassring"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "229115-discovery/1.json",
+        "229115-discovery/2.json",
+        "229115-discovery/3.json",
+        "229115-discovery/4.json",
+        "229115-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "242972",
+      "institution": "NUC University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://northbridge.edu/es-pr/ofertas-empleo/",
+        "https://northbridge.edu/en/job-openings/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "adp-workforcenow",
+      "postings": 869,
+      "careersUrl": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=20fa69cd-7a48-410e-9cba-87c44786fb7b&ccId=19000101_000001&lang=es_US&selectedMenuKey=CareerCenter&langChange=true",
+      "scope": "Shared Northbridge/NUC employer board, multiple campuses and brands; not Puerto Rico campus-only",
+      "pagination": "44 API pages; 869/869 requisitions",
+      "resultEvidence": "242972-initial/result.json",
+      "resultSha256": "7504e0ce33c73c28da3aed579cf0c42aed5c7e0f90be105634822cf52214a97f",
+      "ownershipEvidence": "242972-discovery/1.json",
+      "entry": {
+        "name": "NUC University \u2014 Shared Northbridge/NUC employer board, multiple campuses and brands",
+        "careers_url": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=20fa69cd-7a48-410e-9cba-87c44786fb7b&ccId=19000101_000001&lang=es_US&selectedMenuKey=CareerCenter&langChange=true",
+        "max_pages": 200,
+        "provider": "adp-workforcenow",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "242972-discovery/1.json",
+        "242972-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "246354",
+      "institution": "Palo Alto College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=18&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=19&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=20&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=1&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=2&c=alamo"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 26,
+      "careersUrl": "https://alamo.csod.com/ats/careersite/search.aspx?site=18&c=alamo",
+      "scope": "Alamo Palo Alto College faculty site 18",
+      "pagination": "2 API pages; 26/26 requisitions",
+      "resultEvidence": "246354-initial/result.json",
+      "resultSha256": "a2c66a55e2cb163fea2fcaeaf27567a7f531a6180a5ebc1a654d3dec4c99ffe7",
+      "ownershipEvidence": "https://www.alamo.edu/pac/employees/employment/",
+      "entry": {
+        "name": "Palo Alto College",
+        "provider": "csod",
+        "careers_url": "https://alamo.csod.com/ats/careersite/search.aspx?site=18&c=alamo",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "246354-discovery/1.json",
+        "246354-discovery/2.json",
+        "246354-discovery/3.json",
+        "246354-discovery/4.json",
+        "246354-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "364025",
+      "institution": "Chandler-Gilbert Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.maricopa.edu/about/careers",
+        "https://www.maricopa.edu/about/careers/full-time-staff"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 300,
+      "careersUrl": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+      "scope": "Shared Maricopa district board; includes other member colleges",
+      "pagination": "6 search responses; 300/300 grid rows, 300 unique jobs",
+      "resultEvidence": "364025-initial/result.json",
+      "resultSha256": "57e92fc434ba8453cf58ee1a43c47262e64ae9ae9205383cc494498ba94b3ebc",
+      "ownershipEvidence": "https://www.maricopa.edu/about/careers",
+      "entry": {
+        "name": "Chandler-Gilbert Community College \u2014 Shared Maricopa district board",
+        "provider": "peoplesoft",
+        "careers_url": "https://jobs.erp.maricopa.edu/psc/MCPAHPRD/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=1000",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "364025-discovery/1.json",
+        "364025-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "420398",
+      "institution": "Northwest Vista College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=15&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=16&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=17&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=1&c=alamo",
+        "https://alamo.csod.com/ats/careersite/search.aspx?site=2&c=alamo"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "csod",
+      "postings": 20,
+      "careersUrl": "https://alamo.csod.com/ats/careersite/search.aspx?site=15&c=alamo",
+      "scope": "Alamo Northwest Vista College faculty site 15",
+      "pagination": "1 API pages; 20/20 requisitions",
+      "resultEvidence": "420398-initial/result.json",
+      "resultSha256": "7c8024ca2aa783e2f979f7d873dd3a2e97b6980c72fae4de4069bf6c98994793",
+      "ownershipEvidence": "https://www.alamo.edu/nvc/employees/adjunct-faculty/",
+      "entry": {
+        "name": "Northwest Vista College",
+        "provider": "csod",
+        "careers_url": "https://alamo.csod.com/ats/careersite/search.aspx?site=15&c=alamo",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "420398-discovery/1.json",
+        "420398-discovery/2.json",
+        "420398-discovery/3.json",
+        "420398-discovery/4.json",
+        "420398-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "436429",
+      "institution": "Los Angeles Film School",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.lafilm.edu/careers/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:exacthire",
+      "postings": 11,
+      "careersUrl": "https://lafilm.exacthire.com/All_Open_Jobs_at_All_Locations?jobs=[]",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager; 11 advertised postings",
+      "resultEvidence": "436429-search9.json",
+      "resultSha256": "0d907125755a0a6c5864394b1a45693b4c09ba5eafc9e7d465bab279d7366c71",
+      "ownershipEvidence": "436429-browser.json",
+      "entry": {
+        "name": "Los Angeles Film School",
+        "provider": "local-parser",
+        "careers_url": "https://lafilm.exacthire.com/All_Open_Jobs_at_All_Locations?jobs=[]",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "exacthire"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "436429-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "437103",
+      "institution": "Baton Rouge Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.lctcs.edu/jobs/495586/adjunct-faculty-medical-assistant",
+        "https://careers.lctcs.edu/jobs/495515/adjunct-faculty-pipefitting",
+        "https://careers.lctcs.edu/jobs/495514/adjunct-faculty-hvac",
+        "https://careers.lctcs.edu/jobs/495504/adjunct-faculty-electrical",
+        "https://careers.lctcs.edu/jobs/495502/adjunct-faculty-millwright"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:brcc",
+      "postings": 66,
+      "careersUrl": "https://mybrcc.edu/about-brcc/human-resources/employment_opportunities.php",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "437103-search8.json",
+      "resultSha256": "c5705ddcda6086354f7c658ceb0007b4492b52816c071c95a995258565614749",
+      "ownershipEvidence": "437103-browser.json",
+      "entry": {
+        "name": "Baton Rouge Community College",
+        "provider": "local-parser",
+        "careers_url": "https://mybrcc.edu/about-brcc/human-resources/employment_opportunities.php",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "brcc"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "437103-discovery/1.json",
+        "437103-discovery/2.json",
+        "437103-discovery/3.json",
+        "437103-discovery/4.json",
+        "437103-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "443650",
+      "institution": "Miller-Motte College-Chattanooga",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.miller-motte.edu/campuses/chattanooga-career-training/",
+        "https://www.miller-motte.edu/career-training-programs/",
+        "https://www.miller-motte.edu/campuses/augusta-career-training/",
+        "https://www.miller-motte.edu/campuses/columbus-career-training/",
+        "https://www.miller-motte.edu/campuses/tulsa-career-training/"
+      ],
+      "status": "blocked",
+      "complete": false,
+      "postings": null,
+      "reason": "Saved pages concern student career training. Official Miller-Motte hiring event points to ancora.com/careers, but both apex and www career routes failed to fetch.",
+      "resultEvidence": "443650-follow-5.json",
+      "resultSha256": "b6f98244d8619a456ea1e12cf1a14e32f2721c085ea38d2dc67d164d26bfba90",
+      "discoveryEvidence": [
+        "443650-discovery/1.json",
+        "443650-discovery/2.json",
+        "443650-discovery/3.json",
+        "443650-discovery/4.json",
+        "443650-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "444219",
+      "institution": "Folsom Lake College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://employees.losrios.edu/human-resources-and-benefits/how-to-hire-hiring-resources/hiring-adjunct-faculty"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 104,
+      "careersUrl": "https://www.schooljobs.com/careers/losriosccd",
+      "scope": "Shared Los Rios district board, all member colleges",
+      "pagination": "12 requests; 104/104 unique advertised postings",
+      "resultEvidence": "444219-initial/result.json",
+      "resultSha256": "973066d1ec51a63cb6558e5df28d2875bef8dc02192a721f2008729500377ec1",
+      "ownershipEvidence": "444219-discovery/1.json",
+      "entry": {
+        "name": "Folsom Lake College \u2014 Shared Los Rios district board, all member colleges",
+        "careers_url": "https://www.schooljobs.com/careers/losriosccd",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "444219-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "445027",
+      "institution": "American InterContinental University System",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://myjobs.adp.com/aiu",
+        "https://www.aiuniv.edu/about/careers"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:adp-myjobs",
+      "postings": 10,
+      "careersUrl": "https://myjobs.adp.com/aiu/cx/job-listing",
+      "scope": "Institution public employer board",
+      "pagination": "1 API pages; 10/10 jobs",
+      "resultEvidence": "445027-adp.json",
+      "resultSha256": "3b7fc3cc0a8e7abf63c343c6039f2069d6730b72e246154e1002fb1bfbfbf535",
+      "ownershipEvidence": "445027-browser.json",
+      "entry": {
+        "name": "American InterContinental University System",
+        "provider": "local-parser",
+        "careers_url": "https://myjobs.adp.com/aiu/cx/job-listing",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "adp-myjobs-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "445027-discovery/1.json",
+        "445027-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "450933",
+      "institution": "Columbia Southern University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.columbiasouthern.edu/careers/careers-overview/",
+        "https://www.columbiasouthern.edu/careers/staff-careers/",
+        "https://www.columbiasouthern.edu/careers/faculty-careers/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:paycor",
+      "postings": 16,
+      "careersUrl": "https://www.columbiasouthern.edu/careers/faculty-careers/",
+      "scope": "Columbia Southern faculty openings",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "450933-search5.json",
+      "resultSha256": "82b03bc0c19068c95eb7a9884f27aec4dde009b00511a7ad292d902f8f5662d0",
+      "ownershipEvidence": "450933-browser.json",
+      "entry": {
+        "name": "Columbia Southern University",
+        "provider": "local-parser",
+        "careers_url": "https://www.columbiasouthern.edu/careers/faculty-careers/",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "paycor"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "450933-discovery/1.json",
+        "450933-discovery/2.json",
+        "450933-discovery/3.json"
+      ]
+    },
+    {
+      "unitid": "460394",
+      "institution": "Moreno Valley College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.mvc.edu/admin/careers.php"
+      ],
+      "status": "verified-empty",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 0,
+      "careersUrl": "https://jobs.rccd.edu/postings",
+      "scope": "Shared RCCD district board; Riverside, Moreno Valley and Norco",
+      "pagination": "1 pages; final page has no next-page link",
+      "resultEvidence": "460394-initial/result.json",
+      "resultSha256": "f58022a921a34a57830a696b6824e0e2b10a5d4e416ff8f902f8ea4fb15ce731",
+      "ownershipEvidence": "460394-browser.json",
+      "entry": {
+        "name": "Moreno Valley College \u2014 Shared RCCD district board",
+        "provider": "peopleadmin",
+        "careers_url": "https://jobs.rccd.edu/postings",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "460394-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "460464",
+      "institution": "Norco College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.norcocollege.edu/caps/index.html",
+        "https://www.norcocollege.edu/academicaffairs/cte/index.html",
+        "https://readysetcareer.org/norco-college/?utm_source=readysetcareer&utm_content=home",
+        "https://www.norcocollege.edu/services/studentlife/se/index.html",
+        "https://www.norcocollege.edu/services/studentlife/career/assessments.html"
+      ],
+      "status": "verified-empty",
+      "complete": true,
+      "provider": "peopleadmin",
+      "postings": 0,
+      "careersUrl": "https://jobs.rccd.edu/postings",
+      "scope": "Shared RCCD district board; Riverside, Moreno Valley and Norco",
+      "pagination": "1 pages; final page has no next-page link",
+      "resultEvidence": "460464-initial/result.json",
+      "resultSha256": "ad2d8979a28b71bb7151bc5f8e5dee084be139c1532503883eb1f65dc34ca226",
+      "ownershipEvidence": "460464-browser.json",
+      "entry": {
+        "name": "Norco College \u2014 Shared RCCD district board",
+        "provider": "peopleadmin",
+        "careers_url": "https://jobs.rccd.edu/postings",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "460464-discovery/1.json",
+        "460464-discovery/2.json",
+        "460464-discovery/3.json",
+        "460464-discovery/4.json",
+        "460464-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "475121",
+      "institution": "South University-Savannah Online",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.southuniversity.edu/about/employment",
+        "https://www.southuniversity.edu/online/degrees-programs/business-and-technology/human-resources-management-ms",
+        "https://catalog.southuniversity.edu/human-resources-management/hrm5000",
+        "https://catalog.southuniversity.edu/human-resources-management/hrm5010",
+        "https://catalog.southuniversity.edu/human-resources-management/hrm5020"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:dayforce",
+      "postings": 40,
+      "careersUrl": "https://jobs.dayforcehcm.com/southu/CANDIDATEPORTAL",
+      "scope": "Institution public employer board",
+      "pagination": "2 pages; terminal pager",
+      "resultEvidence": "475121-search6.json",
+      "resultSha256": "e8597a2c6fee25c612329a6b2abcd01a15989821302f59bfc32008d2f6dddb71",
+      "ownershipEvidence": "475121-browser.json",
+      "entry": {
+        "name": "South University",
+        "provider": "local-parser",
+        "careers_url": "https://jobs.dayforcehcm.com/southu/CANDIDATEPORTAL",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "dayforce"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "475121-discovery/1.json",
+        "475121-discovery/2.json",
+        "475121-discovery/3.json",
+        "475121-discovery/4.json",
+        "475121-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "482477",
+      "institution": "DeVry University-Illinois",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.devry.edu/online-programs/area-of-study/human-resources.html",
+        "https://www.devry.edu/online-programs/masters-degrees/mba/human-resources.html",
+        "https://www.devry.edu/about/careers-at-devry.html",
+        "https://www.devry.edu/online-programs/associate-degrees/business.html",
+        "https://www.bls.gov/ooh/business-and-financial/human-resources-specialists.htm"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:dayforce",
+      "postings": 94,
+      "careersUrl": "https://jobs.dayforcehcm.com/devry/CANDIDATEPORTAL",
+      "scope": "Institution public employer board",
+      "pagination": "4 pages; terminal pager",
+      "resultEvidence": "482477-search6.json",
+      "resultSha256": "9eb02bf6ddf7b70653665c3e607832911fdf59205dbfe1573fc6d756435515e3",
+      "ownershipEvidence": "482477-browser.json",
+      "entry": {
+        "name": "DeVry University",
+        "provider": "local-parser",
+        "careers_url": "https://jobs.dayforcehcm.com/devry/CANDIDATEPORTAL",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "dayforce"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "482477-discovery/1.json",
+        "482477-discovery/2.json",
+        "482477-discovery/3.json",
+        "482477-discovery/4.json",
+        "482477-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "482680",
+      "institution": "University of North Georgia",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=53000",
+        "https://careers.hprod.onehcm.usg.edu/psp/careers/?cmd=login&languageCd=ENG",
+        "https://ung.edu/human-resources/work-opportunities.php",
+        "https://ung.edu/human-resources/employees/supervisors/hiring-faculty.php",
+        "https://ung.edu/human-resources/index.php"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 261,
+      "careersUrl": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=53000",
+      "scope": "Institution public employer board",
+      "pagination": "6 search responses; 263/263 grid rows, 261 unique jobs",
+      "resultEvidence": "482680-corrected/result.json",
+      "resultSha256": "1951a50f21ea5437f003e31c2c587e2990169a47b57894fd402b8cb65e78a71d",
+      "ownershipEvidence": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=53000",
+      "entry": {
+        "name": "University of North Georgia",
+        "careers_url": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=53000",
+        "max_pages": 200,
+        "provider": "peoplesoft",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "482680-discovery/1.json",
+        "482680-discovery/2.json",
+        "482680-discovery/3.json",
+        "482680-discovery/4.json",
+        "482680-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "483045",
+      "institution": "Central Georgia Technical College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.easyhrweb.com/JC_Central_GA/JobListings/JobCategory.aspx?JobCatTag=JOBCAT_STUEMPLMT",
+        "https://www.easyhrweb.com/JC_Central_GA/",
+        "https://www.easyhrweb.com/JC_Central_GA/joblistings/joblistings.aspx",
+        "https://www.easyhrweb.com/JC_Central_GA/JobListings/JobListings.aspx",
+        "https://www.easyhrweb.com/JC_Central_GA/JobListings/JobCategory.aspx?JobCatTag=JOBCAT_FACULTY"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:easyhr",
+      "postings": 5,
+      "careersUrl": "https://www.easyhrweb.com/JC_Central_GA/JobListings/Description.aspx?Parameter=JobListings&PositionID=436",
+      "scope": "Central Georgia current part-time/adjunct category 436; five posting PDFs",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "483045-search10.json",
+      "resultSha256": "9d138cf1a939b2c371af294b62b58d03d088b45bc46f2b3a06cf165e8a2dc778",
+      "ownershipEvidence": "483045-browser.json",
+      "entry": {
+        "name": "Central Georgia Technical College",
+        "provider": "local-parser",
+        "careers_url": "https://www.easyhrweb.com/JC_Central_GA/JobListings/Description.aspx?Parameter=JobListings&PositionID=436",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "easyhr"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "483045-discovery/1.json",
+        "483045-discovery/2.json",
+        "483045-discovery/3.json",
+        "483045-discovery/4.json",
+        "483045-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "483124",
+      "institution": "Arizona State University Digital Immersion",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://cfo.asu.edu/hr",
+        "https://english.asu.edu/about/employment-opportunities",
+        "https://cfo.asu.edu/reemployment",
+        "https://cisa.asu.edu/job-postings",
+        "https://cfo.asu.edu/applicant"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "workday",
+      "postings": 147,
+      "careersUrl": "https://asu.wd1.myworkdayjobs.com/ASUStaffCareers",
+      "scope": "Shared ASU staff board; includes campus and digital operations; not faculty",
+      "pagination": "8 listing pages, 147/147 raw records; 0 source records lack title/URL",
+      "resultEvidence": "483124-initial/result.json",
+      "resultSha256": "9c60d70e98b411bf5e58e05f76710acecbac02df94c4bb1393d47c23e0013a7a",
+      "ownershipEvidence": "https://cfo.asu.edu/applicant",
+      "entry": {
+        "name": "Arizona State University Digital Immersion \u2014 Shared ASU staff board",
+        "provider": "workday",
+        "careers_url": "https://asu.wd1.myworkdayjobs.com/ASUStaffCareers",
+        "max_pages": 200,
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "483124-discovery/1.json",
+        "483124-discovery/2.json",
+        "483124-discovery/3.json",
+        "483124-discovery/4.json",
+        "483124-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "483595",
+      "institution": "Ana G. Mendez University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://jobs.agmu.edu/page-acervo?lang=en-us",
+        "https://jobs.agmu.edu/Home?lang=en-us",
+        "https://jobs.agmu.edu/page-job-info?id=Nb0uOqJBwqRtJKEPSoHrAmTTXIzkMTPBziO7PVVsYf9aaoGHNYicf2QjKz1TgKNM&lang=en-us",
+        "https://jobs.agmu.edu/page-job-info?id=6h4wmvM8kyBwc+0C+wzJvG9Mj79sfmI7DEbZ0FeUcxM%3D&lang=en-us",
+        "https://jobs.agmu.edu/page-job-info?id=C2VJ8TRxWjFPdRXD3aPfhJl2TVs3nVs9y8NFiX2F%2FGM%3D&lang=en-us"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:agmu",
+      "postings": 32,
+      "careersUrl": "https://jobs.agmu.edu/page-jobs-category?lang=en-us&cat=All",
+      "scope": "Institution public employer board",
+      "pagination": "1 pages; terminal pager",
+      "resultEvidence": "483595-search4.json",
+      "resultSha256": "8c376108abbff0d8d3d4016068ab76f576f51f824f3f4648119138b340559e12",
+      "ownershipEvidence": "483595-browser.json",
+      "entry": {
+        "name": "Ana G. Mendez University",
+        "provider": "local-parser",
+        "careers_url": "https://jobs.agmu.edu/page-jobs-category?lang=en-us&cat=All",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "agmu"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "483595-discovery/1.json",
+        "483595-discovery/2.json",
+        "483595-discovery/3.json",
+        "483595-discovery/4.json",
+        "483595-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "485111",
+      "institution": "Georgia Military College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.paycomonline.net/v4/ats/web.php/jobs/ViewJobDetails?job=114242&clientkey=10157A1AD949DDFC26908FA0C8684BC5",
+        "https://www.paycomonline.net/v4/ats/web.php/jobs?clientkey=10157A1AD949DDFC26908FA0C8684BC5",
+        "https://www.gmc.edu/human-resources/",
+        "https://www.gmc.edu/degree-programs/allied-health-associates-degree/",
+        "https://www.gmc.edu/degree-programs/cybersecurity/"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "browser:paycom",
+      "postings": 143,
+      "careersUrl": "https://www.paycomonline.net/v4/ats/web.php/portal/10157A1AD949DDFC26908FA0C8684BC5/career-page",
+      "scope": "Institution public employer board",
+      "pagination": "15 pages; terminal pager; 143 advertised postings",
+      "resultEvidence": "485111-search3.json",
+      "resultSha256": "f4182a2ff6bb3c521113c7b993b7a050d2c0636c830a4a49a2162846cf6487bd",
+      "ownershipEvidence": "485111-browser.json",
+      "entry": {
+        "name": "Georgia Military College",
+        "provider": "local-parser",
+        "careers_url": "https://www.paycomonline.net/v4/ats/web.php/portal/10157A1AD949DDFC26908FA0C8684BC5/career-page",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "paycom"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "discoveryEvidence": [
+        "485111-discovery/1.json",
+        "485111-discovery/2.json",
+        "485111-discovery/3.json",
+        "485111-discovery/4.json",
+        "485111-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "486840",
+      "institution": "Kennesaw State University",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=43000&&Page=HRS_CAREERS_FL&",
+        "https://careers.kennesaw.edu/campus-community/presentation-request.php",
+        "https://careers.mohawkind.com/",
+        "http://jobs.northside.com/",
+        "https://careers.wellstar.org/us/en"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "peoplesoft",
+      "postings": 240,
+      "careersUrl": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=43000&&Page=HRS_CAREERS_FL&",
+      "scope": "Institution public employer board",
+      "pagination": "5 search responses; 240/240 grid rows, 240 unique jobs",
+      "resultEvidence": "486840-initial/result.json",
+      "resultSha256": "225a600356abe72ae3c24b0b48c6a587aaf894d581deb4c9d2bdca474e0b26bf",
+      "ownershipEvidence": "https://campus.kennesaw.edu/faculty-staff/human-resources/careers/",
+      "entry": {
+        "name": "Kennesaw State University",
+        "careers_url": "https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=43000&&Page=HRS_CAREERS_FL&",
+        "max_pages": 200,
+        "provider": "peoplesoft",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "486840-discovery/1.json",
+        "486840-discovery/2.json",
+        "486840-discovery/3.json",
+        "486840-discovery/4.json",
+        "486840-discovery/5.json"
+      ]
+    },
+    {
+      "unitid": "488846",
+      "institution": "University of the People",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://www.uopeople.edu/volunteer/"
+      ],
+      "status": "no-listing",
+      "complete": false,
+      "postings": null,
+      "reason": "Saved route recruits volunteer instructors via an application form, not a searchable paid-vacancy inventory.",
+      "resultEvidence": "488846-browser.json",
+      "resultSha256": "d6276132e876385bd76fe0f3bc2e891c5801ad57e2f87a1d0aaf5cfb1eac7794",
+      "discoveryEvidence": [
+        "488846-discovery/1.json"
+      ]
+    },
+    {
+      "unitid": "497046",
+      "institution": "Madera Community College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://scccd.edu/career-opportunities/faculty-information.html",
+        "https://www.scccd.edu/career-opportunities/index.html"
+      ],
+      "status": "working",
+      "complete": true,
+      "provider": "neogov",
+      "postings": 18,
+      "careersUrl": "https://www.schooljobs.com/careers/scccd",
+      "scope": "Shared State Center district classified board; separate faculty recruitment is outside this route",
+      "pagination": "3 requests; 18/18 unique advertised postings",
+      "resultEvidence": "497046-initial/result.json",
+      "resultSha256": "13ab65a2a9826ab53355e0115533442417d7381547fc9fedf2b112bd3f536b5b",
+      "ownershipEvidence": "497046-discovery/2.json",
+      "entry": {
+        "name": "Madera Community College \u2014 Shared State Center district classified board",
+        "careers_url": "https://www.schooljobs.com/careers/scccd",
+        "max_pages": 200,
+        "provider": "neogov",
+        "enabled": true
+      },
+      "discoveryEvidence": [
+        "497046-discovery/1.json",
+        "497046-discovery/2.json"
+      ]
+    },
+    {
+      "unitid": "500087",
+      "institution": "Doral College",
+      "checkedOn": "2026-10-19",
+      "savedUrlsInspected": [
+        "https://doral.edu/join-our-team"
+      ],
+      "status": "no-listing",
+      "complete": false,
+      "postings": null,
+      "reason": "Join Our Team embeds a Formstack expression-of-interest form; no enumerable vacancy listing was exposed.",
+      "resultEvidence": "500087-browser.json",
+      "resultSha256": "bb4f13199645bab0e69bf4c514f776fcd3bb559e07cd13b03970a8d99374e2a2",
+      "discoveryEvidence": [
+        "500087-discovery/1.json"
+      ]
+    }
+  ],
+  "additionalProviderValidation": {
+    "provider": "browser:jobsyn",
+    "schoolCountContribution": 0,
+    "source": "https://cuny.jobs/jobs/",
+    "postings": 264,
+    "pages": 27,
+    "resultEvidence": "jobsyn-cuny-search15.json",
+    "resultSha256": "d59f7f67a49c5e837aecf9e70e23e2387e05fe15531d8c808b463f5cceec79ad"
+  }
+}

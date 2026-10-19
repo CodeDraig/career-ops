@@ -43,7 +43,7 @@ function resolveMaxPages(entry) {
 /**
  * `{ origin, agency, folder }` from a careers_url, or null.
  * @param {import('./_types.js').PortalEntry} entry
- * @returns {{origin: string, agency: string, folder: string, departments: string[]} | null}
+ * @returns {{origin: string, agency: string, folder: string, departments: string[], locations?: string[]} | null}
  */
 function resolveTarget(entry) {
   const raw = typeof entry?.careers_url === 'string' ? entry.careers_url.trim() : '';
@@ -64,17 +64,19 @@ function resolveTarget(entry) {
   // Agency-wide boards can host several employers. The public UI translates
   // department[0]/department[] into repeated `department` endpoint parameters.
   const departments = [...parsed.searchParams].filter(([key]) => /^department(?:\[\d*\])?$/.test(key)).map(([, value]) => value).filter(Boolean);
-  return { origin, agency: agency.toLowerCase(), folder: folder.toLowerCase(), departments };
+  const locations = [...parsed.searchParams].filter(([key]) => /^location(?:\[\d*\])?$/.test(key)).map(([, value]) => value).filter(Boolean);
+  return { origin, agency: agency.toLowerCase(), folder: folder.toLowerCase(), departments, ...(locations.length ? { locations } : {}) };
 }
 
 /**
- * @param {{origin: string, agency: string, folder: string, departments: string[]}} t
+ * @param {{origin: string, agency: string, folder: string, departments: string[], locations?: string[]}} t
  * @param {number} page
  */
 function pageUrl(t, page, descending = false) {
   const q = new URLSearchParams({ agency: t.agency });
   if (t.folder) q.set('departmentFolder', t.folder);
   for (const department of t.departments) q.append('department', department);
+  for (const location of t.locations || []) q.append('facetlocation', location);
   // Bulk faculty pools share posting dates. The server's date tie ordering
   // changes between pages, skipping jobs; title ordering avoids those ties.
   q.set('sort', 'PositionTitle');
