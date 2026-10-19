@@ -1,0 +1,929 @@
+# Verified college search routes, 2026-10-19. Example only; not auto-loaded.
+# Merge selected entries into the DATA_ROOT portals.yml tracked_companies list.
+# See docs/COLLEGE_SEARCHES.md for scope, validation and the blocked Galen route.
+tracked_companies:
+  # UNITID 100858: Auburn University
+  # Employer public search (saved category filters retained where present)
+  # working; 337 postings on 2026-10-19.
+  - name: Auburn University
+    provider: jibeapply
+    careers_url: https://jobs.auburn.edu/auburn/jobs
+    enabled: true
+    api: https://jobs.auburn.edu/api/jobs
+  # UNITID 105330: Northern Arizona University
+  # Employer public search (saved category filters retained where present)
+  # working; 29 postings on 2026-10-19.
+  - name: Northern Arizona University
+    provider: local-parser
+    careers_url: https://careers.nau.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 106458: Arkansas State University
+  # Adjunct faculty (public cws=44 search)
+  # working; 3 postings on 2026-10-19.
+  - name: Arkansas State University
+    provider: local-parser
+    careers_url: https://phe.tbe.taleo.net/phe02/ats/careers/v2/searchResults?org=ARKASTAT2&cws=44
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - taleoBusiness
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 111920: Chabot College
+  # Chabot campus only (district location filter 1240[]=2)
+  # working; 1 postings on 2026-10-19.
+  - name: Chabot College
+    provider: peopleadmin
+    careers_url: https://clpccd.peopleadmin.com/postings/search?1240%5B%5D=2
+    enabled: true
+  # UNITID 118912: MiraCosta College
+  # Employer public search (saved category filters retained where present)
+  # working; 93 postings on 2026-10-19.
+  - name: MiraCosta College
+    provider: local-parser
+    careers_url: https://jobs.miracosta.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 122755: San Jose State University
+  # Employer public search (saved category filters retained where present)
+  # working; 269 postings on 2026-10-19.
+  - name: San Jose State University
+    provider: local-parser
+    careers_url: https://jobs.sjsu.edu/en-us/listing/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 122977: Santa Monica College
+  # Public full-time faculty; currently empty. Internal transfer posting excluded.
+  # empty; 0 postings on 2026-10-19.
+  - name: Santa Monica College
+    provider: neogov
+    careers_url: https://www.schooljobs.com/careers/smcacademic
+    enabled: true
+  # UNITID 123509: Skyline College
+  # District-wide part-time faculty pools; includes Skyline, Cañada and College of San Mateo.
+  # working; 47 postings on 2026-10-19.
+  - name: Skyline College
+    provider: local-parser
+    careers_url: https://smccd.interviewexchange.com/static/clients/628SCM1/index.jsp?catid=2082
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - interviewexchange
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 125231: Walden University
+  # Walden brand only (Covista option 216)
+  # working; 10 postings on 2026-10-19.
+  - name: Walden University
+    provider: local-parser
+    careers_url: https://careers.covista.com/jobs?options=216&page=1
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - attrax
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 126614: University of Colorado Boulder
+  # Employer public search (saved category filters retained where present)
+  # working; 82 postings on 2026-10-19.
+  - name: University of Colorado Boulder
+    provider: avature
+    careers_url: https://jobs.colorado.edu/jobs/SearchJobs
+    enabled: true
+  # UNITID 126669: Colorado Christian University
+  # Employer public search (saved category filters retained where present)
+  # working; 27 postings on 2026-10-19.
+  - name: Colorado Christian University
+    provider: jobvite
+    careers_url: https://jobs.jobvite.com/ccu/
+    enabled: true
+  # UNITID 129367: Connecticut State Community College
+  # Employer public search (saved category filters retained where present)
+  # working; 66 postings on 2026-10-19.
+  - name: Connecticut State Community College
+    provider: jazzhr
+    careers_url: https://ctstatecommunitycollege.applytojob.com/apply/
+    enabled: true
+  # UNITID 130183: Post University
+  # Employer public search (saved category filters retained where present)
+  # working; 29 postings on 2026-10-19.
+  - name: Post University
+    provider: local-parser
+    careers_url: https://post.edu/associate-experience/career-opportunities/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - post
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 133951: Florida International University
+  # Employer public search (saved category filters retained where present)
+  # working; 789 postings on 2026-10-19.
+  - name: Florida International University
+    provider: fiu
+    careers_url: https://search.careers.fiu.edu/
+    enabled: true
+  # UNITID 134130: University of Florida
+  # University of Florida faculty search; shared with UF Online
+  # working; 356 postings on 2026-10-19.
+  - name: University of Florida
+    provider: local-parser
+    careers_url: https://explore.jobs.ufl.edu/en-us/filter/?search-keyword=&work-type=adjunct%20faculty&work-type=faculty%20admin%20title&work-type=multi-track%20faculty&work-type=non-permanent%20status%20faculty&work-type=non-tenure-track%20faculty&work-type=other%20faculty&work-type=permanent%20status%20faculty&work-type=tenure-track%20faculty&job-mail-subscribe-privacy=agree
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 135081: Keiser University-Ft Lauderdale
+  # Keiser University employer board, all campuses
+  # working; 246 postings on 2026-10-19.
+  - name: Keiser University
+    provider: isolvedhire
+    careers_url: https://keiseruniversity.isolvedhire.com/jobs/
+    enabled: true
+  # UNITID 135717: Miami Dade College
+  # Employer public search (saved category filters retained where present)
+  # working; 250 postings on 2026-10-19.
+  - name: Miami Dade College
+    provider: peoplesoft
+    careers_url: https://recruitment.mdc.edu/psc/MYMDHPRD/RECRUIT/JOBS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?Page=HRS_CAREERS_FL&Action=U&FOCUS=Applicant&SiteId=1000
+    enabled: true
+  # UNITID 136215: Nova Southeastern University
+  # Employer public search (saved category filters retained where present)
+  # working; 262 postings on 2026-10-19.
+  - name: Nova Southeastern University
+    provider: local-parser
+    careers_url: https://nsucareers.nova.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 137209: Seminole State College of Florida
+  # Employer public search (saved category filters retained where present)
+  # working; 47 postings on 2026-10-19.
+  - name: Seminole State College of Florida
+    provider: local-parser
+    careers_url: https://www.seminolestate.edu/jobs
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - seminole
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 138354: University of West Florida
+  # Adjunct faculty category
+  # working; 23 postings on 2026-10-19.
+  - name: University of West Florida
+    provider: local-parser
+    careers_url: https://careers.uwf.edu/jobs/search/adjuncts
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 139755: Georgia Institute of Technology-Main Campus
+  # Georgia Tech main-campus PeopleSoft site 03000; separate GTRI search also verified
+  # working; 258 postings on 2026-10-19.
+  - name: Georgia Institute of Technology
+    provider: peoplesoft
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=03000
+    enabled: true
+  # UNITID 139986: Southern Crescent Technical College
+  # Employer public search (saved category filters retained where present)
+  # working; 85 postings on 2026-10-19.
+  - name: Southern Crescent Technical College
+    provider: local-parser
+    careers_url: https://careers.georgia.gov/jobs-search?field_agency_name=4946&field_job_family=All&field_employee_status=All&field_job_level=All&field_schedule=All&field_shift=All&search_api_fulltext=
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - georgia
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 140331: Chattahoochee Technical College
+  # Employer public search (saved category filters retained where present)
+  # working; 94 postings on 2026-10-19.
+  - name: Chattahoochee Technical College
+    provider: local-parser
+    careers_url: https://careers.georgia.gov/jobs-search?field_agency_name=4926&page=0
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - georgia
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 142115: Boise State University
+  # Employer public search (saved category filters retained where present)
+  # working; 45 postings on 2026-10-19.
+  - name: Boise State University
+    provider: local-parser
+    careers_url: https://jobs.boisestate.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 145637: University of Illinois Urbana-Champaign
+  # Employer public search (saved category filters retained where present)
+  # working; 124 postings on 2026-10-19.
+  - name: University of Illinois Urbana-Champaign
+    provider: csod
+    careers_url: https://illinois.csod.com/ux/ats/careersite/1/home?c=illinois
+    enabled: true
+  # UNITID 155210: Johnson County Community College
+  # Employer public search (saved category filters retained where present)
+  # working; 46 postings on 2026-10-19.
+  - name: Johnson County Community College
+    provider: local-parser
+    careers_url: https://careers.jccc.edu/cw/en-us/listing?fuseaction=app.jobsearch
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 156125: Wichita State University
+  # Employer public search (saved category filters retained where present)
+  # working; 224 postings on 2026-10-19.
+  - name: Wichita State University
+    provider: local-parser
+    careers_url: https://jobs.wichita.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 156392: Bluegrass Community and Technical College
+  # Employer public search (saved category filters retained where present)
+  # working; 80 postings on 2026-10-19.
+  - name: Bluegrass Community and Technical College
+    provider: local-parser
+    careers_url: https://careers.kctcs.edu/jobs/search/bluegrass-jobs
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 156471: Galen College of Nursing-Louisville
+  # Galen employer search, multiple campuses; pagination blocked by Cloudflare
+  # blocked; unknown postings on 2026-10-19.
+  - name: Galen College of Nursing
+    provider: local-parser
+    careers_url: https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs
+    enabled: false
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - hca
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 156620: Eastern Kentucky University
+  # Employer public search (saved category filters retained where present)
+  # working; 156 postings on 2026-10-19.
+  - name: Eastern Kentucky University
+    provider: local-parser
+    careers_url: https://careers.eku.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 156921: Jefferson Community and Technical College
+  # Jefferson-specific KCTCS search
+  # working; 17 postings on 2026-10-19.
+  - name: Jefferson Community and Technical College
+    provider: local-parser
+    careers_url: https://careers.kctcs.edu/jobs/search/jefferson-jobs
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 158431: Bossier Parish Community College
+  # Employer public search (saved category filters retained where present)
+  # working; 24 postings on 2026-10-19.
+  - name: Bossier Parish Community College
+    provider: neogov
+    careers_url: https://www.governmentjobs.com/careers/louisiana?department[0]=Bossier%20Community%20College
+    enabled: true
+  # UNITID 161767: Anne Arundel Community College
+  # Saved employment-type filter
+  # working; 59 postings on 2026-10-19.
+  - name: Anne Arundel Community College
+    provider: local-parser
+    careers_url: https://careers.aacc.edu/jobs/search?page=1&employment_type_uids%5B%5D=d9d4afc2657271939bfdcb54890a649c&query=
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 162928: Johns Hopkins University
+  # Employer public search (saved category filters retained where present)
+  # working; 605 postings on 2026-10-19.
+  - name: Johns Hopkins University
+    provider: eightfold
+    careers_url: https://jhu.eightfold.ai/careers?domain=jhu.edu
+    enabled: true
+  # UNITID 163204: University of Maryland Global Campus
+  # Remote adjunct faculty only
+  # working; 3 postings on 2026-10-19.
+  - name: University of Maryland Global Campus
+    provider: local-parser
+    careers_url: https://careers.umgc.edu/jobs/adjunct-faculty/north-america-remote/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - umgc
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 166513: University of Massachusetts-Lowell
+  # Employer public search (saved category filters retained where present)
+  # working; 70 postings on 2026-10-19.
+  - name: University of Massachusetts-Lowell
+    provider: local-parser
+    careers_url: https://explorejobs.uml.edu/en-us/listing/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 166629: University of Massachusetts-Amherst
+  # Employer public search (saved category filters retained where present)
+  # working; 141 postings on 2026-10-19.
+  - name: University of Massachusetts-Amherst
+    provider: local-parser
+    careers_url: https://careers.umass.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 170657: Lansing Community College
+  # Employer public search (saved category filters retained where present)
+  # working; 105 postings on 2026-10-19.
+  - name: Lansing Community College
+    provider: local-parser
+    careers_url: https://jobs.lcc.edu/en/listing/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 180902: Central Community College
+  # Employer public search (saved category filters retained where present)
+  # working; 8 postings on 2026-10-19.
+  - name: Central Community College
+    provider: peopleadmin
+    careers_url: https://centralcc.peopleadmin.com/postings/search
+    enabled: true
+  # UNITID 196680: Excelsior University
+  # Employer public search (saved category filters retained where present)
+  # working; 48 postings on 2026-10-19.
+  - name: Excelsior University
+    provider: local-parser
+    careers_url: https://www.excelsior.edu/jobs/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - excelsior
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 200280: University of North Dakota
+  # Employer public search (saved category filters retained where present)
+  # working; 109 postings on 2026-10-19.
+  - name: University of North Dakota
+    provider: local-parser
+    careers_url: https://careers.und.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 203517: Kent State University at Kent
+  # Faculty search, multiple Kent State campuses
+  # working; 10 postings on 2026-10-19.
+  - name: Kent State University
+    provider: local-parser
+    careers_url: https://jobs.kent.edu/jobs/search/faculty
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 207388: Oklahoma State University-Main Campus
+  # OSU shared university/system board; campus review required
+  # working; 393 postings on 2026-10-19.
+  - name: Oklahoma State University-Main Campus
+    provider: local-parser
+    careers_url: https://jobs.okstate.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 212878: Harrisburg Area Community College
+  # Employer public search (saved category filters retained where present)
+  # working; 83 postings on 2026-10-19.
+  - name: Harrisburg Area Community College
+    provider: local-parser
+    careers_url: https://careers.hacc.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 225423: Houston City College
+  # Employer public search (saved category filters retained where present)
+  # working; 278 postings on 2026-10-19.
+  - name: Houston City College
+    provider: local-parser
+    careers_url: https://hccs.referrals.selectminds.com/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - selectminds
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 225432: University of Houston-Downtown
+  # Employer public search (saved category filters retained where present)
+  # working; 83 postings on 2026-10-19.
+  - name: University of Houston-Downtown
+    provider: local-parser
+    careers_url: https://careers.uh.edu/jobs/search/uhd-postings
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 225511: University of Houston
+  # Employer public search (saved category filters retained where present)
+  # working; 405 postings on 2026-10-19.
+  - name: University of Houston
+    provider: local-parser
+    careers_url: https://careers.uh.edu/jobs/search/uh-postings
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 227216: University of North Texas
+  # UNT System employment-type-filtered board; campus review required
+  # working; 107 postings on 2026-10-19.
+  - name: University of North Texas
+    provider: local-parser
+    careers_url: https://careers.untsystem.edu/jobs/search?employment_type_uids%5B%5D=490ec0e79db42096c138f16c39f4cf0a&page=1&query=
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 228547: Tarrant County College District
+  # Employer public search (saved category filters retained where present)
+  # working; 191 postings on 2026-10-19.
+  - name: Tarrant County College District
+    provider: local-parser
+    careers_url: https://careers.tccd.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 229179: Texas Woman's University
+  # Employer public search (saved category filters retained where present)
+  # working; 131 postings on 2026-10-19.
+  - name: Texas Woman's University
+    provider: oraclecloud
+    careers_url: https://ewal.fa.us8.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1
+    enabled: true
+  # UNITID 230728: Utah State University
+  # Employer public search (saved category filters retained where present)
+  # working; 159 postings on 2026-10-19.
+  - name: Utah State University
+    provider: icims
+    careers_url: https://careers-usu.icims.com/jobs/search?ss=1
+    enabled: true
+  # UNITID 231651: Regent University
+  # Saved Regent category filter
+  # working; 32 postings on 2026-10-19.
+  - name: Regent University
+    provider: local-parser
+    careers_url: https://careers.regent.edu/jobs/search?page=1&category_uids=5f6cdfea20e3f021771abacbe65eafe8&query=
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 232186: George Mason University
+  # Employer public search (saved category filters retained where present)
+  # working; 133 postings on 2026-10-19.
+  - name: George Mason University
+    provider: local-parser
+    careers_url: https://listings.jobs.gmu.edu/jobs/search
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - clinch
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 433387: Western Governors University
+  # WGU employer board
+  # working; 75 postings on 2026-10-19.
+  - name: Western Governors University
+    provider: local-parser
+    careers_url: https://jobs.wgu.edu/jobs
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - wgu
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 441371: Ultimate Medical Academy
+  # Employer public search (saved category filters retained where present)
+  # working; 8 postings on 2026-10-19.
+  - name: Ultimate Medical Academy
+    provider: greenhouse
+    careers_url: https://job-boards.greenhouse.io/umaeducationinc/
+    enabled: true
+  # UNITID 454227: Chamberlain University-Illinois
+  # Chamberlain brand only (Covista option 213), multiple campuses
+  # working; 214 postings on 2026-10-19.
+  - name: Chamberlain University-Illinois
+    provider: local-parser
+    careers_url: https://careers.covista.com/jobs?options=213&page=1
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - attrax
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 482158: Middle Georgia State University
+  # Employer public search (saved category filters retained where present)
+  # working; 71 postings on 2026-10-19.
+  - name: Middle Georgia State University
+    provider: peoplesoft
+    careers_url: https://careers.hprod.onehcm.usg.edu/psc/careers/CAREERS/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&SiteId=83000
+    enabled: true
+  # UNITID 484473: University of Florida-Online
+  # Same UF faculty search as 134130; not a distinct employer inventory
+  # working; 356 postings on 2026-10-19.
+  - name: University of Florida-Online
+    provider: local-parser
+    careers_url: https://explore.jobs.ufl.edu/en-us/filter/?search-keyword=&work-type=adjunct%20faculty&work-type=faculty%20admin%20title&work-type=multi-track%20faculty&work-type=non-permanent%20status%20faculty&work-type=non-tenure-track%20faculty&work-type=other%20faculty&work-type=permanent%20status%20faculty&work-type=tenure-track%20faculty&job-mail-subscribe-privacy=agree
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 488077: Sonoran Desert Institute
+  # Official faculty careers list only; excludes separate staff listings
+  # working; 2 postings on 2026-10-19.
+  - name: Sonoran Desert Institute
+    provider: local-parser
+    careers_url: https://sdi.edu/faculty-careers/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - sdiFaculty
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 488679: Indiana Wesleyan University-National & Global
+  # Indiana Wesleyan shared university board; National & Global unit not separately filtered
+  # working; 49 postings on 2026-10-19.
+  - name: Indiana Wesleyan University-National & Global
+    provider: local-parser
+    careers_url: https://careers.indwes.edu/en/listing
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - pageup
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000

@@ -918,7 +918,7 @@ function readPageDom() {
 // Chromium's isolated world shares the DOM but not page-script modifications
 // to DOM prototypes (Herzing's analytics wraps querySelector and throws).
 // Recreate the world after a redirect destroys it; never retry arbitrary errors.
-export async function readDom(page, timeout = DEFAULT_TIMEOUT_MS) {
+export async function readDom(page, timeout = DEFAULT_TIMEOUT_MS, reader = readPageDom, argument, frameUrl) {
   const session = await page.context().newCDPSession(page);
   const deadline = Date.now() + timeout;
   try {
@@ -926,11 +926,24 @@ export async function readDom(page, timeout = DEFAULT_TIMEOUT_MS) {
       try {
         await page.waitForLoadState('domcontentloaded', { timeout: Math.max(1, deadline - Date.now()) });
         const { frameTree } = await session.send('Page.getFrameTree');
+        const matchesFrame = raw => {
+          if (raw === frameUrl) return true;
+          // iCIMS adds viewport/offset query parameters after frame creation.
+          // Its job identity remains the same origin and /jobs/<id>/... path.
+          try {
+            const actual = new URL(raw), expected = new URL(frameUrl);
+            return expected.hostname.endsWith('.icims.com') && actual.origin === expected.origin && actual.pathname === expected.pathname && actual.searchParams.get('in_iframe') === '1' && expected.searchParams.get('in_iframe') === '1';
+          } catch { return false; }
+        };
+        const findFrame = tree => matchesFrame(tree.frame.url) ? tree.frame : (tree.childFrames || []).map(findFrame).find(Boolean);
+        const frame = frameUrl ? findFrame(frameTree) : frameTree.frame;
+        if (!frame) throw new Error('No frame with given id');
         const { executionContextId } = await session.send('Page.createIsolatedWorld', {
-          frameId: frameTree.frame.id, worldName: 'career-ops-reader',
+          frameId: frame.id, worldName: 'career-ops-reader',
         });
         const result = await session.send('Runtime.callFunctionOn', {
-          functionDeclaration: readPageDom.toString(), executionContextId,
+          functionDeclaration: reader.toString(), executionContextId,
+          arguments: argument === undefined ? [] : [{ value: argument }],
           returnByValue: true,
         });
         if (result.exceptionDetails) {
@@ -947,6 +960,36 @@ export async function readDom(page, timeout = DEFAULT_TIMEOUT_MS) {
   } finally {
     await session.detach().catch(() => {});
   }
+}
+
+// These two public ATS shells can look like a complete page while containing
+// only navigation. Wait for CSOD's job heading; read iCIMS' observed same-job
+// iframe in its isolated world, retaining the existing page and route guard.
+export async function readJobDom(page, timeout = DEFAULT_TIMEOUT_MS) {
+  const initial = new URL(page.url());
+  const csod = initial.hostname.endsWith('.csod.com') && /\/home\/requisition\/\d+/.test(initial.pathname);
+  const icims = initial.hostname.endsWith('.icims.com') && /^\/jobs\/\d+\//.test(initial.pathname) && initial.searchParams.get('in_iframe') !== '1';
+  const deadline = Date.now() + timeout;
+  let target;
+  if (icims) {
+    const inline = await readDom(page, timeout);
+    if (inline.text?.trim().length > 300) return inline;
+    do {
+      target = page.frames().map(frame => frame.url()).find(raw => {
+        try { const u = new URL(raw); return u.origin === initial.origin && u.pathname === initial.pathname && u.searchParams.get('in_iframe') === '1'; } catch { return false; }
+      });
+      if (target) break;
+      await page.waitForTimeout(250);
+    } while (Date.now() < deadline);
+    if (!target) throw new Error('iCIMS job-description frame did not load');
+  }
+  let raw;
+  do {
+    raw = await readDom(page, Math.max(1, deadline - Date.now()), readPageDom, undefined, target);
+    if ((!csod && !icims) || (raw.title?.trim() && raw.text?.trim().length > 300)) return raw;
+    await page.waitForTimeout(250);
+  } while (Date.now() < deadline);
+  throw new Error(`${csod ? 'CSOD' : 'iCIMS'} job description did not finish loading`);
 }
 
 async function main() {
@@ -1022,7 +1065,7 @@ async function main() {
     await page.waitForTimeout(HYDRATION_WAIT_MS); // let SPAs hydrate
 
     // Belt-and-suspenders: never emit content read from a private final URL.
-    const raw = await readDom(page, timeout);
+    const raw = mode === 'jd' ? await readJobDom(page, timeout) : await readDom(page, timeout);
     const finalUrl = raw.documentUrl;
     const finalGuard = rejectPrivateOrInvalid(finalUrl);
     if (finalGuard) {

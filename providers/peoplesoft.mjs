@@ -22,14 +22,16 @@
 // branded RMK hosts — a hostname can never be the detect() signal here.
 // What IS a reliable, tenant-agnostic signal is the URL *path*: PeopleSoft's
 // Fluid job-search page always lives at the literal path
-//   /psc/{site}/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL
+//   /psc/{site}/{portal}/{node}/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL
+// {portal}/{node} are commonly EMPLOYEE/HRMS, but some public US college
+// boards use CAREERS/HRMS or RECRUIT/JOBS. Preserve the supplied SiteId too.
 // {site} is the tenant's PeopleSoft "site" segment (e.g. "uwo1", "psft_hr").
 // That component-name string is a PeopleTools implementation signature, not
 // a brand guess — no unrelated site coincidentally serves that exact path —
 // so detect() safely pattern-matches on it regardless of host.
 //
 // ── The flow (verified live) ────────────────────────────────────────────
-//   1. GET  {origin}/psc/{site}/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL
+//   1. GET  {origin}/psc/{site}/{portal}/{node}/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL
 //           ?Page=HRS_APP_SCHJOB_FL&Action=U&FOCUS=Applicant&SiteId=1
 //      Establishes the PeopleSoft session (Set-Cookie) and returns HTML whose
 //      `form[name="win0"]` carries the full ICAJAX postback state.
@@ -39,7 +41,7 @@
 //      one field overridden: `ICAction=HRS_AGNT_RSLT_I$hdown$0`. POST to the
 //      form's own `action` URL, same session cookies, parse the response the
 //      same way, dedupe by job opening id across pages.
-//   3. GET  {origin}/psc/{site}/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL
+//   3. GET  {origin}/psc/{site}/{portal}/{node}/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL
 //           ?Page=HRS_APP_JBPST_FL&Action=U&FOCUS=Applicant
 //           &JobOpeningId={id}&PostingSeq={seq}&SiteId=1
 //      for the detail page. PostingSeq=1 first; if the page is invalid or the
@@ -111,7 +113,7 @@ import { intInRange } from './_config-utils.mjs';
 // The Fluid job-search page's fixed path shape. {site} (capture group 1) is
 // the tenant's PeopleSoft site segment — used to rebuild every other URL
 // this provider needs, never trusted from elsewhere in the given URL.
-const PS_SEARCH_PATH_RE = /^\/psc\/([^/]+)\/EMPLOYEE\/HRMS\/c\/HRS_HRAM_FL\.HRS_CG_SEARCH_FL\.GBL$/i;
+const PS_SEARCH_PATH_RE = /^\/psc\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\/c\/HRS_HRAM_FL\.HRS_CG_SEARCH_FL\.GBL$/i;
 
 const SEARCH_PAGE_PARAM = 'HRS_APP_SCHJOB_FL';
 const DETAIL_PAGE_PARAM = 'HRS_APP_JBPST_FL';
@@ -174,7 +176,7 @@ const HEADERS = {
  * not have a branded-per-tenant-domain exception, which is what this
  * actually is.)
  * @param {import('./_types.js').PortalEntry} entry
- * @returns {{origin: string, site: string, searchUrl: string} | null}
+ * @returns {{origin: string, site: string, portal: string, node: string, siteId: string, searchUrl: string} | null}
  */
 export function resolveConfig(entry) {
   for (const raw of [entry?.api, entry?.careers_url]) {
@@ -189,18 +191,22 @@ export function resolveConfig(entry) {
     const m = u.pathname.match(PS_SEARCH_PATH_RE);
     if (!m) continue;
     const site = m[1];
-    return { origin: u.origin, site, searchUrl: buildSearchUrl(u.origin, site) };
+    const portal = m[2], node = m[3];
+    const siteId = u.searchParams.get('SiteId') || '1';
+    if (!/^\d+$/.test(siteId)) continue;
+    const searchUrl = buildSearchUrl(u.origin, site, portal, node, siteId);
+    return { origin: u.origin, site, portal, node, siteId, searchUrl };
   }
   return null;
 }
 
 /** @param {string} origin @param {string} site */
-export function buildSearchUrl(origin, site) {
-  const u = new URL(`${origin}/psc/${site}/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL`);
+export function buildSearchUrl(origin, site, portal = 'EMPLOYEE', node = 'HRMS', siteId = '1') {
+  const u = new URL(`${origin}/psc/${site}/${portal}/${node}/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL`);
   u.searchParams.set('Page', SEARCH_PAGE_PARAM);
   u.searchParams.set('Action', 'U');
   u.searchParams.set('FOCUS', 'Applicant');
-  u.searchParams.set('SiteId', '1');
+  u.searchParams.set('SiteId', siteId);
   return u.href;
 }
 
@@ -210,13 +216,13 @@ export function buildSearchUrl(origin, site) {
  * @param {number} postingSeq
  */
 export function buildDetailUrl(config, jobId, postingSeq) {
-  const u = new URL(`${config.origin}/psc/${config.site}/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL`);
+  const u = new URL(`${config.origin}/psc/${config.site}/${config.portal || 'EMPLOYEE'}/${config.node || 'HRMS'}/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL`);
   u.searchParams.set('Page', DETAIL_PAGE_PARAM);
   u.searchParams.set('Action', 'U');
   u.searchParams.set('FOCUS', 'Applicant');
   u.searchParams.set('JobOpeningId', jobId);
   u.searchParams.set('PostingSeq', String(postingSeq));
-  u.searchParams.set('SiteId', '1');
+  u.searchParams.set('SiteId', config.siteId || '1');
   return u.href;
 }
 

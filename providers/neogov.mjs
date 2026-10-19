@@ -43,7 +43,7 @@ function resolveMaxPages(entry) {
 /**
  * `{ origin, agency, folder }` from a careers_url, or null.
  * @param {import('./_types.js').PortalEntry} entry
- * @returns {{origin: string, agency: string, folder: string} | null}
+ * @returns {{origin: string, agency: string, folder: string, departments: string[]} | null}
  */
 function resolveTarget(entry) {
   const raw = typeof entry?.careers_url === 'string' ? entry.careers_url.trim() : '';
@@ -61,16 +61,20 @@ function resolveTarget(entry) {
   // `careers/home/...` is the site's own path, not an agency.
   if (agency.toLowerCase() === 'home') return null;
   if (folder && !SEGMENT_RE.test(folder)) return null;
-  return { origin, agency: agency.toLowerCase(), folder: folder.toLowerCase() };
+  // Agency-wide boards can host several employers. The public UI translates
+  // department[0]/department[] into repeated `department` endpoint parameters.
+  const departments = [...parsed.searchParams].filter(([key]) => /^department(?:\[\d*\])?$/.test(key)).map(([, value]) => value).filter(Boolean);
+  return { origin, agency: agency.toLowerCase(), folder: folder.toLowerCase(), departments };
 }
 
 /**
- * @param {{origin: string, agency: string, folder: string}} t
+ * @param {{origin: string, agency: string, folder: string, departments: string[]}} t
  * @param {number} page
  */
 function pageUrl(t, page) {
   const q = new URLSearchParams({ agency: t.agency });
   if (t.folder) q.set('departmentFolder', t.folder);
+  for (const department of t.departments) q.append('department', department);
   q.set('sort', 'PostingDate');
   q.set('isDescendingSort', 'true');
   q.set('page', String(page));
