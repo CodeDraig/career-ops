@@ -1,6 +1,6 @@
 # Original 172 college search routes: ownership and pagination
 
-**Latest coverage:** the [remaining-school validation](COLLEGE_REMAINING_VALIDATION.md) raises the combined total to **338/346 (97.7%)**. Counts below describe this earlier pass.
+**Latest coverage:** the [final-eight validation](COLLEGE_FINAL_EIGHT_VALIDATION.md) raises the combined total to **343/346 (99.1%)**. Counts below describe this earlier pass.
 
 Validated **2026-10-19**. All **172/172** now have a completed search on a board
 belonging to the institution, its shared employing district/system, or its documented

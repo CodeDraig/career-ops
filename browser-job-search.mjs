@@ -10,6 +10,7 @@ import { isMainModule } from './lib/is-main-module.mjs';
 import { validateFlags, flagValue } from './lib/cli-flags.mjs';
 
 export const RECIPES = {
+  igreentree: { container: '.table2.table-collapse', links: '.tr a[title="Click to view job description"]', row: '.tr', requisitionCells: true, startButton: 'a.btn[title="Click to view these current openings..."]', next: 'a[href*="frmPage"]', nextText: 'Next', clickNext: true, buttonNext: true, totalPattern: 'Available Positions:\\s*(\\d+)', requireTotal: true },
   jobsyn: { stopAtTotal: true, container: '#main', links: '#jobs a[href$="/job/"]', row: 'a', title: '.job-title', next: 'button[aria-label="Load more jobs"]', clickNext: true, buttonNext: true, totalPattern: '(\\d+) Jobs', requireTotal: true, emptyPattern: 'No results were found for your current search\\.' },
   neoed: { container: '[id^="jobs-list-"]', links: 'a.jobs__box', row: 'a', title: '.jobs__box__heading', location: '.jobs__box__text', jobHosts: ['www.governmentjobs.com','www.schooljobs.com'], next: '.pagination a', nextText: '❯', clickNext: true, buttonNext: true },
   brassring: { startButton: '#clearResumeJobsBtn', container: 'a[id^="Job_title"][href*="jobid="]', links: 'a[id^="Job_title"][href*="jobid="]', next: 'button[aria-label="Go to next page"]', clickNext: true, buttonNext: true, totalPattern: '(\\d+) results', requireTotal: true },
@@ -49,6 +50,15 @@ export function readSearchPage(recipe) {
   const text = document.body?.innerText || '';
   const rows = [...document.querySelectorAll(recipe.links)].map(a => {
     const row = recipe.row ? a.closest(recipe.row) : null;
+    if (recipe.requisitionCells) {
+      const cells = [...(row?.querySelectorAll(':scope > .td') || [])].map(c => {
+        const copy = c.cloneNode(true); copy.querySelectorAll('h6,form').forEach(n => n.remove()); return copy.textContent.trim();
+      });
+      const req = cells[3];
+      if (!/^[A-Za-z0-9-]+$/.test(req || '')) throw new Error('Missing iGreentree requisition');
+      const url = new URL('CSSPage_Referred.ASP', location.href); url.search = ''; url.searchParams.set('Req', req);
+      return {title: a.innerText.trim(), url: url.href, location: cells[1] || ''};
+    }
     if (recipe.excludeRowText && new RegExp(recipe.excludeRowText, 'i').test(row?.innerText || '')) return null;
     return { title: (recipe.title ? row?.querySelector(recipe.title)?.innerText : a.innerText)?.trim(), url: recipe.rowUrl ? row?.getAttribute(recipe.rowUrl) : a.href, location: recipe.location ? row?.querySelector(recipe.location)?.innerText.trim() || '' : '', description: row?.querySelector('.job-search-results-summary')?.innerText.trim() || '' };
   }).filter(Boolean);

@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {normalizeExtensionPages,validateExtensionSearch,searchExtensionJobs} from '../extension-job-search.mjs';
+import {pass,fail} from './helpers.mjs';
+try {
+  const options={url:'https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs',company:'Galen',kind:'hca',maxPages:10};
+  const page=(start,end,total,ids)=>({url:options.url,text:`Showing ${start}-${end} of ${total} results`,links:ids.map(id=>({text:`Faculty ${id}`,url:`https://careers.hcahealthcare.com/jobs/${id}-faculty`,selector:'html > body > h2 > a'}))});
+  const pages=[page(1,2,3,[1,2]),page(3,3,3,[3])];
+  assert.equal(normalizeExtensionPages(pages,options).jobs.length,3);
+  const located=page(1,1,1,[1]);located.text+='\nFaculty 1\nGalen College of Nursing\nLouisville, KY, United States';
+  assert.equal(normalizeExtensionPages([located],options).jobs[0].location,'Louisville, KY, United States');
+  assert.throws(()=>normalizeExtensionPages([pages[0]],options),/advertised total/);
+  assert.throws(()=>normalizeExtensionPages([pages[0],pages[0]],options),/page range/);
+  assert.throws(()=>normalizeExtensionPages([pages[0],page(3,3,3,[1])],options),/Repeated posting/);
+  assert.throws(()=>normalizeExtensionPages([pages[0],page(3,3,4,[3])],options),/total changed/);
+  assert.throws(()=>normalizeExtensionPages([{...pages[0],url:'https://careers.hcahealthcare.com/search/jobs'}],options),/Galen scope/);
+  assert.throws(()=>normalizeExtensionPages([{...pages[0],text:'Sorry, you have been blocked'}],options),/Blocked/);
+  assert.throws(()=>validateExtensionSearch({...options,url:options.url+'?q=nursing'}),/unfiltered/);
+  assert.throws(()=>validateExtensionSearch({...options,url:'https://localhost/search/galen-college-of-nursing/jobs'}),/unfiltered/);
+  const ie={url:'https://college.interviewexchange.com/static/clients/123ABC/index.jsp',company:'College',kind:'interviewexchange'};
+  const ip={url:ie.url,text:'List All Jobs\nPosition ID: 42',links:[{text:'Faculty',url:'https://college.interviewexchange.com/jobofferdetails.jsp?JOBID=42',selector:'html > body > h6 > a'},{text:'Detail',url:'https://college.interviewexchange.com/jobofferdetails.jsp?JOBID=42'}]};
+  assert.equal(normalizeExtensionPages([ip],ie).jobs.length,1);
+  assert.throws(()=>normalizeExtensionPages([{...ip,text:ip.text+'\nPosition ID: 43'}],ie),/Incomplete/);
+  assert.throws(()=>normalizeExtensionPages([{...ip,links:[...ip.links,{text:'Next',url:ie.url+'?page=2'}]}],ie),/pagination/);
+  assert.throws(()=>normalizeExtensionPages([{...ip,links:ip.links.map(l=>({...l,url:l.url.replace('college.','other.')}))}],ie),/No recognized/);
+  assert.throws(()=>normalizeExtensionPages([{url:ie.url,text:'No jobs',links:[]}],ie),/empty search is unverified/);
+  const script=readFileSync(new URL('../lib/browser-harness/college.py',import.meta.url),'utf8');
+  assert.doesNotMatch(script,/\b(?:js|cdp|click_element|fill_input|capture_screenshot)\s*\(/);
+  let checked=false;
+  const result=await searchExtensionJobs(options,{execute:(bin,args,opts,callback)=>({stdin:{on(){},end(program){checked=true;assert.equal(opts.env.BH_BACKEND,'extension');assert.equal(opts.env.BH_RECORD,'0');assert.ok(program.includes(script));callback(null,'CAREER_OPS_COLLEGE='+JSON.stringify({pages}));}}})});
+  assert.ok(checked);assert.equal(result.jobs.length,3);assert.equal(result.debugger,false);
+  pass('Extension college searches preserve employer scope, reconcile complete pages, reject blocks/partial results and use no debugger calls');
+}catch(e){fail(e.stack);}

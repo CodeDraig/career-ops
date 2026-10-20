@@ -1,0 +1,76 @@
+# Five recovered school routes, 2026-10-19. Example only; not auto-loaded.
+# Chrome extension setup and scopes: docs/COLLEGE_FINAL_EIGHT_VALIDATION.md.
+tracked_companies:
+  # UNITID 113980: El Camino academic and part-time instructor board; classified staff is outside this route
+  - name: El Camino College academic board
+    provider: local-parser
+    careers_url: https://elcamino.igreentree.com/CSS_Academic/
+    enabled: true
+    parser:
+      command: node
+      script: browser-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - igreentree
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 156471: Shared Galen College of Nursing board, all campuses; not Louisville-only
+  - name: Galen College of Nursing (all campuses)
+    provider: local-parser
+    careers_url: https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs
+    enabled: true
+    parser:
+      command: node
+      script: extension-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - hca
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 165033: Bristol public all-category board
+  - name: Bristol Community College
+    provider: local-parser
+    careers_url: https://bristolcc.interviewexchange.com/static/clients/460BCM1/index.jsp
+    enabled: true
+    parser:
+      command: node
+      script: extension-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - interviewexchange
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 196264: Empire State public all-category board; separate adjunct expression-of-interest repository excluded
+  - name: Empire State University
+    provider: local-parser
+    careers_url: https://esc.interviewexchange.com/static/clients/397ESM1/index.jsp
+    enabled: true
+    parser:
+      command: node
+      script: extension-job-search.mjs
+      args:
+        - --url
+        - '{careers_url}'
+        - --company
+        - '{company}'
+        - --kind
+        - interviewexchange
+      timeout_ms: 600000
+      max_buffer_bytes: 10000000
+  # UNITID 443650: Shared Ancora Education employer board including Miller-Motte Chattanooga and other brands/campuses
+  - name: Ancora Education (shared Miller-Motte and partner schools)
+    provider: adp-workforcenow
+    careers_url: https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=1fee27e8-b345-49b9-95f2-58dd60ce03ef&ccId=19000101_000001&lang=en_US
+    enabled: true

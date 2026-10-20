@@ -1,5 +1,7 @@
 # Remaining 115 college search routes
 
+**Latest coverage:** the [final-eight validation](COLLEGE_FINAL_EIGHT_VALIDATION.md) raises the combined total to **343/346 (99.1%)**, with three unresolved. Counts below preserve this earlier pass.
+
 Validated **2026-10-19**. Every one of the **115 unresolved schools** was investigated through its saved public sources and, where necessary, an isolated browser or a current official employer referral.
 
 **107 newly working routes: 103 non-empty searches and 4 verified empty searches.** Combined with the previously validated 231, coverage is now **338/346 = 97.7%**: **332 non-empty and 6 verified empty routes; 8 unresolved**. This is an increase of 107 schools and 30.9 percentage points. The earlier 231 successes were not all re-fetched in this pass; the combined count retains their dated validation.

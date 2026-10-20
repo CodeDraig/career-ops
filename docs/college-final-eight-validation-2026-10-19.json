@@ -1,0 +1,445 @@
+{
+  "checkedOn": "2026-10-19",
+  "inventorySize": 346,
+  "baselineLedger": "college-remaining-validation-2026-10-19.json",
+  "baselineValidated": 338,
+  "schoolsRetested": 8,
+  "newValidated": 5,
+  "validatedTotal": 343,
+  "nonemptyTotal": 337,
+  "emptyTotal": 6,
+  "unresolvedTotal": 3,
+  "coveragePercent": 99.13,
+  "evidenceRoot": "/home/cadwaladyr/Downloads/college-final-eight-2026-10-19",
+  "sourceDatabaseSha256": "913b31191a624b65fe72c8fb858ffaffc9719aa1125f66062315bd89afe4276e",
+  "schools": [
+    {
+      "unitid": "113980",
+      "institution": "El Camino Community College District",
+      "checkedAt": "2026-10-20T00:02:29.604333+00:00",
+      "previousStatus": "session-dependent",
+      "status": "working",
+      "complete": true,
+      "postings": 12,
+      "entry": {
+        "name": "El Camino College academic board",
+        "provider": "local-parser",
+        "careers_url": "https://elcamino.igreentree.com/CSS_Academic/",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "igreentree"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "scope": "El Camino academic and part-time instructor board; classified staff is outside this route",
+      "pagination": {
+        "pages": 2,
+        "complete": true,
+        "evidence": "All 12 academic requisition referral URLs opened the matching title in separate fresh browser contexts."
+      },
+      "reason": "All 12 academic requisition referral URLs opened the matching title in separate fresh browser contexts.",
+      "resultEvidence": "elcamino-live-retry.json",
+      "resultSha256": "1b10d4c0724ef3e5d669f0013375b8bbc6e08a04fc81217591c4bbc96f30ccd8",
+      "supportingEvidence": [
+        {
+          "file": "elcamino-search.json",
+          "sha256": "14a8f5b184f4c8356a3e1732bb0f8046f81663ffc8e8a4f4798c86f533f78268"
+        },
+        {
+          "file": "elcamino-probe.json",
+          "sha256": "ec44f18c254bac4a9123ca62c4ec08367f4775660f7b46e4917ef03bcf5f9257"
+        },
+        {
+          "file": "elcamino-detail-1-probe.json",
+          "sha256": "166b2ed823fd712dbbe6ba5d06d2dd4def123c3d73a3a707e3dc760a4a95ec3e"
+        },
+        {
+          "file": "elcamino-detail-2-probe.json",
+          "sha256": "be0fc00c651004d7d04ac3a50c8a54b53c05b9269acd8c3c36646113f55aa159"
+        },
+        {
+          "file": "elcamino-detail-3-probe.json",
+          "sha256": "85b33f1c8865dfb3f401f358241cd79d70b02f11afb480f11633d955f74df93a"
+        },
+        {
+          "file": "elcamino-detail-4-probe.json",
+          "sha256": "ef71a053e43ebad71e4d6c57a8d31120ea9250f6b879958f8051ddadbdef7e34"
+        },
+        {
+          "file": "elcamino-detail-5-probe.json",
+          "sha256": "914896b58d595deebc81a3c9102d807f92ec4205fd45a6ca72b98cb75b78a458"
+        },
+        {
+          "file": "elcamino-detail-6-probe.json",
+          "sha256": "f686fa540ab1785738dec771ef377518960fc53f8705182191fad1f1d557aaf5"
+        },
+        {
+          "file": "elcamino-detail-7-probe.json",
+          "sha256": "f84d4be5f0fd41675ccc8f4245a0fecb16019505b282851985172f08d15c134b"
+        },
+        {
+          "file": "elcamino-detail-8-probe.json",
+          "sha256": "326740cfd7755d36bcdbe0c3760dcd1cb67cd56a99533ce8bfd4887a6d852ad8"
+        },
+        {
+          "file": "elcamino-detail-9-probe.json",
+          "sha256": "4f80b0e34fbab3ae06e2f75d24af365a3bfef02ef57a13e6d974e8da6f132917"
+        },
+        {
+          "file": "elcamino-detail-10-probe.json",
+          "sha256": "5a8367da3f258c52ad351b9ec8e6aeb2b820d66af3cdffe67dce139ec205311e"
+        },
+        {
+          "file": "elcamino-detail-11-probe.json",
+          "sha256": "8c89388bf9254facbaa047f56a66de1c1b0fa94e7b506f045be5c3c267938764"
+        },
+        {
+          "file": "elcamino-detail-12-probe.json",
+          "sha256": "9786f3812dc22e51f17c1afff3813e3d88df08569135d3130b25153707342efa"
+        }
+      ],
+      "urlsInspected": [
+        "https://elcamino.igreentree.com/CSS_Academic/",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2526-072",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-014",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-011",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-016",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-005",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-008",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-007",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-010",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-009",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-012",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-013",
+        "https://elcamino.igreentree.com/CSS_Academic/CSSPage_Referred.ASP?Req=A2627-006"
+      ]
+    },
+    {
+      "unitid": "154493",
+      "institution": "Upper Iowa University",
+      "checkedAt": "2026-10-20T00:02:29.604652+00:00",
+      "previousStatus": "blocked",
+      "status": "session-dependent",
+      "complete": false,
+      "postings": null,
+      "reason": "Public Jenzabar search now works and shows eight positions. Detail links use ASP.NET postbacks and keep the same URL; no stable public per-posting URL was verified. Listing access is improved but does not yet satisfy scanner URL identity.",
+      "resultEvidence": "uiu-detail.json",
+      "resultSha256": "bd7abe45be965943680b2d799d798ad5b3a3fcd678bca41da59e7370670509f1",
+      "supportingEvidence": [
+        {
+          "file": "uiu-probe.json",
+          "sha256": "48996b71568142f09b08cf3c40ce51cb87eff67b93e3bc9e0d49bc4cf311639a"
+        },
+        {
+          "file": "uiu-search.json",
+          "sha256": "5332b351578866c41517f0f48d4fb5e5bedbb18df3043965ccca5579117ef5a9"
+        },
+        {
+          "file": "uiu-detail.json",
+          "sha256": "bd7abe45be965943680b2d799d798ad5b3a3fcd678bca41da59e7370670509f1"
+        },
+        {
+          "file": "uiu-help-probe.json",
+          "sha256": "b982df624521f1c9314ef59cb28ec56f98ecd3b0b26eb7337140babc19f26f71"
+        },
+        {
+          "file": "uiu-setup-probe.json",
+          "sha256": "1b0171380556cdc8b71feac9d35e8770017cc7ea1fa7a77e5000826bdb84b973"
+        }
+      ],
+      "urlsInspected": [
+        "https://my.uiu.edu/ICS/Employment_Opportunities.jnz",
+        "https://jenzabarhelp.jenzabar.com/ews/help/JICS/released/en/employment-position-application.html",
+        "https://jenzabarhelp.jenzabar.com/ews/help/JICS/released/en/employment-position-application-setup.html"
+      ]
+    },
+    {
+      "unitid": "156471",
+      "institution": "Galen College of Nursing-Louisville",
+      "checkedAt": "2026-10-20T00:02:29.605267+00:00",
+      "previousStatus": "blocked",
+      "status": "working",
+      "complete": true,
+      "postings": 202,
+      "entry": {
+        "name": "Galen College of Nursing (all campuses)",
+        "provider": "local-parser",
+        "careers_url": "https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "extension-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "hca"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "scope": "Shared Galen College of Nursing board, all campuses; not Louisville-only",
+      "pagination": {
+        "pages": 9,
+        "complete": true,
+        "evidence": "Nine consecutive page ranges reconciled to 202 unique postings through Chrome extension snapshots without debugger access."
+      },
+      "reason": "Nine consecutive page ranges reconciled to 202 unique postings through Chrome extension snapshots without debugger access.",
+      "resultEvidence": "galen-live.json",
+      "resultSha256": "7557e98f811b942e277bf73156ebc1f9eb99528f76a9ac862f3894930870ec49",
+      "supportingEvidence": [
+        {
+          "file": "galen-extension.json",
+          "sha256": "28c9fbda90e92a0d30c4531814a66792cabcf99c2bbeae8d3abce189f5f3932a"
+        },
+        {
+          "file": "galen-page2-extension.json",
+          "sha256": "712f8afadd2618c83506a088924e3d858136bd4428ec6c2582c5381a37b673ff"
+        }
+      ],
+      "urlsInspected": [
+        "https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs",
+        "https://careers.hcahealthcare.com/search/galen-college-of-nursing/jobs/in?page=2"
+      ]
+    },
+    {
+      "unitid": "165033",
+      "institution": "Bristol Community College",
+      "checkedAt": "2026-10-20T00:02:29.605559+00:00",
+      "previousStatus": "blocked",
+      "status": "working",
+      "complete": true,
+      "postings": 70,
+      "entry": {
+        "name": "Bristol Community College",
+        "provider": "local-parser",
+        "careers_url": "https://bristolcc.interviewexchange.com/static/clients/460BCM1/index.jsp",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "extension-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "interviewexchange"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "scope": "Bristol public all-category board",
+      "pagination": {
+        "pages": 1,
+        "complete": true,
+        "evidence": "Unfiltered all-jobs page, 70 distinct Position IDs matched to 70 titled posting links; no pager."
+      },
+      "reason": "Unfiltered all-jobs page, 70 distinct Position IDs matched to 70 titled posting links; no pager.",
+      "resultEvidence": "bristol-live.json",
+      "resultSha256": "d97e629637472ecf0f312164583183f7acf2bfa4c7d090b6d9617846829ef4a0",
+      "supportingEvidence": [
+        {
+          "file": "bristol-hr-probe.json",
+          "sha256": "a955c4d8a74f392e22d91c17833241969a234e53b8bc484f6ae9d068b0cd6698"
+        },
+        {
+          "file": "bristol-probe.json",
+          "sha256": "402e4bb7dfb2020b4e5a7d73a277a92394be7891c100fa52df5895edfeeb962d"
+        },
+        {
+          "file": "bristol-static-probe.json",
+          "sha256": "b6efc76073884ea6e5c4c8527bc002c04f30b2ad7ce7a43e39fb189357c8811c"
+        },
+        {
+          "file": "bristol-extension.json",
+          "sha256": "fa49048c5ab919e3ae2d697b25a750462f62863b5e9faac1d35f7146e8917115"
+        }
+      ],
+      "urlsInspected": [
+        "https://bristolcc.edu/bristolcommunity/facultystaff/humanresources/index.html",
+        "https://bristolcc.interviewexchange.com/",
+        "https://bristolcc.interviewexchange.com/static/clients/460BCM1/index.jsp"
+      ]
+    },
+    {
+      "unitid": "196264",
+      "institution": "Empire State University",
+      "checkedAt": "2026-10-20T00:02:29.605656+00:00",
+      "previousStatus": "no-listing",
+      "status": "working",
+      "complete": true,
+      "postings": 19,
+      "entry": {
+        "name": "Empire State University",
+        "provider": "local-parser",
+        "careers_url": "https://esc.interviewexchange.com/static/clients/397ESM1/index.jsp",
+        "enabled": true,
+        "parser": {
+          "command": "node",
+          "script": "extension-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "interviewexchange"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "scope": "Empire State public all-category board; separate adjunct expression-of-interest repository excluded",
+      "pagination": {
+        "pages": 1,
+        "complete": true,
+        "evidence": "Unfiltered all-jobs page, 19 distinct Position IDs matched to 19 titled posting links; no pager."
+      },
+      "reason": "Unfiltered all-jobs page, 19 distinct Position IDs matched to 19 titled posting links; no pager.",
+      "resultEvidence": "empire-live.json",
+      "resultSha256": "eb93cef734a6a190cda6c8083bb4b88ecc60b88583cbd99aa803e7284d2fb010",
+      "supportingEvidence": [
+        {
+          "file": "empire-current-probe.json",
+          "sha256": "2c3ca35ae3becf17f3a683f6d06c9469d3c2e886723f6e0dcc4925df73a17200"
+        },
+        {
+          "file": "empire-employment-probe.json",
+          "sha256": "59cc867b6731b44b887704d88d6ffb70bcd58f262f202c76c71c4533b102cfe3"
+        },
+        {
+          "file": "empire-probe.json",
+          "sha256": "08aac909c6b3f7e4b0be07db0d32fce1974e71b426eda18bd862ec9e7cada6c8"
+        },
+        {
+          "file": "empire-extension.json",
+          "sha256": "5a2bdd730d027b4bdf6c65b056ef7f6faa57ec757713e74a9870591bd7e3f470"
+        }
+      ],
+      "urlsInspected": [
+        "https://www.sunyempire.edu/",
+        "https://www.sunyempire.edu/employment_opportunities.html",
+        "https://esc.interviewexchange.com/",
+        "https://esc.interviewexchange.com/static/clients/397ESM1/index.jsp"
+      ]
+    },
+    {
+      "unitid": "443650",
+      "institution": "Miller-Motte College-Chattanooga",
+      "checkedAt": "2026-10-20T00:02:29.605702+00:00",
+      "previousStatus": "blocked",
+      "status": "working",
+      "complete": true,
+      "postings": 184,
+      "entry": {
+        "name": "Ancora Education (shared Miller-Motte and partner schools)",
+        "provider": "adp-workforcenow",
+        "careers_url": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=1fee27e8-b345-49b9-95f2-58dd60ce03ef&ccId=19000101_000001&lang=en_US",
+        "enabled": true
+      },
+      "scope": "Shared Ancora Education employer board including Miller-Motte Chattanooga and other brands/campuses",
+      "pagination": {
+        "pages": 10,
+        "complete": true,
+        "evidence": "ADP provider traversed 10 list responses; 184 unique postings, including Chattanooga campus roles."
+      },
+      "reason": "ADP provider traversed 10 list responses; 184 unique postings, including Chattanooga campus roles.",
+      "resultEvidence": "443650-live/result.json",
+      "resultSha256": "0577fe8df806ebc9a3ca97a13965f59e67064b0289424b87526de9db38ea7dff",
+      "supportingEvidence": [
+        {
+          "file": "ancora-probe.json",
+          "sha256": "7376942979505bc73b9fd7531deadec3a0d8293ae511da928fc018c7a54a2a1e"
+        },
+        {
+          "file": "miller-employer-probe.json",
+          "sha256": "1400c209e327401a15850aff77ea1eb4b65056eb34e3e9ce4c6a58369e3b02dd"
+        }
+      ],
+      "urlsInspected": [
+        "https://www.ancora.com/about-us/careers",
+        "https://www.miller-motte.edu/"
+      ],
+      "ownershipSources": [
+        "https://www.miller-motte.edu/blog/skilled-trades/miller-motte-colleges-raleigh-north-carolina-campus-to-add-cdl-class-a-training/",
+        "https://www.ancora.com/about-us/careers/"
+      ]
+    },
+    {
+      "unitid": "488846",
+      "institution": "University of the People",
+      "checkedAt": "2026-10-20T00:02:29.606385+00:00",
+      "previousStatus": "no-listing",
+      "status": "no-listing",
+      "complete": false,
+      "postings": null,
+      "reason": "The saved official route still offers volunteer instructor/general volunteer application forms, not an enumerable paid-vacancy board. No paid-vacancy source was verified.",
+      "resultEvidence": "uopeople-forms.json",
+      "resultSha256": "e52d097e9e10592321f0c5f6ea3cdb946bf4929d4c86b3294caf8270b1f92718",
+      "supportingEvidence": [
+        {
+          "file": "uopeople-probe.json",
+          "sha256": "4922bdd1eef0da9cdf47214492cccaaecc743dc5978bd70412ff1747c2e30123"
+        },
+        {
+          "file": "uopeople-forms.json",
+          "sha256": "e52d097e9e10592321f0c5f6ea3cdb946bf4929d4c86b3294caf8270b1f92718"
+        }
+      ],
+      "urlsInspected": [
+        "https://www.uopeople.edu/volunteer/"
+      ]
+    },
+    {
+      "unitid": "500087",
+      "institution": "Doral College",
+      "checkedAt": "2026-10-20T00:02:29.606584+00:00",
+      "previousStatus": "no-listing",
+      "status": "no-listing",
+      "complete": false,
+      "postings": null,
+      "reason": "The official Join Our Team page embeds a Formstack employment application with contact, qualification and attachment fields; no enumerable vacancy inventory or posting URLs were exposed.",
+      "resultEvidence": "doral-forms.json",
+      "resultSha256": "0ea39c0ba19b121ba9fd2fc0a55d012f1cc916e338a10c6989784f24d5b46d9f",
+      "supportingEvidence": [
+        {
+          "file": "doral-probe.json",
+          "sha256": "5e9669a879964fa475c394b994d58c8014d92a472305488f05870938ddba0443"
+        },
+        {
+          "file": "doral-forms.json",
+          "sha256": "0ea39c0ba19b121ba9fd2fc0a55d012f1cc916e338a10c6989784f24d5b46d9f"
+        }
+      ],
+      "urlsInspected": [
+        "https://doral.edu/join-our-team"
+      ]
+    }
+  ],
+  "integrationVerification": {
+    "command": "CAREER_OPS_ROOT=<isolated scanner-smoke> BH_CONFIG_DIR=<configured Browser Harness extension> node scan.mjs --dry-run",
+    "companies": 5,
+    "postings": 487,
+    "errors": 0,
+    "dataRootFilesAfter": [
+      "portals.yml"
+    ],
+    "evidence": "scanner-smoke.log",
+    "sha256": "8ace6879bf8ff478ae17984faeada43ba771a24f3686d10628a69c1e020c2fa2"
+  }
+}

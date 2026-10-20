@@ -9,6 +9,7 @@ try {
   browser = await chromium.launch();
   const page = await browser.newPage();
   const fixtures = {
+    igreentree: '<p>Available Positions: 1</p><div class="table2 table-collapse"><div class="tr"><div class="td"><h6>Job Title</h6><a title="Click to view job description" href="javascript:void(0)">Faculty</a></div><div class="td"><h6>Location</h6>Campus</div><div class="td">Division</div><div class="td"><h6>Req No.</h6>A2627-014<form><input value="session"></form></div></div></div>',
     jobsyn: '<main id="main"><h1>1 Jobs</h1><ul id="jobs"><li><a href="/city/faculty/123/job/"><h2 class="job-title">Faculty</h2></a></li></ul></main>',
     neoed: '<div id="jobs-list-1"><a class="jobs__box" href="https://www.governmentjobs.com/careers/college/jobs/1?visitor=abc&amp;session=def"><div class="jobs__box__heading">Faculty</div></a></div>',
     brassring: '<p>1 results</p><a id="Job_title0" href="/HomeWithPreLoad?jobid=123">Faculty</a>',
@@ -123,5 +124,29 @@ try {
   const cumulative=await searchBrowserJobs({...opts,kind:'exacthire'},{browser:buttonBrowser});
   assert.equal(cumulative.jobs.length,3);assert.equal(cumulative.pages,3);
   pass('Cumulative Load More pagination advances across three pages and stops at the advertised total');
+  let greenMode = 'complete';
+  const greenBrowser = {newContext: async options => {
+    const context=await browser.newContext(options),create=context.newPage.bind(context);
+    context.newPage=async()=>{
+      const p=await create();
+      await p.route('https://college.example/**',route=>{
+        const u=new URL(route.request().url());
+        if(u.pathname==='/CSS_Academic/')return route.fulfill({contentType:'text/html',body:'<a title="Click to view these current openings...">Faculty category</a><a class="btn" title="Click to view these current openings..." href="/CSS_Academic/results?T=session&page=1">View All Jobs</a>'});
+        const n=u.searchParams.get('page')==='2'?2:1;
+        const req=greenMode==='repeat'?'A-1':`A-${n}`;
+        const body=greenMode==='blocked'&&n===2?'<main>Blocked</main>':`<p>Available Positions: 2</p><div class="table2 table-collapse"><div class="tr"><div class="td"><h6>Job Title</h6><a title="Click to view job description" href="javascript:void(0)">Faculty ${n}</a></div><div class="td"><h6>Location</h6>Campus</div><div class="td">Division</div><div class="td"><h6>Req No.</h6>${req}<form><input value="session"></form></div></div></div>${n===1&&greenMode!=='truncated'?'<a href="javascript:void(0)" data-form="frmPage2" onclick="location.href=\'/CSS_Academic/results?page=2\'">Next</a>':''}`;
+        return route.fulfill({contentType:'text/html',body:body.replace('href="javascript:void(0)" data-form="frmPage2"','href="javascript:void(0);/*frmPage2*/"')});
+      });return p;
+    };return context;
+  }};
+  const greenOpts={...opts,url:'https://college.example/CSS_Academic/',kind:'igreentree'};
+  const green=await searchBrowserJobs(greenOpts,{browser:greenBrowser});
+  assert.equal(green.jobs.length,2);assert.equal(green.pages,2);
+  assert.equal(green.jobs[1].url,'https://college.example/CSS_Academic/CSSPage_Referred.ASP?Req=A-2');
+  assert.equal(green.jobs[1].location,'Campus');
+  greenMode='truncated';await assert.rejects(searchBrowserJobs(greenOpts,{browser:greenBrowser}),/advertised total/);
+  greenMode='repeat';await assert.rejects(searchBrowserJobs(greenOpts,{browser:greenBrowser}),/repeated its postings/);
+  greenMode='blocked';await assert.rejects(searchBrowserJobs(greenOpts,{browser:greenBrowser}),/Unrecognized/);
+  pass('iGreentree selects all jobs, traverses form pagination and emits stable requisition URLs without session identifiers');
 } catch (e) { fail(`Browser search integration: ${e.stack}`); process.exitCode = 1; }
 finally { await browser?.close(); }

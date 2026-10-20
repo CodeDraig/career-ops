@@ -378,6 +378,7 @@ const SYSTEM_PATHS = [
   'liveness-browser.mjs',
   'browser-extract.mjs',
   'browser-job-search.mjs',
+  'extension-job-search.mjs',
   'adp-myjobs-search.mjs',
   'peoplesoft-browser-search.mjs',
   'fetch-jd.mjs',
