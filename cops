@@ -31,7 +31,8 @@ case "${1:-}" in
     exit 0
     ;;
   up)
-    docker compose up -d
+    shift
+    docker compose up -d "$@"
     exit 0
     ;;
   down)
@@ -48,7 +49,7 @@ case "${1:-}" in
     docker compose logs -f "$@"
     exit 0
     ;;
-  shell|bash)
+  shell)
     ensure_up
     exec docker compose exec -it "$SERVICE" bash
     ;;

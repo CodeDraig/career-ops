@@ -1,0 +1,7 @@
+# Optional only when Docker's automatic address pools are exhausted.
+# Choose an unused subnet after inspecting host routes and Docker networks.
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: ${CAREER_OPS_SUBNET:?Choose an unused subnet for Career-Ops}

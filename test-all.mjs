@@ -2059,11 +2059,9 @@ for (const f of skillEntrypoints) {
   }
 }
 
-// The Dockerfile pins playwright twice — the FROM base image tag (bundled
-// Chromium) and the --save-exact npm install — so the npm package matches
-// the browser the container ships. Nothing enforced either pin against
-// package.json's own playwright version, so this keeps all three in sync
-// going forward instead of relying on whoever next reads the Dockerfile.
+// A prebuilt Playwright image must match the package pin. A Node base can
+// instead install Chromium through the locally installed, exact package;
+// --no-install prevents npx from fetching a different version as a fallback.
 {
   const pkgPlaywright = JSON.parse(readFile('package.json')).dependencies?.playwright;
   const dockerfile = readFile('Dockerfile');
@@ -2071,18 +2069,24 @@ for (const f of skillEntrypoints) {
   const fromPinMatch = dockerfile.match(/^FROM mcr\.microsoft\.com\/playwright:v([\d.]+)-/m);
   const runPinMatch = dockerfile.match(/--save-exact playwright@([\d.]+)/);
   const commentPinMatch = dockerfileLine2.match(/matches playwright@([\d.]+) in package\.json/);
+  const installsMatchingBrowser = /npx --no-install playwright install --with-deps chromium/.test(dockerfile);
   if (!pkgPlaywright) {
     fail('package.json missing dependencies.playwright — cannot check Dockerfile pins against it');
   } else {
-    if (!fromPinMatch) {
-      fail('Dockerfile missing the expected "FROM mcr.microsoft.com/playwright:vX-<distro>" base image line');
+    if (!fromPinMatch && !installsMatchingBrowser) {
+      fail('Dockerfile must use a matching Playwright image or install Chromium through the local Playwright package');
+    } else if (!fromPinMatch) {
+      if (/^\d+\.\d+\.\d+$/.test(pkgPlaywright)) pass('Dockerfile installs Chromium through the exact local Playwright dependency');
+      else fail('Dockerfile browser installation requires an exact package.json Playwright version');
     } else if (fromPinMatch[1] !== pkgPlaywright) {
       fail(`Dockerfile's FROM base image is playwright@${fromPinMatch[1]} but package.json depends on playwright@${pkgPlaywright} — bump the base image tag`);
     } else {
       pass(`Dockerfile's FROM base image (${fromPinMatch[1]}) matches package.json`);
     }
-    if (!runPinMatch) {
-      fail('Dockerfile missing the expected "--save-exact playwright@X" RUN line');
+    if (!runPinMatch && !installsMatchingBrowser) {
+      fail('Dockerfile must install the package matching its browser image');
+    } else if (!runPinMatch) {
+      pass('Dockerfile uses package.json Playwright without a separate overriding npm pin');
     } else if (runPinMatch[1] !== pkgPlaywright) {
       fail(`Dockerfile pins playwright@${runPinMatch[1]} but package.json depends on playwright@${pkgPlaywright} — bump the Dockerfile's --save-exact pin`);
     } else {

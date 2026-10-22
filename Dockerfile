@@ -1,47 +1,74 @@
-# career-ops container
-# Base: Playwright image with Chromium preinstalled (matches playwright@1.63.0 in package.json).
-# Host kernels that block Playwright's chromium installer (e.g. Ubuntu 26.04) work fine here
-# because the browser ships in the image and runs under the image's userland.
-
-FROM mcr.microsoft.com/playwright:v1.63.0-jammy
-
-ENV DEBIAN_FRONTEND=noninteractive \
-    NODE_ENV=development \
-    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0 \
-    PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
-    PATH=/usr/local/go/bin:$PATH
-
-# Optional: Go toolchain for the dashboard TUI (./dashboard).
-# Small footprint, keeps full feature parity with the README setup.
-# Must be >= the `go` line in dashboard/go.mod (checked by tests/go-floor.test.mjs), or
-# `go build` fetches a newer toolchain over the network and fails offline.
+# syntax=docker/dockerfile:1.7
+# The named browser-harness context is the local extension-capable checkout.
 ARG GO_VERSION=1.27.2
-RUN set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends ca-certificates curl git tini latexmk texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-xetex; \
-    arch="$(dpkg --print-architecture)"; \
-    case "$arch" in \
-      amd64)  go_arch=amd64 ;; \
-      arm64)  go_arch=arm64 ;; \
-      *) echo "unsupported arch: $arch" >&2; exit 1 ;; \
-    esac; \
-    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-${go_arch}.tar.gz" -o /tmp/go.tgz; \
-    tar -C /usr/local -xzf /tmp/go.tgz; \
-    rm /tmp/go.tgz; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
+FROM golang:${GO_VERSION}-bookworm AS dashboard
+WORKDIR /src
+COPY dashboard/go.mod dashboard/go.sum ./
+RUN go mod download
+COPY dashboard/ ./
+RUN CGO_ENABLED=0 go build -buildvcs=false -o /career-dashboard .
 
-WORKDIR /app
+FROM node:24-bookworm AS runtime-base
+ARG CHROME_VERSION=156.0.8078.47
+ARG CHROME_SHA256=e6c94490f0b6b337225aeb2d2a5034858516b7017356980ba94f5176d8774a50
+ARG CODEX_VERSION=0.162.1
+ENV DEBIAN_FRONTEND=noninteractive PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
+    PLAYWRIGHT_BROWSERS_PATH=/opt/playwright NEXT_TELEMETRY_DISABLED=1
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl git tini python3 python3-venv unzip \
+    xvfb xauth openbox x11vnc novnc websockify xdotool x11-utils dbus-x11 \
+    libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 libcups2 \
+    libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+    libgbm1 libasound2 libgtk-3-0 fonts-liberation fonts-noto-color-emoji \
+    latexmk texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-xetex \
+    && rm -rf /var/lib/apt/lists/*
+# Chrome for Testing retains unpacked-extension startup support. No debugging port.
+RUN test "$(dpkg --print-architecture)" = amd64 \
+    && curl -fsSL "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip" -o /tmp/chrome.zip \
+    && echo "${CHROME_SHA256}  /tmp/chrome.zip" | sha256sum -c - \
+    && unzip -q /tmp/chrome.zip -d /opt \
+    && mkdir -p /opt/google/chrome \
+    && ln -s /opt/chrome-linux64/chrome /opt/google/chrome/chrome \
+    && ln -s /opt/chrome-linux64/chrome /usr/local/bin/google-chrome \
+    && chown root:root /opt/chrome-linux64/chrome_sandbox \
+    && chmod 4755 /opt/chrome-linux64/chrome_sandbox \
+    && rm /tmp/chrome.zip
+RUN python3 -m venv /opt/uv && /opt/uv/bin/pip install --no-cache-dir uv==0.10.7 \
+    && npm install -g --no-audit --no-fund "@openai/codex@${CODEX_VERSION}"
+COPY --from=browser-harness /pyproject.toml /uv.lock /LICENSE /EXTENSIONS.md /opt/browser-harness/
+COPY --from=browser-harness /src/ /opt/browser-harness/src/
+RUN /opt/uv/bin/uv sync --directory /opt/browser-harness --frozen --no-dev --no-editable \
+    && BH_TELEMETRY=0 /opt/browser-harness/.venv/bin/browser-harness extension package chrome /opt/browser-harness/chrome-extension
+ENV PATH=/opt/browser-harness/.venv/bin:$PATH
 
-# Prime npm deps in a layer so rebuilds stay fast.
-# Pin playwright to the version that matches the base image's bundled chromium.
-COPY package.json package-lock.json* ./
-RUN npm install --no-audit --no-fund \
- && npm install --no-audit --no-fund --save-exact playwright@1.63.0
+FROM runtime-base AS app-build
+WORKDIR /opt/career-ops
+# The root has no committed npm lockfile; web/ does. Do not generate host locks.
+COPY package.json ./
+RUN npm install --no-audit --no-fund --package-lock=false \
+    && npx --no-install playwright install --with-deps chromium \
+    && node --input-type=module -e "import { chromium } from 'playwright'; import fs from 'node:fs'; fs.accessSync(chromium.executablePath())"
+COPY web/package.json web/package-lock.json ./web/
+RUN npm --prefix web ci --no-audit --no-fund
+COPY . .
+# Runtime imports must work from the filtered source tree, not just Next's build.
+RUN node doctor.mjs --json && node --input-type=module -e "import './tracker-parse.mjs'" \
+    && npm --prefix web run build
 
-# The rest of the project is bind-mounted at runtime via docker compose,
-# so we don't COPY sources here — keeps the image generic and lets local
-# edits show up instantly inside the container.
-
-ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["bash"]
+FROM app-build AS app
+COPY --from=dashboard /career-dashboard /usr/local/bin/career-dashboard
+ENV NODE_ENV=production HOME=/home/node DISPLAY=:99 \
+    CAREER_OPS_CODE_ROOT=/opt/career-ops CAREER_OPS_ROOT=/data \
+    CAREER_OPS_BROWSER_HARNESS_BIN=/opt/browser-harness/.venv/bin/browser-harness \
+    BH_BACKEND=extension BU_NAME=career-ops BH_CONFIG_DIR=/home/node/.config/browser-harness \
+    BH_RUNTIME_DIR=/tmp/browser-harness BH_TMP_DIR=/tmp/browser-harness-output \
+    BH_TELEMETRY=0 BH_DOMAIN_SKILLS=0 BH_RECORD=0
+RUN mkdir -p /data /home/node/chrome-profile /home/node/.config \
+    && chown -R node:node /data /home/node /opt/career-ops/web/.next
+USER node
+WORKDIR /opt/career-ops
+EXPOSE 3000 6080
+HEALTHCHECK --interval=30s --timeout=8s --start-period=90s --retries=3 \
+    CMD ["python3", "/opt/career-ops/container/healthcheck.py"]
+ENTRYPOINT ["/usr/bin/tini", "--", "python3", "/opt/career-ops/container/entrypoint.py"]
+CMD ["serve"]

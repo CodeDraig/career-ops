@@ -529,6 +529,7 @@ const SYSTEM_PATHS = [
   'playwright.cv.config.mjs',
   'scaffolder/',
   'Dockerfile',
+  'container/',
   'docker-compose.yml',
   '.dockerignore',
   'cops',

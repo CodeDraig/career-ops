@@ -2,32 +2,28 @@ services:
   career-ops:
     build:
       context: .
-      dockerfile: Dockerfile
+      additional_contexts:
+        browser-harness: ${CAREER_OPS_BROWSER_HARNESS_SOURCE:-../browser-harness}
     image: career-ops:local
-    container_name: career-ops
-    working_dir: /app
-    # Long-running shell so `docker compose exec` is instant.
-    command: ["tail", "-f", "/dev/null"]
-    init: true
-    # Mount whole project so edits on host are visible inside the container.
-    # node_modules is kept inside the image to avoid host/container ABI mismatch
-    # (host is ubuntu26.04 where playwright won't install; image is jammy).
+    ports:
+      - "127.0.0.1:${CAREER_OPS_WEB_PORT:-3010}:3000"
+      - "127.0.0.1:${CAREER_OPS_DESKTOP_PORT:-6080}:6080"
     volumes:
-      - .:/app
-      - career-ops-node-modules:/app/node_modules
+      - ${CAREER_OPS_DATA_SOURCE:-career-ops-data}:${CAREER_OPS_CONTAINER_DATA_ROOT:-/data}
+      - career-ops-home:/home/node
     environment:
-      - NODE_ENV=development
-      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-      # Forward common API keys if set on host. Empty values are ignored.
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-    # Chromium needs a larger /dev/shm than the default 64M.
+      CAREER_OPS_ROOT: ${CAREER_OPS_CONTAINER_DATA_ROOT:-/data}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # Add account-specific secretEnv names through a private Compose override.
     shm_size: "1gb"
-    # Dashboard TUI is interactive; expose nothing by default but allow `-it`.
-    tty: true
-    stdin_open: true
+    # Allow Chromium's user-namespace sandbox without privileged mode/SYS_ADMIN.
+    security_opt:
+      - seccomp=./container/chromium-seccomp.json
+    stop_grace_period: 45s
     restart: unless-stopped
 
 volumes:
-  career-ops-node-modules:
+  career-ops-data:
+  career-ops-home:
