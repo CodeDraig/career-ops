@@ -437,6 +437,13 @@ function FollowupRow({
             >
               Log
             </button>
+            <Link
+              href={`/mail?appNum=${e.num}`}
+              title={`Open mail for ${e.company} — ${e.role}`}
+              className="rounded-md px-2 py-1 text-xs font-medium text-muted transition-colors hover:bg-brand-soft hover:text-brand"
+            >
+              Mail
+            </Link>
             <button
               type="button"
               onClick={onPin}

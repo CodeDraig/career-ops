@@ -11,6 +11,24 @@ test('mail route rejects cross-origin send and unsupported actions', async () =>
   assert.equal((await send({ action: 'delete' })).status, 400);
   assert.equal((await POST(new Request('http://localhost/api/mail', { method: 'POST', headers: { origin: 'http://localhost', 'Content-Type': 'application/json' }, body: '{' }))).status, 400);
 });
+test('mail route delegates cached message and sync actions to the core', async () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mail-route-actions-'));
+  const before = { ...process.env };
+  try {
+    process.env.CAREER_OPS_ROOT = root;
+    process.env.CAREER_OPS_CODE_ROOT = path.resolve(import.meta.dirname, '../../..');
+    delete process.env.CAREER_OPS_MAIL_CONFIG;
+    const cached = await send({ action: 'messages' });
+    assert.equal(cached.status, 200);
+    assert.deepEqual(await cached.json(), { messages: [], applications: [] });
+    const sync = await send({ action: 'sync', account: 'missing' });
+    assert.equal(sync.status, 400);
+    assert.match((await sync.json()).error, /IMAP is not configured/);
+  } finally {
+    for (const key of Object.keys(process.env)) if (!(key in before)) delete process.env[key]; Object.assign(process.env, before);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
 test('mail web route uses core with separate data root and freezes the reviewed email', async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mail-web-'));
   const before = { ...process.env };

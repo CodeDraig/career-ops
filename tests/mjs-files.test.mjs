@@ -1263,6 +1263,7 @@ test('every recursive walker over this checkout consults the shared predicate', 
   // and have it drop out of the integrity hash — the rug-pull `_lock.mjs`
   // exists to prevent.
   const EXEMPT = new Map([
+    ['lib/mail/core.mjs:effectiveAssociation', 'follows cached message-ID references with a cycle guard; allMessages reads one flat data/mail/messages directory and never descends into child directories'],
     ['plugins/_lock.mjs:walk', 'hashes a plugin tree; skipping a marked dir would be an integrity blind spot'],
     ['plugin-audit.mjs:walk', 'audits a plugin tree, which is not this repository’s source'],
     ['test-all.mjs:walkMjs', 'deny-list security scan over plugins/; a marked dir must not be able to opt out'],

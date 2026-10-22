@@ -192,6 +192,17 @@ Trackers require English column headers in a pipe-delimited Markdown table. Colu
 ### Provider-independent mail
 
 `config/mail.json` is user-owned mail configuration (credential environment-variable names only).
-`data/mail/` contains private inbox snapshots, frozen outgoing messages/attachments and send-attempt receipts.
+`data/mail/` contains private inbox snapshots, cached messages and their reviewed
+application associations, per-mailbox UID synchronization cursors, frozen outgoing
+messages/attachments and send-attempt receipts. A mailbox cursor is advanced only
+after its page of messages is durable. A message's IMAP identity and original
+RFC Message-ID are separate fields. Application links include the canonical
+tracker path and row identity, checked before preparing/sending a linked message.
+Accepted application-linked follow-ups append to `data/follow-ups.md` (or the
+`CAREER_OPS_FOLLOWUPS` override) under the existing follow-ups lock. Each automatic
+row carries `[mail-followup:<prepared-id>]` in Notes so receipt recovery cannot log
+a second copy. SMTP `partial`/`unknown` receipts never trigger automatic logging.
+Receipt review/reconciliation may finish a pending local log write; they never
+resend. These records do not change the tracker status.
 Never auto-update, reset, prune or commit these files. IMAP imports append to the existing
 `data/reply-candidates.json` using its shared lock; they never change tracker status.

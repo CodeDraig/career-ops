@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const text = await request.text();
     if (text.length > 16_000_000) return Response.json({ error: "Request exceeds 16 MB" }, { status: 413 });
     const input = JSON.parse(text);
-    if (!["history", "fetch", "import", "lead", "prepare", "review", "send"].includes(input.action)) throw new Error("Unknown mail action");
+    if (!["history", "fetch", "import", "lead", "sync", "messages", "match", "reply", "prepare", "review", "send", "reconcile"].includes(input.action)) throw new Error("Unknown mail action");
     return Response.json(await runMail(input));
   } catch (e) { return Response.json({ error: e instanceof Error ? e.message : "Mail failed" }, { status: 400 }); }
 }

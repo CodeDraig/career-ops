@@ -2,7 +2,7 @@
 
 <p align="center">The open-source AI job search agent.</p>
 
-[IMAP/SMTP mail](docs/MAIL.md) is available in interactive `mail` mode and the web Mail screen, with explicit review before sending.
+[IMAP/SMTP mail](docs/MAIL.md) supports manual sync, application matching, threaded replies, and automatic follow-up logging in interactive `mail` mode and the web Mail screen. Every send requires review.
 
 Career-Ops is English-only. Legacy profile language settings have no effect.
 

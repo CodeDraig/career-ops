@@ -170,6 +170,15 @@ For each draft, show:
 
 ## Step 5 — Record Follow-ups
 
+For mail sent through Career-Ops, use `mail` mode's application-linked
+`prepare` → reviewed `send` workflow with `logFollowup: true`. SMTP acceptance
+records the follow-up automatically. Inspect the receipt; do not manually log
+another copy. If its local logging failed, use the mail `reconcile` action to
+recover from the accepted receipt without sending again. Partial or uncertain
+send attempts require review and are not automatically recorded as sent.
+
+The manual instructions below apply to follow-ups sent outside Career-Ops.
+
 After the user reviews and says they've sent a follow-up, record it:
 
 1. If `data/follow-ups.md` doesn't exist, create it (this exact header — the
