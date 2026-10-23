@@ -1,5 +1,9 @@
 # Final eight college search routes
 
+Latest full Docker revalidation: [2026-10-23 container results](CONTAINER_VALIDATION_2026-10-23.md)
+record **341/346 (98.55%)**, with two newly failing Georgia searches. The historical
+October 19 results below remain unchanged.
+
 Revalidated **2026-10-19** (US Eastern; verification continued into October 20 UTC).
 
 **Five more working school routes: 343/346 = 99.1% coverage (99.13% to two decimals).** The combined inventory comprises **337 non-empty routes, 6 verified empty routes, and 3 unresolved schools**. This adds five schools and 1.45 percentage points to the previous 338/346 result. All eight previous failures were revisited; the earlier 338 successes retain their dated evidence and were not all fetched again.

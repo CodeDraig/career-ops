@@ -6,6 +6,12 @@ step is needed. The host must expose `search_jobs`, `get_job_details`, and
 `get_job_apply_url` and have a usable LinkedIn session. If tools are disabled or
 authentication is needed, the agent reports that state for you to resolve.
 
+The [container image](../DOCKER.md#commands-and-integration-credentials) includes
+the same MCP server and registers it with the container's Codex on first startup.
+Use `career-ops-linkedin login` in that container, completing authentication in
+its noVNC desktop. Configuration and the separate LinkedIn browser profile stay
+in the persistent home volume; host credentials are not imported automatically.
+
 Examples:
 
 ```text

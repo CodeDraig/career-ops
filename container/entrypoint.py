@@ -78,6 +78,7 @@ def prepare():
     subprocess.run(['browser-harness', 'extension', 'install-host', 'chrome',
                     '--extension-id', extension_id(), '--manifest-dir',
                     str(Path.home() / 'chrome-profile/NativeMessagingHosts')], check=True)
+    subprocess.run(['career-ops-linkedin', 'configure'], check=True)
 
 
 def shutdown(children):
@@ -106,7 +107,7 @@ def shutdown(children):
 def serve():
     children = []
     stopping = False
-    guard = None
+    guards = []
 
     def stop(signum=None, frame=None):
         nonlocal stopping
@@ -121,7 +122,9 @@ def serve():
         return process
 
     try:
-        guard = acquire_profile()
+        guards.append(acquire_profile())
+        guards.append(acquire_profile(Path.home() / '.linkedin-mcp/profile',
+                                      Path.home() / '.local/state/career-ops/linkedin-locks'))
         prepare()
         display = os.environ.get('DISPLAY', ':99')
         start('display', ['Xvfb', display, '-screen', '0', '1440x1000x24', '-nolisten', 'tcp'])
@@ -181,7 +184,7 @@ def serve():
         return 0
     finally:
         shutdown(children)
-        if guard:
+        for guard in reversed(guards):
             guard.close()
 
 

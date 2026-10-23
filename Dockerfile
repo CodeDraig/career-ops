@@ -12,6 +12,8 @@ FROM node:24-bookworm AS runtime-base
 ARG CHROME_VERSION=156.0.8078.47
 ARG CHROME_SHA256=e6c94490f0b6b337225aeb2d2a5034858516b7017356980ba94f5176d8774a50
 ARG CODEX_VERSION=0.162.1
+ARG LINKEDIN_MCP_VERSION=4.28.0
+ARG LINKEDIN_PYTHON_VERSION=3.13.9
 ENV DEBIAN_FRONTEND=noninteractive PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
     PLAYWRIGHT_BROWSERS_PATH=/opt/playwright NEXT_TELEMETRY_DISABLED=1
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -35,6 +37,12 @@ RUN test "$(dpkg --print-architecture)" = amd64 \
     && rm /tmp/chrome.zip
 RUN python3 -m venv /opt/uv && /opt/uv/bin/pip install --no-cache-dir uv==0.10.7 \
     && npm install -g --no-audit --no-fund "@openai/codex@${CODEX_VERSION}"
+# Same server as the LinkedIn plugin; install at build time, never via runtime uvx.
+# Keep its newer Python and dependencies separate from Browser Harness.
+ENV UV_PYTHON_INSTALL_DIR=/opt/python
+RUN /opt/uv/bin/uv venv --python ${LINKEDIN_PYTHON_VERSION} /opt/linkedin \
+    && /opt/uv/bin/uv pip install --python /opt/linkedin/bin/python "mcp-server-linkedin==${LINKEDIN_MCP_VERSION}" \
+    && /opt/linkedin/bin/mcp-server-linkedin --help >/dev/null
 COPY --from=browser-harness /pyproject.toml /uv.lock /LICENSE /EXTENSIONS.md /opt/browser-harness/
 COPY --from=browser-harness /src/ /opt/browser-harness/src/
 RUN /opt/uv/bin/uv sync --directory /opt/browser-harness --frozen --no-dev --no-editable \
@@ -57,6 +65,7 @@ RUN node doctor.mjs --json && node --input-type=module -e "import './tracker-par
 
 FROM app-build AS app
 COPY --from=dashboard /career-dashboard /usr/local/bin/career-dashboard
+COPY --chmod=755 container/linkedin.py /usr/local/bin/career-ops-linkedin
 ENV NODE_ENV=production HOME=/home/node DISPLAY=:99 \
     CAREER_OPS_CODE_ROOT=/opt/career-ops CAREER_OPS_ROOT=/data \
     CAREER_OPS_BROWSER_HARNESS_BIN=/opt/browser-harness/.venv/bin/browser-harness \

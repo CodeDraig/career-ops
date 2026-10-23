@@ -92,9 +92,52 @@ container writers against the same data volume.
 Raw commands execute in `/opt/career-ops`. Use absolute `/data/...` paths for
 arguments that are relative to the working directory, such as PDF input files.
 The `CAREER_OPS_ROOT` environment variable already selects the user data volume.
-CLI configuration/login state persists in the home volume. Host-agent MCP tools
-are not inherited: configure LinkedIn MCP in the container's agent if needed.
-No AI account login or paid model call is performed at startup.
+CLI configuration/login state persists in the home volume. The image includes
+`mcp-server-linkedin` 4.28.0 with its own Python environment. On startup,
+`career-ops-linkedin configure` registers the local stdio server with Codex if
+there is no `linkedin` registration; existing registrations are preserved.
+Other agent hosts can register `/usr/local/bin/career-ops-linkedin serve` as a
+stdio MCP command. Host MCP configuration is not copied into the image.
+
+Sign into LinkedIn once in the container's desktop:
+
+```sh
+./cops career-ops-linkedin login
+./cops career-ops-linkedin status
+```
+
+The login command opens a separate managed browser visible through noVNC. Finish
+any login confirmation, captcha or two-factor step yourself. Its profile, session
+snapshots and authentication state stay in `/home/node/.linkedin-mcp/`, and Codex's
+registration stays in `/home/node/.codex/`; both survive container recreation in
+the home volume. Startup exclusively owns both browser profiles. Stale Chrome
+singleton links from a previous container are archived under
+`/home/node/.local/state/career-ops/linkedin-locks/` before LinkedIn starts; its
+cookies and profile databases are preserved. LinkedIn does not share the
+Indeed/Browser Harness profile and does not automatically import host cookies.
+Each independent instance signs in
+separately. LinkedIn remains an interactive agent integration, not a web Explore
+source. No LinkedIn data request, AI login or paid model call runs at startup.
+
+### Full college inventory validation
+
+`container/validate-colleges.mjs` runs an explicit JSON inventory of exactly 346
+distinct UNITIDs. Supply the latest corrected per-school `entry` objects, their
+`scope`, and a `probeUrl`/`reason` for sources with no supported adapter. It never
+reads or writes the instance's live portal configuration or tracker:
+
+```sh
+./cops node container/validate-colleges.mjs \
+  --inventory /data/college-inventory.json --output /data/college-validation
+```
+
+Every school gets its own result, complete posting list and available HTTP
+pagination receipts. Browser recipes reconcile their normal page/total checks;
+provider warnings indicating partial results fail validation. Unsupported
+sources are visited and remain unresolved. A challenged page is never an empty
+successful search. Use a new output directory for a fresh run; `--resume`
+explicitly retains existing receipts. The report's school counts include shared
+employer boards separately and must not be summed as unique vacancies.
 
 For mail, place `config/mail.json` under the mounted data root as described in
 [MAIL.md](docs/MAIL.md). Pass each account's `secretEnv` name in a private Compose

@@ -16,6 +16,33 @@ spec.loader.exec_module(entrypoint)
 
 
 class StartupTests(unittest.TestCase):
+    def test_serve_owns_both_profiles_and_recovers_linkedin_before_any_client_starts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            profile = home / '.linkedin-mcp/profile'
+            profile.mkdir(parents=True)
+            (profile / 'Cookies').write_bytes(b'LinkedIn authentication fixture')
+            (profile / 'SingletonLock').symlink_to('previous-container-123')
+
+            def stop_before_services():
+                self.assertFalse((profile / 'SingletonLock').is_symlink())
+                self.assertEqual((profile / 'Cookies').read_bytes(), b'LinkedIn authentication fixture')
+                for current in (home / 'chrome-profile', profile):
+                    with self.assertRaisesRegex(RuntimeError, 'already owned'):
+                        entrypoint.acquire_profile(current)
+                raise RuntimeError('stop before launching services')
+
+            with patch.object(entrypoint.Path, 'home', return_value=home), \
+                    patch.object(entrypoint.signal, 'signal'), \
+                    patch.object(entrypoint, 'prepare', side_effect=stop_before_services):
+                with self.assertRaisesRegex(RuntimeError, 'stop before launching services'):
+                    entrypoint.serve()
+            # Both guards are released on failure, including the first when the
+            # second profile or later preparation fails.
+            for current in (home / 'chrome-profile', profile):
+                with entrypoint.acquire_profile(current):
+                    pass
+
     def test_previous_container_locks_are_archived_without_changing_profile_data(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -61,8 +88,9 @@ class StartupTests(unittest.TestCase):
             self.assertEqual((data / 'cv.md').read_bytes(), b'User-authored CV\n')
             self.assertEqual((config / 'extension.json').read_bytes(), pairing)
             self.assertEqual(sorted(p.name for p in data.iterdir()), ['cv.md'])
-            self.assertEqual(run.call_count, 1)
-            self.assertEqual(run.call_args.args[0][:4], ['browser-harness', 'extension', 'install-host', 'chrome'])
+            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_args_list[0].args[0][:4], ['browser-harness', 'extension', 'install-host', 'chrome'])
+            self.assertEqual(run.call_args_list[1].args[0], ['career-ops-linkedin', 'configure'])
 
     def test_chrome_flushes_before_display_is_stopped(self):
         with tempfile.TemporaryDirectory() as directory:
