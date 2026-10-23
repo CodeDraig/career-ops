@@ -75,6 +75,8 @@ import { barePrefixDomainKeywords, buildDomainFilter } from './title-keywords.mj
 import { KNOWN_ATS_VENDORS } from './ats-vendor.mjs';
 import { loadHistoryAtsSeeds } from './history-ats-seeds.mjs';
 import { loadProviders } from './providers/_registry.mjs';
+import { makeRunReceipt, stableSourceId } from './lib/automation/recovery.mjs';
+import { classifyFetchError } from './verify-portals.mjs';
 
 // ── Config ──────────────────────────────────────────────────────────
 
@@ -319,13 +321,13 @@ export const SOURCES = {
 
 const KNOWN_FLAGS = [
   '--since', '--limit', '--ats', '--seeds', '--history-seeds', '--dry-run', '--liveness',
-  '--verbose', '--md-out', '--json', '--include-undated', '--include-blacklisted',
+  '--verbose', '--md-out', '--json', '--run-receipt', '--target-source-id', '--include-undated', '--include-blacklisted',
   '--shuffle', '--resume', '--help', '-h',
 ];
 
 // Flags that consume the next argv token as a value (space-separated form —
 // the `--flag=value` form is self-contained and never needs this).
-const VALUE_FLAGS = ['--since', '--limit', '--ats', '--seeds', '--md-out'];
+const VALUE_FLAGS = ['--since', '--limit', '--ats', '--seeds', '--md-out', '--run-receipt', '--target-source-id'];
 
 const USAGE = `Usage:
   node scan-ats-full.mjs                      # scan all ATS directories, last 3 days
@@ -339,6 +341,7 @@ const USAGE = `Usage:
   node scan-ats-full.mjs --include-blacklisted # audit: let data/blacklist.md matches through, annotated
   node scan-ats-full.mjs --verbose            # log per-board fetch failures
   node scan-ats-full.mjs --md-out <dir>       # also write a dated markdown digest to <dir>
+  node scan-ats-full.mjs --run-receipt FILE  # write detailed per-target outcomes to FILE
   node scan-ats-full.mjs --resume             # continue an interrupted sweep from its checkpoint
   node scan-ats-full.mjs --help               # print this usage block and exit`;
 
@@ -422,6 +425,8 @@ export function parseArgs(argv) {
     includeBlacklisted: args.includes('--include-blacklisted'),
     shuffle: args.includes('--shuffle'),
     resume: args.includes('--resume'),
+    runReceipt: valueOf('--run-receipt'),
+    targetSourceId: valueOf('--target-source-id'),
   };
 }
 
@@ -1042,6 +1047,8 @@ function isoDay(v) {
 
 async function main() {
   const opts = parseArgs(process.argv);
+  const runStartedAt = new Date().toISOString();
+  const targetOutcomes = new Map();
   let checkpoint = null;
   if (opts.resume) {
     const cp = loadCheckpoint();
@@ -1172,6 +1179,7 @@ async function main() {
   // checkpoint that lost its offers array would otherwise set this to undefined
   // and throw on the next line, instead of degrading to an empty resume.
   const newOffers = checkpoint?.offers || [];
+  const offerTargets = new WeakMap();
   // Checkpointed matches were already deduped once — without re-seeding, a
   // resumed run re-scanning the in-flight overlap would duplicate them.
   // Reseed with the SAME token a fresh dedup check would produce (provider
@@ -1288,7 +1296,7 @@ async function main() {
   // Per-job filter chain, shared by the parallel sweep, the truncation retry
   // pass (workday), and date enrichment (icims). Closure over the filters and
   // counters so both passes update the same run totals.
-  const processJobs = async (jobs, sourceName, provider, companySlug, shouldContinue = () => true) => {
+  const processJobs = async (jobs, sourceName, provider, companySlug, shouldContinue = () => true, targetOutcome = null) => {
     for (const job of jobs) {
       if (!shouldContinue()) return;
       if (!job.url || !job.title) continue;
@@ -1326,7 +1334,9 @@ async function main() {
       const dedupToken = dedupTokenFor(job, provider);
       if (seenUrls.has(dedupToken)) continue;
       seenUrls.add(dedupToken); // intra-scan dedup
+      const before = newOffers.length;
       keepAndMaybeEmit(job, `${sourceName}-full`, newOffers, blacklist, opts);
+      if (targetOutcome && newOffers.length > before) offerTargets.set(newOffers.at(-1), targetOutcome);
     }
   };
 
@@ -1349,7 +1359,13 @@ async function main() {
       continue;
     }
     const datasetHash = datasetFingerprint(list);
-    const entriesAll = sampleCompanies(list, opts.limit, opts.shuffle).map(source.toEntry).filter(Boolean);
+    let entriesAll = sampleCompanies(list, opts.targetSourceId ? Infinity : opts.limit, opts.targetSourceId ? false : opts.shuffle).map(source.toEntry).filter(Boolean);
+    if (opts.targetSourceId) {
+      entriesAll = entriesAll.filter(entry => stableSourceId({ scanner: 'ats-full', name: entry.name,
+        provider: name, scope: { ats: name, dataset: source.dataset } }) === opts.targetSourceId);
+      if (entriesAll.length > 1) throw new Error(`--target-source-id resolved to multiple ${name} entries`);
+      if (!entriesAll.length) continue;
+    }
 
     let startAt = 0;
     if (checkpoint && checkpoint.current?.name === name) {
@@ -1364,6 +1380,12 @@ async function main() {
       startAt = checkpoint.current.resumeAt;
     }
     const entries = entriesAll.slice(startAt);
+    for (const entry of entries) targetOutcomes.set(entry, {
+      sourceId: stableSourceId({ scanner: 'ats-full', name: entry.name, provider: name,
+        scope: { ats: name, dataset: source.dataset } }),
+      name: entry.name, provider: name, configScope: { ats: name, dataset: source.dataset },
+      status: 'queued', complete: false, jobs: 0, addedUrls: [], warnings: [],
+    });
     totalCompaniesScanned += entries.length;
     curEntries = entries.length; curDone = 0; curErrors = 0; curDeadSkipped = 0;
     log(`\n⚙  ${name} — ${entriesAll.length} companies${status !== 'ok' ? ` (dataset: ${status})` : ''}${startAt ? ` — resuming at ${startAt}` : ''}`);
@@ -1399,8 +1421,10 @@ async function main() {
     const deferredIndices = () => [...deferred.values()].map((d) => d.index);
     await parallelEach(entries, source.concurrency ?? CONCURRENCY, async (entry, idx) => {
       const deadBoard = boardKey(entry);
+      const targetOutcome = targetOutcomes.get(entry);
       if (shouldSkipDeadBoard(deadBoards, name, deadBoard)) {
         deadBoardsSkipped++;
+        Object.assign(targetOutcome, { status: 'skipped', complete: true, kind: 'known_dead_board' });
         return;
       }
       try {
@@ -1414,6 +1438,7 @@ async function main() {
           if (typeof source.provider.fetchListing === 'function') {
             const listing = await source.provider.fetchListing(entry, ctx);
             if (!listingMayMatch(listing, { cutoff, titleFilter, companySlug: entry.name })) {
+              Object.assign(targetOutcome, { status: 'empty', complete: true, jobs: listing.length, statusCode: 200 });
               if (!opts.includeUndated) droppedNoDate += undatedInListing(listing, cutoff);
               recordBoardResult(deadBoards, name, deadBoard, 200);
               consecutiveResolverFailures = 0;
@@ -1421,6 +1446,12 @@ async function main() {
             }
           }
           const jobs = await source.provider.fetch(entry, ctx);
+          const incomplete = Boolean(jobs.workdayTruncated || jobs.icimsTruncated);
+          Object.assign(targetOutcome, { status: incomplete ? 'incomplete' : (jobs.length ? 'success' : 'empty'),
+            complete: !incomplete, jobs: jobs.length,
+            warnings: incomplete ? [String(jobs.workdayTruncated || jobs.icimsTruncated)] : [],
+            error: incomplete ? String(jobs.workdayTruncated || jobs.icimsTruncated) : null,
+            kind: jobs.icimsTruncated ? 'structural' : (jobs.workdayTruncated ? String(jobs.workdayTruncated) : null), statusCode: 200 });
           recordBoardResult(deadBoards, name, deadBoard, 200);
           consecutiveResolverFailures = 0;
           // Queued BEFORE the gate, deliberately: a board the gate cannot yet
@@ -1456,9 +1487,12 @@ async function main() {
             if (opts.verbose) console.error(`  ⚠ ${name}/${entry.name}: hit the page cap — later postings not scanned`);
           }
           if (jobs.workdayNoDateSkip) { noDateSkipCompanies++; noDateSkipJobs += jobs.length; }
-          await processJobs(jobs, name, source.provider, entry.name);
+          await processJobs(jobs, name, source.provider, entry.name, undefined, targetOutcome);
         })(), COMPANY_TIMEOUT_MS, `${name}/${entry.name}`);
       } catch (err) {
+        Object.assign(targetOutcome, { status: 'error', complete: false, error: err.message,
+          kind: classifyFetchError(err), statusCode: err.status ?? null,
+          retryAfter: err.retryAfter ?? err.headers?.['retry-after'] ?? err.response?.headers?.get?.('retry-after') ?? null });
         // Mostly defunct boards in the public dataset — expected noise, so the
         // default stays quiet; --verbose surfaces per-board failures.
         errors++;
@@ -1522,6 +1556,13 @@ async function main() {
         try {
           await withTimeout((async () => {
             const jobs = await source.provider.fetch(entry, ctx);
+            const targetOutcome = targetOutcomes.get(entry);
+            const incomplete = Boolean(jobs.workdayTruncated || jobs.icimsTruncated);
+            Object.assign(targetOutcome, { status: incomplete ? 'incomplete' : (jobs.length ? 'success' : 'empty'),
+              complete: !incomplete, jobs: jobs.length,
+              warnings: incomplete ? [String(jobs.workdayTruncated || jobs.icimsTruncated)] : [],
+              error: incomplete ? String(jobs.workdayTruncated || jobs.icimsTruncated) : null,
+              kind: jobs.icimsTruncated ? 'structural' : (jobs.workdayTruncated ? String(jobs.workdayTruncated) : null), statusCode: 200 });
             recordBoardResult(deadBoards, name, boardKey(entry), 200);
             // Where a board deferred by the parallel sweep is actually decided.
             // A board the sweep already admitted is never gated here, and one
@@ -1531,7 +1572,7 @@ async function main() {
               domainGatedPostings += jobs.length;
               if (opts.verbose) console.error(`  ⊘ ${name}/${entry.name}: no domain-bearing posting — board skipped`);
             } else {
-              await processJobs(jobs, name, source.provider, entry.name);
+              await processJobs(jobs, name, source.provider, entry.name, undefined, targetOutcomes.get(entry));
             }
             if (jobs.workdayTruncated) {
               errors++; // still not fully covered — move on
@@ -1547,6 +1588,9 @@ async function main() {
             }
           })(), COMPANY_TIMEOUT_MS, `${name}/${entry.name} (retry)`);
         } catch (err) {
+          Object.assign(targetOutcomes.get(entry), { status: 'error', complete: false, error: err.message,
+            kind: classifyFetchError(err), statusCode: err.status ?? null,
+            retryAfter: err.retryAfter ?? err.headers?.['retry-after'] ?? err.response?.headers?.get?.('retry-after') ?? null });
           errors++;
           recordBoardResult(deadBoards, name, boardKey(entry), err?.status);
           if (opts.verbose) console.error(`  ✗ ${name}/${entry.name} (retry): ${err.message}`);
@@ -1555,7 +1599,7 @@ async function main() {
           // comes back truncated again. Without it, a title match already in
           // hand would be lost to the retry's failure.
           const partial = deferred.get(entry)?.jobs;
-          if (partial) await processJobs(partial, name, source.provider, entry.name);
+          if (partial) await processJobs(partial, name, source.provider, entry.name, undefined, targetOutcomes.get(entry));
         }
       }
     }
@@ -1634,6 +1678,7 @@ async function main() {
   let offers = blacklistResult.offers;
   if (offers.length && opts.liveness) offers = await filterLive(offers);
   offers.sort((a, b) => (b.postedAt || 0) - (a.postedAt || 0));
+  for (const offer of offers) offerTargets.get(offer)?.addedUrls.push(offer.url);
 
   printScanSummaryHeader('Reverse ATS Scan', date, log);
   log(`Companies scanned:  ${totalCompaniesScanned}${capHit ? ` of ${totalCompaniesAvailable} (capped)` : ''}`);
@@ -1718,6 +1763,29 @@ async function main() {
   // did NOT complete: deleting here would destroy the resume point the outage
   // branch just wrote, which is the one case --resume exists for (#2283).
   if (!opts.dryRun && !stoppedByOutage && existsSync(CHECKPOINT_PATH)) unlinkSync(CHECKPOINT_PATH);
+
+  if (opts.runReceipt) {
+    const removedFlags = new Set(['--run-receipt', '--target-source-id', '--resume', '--shuffle', '--seeds', '--history-seeds']);
+    const runArgs = [];
+    for (let i = 2; i < process.argv.length; i++) {
+      const arg = process.argv[i];
+      if (removedFlags.has(arg)) {
+        if (['--run-receipt', '--target-source-id', '--seeds'].includes(arg)) i++;
+      } else runArgs.push(arg);
+    }
+    const receipt = makeRunReceipt({ scanner: 'ats-full', config,
+      baseConfigSha256: process.env.CAREER_OPS_BASE_PORTALS_SHA256 || undefined,
+      startedAt: runStartedAt, finishedAt: new Date().toISOString(),
+      scope: { ats: opts.ats, sinceDays: opts.sinceDays, limit: Number.isFinite(opts.limit) ? opts.limit : null,
+        includeUndated: opts.includeUndated, dryRun: opts.dryRun, runArgs,
+        effectiveConfigPath: process.env.CAREER_OPS_EFFECTIVE_PORTALS_SNAPSHOT || null },
+      targets: [...targetOutcomes].map(([entry, outcome]) => ({ ...outcome,
+        addedUrls: newOffers.filter(offer => offer.company === entry.name).map(offer => offer.url),
+      })),
+    });
+    mkdirSync(path.dirname(path.resolve(opts.runReceipt)), { recursive: true });
+    writeFileSync(path.resolve(opts.runReceipt), JSON.stringify(receipt, null, 2) + '\n', { mode: 0o600, flag: 'wx' });
+  }
 
   // The authoritative machine-readable result: lets a caller (e.g. the web)
   // tell a *degraded* scan (capped / stale dataset / undated dropped) apart

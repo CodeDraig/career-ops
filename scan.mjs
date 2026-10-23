@@ -81,6 +81,7 @@ import { escapeFormulaCell } from './lib/tsv-formula-escape.mjs';
 import { promoteKnownFragmentIdentity } from './url-key.mjs';
 import { getCareerOpsRoot } from './path-resolver.mjs';
 import { checkLivenessViaApi } from './liveness-api.mjs';
+import { makeRunReceipt, sourceConfigScope, stableSourceId } from './lib/automation/recovery.mjs';
 
 const CODE_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DATA_ROOT = getCareerOpsRoot();
@@ -3768,14 +3769,14 @@ function guardStatusFor(code) {
 const KNOWN_FLAGS = [
   '--dry-run', '--verify', '--headed-fallback', '--throttle', '--rediscover-404',
   '--include-blacklisted', '--company', '--posted-after', '--posted-before',
-  '--since', '--quiet', '--json', '--help', '-h',
+  '--since', '--quiet', '--json', '--run-receipt', '--target-id', '--help', '-h',
 ];
 
 // Flags whose space-separated value is the NEXT argv token (the `--flag=value`
 // form is self-contained and never needs this). --throttle is deliberately
 // excluded: only its bare and `--throttle=<ms>` forms are read below, so a
 // following token is never its value.
-const VALUE_FLAGS = ['--company', '--posted-after', '--posted-before', '--since'];
+const VALUE_FLAGS = ['--company', '--posted-after', '--posted-before', '--since', '--run-receipt', '--target-id'];
 
 const USAGE = `Usage:
   node scan.mjs                              # scan all enabled companies
@@ -3791,14 +3792,18 @@ const USAGE = `Usage:
   node scan.mjs --posted-after 2026-07-01    # absolute lower bound on posting date
   node scan.mjs --posted-before 2026-08-01   # absolute upper bound on posting date
   node scan.mjs --json                       # emit one machine-readable receipt on stdout
+  node scan.mjs --run-receipt FILE           # write detailed per-target receipt without changing stdout
   node scan.mjs --quiet                      # suppress the manifesto footer
   node scan.mjs --help                       # print this usage block and exit`;
 
 async function main() {
   const args = process.argv.slice(2);
+  const runStartedAt = new Date().toISOString();
   validateFlags(args, KNOWN_FLAGS, USAGE, { valueFlags: VALUE_FLAGS });
   const dryRun = args.includes('--dry-run');
   const jsonMode = args.includes('--json');
+  const detailedReceiptPath = args.includes('--run-receipt') ? args[args.indexOf('--run-receipt') + 1] : null;
+  const requestedTargetId = args.includes('--target-id') ? args[args.indexOf('--target-id') + 1] : null;
   if (jsonMode) console.log = console.error.bind(console);
   const verify = args.includes('--verify');
   // Opt-in: on an anti-bot challenge (e.g. pracuj.pl Cloudflare wall), retry the
@@ -3968,7 +3973,7 @@ async function main() {
       }
 
       if (resolved.error) {
-        resolveErrors.push({ company: entry.name, error: resolved.error });
+        resolveErrors.push({ company: entry.name, error: resolved.error, entry });
         continue;
       }
 
@@ -3979,6 +3984,20 @@ async function main() {
 
   resolveEntries(companies);
   resolveEntries(boards, { isBoard: true });
+  if (requestedTargetId) {
+    const matches = targets.filter(target => stableSourceId({ scanner: 'portals', name: target.name,
+      provider: target._provider.id, scope: sourceConfigScope(target) }) === requestedTargetId);
+    if (matches.length !== 1) {
+      console.error(`Error: --target-id resolved to ${matches.length} configured sources; expected exactly one.`);
+      process.exit(2);
+    }
+    targets.splice(0, targets.length, ...matches);
+  }
+  const targetOutcomes = new Map(targets.map(target => [target, {
+    sourceId: stableSourceId({ scanner: 'portals', name: target.name, provider: target._provider.id, scope: sourceConfigScope(target) }),
+    name: target.name, provider: target._provider.id, configScope: sourceConfigScope(target),
+    status: 'running', complete: false, jobs: 0, addedUrls: [], warnings: [],
+  }]));
 
   // #3438. Startup checks for field_filters / filter_on, before any network
   // call. scan.mjs does not run validatePortalsConfig, so every rule that
@@ -4177,6 +4196,7 @@ async function main() {
       locationHints: config.location_filter,
     };
     let sourceName = provider.id === 'local-parser' ? 'local-parser' : `${provider.id}-api`;
+    const targetOutcome = targetOutcomes.get(company);
     try {
       let jobs;
       try {
@@ -4196,6 +4216,12 @@ async function main() {
       if (!Array.isArray(jobs)) {
         throw new Error(`${provider.id}: fetch() did not return an array`);
       }
+      targetOutcome.jobs = jobs.length;
+      targetOutcome.status = jobs.length ? 'success' : (emptyTargetStatus(observation) === 'empty' ? 'empty' : 'incomplete');
+      targetOutcome.complete = targetOutcome.status !== 'incomplete';
+      targetOutcome.error = targetOutcome.complete ? null : 'Provider returned zero jobs without a successful HTTP response';
+      targetOutcome.kind = targetOutcome.complete ? null : 'unknown';
+      targetOutcome.statusCode = observation.lastStatus;
       totalFound += jobs.length;
       if (!company._isBoard && jobs.length === 0) {
         if (emptyTargetStatus(observation) === 'empty') emptyTargets.push(company.name);
@@ -4366,11 +4392,18 @@ async function main() {
           careersUrlDomain,
         };
         newOffers.push(offerForVerification);
+        targetOutcome.addedUrls.push(offerForVerification.url);
         if (verify) verifyDedupKeys.set(offerForVerification, {
           key, baseKey, requisition, language,
         });
       }
     } catch (err) {
+      targetOutcome.status = 'error';
+      targetOutcome.complete = false;
+      targetOutcome.error = err.message;
+      targetOutcome.kind = classifyFetchError(err);
+      targetOutcome.statusCode = err.status ?? observation.lastStatus;
+      targetOutcome.retryAfter = err.retryAfter ?? err.headers?.['retry-after'] ?? err.response?.headers?.get?.('retry-after') ?? null;
       errors.push({
         company: company.name,
         error: err.message,
@@ -4807,6 +4840,36 @@ async function main() {
       unverified_zero: unverifiedZeroTargets,
       dry_run: dryRun,
     }, errors.length > 0 ? 2 : 0);
+  }
+
+  if (detailedReceiptPath) {
+    const runArgs = [];
+    for (let i = 0; i < args.length; i++) {
+      if (['--run-receipt', '--target-id'].includes(args[i])) { i++; continue; }
+      runArgs.push(args[i]);
+    }
+    const detailed = makeRunReceipt({
+      scanner: 'portals', config,
+      baseConfigSha256: process.env.CAREER_OPS_BASE_PORTALS_SHA256 || undefined,
+      startedAt: runStartedAt,
+      finishedAt: new Date().toISOString(),
+      scope: { filterCompany, since: effectiveAfter, postedBefore, dryRun, runArgs,
+        effectiveConfigPath: process.env.CAREER_OPS_EFFECTIVE_PORTALS_SNAPSHOT || null },
+      targets: [
+        ...targetOutcomes.values(),
+        ...resolveErrors.map(row => ({
+          sourceId: stableSourceId({ scanner: 'portals', name: row.company, provider: row.entry.provider || null,
+            scope: sourceConfigScope(row.entry) }),
+          name: row.company, provider: row.entry.provider || null,
+          configScope: sourceConfigScope(row.entry), status: 'configuration_error', complete: false,
+          jobs: 0, addedUrls: [], warnings: [], error: row.error, kind: 'configuration',
+        })),
+      ],
+    });
+    const receiptFile = path.resolve(detailedReceiptPath);
+    const receiptFd = openSync(receiptFile, 'wx', 0o600);
+    try { writeFileSync(receiptFd, JSON.stringify(detailed, null, 2) + '\n', 'utf-8'); fsyncSync(receiptFd); }
+    finally { closeSync(receiptFd); }
   }
 
   // One-time-ever manifesto note: first successful REAL run only. The state

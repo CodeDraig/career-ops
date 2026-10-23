@@ -11,6 +11,7 @@ These files contain your personal data, customizations, and work product. Update
 | `.career-ops-web/chats/*.json` | Local assistant conversation history (gitignored, not verified profile facts); only the chat API writes these files |
 | `cv.md` | Your CV in markdown |
 | `config/profile.yml` | Your identity, targets, comp range |
+| `config/automation.json` | Your explicit local automation settings: enable/pause state, timezone, daily role and draft limits, cohort slots, selected mail accounts, and Codex model/effort overrides |
 | `config/cv-facts.json` | Your CV fact-check allowlist and forbidden phrases |
 | `config/benchmarks.yml` | Your market calibration benchmark overrides (optional; copy `templates/benchmarks.yml` here and edit — read by `funnel-velocity.mjs`) |
 | `config/local-paths.txt` | Files *this clone* owns that upstream does not ship — one repo-relative path per line (optional; copy `config/local-paths.example.txt` here and edit). See [Fork-local paths](#fork-local-paths) below |
@@ -40,6 +41,7 @@ These files contain your personal data, customizations, and work product. Update
 | `data/scan-history.tsv` | Your scan history: one tab-separated row per posting the scanners have seen. Columns are append-only — a new column goes at the end and existing ones never move — so older rows may have fewer columns, and a missing cell reads as empty. The column order is declared in `lib/scan-history-columns.mjs`; what each column holds is in the Scan History table of `modes/scan.md`. A cell that would run as a spreadsheet formula is stored with one extra leading `'`; `parseScanHistoryLine` removes it. |
 | `data/scan-runs.tsv` | Your per-run scan counters (appended by `scan.mjs`, read by `stats.mjs`) |
 | `data/scheduled-jobs.json` | Your local scheduled-scan definitions, queue, and bounded run history (written by the web UI and `web/scripts/scheduled-jobs-runner.mjs`) |
+| `data/automation/` | Your durable automation tasks, review items, budget reservations, mailbox watch state, daily digests, worker heartbeat, and private attempt/recovery receipts. These files may refer to private job and message evidence; do not commit, reset, or remove them as routine cleanup. |
 | `data/portal-health.tsv` | Consecutive reachability status for scanned portals (appended by `scan.mjs`; statuses: `reachable`, `empty`, `slug_gone`, `network`, `auth`, `server`, `unknown`, `unverified_zero` — the last four joined the vocabulary later, so older files carry only the first four; `unverified_zero` means a provider returned no jobs without any observed successful HTTP response and counts toward the failure streak) |
 | `data/dead-boards.tsv` | Boards that returned three consecutive 404s during mass reverse ATS sweeps (written by `scan-ats-full.mjs`; unlike `data/portal-health.tsv`, this does not track the user's configured portals; re-probed after 30 days — safe to delete, the next sweep rebuilds it) |
 | `data/follow-ups.md` | Your follow-up history |
@@ -192,6 +194,10 @@ Trackers require English column headers in a pipe-delimited Markdown table. Colu
 ### Provider-independent mail
 
 `config/mail.json` is user-owned mail configuration (credential environment-variable names only).
+`config/automation.json` is created only when automation is explicitly configured. Its
+absence leaves background automation disabled; startup never copies a template or
+enables processing implicitly. The worker state under `data/automation/` is private
+user data and is resolved beneath the same data root as the tracker and mail cache.
 `data/mail/` contains private inbox snapshots, cached messages and their reviewed
 application associations, per-mailbox UID synchronization cursors, frozen outgoing
 messages/attachments and send-attempt receipts. A mailbox cursor is advanced only

@@ -48,7 +48,7 @@ Compose creates three named volumes:
 
 | Volume | Container path | Contents |
 |---|---|---|
-| `career-ops-data` | `/data` | CV/profile, tracker, reports, PDFs, mail caches/cursors/outbox/receipts and other user files |
+| `career-ops-data` | `/data` | CV/profile, tracker, reports, PDFs, mail caches/cursors/outbox/receipts, automation settings/state, and other user files |
 | `career-ops-home` | `/home/node` | Chrome profile, Browser Harness pairing/configuration, downloads and CLI credentials/configuration |
 | `career-ops-workday-pacing` | `/var/lib/career-ops/workday-pacing` | Public Workday host names, request timing and rate-limit cooldowns; shared across instances |
 
@@ -76,7 +76,15 @@ or adapt the image user for your installation. Keeping the same canonical
 tracker path preserves confirmed mail matches and frozen send identities.
 Moving it requires reviewing matches and preparing affected drafts again.
 Empty storage is intentionally empty: use the existing onboarding workflow;
-startup never copies personalisation templates over existing files.
+startup never copies personalisation templates over existing files. Automation
+is disabled until `config/automation.json` is explicitly configured. Missing
+missing profile files block the scan lane, selected mail accounts report their own
+configuration or credential blockers, and the AI lane checks this container's Codex
+login before claiming work or reserving a daily allocation. `status --json` reports
+known blockers without contacting a mailbox, job board, or model. These states do not
+restart the worker or initialize templates. Do not treat an instance as live-ready
+until its own profile, portals, and Codex authentication have been configured; mail
+triage additionally needs an explicitly selected, configured account.
 
 All writers should run through this container. The core's PID-based lock
 recovery assumes one PID namespace; do not run simultaneous host or separate
@@ -180,7 +188,52 @@ Store the override outside this checkout and invoke Compose with both files.
 Mount any custom CA bundle at the same path named in `caFile`. Secrets belong
 in runtime environment/configuration, never the Dockerfile, build arguments,
 image or source control. OAuth token acquisition/refresh remains outside the
-mail transport. Sync remains manual and Send requires explicit review.
+mail transport. Interactive sync remains manual. The opt-in worker uses read-only
+IMAP polling; SMTP Send still requires explicit review.
+
+### Container automation
+
+The supervised worker checks for work every 60 seconds. Configure each instance
+separately after its own CV, profile, portals, Codex login, and optional mail
+account are ready. Do not copy credentials or user data between instances. The
+default configuration uses `America/New_York`, 20 roles and 20 mail drafts per
+day, with 10 role slots for new results and 10 for the backlog present at
+activation. Unused cohort slots may be borrowed. Saved scan schedules keep
+their configured timezones.
+
+Create and apply automation settings explicitly from the repository root. The
+JSON file passed with `--file` is a patch kept outside the active data config; the
+command merges it and atomically writes `/data/config/automation.json`. On first
+enablement, it snapshots the existing pending-URL backlog before turning on the
+worker. Do not edit or create the active config file directly:
+
+```sh
+cat > /tmp/career-ops-automation.json <<'JSON'
+{
+  "enabled": true,
+  "paused": false,
+  "timezone": "America/New_York",
+  "dailyRoles": 20,
+  "dailyDrafts": 20,
+  "newSlots": 10,
+  "backlogSlots": 10,
+  "mailAccounts": [],
+  "model": "",
+  "effort": ""
+}
+JSON
+./cops node automation.mjs config --file /tmp/career-ops-automation.json
+./cops node automation.mjs status --json
+```
+
+Add account IDs from `/data/config/mail.json` to `mailAccounts` only when
+mailbox triage is wanted. Use `pause` before maintenance and `resume` to restart
+claims. `worker --once` runs one tick for diagnosis. The web and CLI share the
+persistent review inbox at `/automation`; the daily digest is local and sends no
+notification.
+See [AUTOMATION.md](docs/AUTOMATION.md) for retry limits and review actions.
+LinkedIn remains interactive-only, and browser-backed recovery uses the Browser
+Harness extension and existing browser profile.
 
 ## Lifecycle and access
 
@@ -193,9 +246,11 @@ docker compose logs -f
 ```
 
 Rebuild the image to update code and dependencies; in-container self-update is
-not the deployment mechanism. A failing supervised service stops the container;
-Compose's restart policy restarts the stack. Shutdown lets Chrome flush its
-profile before stopping the display and bridge. An advisory lock prevents two
+not the deployment mechanism. A failing required supervised service stops the
+container; Compose's restart policy restarts the stack. Missing automation
+prerequisites block dependent tasks without stopping the worker or container.
+Shutdown stops worker claims before Chrome flushes its profile and before the
+display and bridge stop. An advisory lock prevents two
 Career-Ops containers from sharing the browser profile concurrently. After that
 lock is acquired, stale Chromium singleton links from the previous container
 are preserved under `/home/node/.local/state/career-ops/chrome-locks/`, with a

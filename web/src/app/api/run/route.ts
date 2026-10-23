@@ -8,7 +8,7 @@ import path from "node:path";
 import { cliSubstitutionNotice, cliUnavailableError, resolveCliOrFallback } from "@/lib/clis";
 import { localISODate } from "@/lib/followups";
 import { accumulateTokens, hasNewCompletedReport, isFatalGenericStderr, killMsForKind, timeoutMessage } from "@/lib/run-cli-support.mjs";
-import { spawnHeadlessCli } from "@/lib/spawn-cli.mjs";
+import { spawnAutomationCli } from "@/lib/automation/execution.mjs";
 import { careerOpsRoot, careerOpsCodeRoot, readMemory, findReportFile, readInbox, readScanDates, readLanguageConfig } from "@/lib/career-ops";
 import { resolvePdfPaths, type PdfPaths } from "@/lib/pdf-paths.mjs";
 import { renderAndMarkPdf, writeCvHtml, pdfRunOutcome } from "@/lib/pdf-render.mjs";
@@ -182,7 +182,7 @@ export async function POST(req: Request) {
   // drift back in on any single call site.
   let child;
   try {
-    child = spawnHeadlessCli(
+    child = spawnAutomationCli(
       binPath,
       args,
       { cwd: dataRoot, env: { ...process.env, CAREER_OPS_ROOT: dataRoot } },

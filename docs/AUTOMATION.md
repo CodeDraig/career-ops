@@ -1,13 +1,108 @@
-# Automation: recurring scans, a zero-token triage, and a follow-up sweep
+# Automation: saved searches, job packets, and mail review
 
-`career-ops` offers to scan for you on a schedule ("just say *scan every 3 days*"),
-but the actual scheduling is left to your operating system. This page ships the
-recipes: how to run the scanner unattended, a cheap zero-token **triage** pass
-that turns a pile of freshly-scanned URLs into a short "worth a look" list —
-*before* you spend any tokens evaluating them — and an unattended **follow-up
-sweep** that drafts (never sends) chase-up emails for aging applications.
+Career-Ops can run saved scans in its container and prepare job and mail work for
+review. Automation is opt-in per data root. It uses the existing scanners, pipeline,
+evaluation, document, mail, and tracker paths; it does not submit applications or send
+email for you.
 
-Three independent pieces, smallest first. You can use any of them on their own.
+The container worker checks for due work every 60 seconds. Its defaults are 20 roles
+and 20 mail drafts per instance per local day, with 10 role slots each for new results
+and URLs already pending when automation was enabled. Unused slots may be borrowed by
+the other cohort. Each instance has its own worker, configuration, and Codex login.
+The default timezone is `America/New_York`; saved scan schedules keep their own
+timezones. The worker runs at most one scan, one AI task, and one mailbox sync at a
+time for an instance.
+
+To enable it, first complete the normal profile and portal setup, sign Codex in for
+this container, and configure mail if mail triage is wanted. Then create an explicit
+automation configuration, for example:
+
+```json
+{
+  "enabled": true,
+  "paused": false,
+  "timezone": "America/New_York",
+  "dailyRoles": 20,
+  "dailyDrafts": 20,
+  "newSlots": 10,
+  "backlogSlots": 10,
+  "mailAccounts": [],
+  "model": "",
+  "effort": ""
+}
+```
+
+Keep this input separate from the active configuration. Save it as a temporary
+settings file outside `{DATA_ROOT}` (for example, `/tmp/career-ops-automation.json`),
+then apply it through the CLI:
+
+```sh
+node automation.mjs config --file /tmp/career-ops-automation.json
+node automation.mjs status --json
+```
+
+The CLI merges the JSON patch with existing settings and atomically writes
+`{DATA_ROOT}/config/automation.json`. When this first enables automation, it records
+the existing pending-URL backlog before turning the worker on. Do not edit or create
+the active config file directly.
+
+An empty `mailAccounts` list leaves mailbox polling off. Add only account IDs already
+configured in `config/mail.json` to enable those mailboxes. The first mailbox sync
+uses a fixed lookback beginning seven days before activation, then continues from its
+saved IMAP cursor every 15 minutes, up to two pages of 50 messages per poll. Incoming
+messages and job postings are untrusted content. Mail drafts and status suggestions
+wait for review; only the existing explicit **Prepare** and **Send** flow can send.
+
+Use these commands to inspect and control the local worker and review queue:
+
+```sh
+node automation.mjs worker --once
+node automation.mjs status --json
+node automation.mjs pause
+node automation.mjs resume
+node automation.mjs retry TASK_ID
+node automation.mjs review list --json
+node automation.mjs review show REVIEW_ID --json
+node automation.mjs review resolve REVIEW_ID --revision 1 --action ACTION --data action.json --json
+```
+
+`--data` supplies action-specific JSON, such as a confirmed application match or a
+response to a blocked pipeline question. Actions are `reviewed`, `dismiss`, `retry`,
+`answer`, `match`, `approve_status`, and `open_draft`. Review actions are typed
+operations; the worker does not execute arbitrary instructions from review text. A
+stale revision returns a conflict with the current item so you can reload it before
+acting.
+
+Open `/automation` in the web app for the same persistent review inbox and instance
+status. The JSON endpoints are `GET /api/automation` for status,
+`GET /api/automation/review?state=open` for the queue,
+`GET /api/automation/review/{id}` for an item, and same-origin JSON `POST` requests
+to `/api/automation` or `/api/automation/review/{id}` for configuration and
+revision-checked review actions. The web surface supports enabling, pausing, resuming,
+task retry, review, mail-match confirmation, status approval, answering required
+questions, and opening a draft in Mail. It has no send or application-submit action.
+A local digest is prepared at 08:00 in the configured timezone; it does not send an
+external notification. Missing
+`cv.md`, `config/profile.yml`, `modes/_profile.md`, or `portals.yml` blocks the scan
+lane and creates a required-input review item. The AI lane checks this container's
+Codex login before claiming an AI task or reserving its daily role/draft allocation;
+missing authentication creates a required-input item. Mail setup failures are
+reported per selected account as mail blockers. `status --json` reports known profile,
+Codex, and task blockers; Codex readiness is checked when an AI task is eligible, not
+by a network-dependent health check. Startup does not initialize templates or borrow
+credentials from another container. Live activation remains blocked until this
+instance has its own profile, portal configuration, and Codex authentication; configure
+mail separately when mail triage is wanted.
+
+LinkedIn remains available to interactive agent sessions only. Browser-backed search
+recovery uses the connected Browser Harness Chrome extension and existing browser
+profile; a login requirement or challenge waits for you to resolve it in the desktop.
+
+## Standalone scheduling recipes
+
+The recipes below remain available for non-container installs or users who choose to
+schedule standalone commands themselves. In containers, the persistent worker is the
+normal way to run saved scans and background mail triage.
 
 - **[1. Schedule the scan](#1-schedule-the-scan)** — run `node scan.mjs` on cron /
   launchd / Windows Task Scheduler. Zero tokens: the scanner only reads public
@@ -22,12 +117,12 @@ Three independent pieces, smallest first. You can use any of them on their own.
   to a file for you to review. Costs tokens (it's LLM-driven, not a script),
   but never sends anything on its own.
 
-> Everything here is **local-first**: your CV, profile, and pipeline stay on your
-> machine — none of your data is uploaded. The scan does reach out to *public*
-> job-board APIs to read listings (the same zero-key reads the manual scan makes),
-> but it sends none of your personal data with them, and the triage only reads your
-> local files. Evaluating a shortlisted role later (`/career-ops pipeline`) is the
-> only step that spends tokens.
+> Scanner requests send search parameters to the relevant job-board providers, not
+> your CV or profile. The standalone shortlist prompt reads local files. When you
+> enable job evaluation or mail drafting, the selected Codex CLI receives the
+> posting or message and the source-backed context needed for that task, according
+> to that runtime's account and privacy terms. AI work spends the configured CLI's
+> usage; the 20-role / 20-draft limits are workload limits, not a dollar cap.
 
 ---
 
@@ -100,17 +195,18 @@ replace the `StartCalendarInterval` block with an interval in seconds:
 
 ### Windows — Task Scheduler
 
-Automatic recurring scans from the Scheduled scans page are Windows-only. On
-macOS and Linux, saved scans run only through **Run now**.
-The web UI's Scheduled scans page supports multiple saved cadences. Install its
-local queue worker from the repository root with:
+The web UI's Scheduled scans page supports multiple saved cadences. In a configured
+Career-Ops container, the persistent automation worker checks this queue every 60
+seconds. Standalone Windows installs can use the existing Task Scheduler integration;
+install its local queue worker from the repository root with:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File web/scripts/install-scan-schedule.ps1
 ```
 
 The task checks for due jobs every 15 minutes and runs at most one queued scan per
-check in the current user's interactive session; you must be logged in. Use `web/scripts/uninstall-scan-schedule.ps1` to remove it. For a single fixed
+check in the current user's interactive session; you must be logged in. Use
+`web/scripts/uninstall-scan-schedule.ps1` to remove it. For a single fixed
 daily scan without the web UI, use the lower-level Task Scheduler recipe below.
 
 ```powershell
@@ -120,7 +216,10 @@ Register-ScheduledTask -TaskName "career-ops scan" -Action $action -Trigger $tri
 ```
 
 After any of these, new postings land in `data/pipeline.md` under `## Pending` on
-each run. Next you decide which are worth your attention — cheaply.
+each run. With container automation enabled, eligible new and previously pending URLs
+can also proceed through the configured evaluation and document thresholds into the
+review queue. With automation disabled, the standalone triage recipe below remains a
+manual, low-cost way to choose what to evaluate.
 
 ---
 

@@ -2,8 +2,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
-import { randomUUID } from "node:crypto";
+import { spawn, spawnSync } from "node:child_process";
+import { createHash, randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import * as yaml from "js-yaml";
 import {
@@ -244,6 +244,108 @@ export function executeJob(root, job, options = {}) {
   };
 }
 
+async function runChild(command, args, options = {}) {
+  const { signal, timeout: timeoutMs = SCAN_TIMEOUT_MS, maxBuffer = MAX_OUTPUT_BYTES, encoding: _encoding, ...spawnOptions } = options;
+  if (signal?.aborted) return { status: null, stdout: "", stderr: "", error: new Error("Scan cancelled") };
+  return new Promise((resolve) => {
+    let stdout = "";
+    let stderr = "";
+    let settled = false;
+    let timedOut = false;
+    const child = spawn(command, args, { ...spawnOptions, stdio: ["ignore", "pipe", "pipe"], detached: process.platform !== "win32" });
+    const kill = (signalName = "SIGTERM") => {
+      if (child.exitCode !== null || child.signalCode !== null) return;
+      try {
+        if (process.platform !== "win32" && child.pid) process.kill(-child.pid, signalName);
+        else child.kill(signalName);
+      } catch { /* Child exited between the check and signal. */ }
+    };
+    const timeout = setTimeout(() => { timedOut = true; kill(); }, timeoutMs);
+    const onAbort = () => kill();
+    signal?.addEventListener("abort", onAbort, { once: true });
+    child.stdout.on("data", (chunk) => { if (stdout.length < maxBuffer) stdout += chunk.toString("utf8").slice(0, maxBuffer - stdout.length); });
+    child.stderr.on("data", (chunk) => { if (stderr.length < maxBuffer) stderr += chunk.toString("utf8").slice(0, maxBuffer - stderr.length); });
+    child.once("error", (error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      signal?.removeEventListener("abort", onAbort);
+      resolve({ status: null, stdout, stderr, error });
+    });
+    child.once("close", (status, childSignal) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      signal?.removeEventListener("abort", onAbort);
+      const error = timedOut ? new Error("Scan timed out") : signal?.aborted ? new Error("Scan cancelled") : null;
+      resolve({ status, signal: childSignal, stdout, stderr, error });
+    });
+  });
+}
+
+/*
+ * Container automation uses one asynchronous scan attempt. Per-source
+ * failures are retained in the scanner receipt and retried by the automation
+ * worker; rerunning the whole board sweep would duplicate successful work.
+ * The synchronous executeJob above remains the compatibility path for the
+ * existing one-shot runner and its tests.
+ */
+export async function executeScheduledJob(root, job, options = {}) {
+  const startedAt = Date.now();
+  let tempPortals = null;
+  let receiptPath = null;
+  let effectiveConfigPath = null;
+  try {
+    tempPortals = writeJobPortals(root, job);
+    const command = buildScanCommand(job);
+    const receiptsDir = path.join(root, "data", "automation", "receipts");
+    const snapshotsDir = path.join(root, "data", "automation", "config-snapshots");
+    fs.mkdirSync(receiptsDir, { recursive: true, mode: 0o700 });
+    fs.mkdirSync(snapshotsDir, { recursive: true, mode: 0o700 });
+    try { fs.chmodSync(receiptsDir, 0o700); fs.chmodSync(snapshotsDir, 0o700); } catch { /* mode may be managed by the mounted filesystem */ }
+    const runId = `${job.id}-${Date.now()}-${randomUUID()}`;
+    receiptPath = path.join(receiptsDir, `${runId}.json`);
+    effectiveConfigPath = path.join(snapshotsDir, `${runId}.yml`);
+    const effectiveConfig = yaml.load(fs.readFileSync(tempPortals, "utf8"));
+    const basePortalsPath = path.join(root, "portals.yml");
+    const baseConfig = yaml.load(fs.readFileSync(basePortalsPath, "utf8"));
+    const baseConfigSha256 = createHash("sha256").update(JSON.stringify(baseConfig)).digest("hex");
+    fs.writeFileSync(effectiveConfigPath, yaml.dump(effectiveConfig, { lineWidth: 120, noRefs: true }), { encoding: "utf8", mode: 0o600, flag: "wx" });
+    const spawnFn = options.spawnFn || runChild;
+    const result = await spawnFn(
+      process.execPath,
+      [command.script, ...command.args, "--run-receipt", receiptPath],
+      {
+        cwd: CODE_ROOT,
+        env: {
+          ...process.env,
+          CAREER_OPS_ROOT: root,
+          CAREER_OPS_PORTALS: tempPortals,
+          CAREER_OPS_BASE_PORTALS: basePortalsPath,
+          CAREER_OPS_BASE_PORTALS_SHA256: baseConfigSha256,
+          CAREER_OPS_EFFECTIVE_PORTALS_SNAPSHOT: effectiveConfigPath,
+        },
+        encoding: "utf8",
+        timeout: SCAN_TIMEOUT_MS,
+        maxBuffer: MAX_OUTPUT_BYTES,
+        windowsHide: true,
+        signal: options.signal,
+      },
+    );
+    const rolesFound = extractRolesFound(job.engine || "full", result.stdout || "");
+    if (result.status === 0 && !result.error) {
+      return { state: "success", attempt: 1, rolesFound, durationMs: Date.now() - startedAt, receiptPath, effectiveConfigPath, message: `Scan finished with ${rolesFound} matching role${rolesFound === 1 ? "" : "s"}.` };
+    }
+    return { state: options.signal?.aborted ? "cancelled" : "failed", attempt: 1, rolesFound, durationMs: Date.now() - startedAt, receiptPath, effectiveConfigPath, message: firstErrorLine(result) };
+  } catch (error) {
+    return { state: options.signal?.aborted ? "cancelled" : "failed", attempt: 1, rolesFound: 0, durationMs: Date.now() - startedAt, receiptPath, effectiveConfigPath, message: firstErrorLine({ error }) };
+  } finally {
+    if (tempPortals) {
+      try { fs.rmSync(tempPortals, { force: true }); } catch { /* temporary filter cleanup is best effort */ }
+    }
+  }
+}
+
 export async function recordCompletion(storePath, claim, result, inMemoryStore = null) {
   const at = nowIso();
   const apply = (store) => {
@@ -278,16 +380,87 @@ async function takeDueJob(storePath) {
   });
 }
 
+export async function runScheduledTick(root, options = {}) {
+  const storePath = options.storePath || scheduledStorePath(root);
+  const runnerResource = runnerResourcePath(storePath);
+  return withResourceLock(
+    runnerResource,
+    async () => {
+      let claim = await takeDueJob(storePath);
+      if (!claim) return { status: "idle" };
+      if (options.signal?.aborted) {
+        await recordCompletion(storePath, claim, { state: "cancelled", attempt: 1, rolesFound: 0, durationMs: 0, message: "Scan cancelled before it started." });
+        return { status: "cancelled", jobId: claim.job.id };
+      }
+      let result = await executeScheduledJob(root, claim.job, options);
+      if (result.receiptPath && options.onReceipt) {
+        const receiptOutcome = await options.onReceipt(result.receiptPath, result, claim.job);
+        if (receiptOutcome?.status === "failed") result = { ...result, state: "failed", message: receiptOutcome.message || "Scanner receipt was not accepted." };
+      }
+      await recordCompletion(storePath, claim, result);
+      return { status: result.state === "success" ? "success" : result.state, jobId: claim.job.id, ...result };
+    },
+    { timeoutMs: 1_000, staleMs: SCAN_TIMEOUT_MS + 60_000 },
+  );
+}
+
 function requestedJobId(args) {
   const index = args.indexOf("--job");
   return index >= 0 ? args[index + 1] || null : null;
 }
 
-async function main() {
-  const root = getCareerOpsRoot();
+async function ingestScheduledReceipt(root, receiptPath, result, job) {
+  const [{ addReview }, { ingestReceipt }] = await Promise.all([
+    import("../../lib/automation/store.mjs"),
+    import("../../lib/automation/worker.mjs"),
+  ]);
+  let receipt;
+  let issue = null;
+  try {
+    receipt = JSON.parse(fs.readFileSync(receiptPath, "utf8"));
+    if (!receipt || receipt.schema !== "career-ops.scan-run@1" || !Array.isArray(receipt.targets)) {
+      issue = "Scanner receipt could not be read or validated: malformed or unsupported receipt.";
+    }
+  } catch (error) {
+    if (error?.code === "ENOENT") issue = "Scanner stopped before writing its source receipt.";
+    else if (error instanceof SyntaxError) issue = "Scanner receipt could not be read or validated: invalid JSON.";
+    else throw error;
+  }
+  if (issue) {
+    const identity = path.basename(receiptPath || result?.effectiveConfigPath || `${job?.id || "scan"}-${Date.now()}`);
+    await addReview(root, {
+      key: `scan-receipt:${identity}`, type: "source_repair",
+      title: `Scheduled scan needs attention: ${job?.name || job?.id || "scan"}`,
+      payload: { jobId: job?.id, receiptPath, reason: issue, scanState: result?.state, requiredAction: "Inspect the scheduled run and retry after correcting the scanner failure." },
+    });
+    return { status: "failed", message: issue };
+  }
+  // Ingestion/storage failures are intentionally allowed to propagate. A
+  // permission or disk error must not be mislabeled as bad scanner output.
+  await ingestReceipt(root, receipt);
+  return { status: "success" };
+}
+
+export async function main(argv = process.argv.slice(2), { root = getCareerOpsRoot(), spawnFn } = {}) {
   const storePath = scheduledStorePath(root);
   const runnerResource = runnerResourcePath(storePath);
-  const manualJobId = requestedJobId(process.argv.slice(2));
+  const manualJobId = requestedJobId(argv);
+
+  // When the persistent automation feature is enabled, let its scan lane
+  // prioritize due target-only recovery tasks before taking another sweep.
+  // The ordinary Windows Task Scheduler path stays useful when automation is
+  // disabled and still ingests every detailed receipt into durable state.
+  if (!manualJobId) {
+    const { readConfig } = await import("../../lib/automation/store.mjs");
+    if (readConfig(root).enabled) {
+      const { runScanTick } = await import("../../lib/automation/worker.mjs");
+      return runScanTick(root);
+    }
+    return runScheduledTick(root, {
+      ...(spawnFn ? { spawnFn } : {}),
+      onReceipt: (receiptPath, result, job) => ingestScheduledReceipt(root, receiptPath, result, job),
+    });
+  }
 
   return withResourceLock(
     runnerResource,
@@ -308,12 +481,16 @@ async function main() {
 
       if (!claim) return { status: "idle" };
 
-      const result = executeJob(root, claim.job);
+      let result = await executeScheduledJob(root, claim.job, spawnFn ? { spawnFn } : {});
+      if (result.receiptPath) {
+        const receiptOutcome = await ingestScheduledReceipt(root, result.receiptPath, result, claim.job);
+        if (receiptOutcome.status === "failed") result = { ...result, state: "failed", message: receiptOutcome.message };
+      }
       await recordCompletion(storePath, claim, result);
       if (result.state === "failed") throw new Error(result.message);
       return { status: "success", jobId: claim.job.id, ...result };
     },
-    { timeoutMs: 1_000, staleMs: SCAN_TIMEOUT_MS * MAX_ATTEMPTS + 60_000 },
+    { timeoutMs: 1_000, staleMs: SCAN_TIMEOUT_MS + 60_000 },
   );
 }
 

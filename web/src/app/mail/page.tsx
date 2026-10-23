@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { classificationLabel, confidenceLabel, replyApplication, syncAppFilter } from "@/lib/mail-ui-state.mjs";
+import { automationMailPrepareFields, parseAutomationMailHandoff } from "@/lib/automation-mail-handoff.mjs";
 
 type Account = { id: string; from: string; imap: boolean; smtp: boolean; ready: string[] };
 type Application = { num: number; company: string; role: string; status?: string };
@@ -9,6 +10,7 @@ type MailMessage = { message_id: string; account: string; from: string; to?: str
 type Attachment = { name: string; dataBase64: string; bytes?: number };
 type Draft = { from?: string; to: string[]; cc: string[]; bcc: string[]; subject: string; body: string; attachments: Attachment[] };
 type FollowupLog = { logged?: boolean; num?: number; duplicate?: boolean; error?: string; reason?: string };
+type AutomationDraftContext = { id: string; contextDigest: string; kind: "reply" | "followup" };
 type Prepared = { id: string; digest: string; payload: { draft: Draft; application?: Application | null; parentMessageId?: string | null; logFollowup?: boolean }; receipt?: { status?: string; followupLog?: FollowupLog; followupLogError?: string } | null; followup?: FollowupLog | null };
 type CachedMessage = MailMessage & { suggestions?: Suggestion[] };
 type HistoryItem = { id: string; subject: string; from: string; status: string; receipt?: { status?: string } | null; followup?: FollowupLog | null };
@@ -30,6 +32,7 @@ export default function MailPage() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [busy, setBusy] = useState(false), [notice, setNotice] = useState(""), [attempted, setAttempted] = useState(false);
   const [replyTarget, setReplyTarget] = useState<string | null>(null), [logFollowup, setLogFollowup] = useState(true);
+  const [automationDraft, setAutomationDraft] = useState<AutomationDraftContext | null>(null);
   const cacheRequest = useRef(0);
   const inputClass = "w-full rounded border border-border bg-background p-2";
   const buttonClass = "rounded border border-border px-3 py-2 disabled:opacity-40";
@@ -46,11 +49,26 @@ export default function MailPage() {
   useEffect(() => { fetch("/api/mail").then(r => r.json()).then(d => { if (d.error) throw new Error(d.error); setAccounts(d.accounts); setAccount(d.accounts[0]?.id || ""); }).catch(e => setNotice(e.message)); }, []);
   useEffect(() => { setAppNumParam(new URLSearchParams(window.location.search).get("appNum") || ""); }, []);
   useEffect(() => { setViewApp(appNumParam || ""); setComposeApp(appNumParam || ""); }, [appNumParam]);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("automationDraft") !== "1") return;
+    const stored = sessionStorage.getItem("careerOpsAutomationMailDraft");
+    if (!stored) return;
+    try {
+      const seed = parseAutomationMailHandoff(stored);
+      sessionStorage.removeItem("careerOpsAutomationMailDraft");
+      const value = seed.draft as Draft;
+      setTo((value.to || []).join(", ")); setCc((value.cc || []).join(", ")); setBcc((value.bcc || []).join(", "));
+      setSubject(value.subject || ""); setBody(value.body || ""); setAttachments(value.attachments || []);
+      setAccount(seed.account || ""); setReplyTarget(seed.messageId || null); setComposeApp(seed.appNum ? String(seed.appNum) : "");
+      setLogFollowup(seed.logFollowup); setPrepared(null); setAutomationDraft(seed.automation);
+      setNotice("Automation draft loaded. Review and edit it, then prepare it for review before any send.");
+    } catch (error) { setNotice(error instanceof Error ? error.message : "Could not load automation draft."); }
+  }, []);
   useEffect(() => { if (accounts.length) void loadCached(appNumParam || undefined).catch(e => setNotice(e.message)); }, [accounts.length, appNumParam, loadCached]);
   async function perform(work: () => Promise<void>) { setBusy(true); setNotice(""); try { await work(); } catch (e) { setNotice(e instanceof Error ? e.message : "Mail failed"); } finally { setBusy(false); } }
   function fillDraft(draft: Draft, messageId: string | null, app?: Application | null) {
     setTo(draft.to.join(", ")); setCc(draft.cc.join(", ")); setBcc(draft.bcc.join(", ")); setSubject(draft.subject); setBody(draft.body); setAttachments(draft.attachments || []);
-    setReplyTarget(messageId); setComposeApp(replyApplication(app)); setPrepared(null);
+    setReplyTarget(messageId); setComposeApp(replyApplication(app)); setPrepared(null); setAutomationDraft(null);
   }
   async function startReply(message: CachedMessage, replyAll: boolean) {
     const result = await call({ action: "reply", messageId: message.message_id, replyAll });
@@ -94,8 +112,9 @@ export default function MailPage() {
       <div><label htmlFor="mail-body" className="block">Body</label><textarea id="mail-body" className={inputClass} rows={10} value={body} onChange={e => setBody(e.target.value)} /></div>
       <label className="block">Attachments (10 MB total)<input className="mt-2 block" type="file" multiple onChange={e => { const files = Array.from(e.target.files || []); void perform(async () => { if (files.length > 10 || files.reduce((n, f) => n + f.size, 0) > 10_000_000) throw new Error("At most 10 attachments, 10 MB total"); setAttachments(await Promise.all(files.map(f => new Promise<Attachment>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve({ name: f.name, dataBase64: String(reader.result).split(",")[1], bytes: f.size }); reader.onerror = () => reject(new Error("Attachment read failed")); reader.readAsDataURL(f); })))); }); }} /></label>
       {composeApp && <label className="flex items-center gap-2"><input type="checkbox" disabled={busy} checked={logFollowup} onChange={e => setLogFollowup(e.target.checked)} />Log this as a follow-up only after SMTP accepts the send</label>}
-      <button className={buttonClass} disabled={busy || !account} onClick={() => perform(async () => { setPrepared(await call({ action: "prepare", account, messageId: replyTarget || undefined, appNum: composeApp ? Number(composeApp) : undefined, logFollowup: !!composeApp && logFollowup, draft: { to: recipients(to), cc: recipients(cc), bcc: recipients(bcc), subject, body, attachments } })); setAttempted(false); })}>Prepare for review</button>
-      <button className={buttonClass} disabled={busy} onClick={() => { fillDraft({ to: [], cc: [], bcc: [], subject: "", body: "", attachments: [] }, null, null); setComposeApp(""); }}>New email</button>
+      {automationDraft && <p>Generated from an automation review item. Its source context will be checked again when this draft is prepared.</p>}
+      <button className={buttonClass} disabled={busy || !account} onClick={() => perform(async () => { setPrepared(await call({ action: "prepare", account, messageId: replyTarget || undefined, appNum: composeApp ? Number(composeApp) : undefined, logFollowup: !!composeApp && logFollowup, ...automationMailPrepareFields(automationDraft), draft: { to: recipients(to), cc: recipients(cc), bcc: recipients(bcc), subject, body, attachments } })); setAttempted(false); })}>Prepare for review</button>
+      <button className={buttonClass} disabled={busy} onClick={() => { fillDraft({ to: [], cc: [], bcc: [], subject: "", body: "", attachments: [] }, null, null); setComposeApp(""); setAutomationDraft(null); }}>New email</button>
     </section>
     <section className="space-y-3"><h2 className="text-xl">Saved emails and send receipts</h2><button className={buttonClass} disabled={busy} onClick={() => perform(async () => { setHistory((await call({ action: "history" })).drafts); })}>Load saved emails</button>
       {history.map(item => <div key={item.id} className="space-y-2 rounded border border-border p-3"><p>{item.subject} — {item.from} — {item.status}</p>{item.receipt && <p>SMTP receipt: {item.receipt.status || "recorded"}; follow-up log: {item.followup?.logged ? `logged${item.followup.num ? ` (#${item.followup.num})` : ""}` : item.followup?.error ? `pending (${item.followup.error})` : "not logged"}</p>}

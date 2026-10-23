@@ -94,6 +94,23 @@ function readOwner(lockDir) {
   }
 }
 
+// Remove only the directory this process owns. Recursive removal has a gap:
+// after it deletes owner.json, another process can observe the empty directory
+// and install a new owner before rmSync reaches the directory itself. A
+// subsequent recursive deletion would then erase that contender's live lock.
+// Unlinking our marker and using rmdir keeps the directory present until the
+// final atomic removal, so nobody can replace it in between.
+function removeOwnedLockDir(lockDir, token) {
+  if (readOwner(lockDir)?.token !== token) return;
+  try {
+    fs.unlinkSync(path.join(lockDir, "owner.json"));
+    fs.rmdirSync(lockDir);
+  } catch {
+    // Preserve unexpected contents for stale recovery rather than recursively
+    // deleting a directory whose ownership may have changed.
+  }
+}
+
 function processIsAlive(pid) {
   if (!Number.isInteger(pid) || pid <= 0) return false;
   try {
@@ -195,9 +212,7 @@ async function withRecoveryGuard(resourcePath, options, fn) {
   try {
     return await fn();
   } finally {
-    if (readOwner(guardDir)?.token === token) {
-      try { fs.rmSync(guardDir, { recursive: true, force: true }); } catch { /* stale recovery handles it */ }
-    }
+    removeOwnedLockDir(guardDir, token);
   }
 }
 
@@ -250,12 +265,7 @@ async function acquireResourceLock(resourcePath, options = {}) {
   return () => {
     if (released) return;
     released = true;
-    if (readOwner(lockDir)?.token !== token) return;
-    try {
-      fs.rmSync(lockDir, { recursive: true, force: true });
-    } catch {
-      // A future stale-lock recovery can remove it.
-    }
+    removeOwnedLockDir(lockDir, token);
   };
 }
 

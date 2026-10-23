@@ -37,6 +37,26 @@ export function classifySearch(jobs, warnings) {
   return jobs.length ? 'working' : 'empty';
 }
 
+export function failedSchoolsForRetry(summary, inventorySha256) {
+  if (summary?.inventorySha256 !== inventorySha256) throw new Error('Inventory does not match the original run receipt');
+  return (summary.schools || []).filter(row => ['error', 'incomplete'].includes(row.status) && row.complete !== true);
+}
+
+export function buildCoverageOverlay(originalSummary, recoveredSchools, originalReceipt) {
+  const recoveredById = new Map(recoveredSchools.map(row => [row.unitid, row]));
+  const schools = (originalSummary.schools || []).map(original => {
+    const recovery = recoveredById.get(original.unitid);
+    return recovery ? { ...original, recovery,
+      effectiveStatus: recovery.complete ? recovery.status : original.status,
+      effectiveComplete: recovery.complete === true } : { ...original,
+      effectiveStatus: original.status, effectiveComplete: original.complete === true };
+  });
+  const counts = Object.fromEntries(['working', 'empty', 'unresolved', 'error'].map(status => [status,
+    schools.filter(row => row.effectiveStatus === status).length]));
+  return { schema: 'career-ops.college-validation-overlay@1', originalReceipt, total: schools.length, counts,
+    coveragePercent: Math.round((counts.working + counts.empty) / schools.length * 10000) / 100, schools };
+}
+
 async function one(school, output) {
   const folder = path.join(output, school.unitid);
   fs.mkdirSync(folder, { recursive: true });
@@ -83,6 +103,10 @@ async function one(school, output) {
       const entry = school.entry;
       if (entry.provider === 'local-parser' && entry.parser?.script === 'browser-job-search.mjs') {
         const args = entry.parser.args;
+        // A failed-only recovery invokes one() again in a separate output
+        // directory. searchBrowserJobs creates a fresh browser/page and starts
+        // pagination from its first page; no cursor from the failed attempt is
+        // carried forward.
         const search = await searchBrowserJobs({ url: entry.careers_url, company: entry.name,
           kind: args[args.indexOf('--kind') + 1], maxPages: 200 });
         jobs = search.jobs;
@@ -111,19 +135,84 @@ async function one(school, output) {
 
 async function main() {
   const args = process.argv.slice(2);
-  validateFlags(args, ['--inventory', '--output', '--concurrency', '--school', '--resume', '--help', '-h'],
-    'Usage: node container/validate-colleges.mjs --inventory FILE --output DIRECTORY [--concurrency 6] [--resume]',
-    { valueFlags: ['--inventory', '--output', '--concurrency', '--school'], requireOperand: true });
+  const usage = 'Usage: node container/validate-colleges.mjs --inventory FILE --output DIRECTORY [--concurrency 6] [--resume]\n       node container/validate-colleges.mjs --inventory FILE --output ORIGINAL --retry-failed --recovery-output NEW_DIRECTORY';
+  validateFlags(args, ['--inventory', '--output', '--recovery-output', '--concurrency', '--school', '--resume', '--retry-failed', '--help', '-h'],
+    usage,
+    { valueFlags: ['--inventory', '--output', '--recovery-output', '--concurrency', '--school'], requireOperand: true });
   const { values } = parseArgs({ options: {
-    inventory: { type: 'string' }, output: { type: 'string' }, concurrency: { type: 'string', default: '6' },
-    school: { type: 'string' }, resume: { type: 'boolean', default: false },
+    inventory: { type: 'string' }, output: { type: 'string' }, 'recovery-output': { type: 'string' }, concurrency: { type: 'string', default: '6' },
+    school: { type: 'string' }, resume: { type: 'boolean', default: false }, 'retry-failed': { type: 'boolean', default: false },
+    help: { type: 'boolean', short: 'h', default: false },
   } });
+  if (values.help) { console.log(usage); return; }
   if (!values.inventory || !values.output) throw new Error('Required: --inventory FILE --output DIRECTORY');
   if (!fs.existsSync('/.dockerenv')) throw new Error('Run this validation inside Docker');
   const inventoryText = fs.readFileSync(values.inventory, 'utf8');
   const inventory = JSON.parse(inventoryText);
   validateInventory(inventory);
   const output = path.resolve(values.output);
+  if (values['retry-failed']) {
+    if (!values['recovery-output']) throw new Error('--retry-failed requires --recovery-output so original receipts remain untouched');
+    const recoveryOutput = path.resolve(values['recovery-output']);
+    if (recoveryOutput === output || recoveryOutput.startsWith(output + path.sep) || output.startsWith(recoveryOutput + path.sep)) {
+      throw new Error('Original and recovery output directories must be separate, non-nested paths');
+    }
+    const originalSummaryPath = path.join(output, 'summary.json');
+    if (!fs.existsSync(originalSummaryPath)) throw new Error(`Original summary not found: ${originalSummaryPath}`);
+    const originalText = fs.readFileSync(originalSummaryPath, 'utf8');
+    const originalSummary = JSON.parse(originalText);
+    if (originalSummary.inventorySha256 !== sha(inventoryText)) throw new Error('Inventory does not match the original run receipt');
+    const failedIds = new Set(failedSchoolsForRetry(originalSummary, sha(inventoryText)).map(row => row.unitid));
+    const retrySchools = inventory.schools.filter(row => failedIds.has(row.unitid));
+    if (!retrySchools.length) throw new Error('Original validation has no incomplete failed schools to retry');
+    if (fs.existsSync(recoveryOutput) && fs.readdirSync(recoveryOutput).length) {
+      throw new Error('Recovery output directory already contains files; use a fresh directory');
+    }
+    fs.mkdirSync(recoveryOutput, { recursive: true });
+    const startedAt = new Date().toISOString();
+    const browserQueue = retrySchools.filter(s => !s.entry || s.entry.provider === 'local-parser');
+    const nativeQueue = retrySchools.filter(s => s.entry && s.entry.provider !== 'local-parser');
+    let completed = 0;
+    async function retryWorker(queue) {
+      while (queue.length) {
+        const school = queue.shift();
+        await new Promise(resolve => {
+          execFile(process.execPath, [fileURLToPath(import.meta.url), '--inventory', path.resolve(values.inventory),
+            '--output', recoveryOutput, '--school', school.unitid], { timeout: 660000, maxBuffer: 1000000 }, (error, stdout) => {
+            if (error) {
+              fs.mkdirSync(path.join(recoveryOutput, school.unitid), { recursive: true });
+              write(path.join(recoveryOutput, school.unitid, 'result.json'), { unitid: school.unitid, name: school.name,
+                status: 'error', complete: false, reason: 'Recovery subprocess failed or exceeded 11 minutes',
+                finishedAt: new Date().toISOString(), docker: true });
+            }
+            console.log(`retry ${++completed}/${retrySchools.length} ${stdout.trim() || school.unitid + ' subprocess failed'}`);
+            resolve();
+          });
+        });
+      }
+    }
+    const concurrency = Number(values.concurrency);
+    if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 8) throw new Error('concurrency must be 1..8');
+    await Promise.all([...Array.from({ length: concurrency }, () => retryWorker(nativeQueue)),
+      ...Array.from({ length: 2 }, () => retryWorker(browserQueue))]);
+    const retried = retrySchools.map(school => {
+      const file = path.join(recoveryOutput, school.unitid, 'result.json');
+      return { ...JSON.parse(fs.readFileSync(file)), resultSha256: sha(fs.readFileSync(file)) };
+    });
+    write(path.join(recoveryOutput, 'summary.json'), { startedAt, finishedAt: new Date().toISOString(),
+      inventorySha256: sha(inventoryText), sourceDatabaseSha256: inventory.sourceDatabaseSha256,
+      docker: true, container: process.env.HOSTNAME, total: retried.length, schools: retried,
+      originalSummary: { path: originalSummaryPath, sha256: sha(originalText) } });
+    const overlayReceipt = buildCoverageOverlay(originalSummary, retried,
+      { path: originalSummaryPath, sha256: sha(originalText) });
+    overlayReceipt.recoverySummary = path.join(recoveryOutput, 'summary.json');
+    overlayReceipt.inventorySha256 = sha(inventoryText);
+    const overlayPath = path.join(recoveryOutput, 'overlay-summary.json');
+    write(overlayPath, overlayReceipt);
+    console.log(JSON.stringify({ retried: retrySchools.length, counts: overlayReceipt.counts, coveragePercent: overlayReceipt.coveragePercent,
+      originalPreserved: true, overlay: overlayPath }));
+    return;
+  }
   if (values.school) {
     const school = inventory.schools.find(row => row.unitid === values.school);
     if (!school) throw new Error('Unknown UNITID');

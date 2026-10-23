@@ -124,6 +124,45 @@ while True:time.sleep(.1)
                         process.kill()
                         process.wait()
 
+    def test_automation_worker_stops_before_chrome_flushes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            display = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(120)'], start_new_session=True)
+            worker_program = '''import os,signal,sys,time
+from pathlib import Path
+root=Path(sys.argv[1]); chrome=int(sys.argv[2])
+def stop(*args):
+ os.kill(chrome,0); (root/'worker-stopped').touch(); sys.exit(0)
+signal.signal(signal.SIGTERM,stop); (root/'worker-ready').touch()
+while True:time.sleep(.1)
+'''
+            chrome_program = '''import signal,sys,time
+from pathlib import Path
+root=Path(sys.argv[1])
+def stop(*args):
+ assert (root/'worker-stopped').exists(); (root/'chrome-flushed').touch(); sys.exit(0)
+signal.signal(signal.SIGTERM,stop); (root/'chrome-ready').touch()
+while True:time.sleep(.1)
+'''
+            chrome = subprocess.Popen([sys.executable, '-c', chrome_program, str(root)], start_new_session=True)
+            worker = subprocess.Popen([sys.executable, '-c', worker_program, str(root), str(chrome.pid)], start_new_session=True)
+            try:
+                for _ in range(100):
+                    if (root / 'worker-ready').exists() and (root / 'chrome-ready').exists():
+                        break
+                    time.sleep(.01)
+                self.assertTrue((root / 'worker-ready').exists())
+                self.assertTrue((root / 'chrome-ready').exists())
+                entrypoint.shutdown([('display', display), ('Chrome', chrome), ('automation worker', worker)])
+                self.assertTrue((root / 'worker-stopped').exists())
+                self.assertTrue((root / 'chrome-flushed').exists())
+                self.assertIsNotNone(display.poll())
+            finally:
+                for process in (worker, chrome, display):
+                    if process.poll() is None:
+                        process.kill()
+                        process.wait()
+
 
 if __name__ == '__main__':
     unittest.main()

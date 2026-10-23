@@ -249,6 +249,7 @@ const SYSTEM_PATHS = [
   'lib/local-today.mjs',
   'lib/parse-date.mjs',
   'lib/reply-proposals.mjs',
+  'lib/reply-approval.mjs',
   'lib/placeholder-cell.mjs',
   'lib/tracker-addition.mjs',
   'lib/scan-summary-marker.mjs',
@@ -414,6 +415,8 @@ const SYSTEM_PATHS = [
   'invite-match.mjs',
   'coverage-check.mjs',
   'agent-inbox.mjs',
+  'automation.mjs',
+  'lib/automation/',
   'followup-seed.mjs',
   'profile-language.mjs',
   'title-keywords.mjs',
@@ -586,10 +589,14 @@ const BOOTSTRAP_PATHS = [
  * that has no business having an opinion about it (#2480).
  */
 export const USER_PATHS = [
+  // Local work-catalog registry metadata is project-specific workspace state;
+  // preserve it across release updates without interpreting its contents.
+  '.work-catalog.toml',
   '.career-ops-web/',
   'cv.md',
   'config/profile.yml',
   'config/mail.json',
+  'config/automation.json',
   'modes/_profile.md',
   'modes/_custom.md',
   'modes/_brief.md',

@@ -185,6 +185,7 @@ test('the guard exempts every tracked source under batch/', () => {
 // Each one needs a reason; an entry here that leaves USER_PATHS fails below.
 const NOT_GUARDED = new Map([
   ['voice-dna.md', 'ships as a populated system default, so edits to it are legit'],
+  ['.work-catalog.toml', 'local project registry metadata is tracked workspace configuration, not private job-search data'],
   ['.claude/settings.json', 'project harness config, not gitignored, may legitimately be committed'],
   ['.claude/hooks/', 'project harness config, not gitignored, may legitimately be committed'],
 ]);

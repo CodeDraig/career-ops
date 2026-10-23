@@ -63,8 +63,9 @@ Both the interactive `mail` mode and web **Mail** screen use the same core:
    a follow-up to a replacement row.
 
 The web Follow-ups screen links each application to `/mail?appNum=N`. In Mail,
-application filtering is separate from the draft's selected application. No
-mailbox polling or automatic sending is scheduled by this feature.
+application filtering is separate from the draft's selected application. The
+interactive workflow does not poll in the background; the opt-in automation worker
+below adds scheduled read-only polling.
 
 Caches and cursors live in `data/mail/messages/` and `data/mail/cursors/` under
 normal data-root resolution. The automatic log honors `CAREER_OPS_FOLLOWUPS`
@@ -73,6 +74,32 @@ retain the canonical tracker path plus number/company/role/report, so a renumber
 or replaced row must be matched again. Changing account aliases keeps separate
 message identities and cursors. A UIDVALIDITY reset starts a new IMAP identity
 set; the old cached records are preserved.
+
+## Background mail triage
+
+The container automation worker can poll selected accounts every 15 minutes and
+prepare reply or overdue-follow-up drafts for review. It is disabled until you
+explicitly enable it in `config/automation.json`. Add account IDs already present
+in `config/mail.json` to `mailAccounts`; an empty list leaves mail polling off.
+The first automated sync begins from a fixed date seven days before activation,
+then continues using the saved cursor. Each poll reads up to two pages of 50
+messages and resumes incomplete catch-up on the next worker tick.
+
+The worker performs IMAP reads only. It may classify messages and suggest
+application matches, status changes, or a draft, but it does not confirm an
+ambiguous match, change application status, prepare SMTP, or send. Incoming mail
+is untrusted content and cannot direct the worker to perform other actions.
+Drafts remain in the persistent review inbox and open in the existing Mail
+composer. Review and prepare the current draft there; sending still requires the
+existing explicit Send action and confirmation digest. A new reply or changed
+application/profile context makes an older automated draft stale so it must be
+reviewed again.
+
+Each instance allows up to 20 new mail drafts per local day by default. A draft
+retry is recorded against its allocation. Missing credentials, expired OAuth
+tokens, or missing mailbox configuration create a visible setup blocker; the
+worker does not attempt to acquire or refresh OAuth tokens. The daily 08:00
+digest is local to the web/CLI review queue and sends no notification.
 
 ## Interactive JSON interface
 

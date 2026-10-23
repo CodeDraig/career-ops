@@ -91,7 +91,8 @@ try {
   await check('Workday pacing serializes simultaneous independent processes using the same SQLite file', async directory => {
     const module = new URL('../../providers/_workday-pacing.mjs', import.meta.url).href;
     const child = `import {createWorkdayPacer} from ${JSON.stringify(module)};
-      const p=await createWorkdayPacer({directory:process.argv[1],hostIntervalMs:60,globalIntervalMs:5});
+      const [directoryArg]=process.argv.slice(1);
+      const p=await createWorkdayPacer({directory:directoryArg,hostIntervalMs:60,globalIntervalMs:5});
       for(let n=0;n<3;n++) await p.run('shared.wd1.myworkdayjobs.com',async()=>console.log(Date.now()));
       p.close();`;
     const results = await Promise.all(Array.from({ length: 3 }, () => promisify(execFile)(process.execPath,
@@ -102,7 +103,8 @@ try {
   });
   await check('Workday transport paces actual POST pages and GET details before the request timeout starts', async directory => {
     const child = `import assert from 'node:assert/strict';
-      process.env.CAREER_OPS_WORKDAY_PACING_DIR=process.argv[1];
+      const [directoryArg]=process.argv.slice(1);
+      process.env.CAREER_OPS_WORKDAY_PACING_DIR=directoryArg;
       const {fetchJson,fetchJsonWithRetry}=await import('./providers/_http.mjs');
       const starts=[],methods=[];let attempts=0;
       globalThis.fetch=async(url,options)=>{starts.push(Date.now());methods.push(options.method);

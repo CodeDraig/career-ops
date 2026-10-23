@@ -11,21 +11,33 @@ import { join } from 'path';
 console.log('\ncheck-liveness — --help/-h contract');
 
 const scriptPath = join(ROOT, 'check-liveness.mjs');
-const run = (args) => spawnSync(NODE, [scriptPath, ...args], {
-  encoding: 'utf-8',
-  timeout: 10000,
+const run = (args) => {
+  const startedAt = Date.now();
+  const result = spawnSync(NODE, [scriptPath, ...args], {
+    encoding: 'utf-8',
+    timeout: 10000,
+  });
+  return { ...result, elapsedMs: Date.now() - startedAt };
+};
+const diagnostic = (result) => JSON.stringify({
+  status: result.status,
+  signal: result.signal,
+  error: result.error?.code || null,
+  elapsedMs: result.elapsedMs,
+  stdoutBytes: Buffer.byteLength(result.stdout || ''),
+  stderr: (result.stderr || '').slice(0, 2000),
 });
 
 const help = run(['--help']);
 if (help.status === 0) {
   pass('--help exits 0');
 } else {
-  fail(`--help exits 0 (got status ${help.status})`);
+  fail(`--help exits 0: ${diagnostic(help)}`);
 }
 if ((help.stdout || '').includes('Usage:')) {
   pass('--help prints usage');
 } else {
-  fail('--help prints usage');
+  fail(`--help prints usage: ${diagnostic(help)}`);
 }
 for (const flag of ['--no-fallback', '--throttle', '--no-record', '--file', '--help']) {
   if ((help.stdout || '').includes(flag)) pass(`--help documents ${flag}`);
@@ -36,20 +48,20 @@ else fail('--help documents -h');
 
 const h = run(['-h']);
 if (h.status === 0 && (h.stdout || '').includes('Usage:')) pass('-h prints usage');
-else fail('-h prints usage');
+else fail(`-h prints usage: ${diagnostic(h)}`);
 // The alias must stay byte-identical to --help or the two contracts can drift.
 if (h.stdout === help.stdout) pass('-h output is byte-identical to --help');
-else fail('-h output is byte-identical to --help');
+else fail(`-h output is byte-identical to --help: short=${diagnostic(h)}, long=${diagnostic(help)}`);
 
 const helpWithMissingFile = run(['--help', '--file', join('definitely', 'missing')]);
 if (helpWithMissingFile.status === 0 && (helpWithMissingFile.stdout || '').includes('Usage:')) {
   pass('--help exits before file read');
 } else {
-  fail('--help exits before file read');
+  fail(`--help exits before file read: ${diagnostic(helpWithMissingFile)}`);
 }
 
 const noArgs = run([]);
 if (noArgs.status === 1) pass('no args exits 1');
-else fail(`no args exits 1 (got status ${noArgs.status})`);
+else fail(`no args exits 1: ${diagnostic(noArgs)}`);
 if ((noArgs.stderr || '').includes('Usage:')) pass('no args prints usage to stderr');
-else fail('no args prints usage to stderr');
+else fail(`no args prints usage to stderr: ${diagnostic(noArgs)}`);

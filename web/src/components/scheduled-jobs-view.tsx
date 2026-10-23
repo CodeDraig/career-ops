@@ -28,6 +28,7 @@ type SchedulerStatus = {
   platform: "win32" | "darwin" | "linux" | string;
   available: boolean;
   running: boolean;
+  worker: { enabled: boolean; state: string; paused: boolean; at: string | null; active: unknown; lastError: string | null };
   task: { exists: boolean; enabled: boolean; nextRun: string | null; lastRun: string | null };
 };
 
@@ -203,16 +204,18 @@ export function ScheduledJobsView() {
               </div>
               <div>
                 <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                  {scheduler.platform === "win32" ? "Windows Task Scheduler Integration" : "Manual scans"}
+                  {scheduler.platform === "win32" ? "Windows Task Scheduler Integration" : scheduler.worker.enabled ? "Container automation worker" : "Manual scans"}
                   <span
                     className={
-                      scheduler.task.exists && scheduler.task.enabled
+                      scheduler.platform !== "win32" && scheduler.worker.enabled && ["running", "paused"].includes(scheduler.worker.state)
+                        ? "rounded bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400"
+                        : scheduler.platform === "win32" && scheduler.task.exists && scheduler.task.enabled
                         ? "rounded bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400"
                         : "rounded bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:text-amber-300"
                     }
                   >
                     {scheduler.platform !== "win32"
-                      ? "No automatic schedule"
+                      ? scheduler.worker.enabled ? scheduler.worker.state : "No automatic schedule"
                       : scheduler.task.exists
                         ? scheduler.task.enabled ? "Task enabled" : "Task disabled"
                         : "Task not installed"}
@@ -220,7 +223,9 @@ export function ScheduledJobsView() {
                 </div>
                 <div className="mt-0.5 text-xs text-muted">
                   {scheduler.platform !== "win32"
-                    ? "On macOS and Linux, saved scans only run when you choose Run now."
+                    ? scheduler.worker.enabled
+                      ? scheduler.worker.lastError || (scheduler.worker.paused ? "Automation is paused." : `Worker heartbeat: ${formatTaskTime(scheduler.worker.at)}.`)
+                      : "Saved scans only run when you choose Run now."
                     : scheduler.task.exists
                       ? "Next OS check: " + formatTaskTime(scheduler.task.nextRun) + " · Last OS check: " + formatTaskTime(scheduler.task.lastRun)
                       : "Install the Windows task with web/scripts/install-scan-schedule.ps1 to run due jobs automatically."}

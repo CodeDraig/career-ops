@@ -6,6 +6,8 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawn } from "node:child_process";
 import * as yaml from "js-yaml";
+import { createHash } from "node:crypto";
+import { executeRecovery, recoveryTasks } from "../../../lib/automation/recovery.mjs";
 
 import {
   emptyScheduledStore,
@@ -26,6 +28,7 @@ import {
   MAX_RUNS,
   nextFutureRun,
   recordCompletion,
+  runScheduledTick,
   runnerResourcePath,
 } from "../../scripts/scheduled-jobs-runner.mjs";
 import { assertScheduledJobBody } from "../../src/lib/scheduled-job-input.mjs";
@@ -318,6 +321,104 @@ test("roles-found parsing matches both scanner output formats", () => {
   assert.equal(extractRolesFound("full", JSON.stringify({ postingsKept: 7 })), 7);
   assert.equal(extractRolesFound("portals", "New offers added:      3\n"), 3);
   assert.equal(extractRolesFound("full", "not json"), 0);
+});
+
+test("async scheduled tick executes exactly one due job and records its immutable source receipt path", async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "career-ops-scheduled-tick-"));
+  const root = path.join(temp, "user-data");
+  const storePath = path.join(root, "data", "scheduled-jobs.json");
+  const jobId = "11111111-1111-4111-8111-111111111111";
+  fs.mkdirSync(path.dirname(storePath), { recursive: true });
+  fs.writeFileSync(path.join(root, "portals.yml"), "title_filter:\n  positive: [engineer]\nlocation_filter: {}\n", "utf8");
+  const now = new Date(Date.now() - 60_000).toISOString();
+  fs.writeFileSync(storePath, JSON.stringify({
+    jobs: [{ id: jobId, name: "Due scan", status: "active", engine: "full", filters: { positive: ["designer"], blockHard: ["Brazil"] }, timezone: "UTC", startAt: now, every: 1, unit: "hours", createdAt: now, updatedAt: now }],
+    runs: [], queue: [],
+  }));
+  try {
+    let recoveryTask;
+    const tick = await runScheduledTick(root, {
+      storePath,
+      spawnFn: async (_node, args, options) => {
+        assert.equal(options.env.CAREER_OPS_ROOT, root);
+        assert.ok(args.includes("--run-receipt"));
+        const effective = yaml.load(fs.readFileSync(options.env.CAREER_OPS_EFFECTIVE_PORTALS_SNAPSHOT, "utf8"));
+        const base = yaml.load(fs.readFileSync(options.env.CAREER_OPS_BASE_PORTALS, "utf8"));
+        assert.deepEqual(effective.title_filter.positive, ["designer"]);
+        assert.deepEqual(effective.location_filter.block_hard, ["Brazil"]);
+        assert.equal(options.env.CAREER_OPS_BASE_PORTALS, path.join(root, "portals.yml"));
+        assert.equal(options.env.CAREER_OPS_BASE_PORTALS_SHA256, createHash("sha256").update(JSON.stringify(base)).digest("hex"));
+        assert.equal(fs.statSync(options.env.CAREER_OPS_EFFECTIVE_PORTALS_SNAPSHOT).mode & 0o777, 0o600);
+        const receiptPath = args[args.indexOf("--run-receipt") + 1];
+        assert.match(receiptPath, /data[\\/]automation[\\/]receipts[\\/]/);
+        const scannerArgs = args.slice(1, args.indexOf("--run-receipt"));
+        fs.writeFileSync(receiptPath, JSON.stringify({
+          schema: "career-ops.scan-run@1", scanner: "ats-full", runId: "scan-run-1",
+          startedAt: new Date().toISOString(), configSha256: createHash("sha256").update(JSON.stringify(effective)).digest("hex"),
+          baseConfigSha256: options.env.CAREER_OPS_BASE_PORTALS_SHA256,
+          scope: { runArgs: scannerArgs, effectiveConfigPath: options.env.CAREER_OPS_EFFECTIVE_PORTALS_SNAPSHOT },
+          targets: [{ sourceId: "target-1", name: "Test employer", provider: "workday", status: "error", complete: false, error: "HTTP 503", kind: "server" }],
+        }));
+        return { status: 0, stdout: JSON.stringify({ postingsKept: 4 }), stderr: "" };
+      },
+      onReceipt: async (receiptFile) => {
+        const receipt = JSON.parse(fs.readFileSync(receiptFile, "utf8"));
+        [recoveryTask] = recoveryTasks(receipt, { now: 0 });
+      },
+    });
+    assert.equal(tick.status, "success");
+    assert.equal(tick.jobId, jobId);
+    assert.equal(tick.rolesFound, 4);
+    assert.ok(fs.existsSync(tick.effectiveConfigPath), "the immutable effective-config snapshot survives scan completion");
+    assert.equal(recoveryTask.payload.configPath, tick.effectiveConfigPath);
+    assert.deepEqual(recoveryTask.payload.runArgs, ["--since", "7", "--ats", "greenhouse,lever,ashby,workday", "--limit", "150", "--json"]);
+    assert.equal(recoveryTask.payload.baseConfigSha256, createHash("sha256").update(JSON.stringify(yaml.load(fs.readFileSync(path.join(root, "portals.yml"), "utf8")))).digest("hex"));
+    let recoveryCalls = 0;
+    const recovered = await executeRecovery(root, recoveryTask, {
+      env: { CAREER_OPS_BASE_PORTALS: path.join(root, "portals.yml") },
+      runScannerFn: async (args, { env }) => {
+        recoveryCalls += 1;
+        assert.deepEqual(args.slice(1, args.indexOf("--target-source-id")), recoveryTask.payload.runArgs);
+        assert.equal(args[args.indexOf("--target-source-id") + 1], "target-1");
+        assert.deepEqual(yaml.load(fs.readFileSync(env.CAREER_OPS_PORTALS, "utf8")).title_filter.positive, ["designer"]);
+        assert.deepEqual(yaml.load(fs.readFileSync(env.CAREER_OPS_PORTALS, "utf8")).location_filter.block_hard, ["Brazil"]);
+        const retryReceipt = args[args.indexOf("--run-receipt") + 1];
+        fs.writeFileSync(retryReceipt, JSON.stringify({ schema: "career-ops.scan-run@1", targets: [
+          { sourceId: "target-1", status: "success", complete: true, jobs: 1, addedUrls: [] },
+        ] }), { flag: "wx" });
+        return { code: 0, stdout: "", stderr: "" };
+      },
+    });
+    assert.equal(recoveryCalls, 1);
+    assert.equal(recovered.state, "completed");
+    fs.writeFileSync(path.join(root, "portals.yml"), "title_filter:\n  positive: [changed]\nlocation_filter: {}\n", "utf8");
+    let staleBaseCalled = false;
+    const stale = await executeRecovery(root, recoveryTask, {
+      env: { CAREER_OPS_BASE_PORTALS: path.join(root, "portals.yml") },
+      runScannerFn: async () => { staleBaseCalled = true; return { code: 0 }; },
+    });
+    assert.equal(stale.state, "needs_review");
+    assert.equal(stale.reason, "base_source_configuration_changed");
+    assert.equal(staleBaseCalled, false);
+    assert.equal(readScheduledStore(storePath).queue.length, 0);
+    assert.equal(readScheduledStore(storePath).runs[0].state, "success");
+  } finally {
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test("async scheduled tick returns idle without touching files when no job is due", async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), "career-ops-scheduled-idle-"));
+  const storePath = path.join(temp, "scheduled-jobs.json");
+  try {
+    let spawned = false;
+    const result = await runScheduledTick(temp, { storePath, spawnFn: async () => { spawned = true; } });
+    assert.deepEqual(result, { status: "idle" });
+    assert.equal(spawned, false);
+    assert.equal(fs.existsSync(storePath), true);
+  } finally {
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
 });
 
 test("queue claim is durable until completion and stale claims are reclaimable", async () => {

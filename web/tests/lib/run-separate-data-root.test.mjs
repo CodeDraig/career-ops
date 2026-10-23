@@ -15,9 +15,9 @@ const mocks = {
     export const cliSubstitutionNotice = () => null;
     export const cliUnavailableError = () => ({ error: "fixture unavailable" });
   `,
-  '@/lib/spawn-cli.mjs': `
+  '@/lib/automation/execution.mjs': `
     import { spawn } from "node:child_process";
-    export function spawnHeadlessCli(bin, args, opts) {
+    export function spawnAutomationCli(bin, args, opts) {
       return spawn(process.execPath, [${JSON.stringify(worker)}, args[args.indexOf("-p") + 1]], { ...opts, stdio: ["ignore", "pipe", "pipe"] });
     }
   `,

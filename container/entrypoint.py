@@ -82,26 +82,33 @@ def prepare():
 
 
 def shutdown(children):
-    # Keep the display and native bridge alive while Chrome flushes its profile.
-    ordered = sorted(children, key=lambda item: item[0] != 'Chrome')
-    for name, process in ordered:
-        if process.poll() is None:
-            try:
-                os.killpg(process.pid, signal.SIGTERM)
-            except ProcessLookupError:
-                continue
-            if name == 'Chrome':
+    # Stop automation before Chrome so no worker can claim new browser work
+    # while the persistent profile is flushing. Keep the display and native
+    # bridge alive until Chrome has exited.
+    by_name = {name: process for name, process in children}
+
+    def stop_group(names, timeout):
+        selected = [(name, by_name[name]) for name in names if name in by_name]
+        for _, process in selected:
+            if process.poll() is None:
                 try:
-                    process.wait(timeout=15)
-                except subprocess.TimeoutExpired:
+                    os.killpg(process.pid, signal.SIGTERM)
+                except ProcessLookupError:
+                    pass
+        deadline = time.monotonic() + timeout
+        for _, process in selected:
+            try:
+                process.wait(timeout=max(.1, deadline - time.monotonic()))
+            except subprocess.TimeoutExpired:
+                try:
                     os.killpg(process.pid, signal.SIGKILL)
-    deadline = time.monotonic() + 15
-    for _, process in ordered:
-        try:
-            process.wait(timeout=max(.1, deadline - time.monotonic()))
-        except subprocess.TimeoutExpired:
-            os.killpg(process.pid, signal.SIGKILL)
-            process.wait()
+                except ProcessLookupError:
+                    pass
+                process.wait()
+
+    stop_group(['automation worker'], 15)
+    stop_group(['Chrome'], 15)
+    stop_group([name for name, _ in children if name not in ('automation worker', 'Chrome')], 15)
 
 
 def serve():
@@ -175,6 +182,11 @@ def serve():
         subprocess.run(['google-chrome', '--user-data-dir=' + str(profile),
                         'chrome-extension://' + extension_id() + '/popup.html'], check=True, timeout=10)
         start('web', ['npm', '--prefix', str(CODE / 'web'), 'start', '--', '--hostname', '0.0.0.0', '--port', '3000'])
+        wait_port(3000, next(process for name, process in children if name == 'web'))
+        automation = CODE / 'automation.mjs'
+        if automation.is_file():
+            start('automation worker', ['node', str(automation), 'worker'], cwd=str(CODE),
+                  env={**os.environ, 'CAREER_OPS_ROOT': os.environ['CAREER_OPS_ROOT']})
         print('Career-Ops: web on :3000; desktop on :6080/vnc.html. Connect Browser Harness in Chrome.', flush=True)
         while not stopping:
             for name, process in children:

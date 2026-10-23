@@ -6,6 +6,7 @@ import { careerOpsRoot } from "@/lib/career-ops";
 import { resolveCodeRoot } from "@/lib/core/code-root.mjs";
 import { readLockStatus } from "./scheduled-jobs-store.mjs";
 import { scheduledRunnerResourcePath, scheduledStorePath } from "./scheduled-runner-path.mjs";
+import { automationWorkerStatus } from "./automation-worker-status.mjs";
 
 const execFileAsync = promisify(execFile);
 const TASK_NAME = "career-ops recurring scan";
@@ -14,6 +15,7 @@ export type SchedulerStatus = {
   platform: NodeJS.Platform;
   available: boolean;
   running: boolean;
+  worker: ReturnType<typeof automationWorkerStatus>;
   task: {
     exists: boolean;
     enabled: boolean;
@@ -70,6 +72,7 @@ export async function schedulerStatus(): Promise<SchedulerStatus> {
     platform: process.platform,
     available: fs.existsSync(runner),
     running: lock.active && !lock.stale,
+    worker: automationWorkerStatus(root),
     task: await readTask(),
   };
 }
