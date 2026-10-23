@@ -1,5 +1,9 @@
 # Container integration validation — 2026-10-23
 
+**Latest result:** the [Georgia and LinkedIn follow-up](GEORGIA_LINKEDIN_FIXES_2026-10-23.md)
+restores coverage to **343/346 (99.13%)** and verifies external LinkedIn application
+URLs. Its two-school rerun overlays the earlier full run preserved below.
+
 The fully containerised image now includes `mcp-server-linkedin` **4.28.0** in an
 isolated Python **3.13.9** environment. Startup registers the local stdio command
 with Codex, preserving any existing `linkedin` registration. Authentication is

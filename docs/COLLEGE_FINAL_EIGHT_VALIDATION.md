@@ -1,8 +1,8 @@
 # Final eight college search routes
 
-Latest full Docker revalidation: [2026-10-23 container results](CONTAINER_VALIDATION_2026-10-23.md)
-record **341/346 (98.55%)**, with two newly failing Georgia searches. The historical
-October 19 results below remain unchanged.
+Latest Docker coverage: [Georgia fixes verified on 2026-10-23](GEORGIA_LINKEDIN_FIXES_2026-10-23.md)
+restore **343/346 (99.13%)**, overlaying two successful reruns on the earlier full
+346-school Docker validation. The historical October 19 results below remain unchanged.
 
 Revalidated **2026-10-19** (US Eastern; verification continued into October 20 UTC).
 

@@ -1,0 +1,162 @@
+{
+  "checkedOn": "2026-10-23",
+  "basis": "Two-school rerun over the earlier full 346-school Docker validation; 344 school results carried forward unchanged.",
+  "baseline": {
+    "path": "college-container-validation-2026-10-23.json",
+    "sha256": "c2074cf282a5b3f5c8d70007b76d6f97122f7b819fff291a01080c562b715284",
+    "coverage": 341,
+    "coveragePercent": 98.55
+  },
+  "freshSchools": 2,
+  "carriedForwardSchools": 344,
+  "total": 346,
+  "counts": {
+    "working": 337,
+    "empty": 6,
+    "error": 0,
+    "unresolved": 3
+  },
+  "successful": 343,
+  "coveragePercent": 99.13,
+  "docker": true,
+  "imageId": "sha256:2a6b5f1b77872c86a8afd803a6efed754cf7edc74e4976eea12a5ba74744900b",
+  "evidenceRoot": "/home/cadwaladyr/Downloads/career-ops-georgia-linkedin-fixes-2026-10-23",
+  "schools": [
+    {
+      "unitid": "139986",
+      "name": "Southern Crescent Technical College",
+      "entry": {
+        "id": "139986-final3",
+        "name": "Southern Crescent Technical College",
+        "kind": "georgia",
+        "url": "https://careers.georgia.gov/jobs-search?field_agency_name=4946&field_job_family=All&field_employee_status=All&field_job_level=All&field_schedule=All&field_shift=All&search_api_fulltext=",
+        "enabled": true,
+        "provider": "local-parser",
+        "careers_url": "https://careers.georgia.gov/jobs-search?field_agency_name=4946&field_job_family=All&field_employee_status=All&field_job_level=All&field_schedule=All&field_shift=All&search_api_fulltext=",
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "georgia"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "scope": "Employer public search (saved category filters retained where present)",
+      "startedAt": "2026-10-23T17:49:37.693Z",
+      "container": "effc58ff7e89",
+      "docker": true,
+      "status": "working",
+      "complete": true,
+      "pagination": {
+        "pages": 5,
+        "reportedTotal": 84,
+        "complete": true
+      },
+      "postings": 84,
+      "jobsSha256": "ba064c02040ab865a8fd221e0084558f855e0a87f5d80d1dd12e850db236303e",
+      "warnings": [],
+      "requests": 0,
+      "finishedAt": "2026-10-23T17:49:44.017Z",
+      "resultSha256": "784c19b39ce267000ade48799ffe1233cee2a89c073499e45f1fca8d4ecfe7df",
+      "evidenceDirectory": "/home/cadwaladyr/Downloads/career-ops-georgia-linkedin-fixes-2026-10-23/georgia-final-image/139986"
+    },
+    {
+      "unitid": "140331",
+      "name": "Chattahoochee Technical College",
+      "entry": {
+        "id": "140331-final4",
+        "name": "Chattahoochee Technical College",
+        "kind": "georgia",
+        "url": "https://careers.georgia.gov/jobs-search?field_agency_name=4926&page=0",
+        "enabled": true,
+        "provider": "local-parser",
+        "careers_url": "https://careers.georgia.gov/jobs-search?field_agency_name=4926&page=0",
+        "parser": {
+          "command": "node",
+          "script": "browser-job-search.mjs",
+          "args": [
+            "--url",
+            "{careers_url}",
+            "--company",
+            "{company}",
+            "--kind",
+            "georgia"
+          ],
+          "timeout_ms": 600000,
+          "max_buffer_bytes": 10000000
+        }
+      },
+      "scope": "Employer public search (saved category filters retained where present)",
+      "startedAt": "2026-10-23T17:49:44.299Z",
+      "container": "effc58ff7e89",
+      "docker": true,
+      "status": "working",
+      "complete": true,
+      "pagination": {
+        "pages": 5,
+        "reportedTotal": 88,
+        "complete": true
+      },
+      "postings": 88,
+      "jobsSha256": "5c041fe9270b4d99882baab6f1d4a1778fd7f67ad5996c8d60e59f71c173eeb7",
+      "warnings": [],
+      "requests": 0,
+      "finishedAt": "2026-10-23T17:49:52.771Z",
+      "resultSha256": "4395e74497494b98ea0517f463d9ad363fef4e503949f5b2c1d00694c3d77b9e",
+      "evidenceDirectory": "/home/cadwaladyr/Downloads/career-ops-georgia-linkedin-fixes-2026-10-23/georgia-final-image/140331"
+    }
+  ],
+  "unresolved": [
+    {
+      "unitid": "154493",
+      "name": "Upper Iowa University",
+      "reason": "Jenzabar employment search requires stateful ASP.NET postbacks; no supported stable per-posting URL resolver."
+    },
+    {
+      "unitid": "488846",
+      "name": "University of the People",
+      "reason": "The saved official route still offers volunteer instructor/general volunteer application forms, not an enumerable paid-vacancy board. No paid-vacancy source was verified."
+    },
+    {
+      "unitid": "500087",
+      "name": "Doral College",
+      "reason": "The official Join Our Team page embeds a Formstack employment application with contact, qualification and attachment fields; no enumerable vacancy inventory or posting URLs were exposed."
+    }
+  ],
+  "linkedin": {
+    "serverVersion": "4.28.0",
+    "patch": "../container/linkedin-apply.patch",
+    "evidenceFile": "linkedin-image-final.json",
+    "evidenceSha256": "7d16625bf9a4dc56c779c6306875a7097cc5a0afd7e1f6ea1b84c8794a37e5d5",
+    "applications": {
+      "4478864590": {
+        "url": "https://www.linkedin.com/jobs/view/4478864590/",
+        "apply": {
+          "type": "external",
+          "url": "https://recruiting.paylocity.com/recruiting/jobs/Details/4554835/Smartsights-LLC/Technical-Support-Engineer"
+        }
+      },
+      "4474855623": {
+        "url": "https://www.linkedin.com/jobs/view/4474855623/",
+        "apply": {
+          "type": "external",
+          "url": "https://job-boards.greenhouse.io/customerio/jobs/8246114?gh_src=258112aa1us"
+        }
+      },
+      "4475855200": {
+        "url": "https://www.linkedin.com/jobs/view/4475855200/",
+        "apply": {
+          "type": "easy_apply"
+        }
+      }
+    },
+    "actions": "Read-only posting navigation and exact-job GET; no Apply clicks or submissions."
+  }
+}

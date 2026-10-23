@@ -38,7 +38,7 @@ try {
     attrax: '<div class="attrax-list-widget__list"><a class="attrax-vacancy-tile__title" href="/jobs/1">Faculty</a><a aria-label="Next pagination page" href="/jobs?page=2">Next</a></div>',
     taleoBusiness: '<div class="oracletaleocwsv2-accordion"><a class="viewJobLink" href="/viewRequisition?rid=1">Faculty</a></div>',
     sdiFaculty: '<main id="main"><div class="job"><div class="course-heading">Faculty</div><a href="https://recruiting.paylocity.com/recruiting/jobs/Details/1/faculty">Apply Now</a></div></main>',
-    georgia: '<div class="view-jobs-search"><div class="job-title"><a href="/faculty">Faculty</a></div></div>',
+    georgia: '<div class="view-jobs-search">Showing 1 Job(s) Available<div class="ajax-dynamic-title"><div class="job-title"><a href="/faculty">Faculty</a></div><div class="organization"><span class="group">College</span></div></div></div>',
     selectminds: '<div class="jResultsActive"><div class="job_list_row"><a class="job_link" href="/jobs/1">Faculty</a></div><span id="jPaginateCurrPage">1</span><a class="next" href="#page2">Next</a></div>',
   };
   assert.deepEqual(Object.keys(fixtures).sort(), Object.keys(RECIPES).sort());
@@ -83,20 +83,37 @@ try {
   mode = 'cap'; await assert.rejects(searchBrowserJobs({ ...opts, maxPages: 1 }, { browser: fakeBrowser }), /incomplete results were not emitted/);
   mode = 'broken'; await assert.rejects(searchBrowserJobs(opts, { browser: fakeBrowser }), /Unrecognized/);
   pass('Real browser pagination preserves filters and fails without partial output on repeated pages, caps and broken later pages');
-  let georgiaReads = 0;
+  let georgiaReads = 0, georgiaMode = 'complete';
   const dynamicBrowser = { newContext: async options => {
     const context = await browser.newContext(options);
+    context.request.get = async (url, options) => {
+      const u = new URL(url);
+      assert.equal(u.searchParams.get('view_name'), 'jobs_search');
+      assert.equal(u.searchParams.get('view_display_id'), 'block_2');
+      assert.equal(u.searchParams.get('page-items'), '20');
+      assert.equal(u.searchParams.get('field_agency_name_sort'), '4926');
+      assert.equal(u.searchParams.get('field_agency_name'), '4926');
+      assert.equal(u.searchParams.get('field_job_family'), 'All');
+      assert.deepEqual(u.searchParams.getAll('aggregated_field[]'), ['a','b']);
+      assert.equal(options.maxRedirects, 0);
+      assert.equal(options.headers.Accept, 'application/json');
+      georgiaReads++;
+      const n = Number(u.searchParams.get('page') || 0);
+      const agency = georgiaMode === 'wrong-employer' ? 'Other College' : 'College';
+      const total = georgiaMode === 'changed-total' && n === 1 ? 22 : 21;
+      const ids = n === 0 ? Array.from({length:20},(_,i)=>i) : georgiaMode === 'overflow' ? [20,21] : [20];
+      const rows = ids.map(id => `<div class="ajax-dynamic-title"><div class="job-title"><a href="/job${id}">Faculty ${id}</a></div><div class="organization"><span class="group">${agency}</span></div></div>`).join('');
+      const htmlValue = `<div class="view-jobs-search view-display-id-block_2">Showing ${total} Job(s) Available${rows}${n === 0 && georgiaMode !== 'truncated' ? '<a rel="next" href="?page=1">Next</a>' : ''}</div><script>location.href='/georgia'</script>`;
+      const html = (georgiaMode === 'false-empty' || (georgiaMode === 'transient' && !u.searchParams.has('_career_ops_read'))) ? '<div class="view-jobs-search">No result found</div>' : htmlValue;
+      return {ok:()=>true,url:()=>url,json:async()=>[{command:'insert',method:'replaceWith',data:html}]};
+    };
     const newPage = context.newPage.bind(context);
     context.newPage = async () => {
       const p = await newPage();
       await p.route('https://college.example/**', route => {
         const u = new URL(route.request().url());
         let html;
-        if (u.pathname === '/georgia') {
-          const n = Number(u.searchParams.get('page') || 1);
-          html = `<div class="view-jobs-search">Showing 2 Jobs<div class="job-title"><a href="/job${n}">Faculty ${n}</a></div>${n === 1 ? '<div class="pager__item--next"><a href="?page=2">Next</a></div>' : ''}</div><script>if(location.search)location.href='/georgia'</script>`;
-          if (++georgiaReads === 1) html = '<div class="view-jobs-search">No result found</div>';
-        } else if (u.pathname === '/') {
+        if (u.pathname === '/') {
           html = '<button id="jSearchSubmit" onclick="location.href=\'/jobs/search/123\'">Search</button>';
         } else {
           const n = u.pathname.endsWith('page2') ? 2 : 1;
@@ -108,10 +125,17 @@ try {
     };
     return context;
   } };
-  assert.equal((await searchBrowserJobs({ ...opts, url: 'https://college.example/georgia', kind: 'georgia' }, { browser: dynamicBrowser })).jobs.length, 2);
-  assert.equal(georgiaReads, 3);
+  const georgiaOpts = {...opts,url:'https://college.example/georgia?field_agency_name=4926&page=0&aggregated_field[]=a&aggregated_field[]=b',kind:'georgia'};
+  const georgia = await searchBrowserJobs(georgiaOpts, {browser:dynamicBrowser});
+  assert.equal(georgia.jobs.length, 21); assert.equal(georgia.pages, 2); assert.equal(georgia.reportedTotal, 21);
+  assert.equal(georgiaReads, 2);
+  for (const [mode, error] of [['truncated',/advertised total/],['wrong-employer',/requested employer/],['false-empty',/empty search is unverified/],['overflow',/advertised total/],['changed-total',/total changed/]]) {
+    georgiaMode=mode; await assert.rejects(searchBrowserJobs(georgiaOpts,{browser:dynamicBrowser}),error);
+  }
+  georgiaMode='transient';
+  assert.equal((await searchBrowserJobs({...georgiaOpts,timeout:4000},{browser:dynamicBrowser})).jobs.length,21);
   assert.equal((await searchBrowserJobs({ ...opts, url: 'https://college.example/', kind: 'selectminds', timeout: 4000 }, { browser: dynamicBrowser })).jobs.length, 2);
-  pass('Georgia paging survives auto-submit scripts; SelectMinds starts a fresh search and advances its AJAX pager');
+  pass('Georgia public AJAX search preserves filters, traverses its current pager and rejects false empty, foreign-employer and truncated results; SelectMinds advances its AJAX pager');
   const buttonBrowser = { newContext: async options => {
     const context = await browser.newContext(options);
     const create = context.newPage.bind(context);

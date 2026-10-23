@@ -59,6 +59,11 @@ RUN npm install --no-audit --no-fund --package-lock=false \
 COPY web/package.json web/package-lock.json ./web/
 RUN npm --prefix web ci --no-audit --no-fund
 COPY . .
+# The pinned server's October button markup needs a read-only job-record lookup.
+# Context checks make an upstream source change fail the build, not skip the fix.
+RUN cd /opt/linkedin/lib/python3.13/site-packages \
+    && git apply --check /opt/career-ops/container/linkedin-apply.patch \
+    && git apply /opt/career-ops/container/linkedin-apply.patch
 # Runtime imports must work from the filtered source tree, not just Next's build.
 RUN node doctor.mjs --json && node --input-type=module -e "import './tracker-parse.mjs'" \
     && npm --prefix web run build

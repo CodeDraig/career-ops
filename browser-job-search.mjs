@@ -38,9 +38,9 @@ export const RECIPES = {
   seminole: { container: '.jsJob', links: '.jsJob h3', row: '.jsJob', rowUrl: 'data-url' },
   attrax: { container: '.attrax-list-widget__list', links: 'a.attrax-vacancy-tile__title', next: 'a[aria-label="Next pagination page"][href^="/"]', row: '.attrax-vacancy-tile', totalPattern: '(\\d+) results' },
   taleoBusiness: { container: '.oracletaleocwsv2-accordion', links: 'a.viewJobLink', next: 'a[rel="next"]', totalPattern: 'Positions Matched (\\d+)' },
-  // Drupal's auto-submit script resets ?page on navigation. Its server-rendered
-  // list already contains the results and pager; leave that script disabled.
-  georgia: { container: '.view-jobs-search', links: '.view-jobs-search .job-title a', next: '.pager__item--next a', row: '.views-row', noJavaScript: true, totalPattern: 'Showing (\\d+) Job' },
+  // Read Drupal's public AJAX view: the ordinary document can return a false
+  // empty fragment, and auto-submit scripts reset pagination on navigation.
+  georgia: { container: '.view-jobs-search', links: '.view-jobs-search .job-title a', next: '.view-jobs-search a[rel="next"],.pager__item--next a', row: '.ajax-dynamic-title,.views-row', agency: '.organization .group', noJavaScript: true, totalPattern: 'Showing (\\d+) Job', requireTotal: true },
   sdiFaculty: { container: '#main', links: '.job a[href*="recruiting.paylocity.com/recruiting/jobs/Details/"]', row: '.job', title: '.course-heading', jobHosts: ['recruiting.paylocity.com'], path: '^/recruiting/jobs/Details/\\d+/' },
   selectminds: { container: '.jResultsActive', links: '.jResultsActive a.job_link', row: '.job_list_row', location: '.location', next: '.jResultsActive a.next', pageToken: '.jResultsActive #jPaginateCurrPage', pageCount: '.jResultsActive #jPaginateNumPages', startSearch: '#jSearchSubmit', clickNext: true },
 };
@@ -60,7 +60,7 @@ export function readSearchPage(recipe) {
       return {title: a.innerText.trim(), url: url.href, location: cells[1] || ''};
     }
     if (recipe.excludeRowText && new RegExp(recipe.excludeRowText, 'i').test(row?.innerText || '')) return null;
-    return { title: (recipe.title ? row?.querySelector(recipe.title)?.innerText : a.innerText)?.trim(), url: recipe.rowUrl ? row?.getAttribute(recipe.rowUrl) : a.href, location: recipe.location ? row?.querySelector(recipe.location)?.innerText.trim() || '' : '', description: row?.querySelector('.job-search-results-summary')?.innerText.trim() || '' };
+    return { title: (recipe.title ? row?.querySelector(recipe.title)?.innerText : a.innerText)?.trim(), url: recipe.rowUrl ? row?.getAttribute(recipe.rowUrl) : a.href, location: recipe.location ? row?.querySelector(recipe.location)?.innerText.trim() || '' : '', description: row?.querySelector('.job-search-results-summary')?.innerText.trim() || '', ...(recipe.agency ? { agency: row?.querySelector(recipe.agency)?.textContent.trim() } : {}) };
   }).filter(Boolean);
   const next = recipe.next ? [...document.querySelectorAll(recipe.next)].find(a => (!recipe.nextText || a.innerText.trim() === recipe.nextText) && (a.getAttribute('href') || recipe.buttonNext) && !a.closest('.disabled,[aria-disabled="true"],[disabled]')) : null;
   const nextUrl = next ? (recipe.buttonNext ? location.href.split('#')[0] + '#after=' + encodeURIComponent(rows.at(-1)?.url || 'empty') : next.href) : null;
@@ -76,6 +76,7 @@ export function normalizeSearchPage(raw, { url, company, kind }) {
   const seen = new Set();
   const jobs = [];
   for (const row of raw.rows || []) {
+    if (kind === 'georgia' && row.agency?.replace(/\s+/g, ' ').trim().toLowerCase() !== company.replace(/\s+/g, ' ').trim().toLowerCase()) throw new Error('Georgia posting does not match the requested employer');
     if (typeof row.url !== 'string' || !row.url.trim()) continue;
     let u;
     try { u = new URL(row.url, base); } catch { continue; }
@@ -106,9 +107,51 @@ export function normalizeSearchPage(raw, { url, company, kind }) {
   }
   let total = recipe.totalPattern ? (raw.text || '').replace(/\s+/g, ' ').match(new RegExp(recipe.totalPattern, 'i'))?.[1] : null;
   if (total == null && !jobs.length && recipe.emptyPattern && new RegExp(recipe.emptyPattern).test(raw.text || '')) total = '0';
-  if (recipe.requireTotal && total == null) throw new Error('Search is missing its advertised result count');
   if (kind === 'georgia' && !jobs.length && total == null) throw new Error('Georgia search returned no results without its count; empty search is unverified');
+  if (recipe.requireTotal && total == null) throw new Error('Search is missing its advertised result count');
   return { jobs, next, reportedTotal: total == null ? null : Number(total) };
+}
+
+// The anonymous Drupal GET returns insert commands containing the results
+// block. Render only replacement HTML; never execute AJAX commands.
+async function loadGeorgiaPage(page, source, timeout) {
+  const input = new URL(source), ajax = new URL('/views/ajax', input);
+  ajax.search = input.search;
+  for (const key of ['field_job_family','field_employee_status','field_job_level','field_schedule','field_shift']) {
+    if (!ajax.searchParams.has(key)) ajax.searchParams.set(key, 'All');
+  }
+  if (!ajax.searchParams.has('search_api_fulltext')) ajax.searchParams.set('search_api_fulltext', '');
+  // The results block has its own exposed filter names. Keep both forms in
+  // sync, including when an old saved URL supplies only the primary names.
+  for (const key of ['field_agency_name','field_job_family','field_employee_status','field_job_level','field_schedule','field_shift','search_api_fulltext']) {
+    if (!ajax.searchParams.has(key + '_sort') && ajax.searchParams.has(key)) ajax.searchParams.set(key + '_sort', ajax.searchParams.get(key));
+  }
+  // Without this explicit page size, the final partial page can be returned as
+  // a false empty fragment despite the view advertising more postings.
+  if (!ajax.searchParams.has('page-items')) ajax.searchParams.set('page-items','20');
+  for (const [key, value] of Object.entries({view_name:'jobs_search',view_display_id:'block_2',view_args:'',view_path:'/jobs-search',view_base_path:'jobs-search',pager_element:'0',_wrapper_format:'drupal_ajax',_drupal_ajax:'1'})) ajax.searchParams.set(key,value);
+  const base = input.href.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
+  const deadline = Date.now() + timeout;
+  for (let attempt = 0; attempt < 10; attempt++) {
+    if (Date.now() >= deadline) break;
+    const remaining = () => Math.max(1,deadline-Date.now());
+    const response = await page.request.get(ajax.href, {timeout:remaining(),maxRedirects:0,headers:{Accept:'application/json','X-Requested-With':'XMLHttpRequest','Cache-Control':'no-cache'}});
+    if (!response.ok() || new URL(response.url()).origin !== input.origin) throw new Error('Georgia public search request failed');
+    const commands = await response.json();
+    const views = Array.isArray(commands) ? commands.filter(c => c.command === 'insert' && c.method === 'replaceWith' && typeof c.data === 'string' && c.data.includes('view-jobs-search')) : [];
+    if (views.length !== 1) throw new Error('Georgia public search returned no unambiguous results view');
+    await page.setContent(`<base href="${base}">${views[0].data}`, {waitUntil:'domcontentloaded',timeout:remaining()});
+    const raw = await readDom(page, remaining(), readSearchPage, RECIPES.georgia);
+    const total = raw.text.replace(/\s+/g,' ').match(/Showing (\d+) Job/i)?.[1];
+    if (total !== undefined && (raw.rows.length || total === '0')) return;
+    // Repeated live reads of the same page alternate between real results and
+    // HTTP-200 empty fragments with no count. Retry only that unverified shape,
+    // within the caller's time budget; never emit it as a zero or partial list.
+    if (Date.now() >= deadline || attempt === 9) break;
+    await page.waitForTimeout(Math.min(1000,remaining()));
+    ajax.searchParams.set('_career_ops_read',String(Date.now()));
+  }
+  throw new Error('Georgia search returned no results without its count; empty search is unverified');
 }
 
 export async function searchBrowserJobs({ url, company, kind, maxPages = 100, timeout = 30000 }, { browser: suppliedBrowser } = {}) {
@@ -131,6 +174,8 @@ export async function searchBrowserJobs({ url, company, kind, maxPages = 100, ti
       visited.add(next);
       if (n > 1 && recipe.clickNext) {
         await (recipe.nextText ? page.locator(recipe.next).filter({ hasText: recipe.nextText }) : page.locator(recipe.next)).first().click({ timeout });
+      } else if (kind === 'georgia') {
+        await loadGeorgiaPage(page, next, timeout);
       } else {
         const response = await page.goto(next, { waitUntil: 'domcontentloaded', timeout, ...(n > 1 ? { referer: page.url() } : {}) });
         // A challenge response may navigate to the public page after its own
@@ -156,28 +201,20 @@ export async function searchBrowserJobs({ url, company, kind, maxPages = 100, ti
         await page.waitForTimeout(500);
         const frameUrl = recipe.frameHost ? page.frames().find(f => { try { return new URL(f.url()).hostname === recipe.frameHost; } catch { return false; } })?.url() : undefined;
         raw = await readDom(page, Math.max(1,deadline-Date.now()), readSearchPage, RECIPES[kind], frameUrl);
+        if (kind === 'georgia') raw.documentUrl = next;
         if ((!recipe.pageToken || raw.pageToken === String(n)) && (!recipe.buttonNext || JSON.stringify(raw.rows.map(r => r.url)) !== previousSignature) && (!recipe.requireTotal || new RegExp(recipe.totalPattern, 'i').test(raw.text.replace(/\s+/g, ' ')) || (recipe.emptyPattern && new RegExp(recipe.emptyPattern).test(raw.text))) && raw.recognized && (raw.rows.length || /no (?:matching |open |current )?(?:jobs|positions|vacancies)|0 (?:jobs|positions|results)|no results?/i.test(raw.text))) break;
       } while (Date.now() < deadline);
-      // This Drupal board intermittently serves an HTTP-200 "No result found"
-      // fragment without its result count, even for a populated agency. Retry
-      // that exact read twice; never turn the fragment into a verified zero.
-      if (kind === 'georgia') {
-        for (let retry = 0; retry < 2 && !raw.rows.length && !/Showing\s+0\s+Job/i.test(raw.text); retry++) {
-          await page.waitForTimeout(500);
-          await page.goto(next, { waitUntil: 'domcontentloaded', timeout });
-          raw = await readDom(page, timeout, readSearchPage, recipe);
-        }
-      }
       if (rejectPrivateOrInvalid(raw.documentUrl)) throw new Error('Blocked final job search URL');
       if (recipe.pageToken && raw.pageToken !== String(n)) throw new Error(`Search did not advance to page ${n} (reported ${raw.pageToken})`);
       previousSignature = JSON.stringify(raw.rows.map(r => r.url));
       const parsed = normalizeSearchPage(raw, { url: next, company, kind });
+      if (kind === 'georgia' && reportedTotal !== null && parsed.reportedTotal !== reportedTotal) throw new Error('Georgia search total changed during pagination');
       if (parsed.reportedTotal !== null) reportedTotal = parsed.reportedTotal;
       let fresh = 0;
       for (const job of parsed.jobs) if (!seen.has(job.url)) { seen.add(job.url); jobs.push(job); fresh++; }
       if (n > 1 && parsed.jobs.length && !fresh) throw new Error('Job search pagination repeated its postings');
       if (!parsed.next || (recipe.stopAtTotal && reportedTotal !== null && jobs.length === reportedTotal)) {
-        if ((reportedTotal !== null && jobs.length < reportedTotal) || raw.pageCount > n) throw new Error('Search ended before its advertised total; incomplete results were not emitted');
+        if ((reportedTotal !== null && (jobs.length < reportedTotal || (kind === 'georgia' && jobs.length !== reportedTotal))) || raw.pageCount > n) throw new Error('Search ended without its advertised total; incomplete results were not emitted');
         return { jobs, pages: n, complete: true, source: url, ...(reportedTotal === null ? {} : { reportedTotal }) };
       }
       next = parsed.next;

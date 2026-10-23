@@ -1,0 +1,93 @@
+--- a/linkedin_mcp_server/linkedin/job_pages.py
++++ b/linkedin_mcp_server/linkedin/job_pages.py
+@@ -156,10 +156,9 @@
+ # each with an Apply of its own. Without the heading nothing is proven to be
+ # this posting's, and the read answers `unknown`.
+ #
+-# On 2026-09-14 the external control was a `<button>` with no href, whose click
+-# opened a "Share your profile?" dialog or a tab. LinkedIn counts that click as
+-# an apply on the posting, and no posting has shown the button since, so it is
+-# not read: a posting carrying it answers `unknown` and is never clicked.
++# The October 2026 external button has no href. Recognize it only above this
++# posting's description and read its own job record with one same-origin GET.
++# Never click it: LinkedIn records that action as an application start.
+ #
+ # The heading is found by walking text nodes rather than asking every element
+ # for its text. Both find it; the walk visits fewer nodes and copies none of
+@@ -205,10 +204,39 @@
+             || [...main.querySelectorAll('button')].some((el) => above(el)
+                 && (el.innerText || '').trim() === easyApplyLabel),
+         external_link: link ? link.href : null,
++        external_button: [...main.querySelectorAll('button')].some((el) => above(el)
++            && (el.innerText || '').trim() === externalLabel
++            && el.getAttribute('aria-label') === 'Apply on company website'),
+         applied: top.some((line) => applied.test(line)),
+         closed: top.some((line) => closedLines.includes(line)),
+     };
+ }"""
++
++# Read only the requested posting. No application endpoint, POST, redirect,
++# employer navigation, cookie export or credentials in the returned value.
++APPLY_RECORD_JS = r"""async (jobId) => {
++    if (!/^\d+$/.test(jobId) || location.pathname.replace(/\/+$/, '') !== '/jobs/view/' + jobId) return null;
++    const csrf = document.cookie.split('; ').find(c => c.startsWith('JSESSIONID='))
++        ?.slice('JSESSIONID='.length).replace(/^"|"$/g, '');
++    if (!csrf) return null;
++    try {
++        const response = await fetch('/voyager/api/jobs/jobPostings/' + jobId, {
++            method: 'GET', credentials: 'same-origin', mode: 'same-origin', redirect: 'error',
++            headers: {'csrf-token': csrf, 'accept': 'application/json'},
++            signal: AbortSignal.timeout(10000),
++        });
++        if (!response.ok) return null;
++        const data = await response.json();
++        if (data.entityUrn !== 'urn:li:fs_normalized_jobPosting:' + jobId) return null;
++        const info = data.applyingInfo;
++        if (info?.entityUrn !== 'urn:li:fs_jobApplyingInfo:' + jobId
++            || typeof info.applied !== 'boolean' || typeof info.closed !== 'boolean') return null;
++        const href = data.applyMethod?.['com.linkedin.voyager.jobs.OffsiteApply']?.companyApplyUrl;
++        return {applied: info.applied, closed: info.closed,
++                url: typeof href === 'string' ? href : null};
++    } catch (error) { return null; }
++}"""
++
+ 
+ # Ready once the description heading and a signal are both in. The Easy Apply
+ # anchor is found without the heading (the button is not), but the applied and
+@@ -217,7 +245,7 @@
+ APPLY_READY_JS = (
+     "(opts) => {\n    const signals = (" + APPLY_SIGNALS_JS + ")(opts);\n"
+     "    return Boolean(signals && signals.bounded && (signals.easy_apply\n"
+-    "        || signals.external_link || signals.applied || signals.closed));\n}"
++    "        || signals.external_link || signals.external_button || signals.applied || signals.closed));\n}"
+ )
+ 
+ # How long the apply control gets to render.
+@@ -313,9 +341,8 @@
+     ) -> JobApplyRead:
+         """Read how a posting takes applications, and an external one's address.
+ 
+-        Nothing is clicked. An external Apply is a link whose href names the
+-        employer's address; a posting whose Apply is anything else answers
+-        `unknown`.
++        Nothing is clicked. Read the external link, or the authenticated job
++        record when this posting exposes the external Apply button instead.
+ 
+         The employer's address is answered as LinkedIn gives it and never
+         loaded. It comes from whoever posted the job, and loading it would let
+@@ -354,6 +381,15 @@
+             return JobApplyRead(
+                 "external", employer_apply_url(signals["external_link"])
+             )
++        if signals and signals.get("external_button"):
++            record = await self._session.run_on_linkedin(APPLY_RECORD_JS, job_id)
++            if record:
++                if record["applied"]:
++                    return JobApplyRead("applied")
++                if record["closed"]:
++                    return JobApplyRead("closed")
++                if record["url"]:
++                    return JobApplyRead("external", employer_apply_url(record["url"]))
+         # A barrier served in place of the posting renders none of the above
+         # either, and it needs the relogin path rather than a type.
+         await self._navigator._raise_if_auth_barrier(url)

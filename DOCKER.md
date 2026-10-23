@@ -119,6 +119,11 @@ Each independent instance signs in
 separately. LinkedIn remains an interactive agent integration, not a web Explore
 source. No LinkedIn data request, AI login or paid model call runs at startup.
 
+The image applies a checked patch to the pinned LinkedIn server for its current
+external Apply buttons. It reads the destination from the exact posting's
+authenticated job record, without clicking Apply or loading the employer URL.
+See the [live Docker verification and current college coverage](docs/GEORGIA_LINKEDIN_FIXES_2026-10-23.md).
+
 ### Full college inventory validation
 
 `container/validate-colleges.mjs` runs an explicit JSON inventory of exactly 346
