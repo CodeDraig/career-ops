@@ -11,6 +11,7 @@ services:
     volumes:
       - ${CAREER_OPS_DATA_SOURCE:-career-ops-data}:${CAREER_OPS_CONTAINER_DATA_ROOT:-/data}
       - career-ops-home:/home/node
+      - career-ops-workday-pacing:/var/lib/career-ops/workday-pacing
     environment:
       CAREER_OPS_ROOT: ${CAREER_OPS_CONTAINER_DATA_ROOT:-/data}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
@@ -27,3 +28,5 @@ services:
 volumes:
   career-ops-data:
   career-ops-home:
+  career-ops-workday-pacing:
+    name: ${CAREER_OPS_WORKDAY_PACING_VOLUME:-career-ops-workday-pacing}

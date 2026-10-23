@@ -73,12 +73,13 @@ COPY --from=dashboard /career-dashboard /usr/local/bin/career-dashboard
 COPY --chmod=755 container/linkedin.py /usr/local/bin/career-ops-linkedin
 ENV NODE_ENV=production HOME=/home/node DISPLAY=:99 \
     CAREER_OPS_CODE_ROOT=/opt/career-ops CAREER_OPS_ROOT=/data \
+    CAREER_OPS_WORKDAY_PACING_DIR=/var/lib/career-ops/workday-pacing \
     CAREER_OPS_BROWSER_HARNESS_BIN=/opt/browser-harness/.venv/bin/browser-harness \
     BH_BACKEND=extension BU_NAME=career-ops BH_CONFIG_DIR=/home/node/.config/browser-harness \
     BH_RUNTIME_DIR=/tmp/browser-harness BH_TMP_DIR=/tmp/browser-harness-output \
     BH_TELEMETRY=0 BH_DOMAIN_SKILLS=0 BH_RECORD=0
-RUN mkdir -p /data /home/node/chrome-profile /home/node/.config \
-    && chown -R node:node /data /home/node /opt/career-ops/web/.next
+RUN mkdir -p /data /home/node/chrome-profile /home/node/.config /var/lib/career-ops/workday-pacing \
+    && chown -R node:node /data /home/node /opt/career-ops/web/.next /var/lib/career-ops/workday-pacing
 USER node
 WORKDIR /opt/career-ops
 EXPOSE 3000 6080

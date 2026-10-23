@@ -10,6 +10,8 @@ import {
 } from '../user-agent.mjs';
 import { providerFetchContext, isBlockedAddress, blockedAddressError } from './_ip-guard.mjs';
 import { normalizeUrl } from '../url-key.mjs';
+import { paceWorkdayRequest, parseRetryAfterMs, WorkdayCooldownError } from './_workday-pacing.mjs';
+export { parseRetryAfterMs } from './_workday-pacing.mjs';
 
 /** @typedef {import('./_types.js').Context} Context */
 /** @typedef {import('./_types.js').FetchOptions} FetchOptions */
@@ -95,8 +97,8 @@ async function fetchWithTimeout(url, opts = {}, consume, allowManualRedirectResp
   // starts it: the DNS lookup happens inside connect, well after the
   // synchronous part of fetch() has returned, and the context has to still be
   // entered when it does.
-  return providerFetchContext.run({ url: String(url), targetHost, proxyHost },
-    () => fetchInContext(url, opts, consume, dispatcher, allowManualRedirectResponse, fetchImpl));
+  return paceWorkdayRequest(url, () => providerFetchContext.run({ url: String(url), targetHost, proxyHost },
+    () => fetchInContext(url, opts, consume, dispatcher, allowManualRedirectResponse, fetchImpl)));
 }
 
 // redirect defaults to 'error': a provider fetch must never follow a 3xx, or a
@@ -322,21 +324,6 @@ export function sleep(ms, ctx) {
 }
 
 /**
- * Milliseconds from a Retry-After header, in either permitted form (delta
- * seconds or an HTTP-date). Null when absent or unparseable.
- *
- * @param {(string | null | undefined)} value - Raw `Retry-After` header value.
- * @returns {(number | null)}
- */
-export function parseRetryAfterMs(value) {
-  if (!value) return null;
-  const secs = Number(value);
-  if (Number.isFinite(secs) && secs >= 0) return secs * 1000;
-  const dateMs = Date.parse(value);
-  return Number.isFinite(dateMs) ? Math.max(0, dateMs - Date.now()) : null;
-}
-
-/**
  * Whether a failure is a redirect refused by the mandatory SSRF guard —
  * `redirect:'error'` meeting a 3xx (#1440). It arrives as a bare TypeError
  * with no `.status`, indistinguishable by shape from a timeout or a DNS
@@ -372,6 +359,7 @@ export function isRefusedRedirectError(err) {
  * @returns {boolean}
  */
 export function isRetryableError(err) {
+  if (err instanceof WorkdayCooldownError) return false;
   const status = err?.status;
   if (status === 429) return true;
   if (typeof status === 'number' && status >= 500) return true;

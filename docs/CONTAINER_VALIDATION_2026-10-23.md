@@ -1,6 +1,11 @@
 # Container integration validation — 2026-10-23
 
-**Latest result:** the [Georgia and LinkedIn follow-up](GEORGIA_LINKEDIN_FIXES_2026-10-23.md)
+**Latest concurrency verification:** the [Workday rate-limit fix](WORKDAY_RATE_LIMIT_FIX_2026-10-23.md)
+completed all 57 Workday school routes in each of three simultaneous Docker
+runs, with zero Workday rate limits. That report preserves the complete
+346-school results and separate browser follow-ups.
+
+**Earlier result:** the [Georgia and LinkedIn follow-up](GEORGIA_LINKEDIN_FIXES_2026-10-23.md)
 restores coverage to **343/346 (99.13%)** and verifies external LinkedIn application
 URLs. Its two-school rerun overlays the earlier full run preserved below.
 

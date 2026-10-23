@@ -44,16 +44,21 @@ are in memory and end when the container restarts; saved user files remain.
 
 ## Persistent data
 
-Compose creates two named volumes:
+Compose creates three named volumes:
 
 | Volume | Container path | Contents |
 |---|---|---|
 | `career-ops-data` | `/data` | CV/profile, tracker, reports, PDFs, mail caches/cursors/outbox/receipts and other user files |
 | `career-ops-home` | `/home/node` | Chrome profile, Browser Harness pairing/configuration, downloads and CLI credentials/configuration |
+| `career-ops-workday-pacing` | `/var/lib/career-ops/workday-pacing` | Public Workday host names, request timing and rate-limit cooldowns; shared across instances |
 
-The names are prefixed by the Compose project name. Container replacement and
+The data and home names are prefixed by the Compose project name. The Workday
+volume has a fixed name so instances using the same host's internet connection
+coordinate their public requests without sharing profiles or user data.
+Set `CAREER_OPS_WORKDAY_PACING_VOLUME` to choose a separate quota group.
+Container replacement and
 `docker compose down` keep them. **Do not run `down -v`** unless you intend to
-remove these volumes. Back up both while the container is stopped. The image
+remove these volumes. Back up the data and home volumes while the container is stopped. The image
 contains no personal profile, mail configuration or host Chrome cookies.
 
 The image runs as uid/gid 1000. For an existing data directory, use an absolute
@@ -76,6 +81,22 @@ startup never copies personalisation templates over existing files.
 All writers should run through this container. The core's PID-based lock
 recovery assumes one PID namespace; do not run simultaneous host or separate
 container writers against the same data volume.
+
+Workday provider requests use one start per second per host and one every 200 ms across
+Workday hosts. A 429 pauses all Workday workers for up to 30 seconds, with
+30/60/120-second host cooldowns when no `Retry-After` is supplied. Workers
+recheck the shared timing state after waiting, including page retries and
+detail lookups. A longer upstream `Retry-After` is saved and reported as
+deferred rather than retried early. Exhausted retries still report an
+incomplete board; they never become a successful empty result.
+
+For manual `docker run` instances on the same egress connection, mount
+`-v career-ops-workday-pacing:/var/lib/career-ops/workday-pacing` in each one.
+Outside Docker, processes belonging to the same user share timing state in
+the system temporary directory; `CAREER_OPS_WORKDAY_PACING_DIR` selects an
+explicit directory. Use a local filesystem, not a network filesystem, for
+SQLite coordination. The database contains no job bodies, credentials or
+user-layer paths.
 
 ## Commands and integration credentials
 
