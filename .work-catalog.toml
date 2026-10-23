@@ -1,0 +1,13 @@
+# Project metadata for work-catalog. Edit deliberately; refresh imports changes.
+schema_version = 1
+
+[project]
+id = "career-ops-8d56b665"
+purpose = "AI-assisted job-search workspace with mail and Indeed integrations."
+state = "active"
+next_action = "Review and preserve the reported local changes before delivery; establish the intended next task without inferring lifecycle."
+tags = ["xint"]
+
+[annotations]
+tags = []
+note = ""
