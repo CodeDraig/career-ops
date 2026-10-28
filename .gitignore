@@ -272,3 +272,4 @@ data/interview-prep/
 /config/mail.json
 /lib/mail/__pycache__/
 /tests/__pycache__/
+/tmp/

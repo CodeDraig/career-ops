@@ -63,3 +63,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Backup and archive policy
+
+- Do not create additional backup or archive copies of content that can be recovered from Git history.
+- Any necessary backup or archive copies must be placed under the owning project's `tmp/` directory.
+- The project's `tmp/` directory and everything inside it must remain untracked and ignored by Git. Verify this before writing copies there; add `/tmp/` to the project's `.gitignore` if necessary. Never force-add these copies.
+- These rules take precedence over conflicting backup-location or duplicate-copy instructions in this file.
